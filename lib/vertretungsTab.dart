@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:annette_app/vertretungListTile.dart';
 import 'package:annette_app/vertretungsEinheit.dart';
 import 'package:annette_app/vertretunsplanCrawler.dart';
@@ -11,34 +13,63 @@ class VertretungsTab extends StatefulWidget {
 
 class _VertretungsTabState extends State<VertretungsTab> {
   String htmlCode;
-  List<VertretungsEinheit> vertretungen = [];
+  List<VertretungsEinheit> vertretungenHeute = [];
+  List<VertretungsEinheit> vertretungenMorgen = [];
+  String dateTomorrow = 'Morgen';
+  String dateToday = 'Heute';
+  String lastEdited = '--';
+  bool load = true;
   void makeRequest() async {
-    try {
-      final response = await http.get(Uri.https(
-          'www.annettegymnasium.de', 'SP/vertretung/Heute_KoL/subst_001.htm'));
 
+    try {
+      var response = await http.get(Uri.https(
+          'www.annettegymnasium.de', 'SP/vertretung/Heute_KoL/subst_001.htm'));
       if (response.statusCode == 200) {
         htmlCode = response.body;
-
-        VertretungsplanCrawler vpc =
+        VertretungsplanCrawler vpc1 =
             new VertretungsplanCrawler(htmlCode: htmlCode);
-        vpc.getCurrentDate();
-        vertretungen = vpc.getVertretungen();
-        vpc.getLastEdited();
-        vpc.getAffectedClasses();
+        dateToday = vpc1.getCurrentDate();
+        vertretungenHeute = vpc1.getVertretungen();
+        lastEdited = vpc1.getLastEdited();
+        vpc1.getAffectedClasses();
+        load = true;
         setState(() {});
       } else {
-        throw Exception('Failed to load.');
+        load = false;
+      }
+
+      response = await http.get(Uri.https(
+          'www.annettegymnasium.de', 'SP/vertretung/Morgen_KoL/subst_001.htm'));
+      if (response.statusCode == 200) {
+        htmlCode = response.body;
+        VertretungsplanCrawler vpc2 =
+            new VertretungsplanCrawler(htmlCode: htmlCode);
+        dateTomorrow = vpc2.getCurrentDate();
+        vertretungenMorgen = vpc2.getVertretungen();
+        vpc2.getLastEdited();
+        vpc2.getAffectedClasses();
+        load = true;
+        setState(() {});
+      } else {
+        load = false;
       }
     } catch (e) {
+      load = false;
+    }
+
+    if (!load) {
       final snackBar = SnackBar(
         content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('Laden fehlgeschlagen'),
             Icon(
               Icons.warning_rounded,
               color: Colors.white,
+            ),
+            Container(
+              child:
+                  Text('Laden fehlgeschlagen', style: TextStyle(fontSize: 17)),
+              margin: EdgeInsets.only(left: 15),
             ),
           ],
         ),
@@ -48,6 +79,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+
   }
 
   @override
@@ -61,15 +93,48 @@ class _VertretungsTabState extends State<VertretungsTab> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: RefreshIndicator(
-      child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: vertretungen.length,
-              itemBuilder: (BuildContext context, int index) {
-                return VertretungListTile(vertretungen[index]);
-              }),
-      color: Colors.red,
-      backgroundColor: Colors.tealAccent,
-      strokeWidth: 5,
+      child: Column(children: [
+        Text('Stand: $lastEdited'),
+        Expanded(
+            child: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+                delegate: SliverChildListDelegate.fixed([
+              Container(
+                height: 50,
+                child: Text(dateToday),
+              )
+            ])),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return VertretungListTile(vertretungenHeute[
+                      index]); // you can add your available item here
+                },
+                childCount: vertretungenHeute.length,
+              ),
+            ),
+            SliverList(
+                delegate: SliverChildListDelegate.fixed([
+              Container(
+                height: 50,
+                child: Text(dateTomorrow),
+              )
+            ])),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return VertretungListTile(vertretungenMorgen[
+                      index]); // you can add your available item here
+                },
+                childCount: vertretungenMorgen.length,
+              ),
+            )
+          ],
+          physics: const AlwaysScrollableScrollPhysics(),
+        )),
+      ]),
+      //color: Colors.red,
       onRefresh: () {
         return Future.delayed(Duration.zero, () {
           setState(() {
@@ -80,3 +145,14 @@ class _VertretungsTabState extends State<VertretungsTab> {
     ));
   }
 }
+
+/*
+Expanded(
+          child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: vertretungen.length,
+              itemBuilder: (BuildContext context, int index) {
+                return VertretungListTile(vertretungen[index]);
+              }),
+        ),
+ */

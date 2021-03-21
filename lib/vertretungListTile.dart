@@ -17,7 +17,19 @@ class VertretungListTile extends StatelessWidget {
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(vertretung.affectedClass + vertretung.type),
+      child: Column(children: [
+        if(vertretung.affectedClass != null) Text(vertretung.affectedClass),
+        if(vertretung.type != null) Text(vertretung.type),
+        if(vertretung.teacher_old != null) Text(vertretung.teacher_old),
+        if(vertretung.teacher_new != null) Text(vertretung.teacher_new),
+        if(vertretung.comment != null) Text(vertretung.comment),
+        if(vertretung.lesson != null) Text(vertretung.lesson),
+        if(vertretung.room != null)  Text(vertretung.room),
+        if(vertretung.subject_new != null) Text(vertretung.subject_new),
+        if(vertretung.subject_old != null) Text(vertretung.subject_old),
+
+
+      ],),
     );
   }
 }
