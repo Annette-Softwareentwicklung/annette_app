@@ -1,4 +1,4 @@
-import 'package:annette_app/vertretungsEinheit.dart';
+import 'package:annette_app/vertretung/vertretungsEinheit.dart';
 import 'package:flutter/material.dart';
 
 class VertretungListTile extends StatelessWidget {

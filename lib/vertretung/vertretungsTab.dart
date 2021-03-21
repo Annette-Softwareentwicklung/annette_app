@@ -1,8 +1,6 @@
-import 'dart:io';
-
-import 'package:annette_app/vertretungListTile.dart';
-import 'package:annette_app/vertretungsEinheit.dart';
-import 'package:annette_app/vertretunsplanCrawler.dart';
+import 'package:annette_app/vertretung/vertretungListTile.dart';
+import 'package:annette_app/vertretung/vertretungsEinheit.dart';
+import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -146,13 +144,3 @@ class _VertretungsTabState extends State<VertretungsTab> {
   }
 }
 
-/*
-Expanded(
-          child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: vertretungen.length,
-              itemBuilder: (BuildContext context, int index) {
-                return VertretungListTile(vertretungen[index]);
-              }),
-        ),
- */

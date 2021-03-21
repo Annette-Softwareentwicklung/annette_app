@@ -1,4 +1,4 @@
-import 'package:annette_app/vertretungsEinheit.dart';
+import 'package:annette_app/vertretung/vertretungsEinheit.dart';
 
 class VertretungsplanCrawler {
   final String htmlCode;
