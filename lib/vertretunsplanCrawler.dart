@@ -49,4 +49,22 @@ class VertretungsplanCrawler {
     print('Current date: $currentDate');
     return currentDate;
   }
+
+  String getLastEdited() {
+    String htmlCodeTemp = htmlCode;
+    int tempStart = htmlCodeTemp.indexOf('Stand: ') + 7;
+    int tempEnd = htmlCodeTemp.indexOf("<", tempStart);
+    String lastEdited = htmlCodeTemp.substring(tempStart, tempEnd);
+    print('lastEdited: $lastEdited');
+    return lastEdited;
+  }
+
+  String getAffectedClasses() {
+    String htmlCodeTemp = htmlCode;
+    int tempStart = htmlCodeTemp.indexOf('Betroffene Klassen&nbsp;</td>') + 59;
+    int tempEnd = htmlCodeTemp.indexOf("<", tempStart);
+    String affectedClasses = htmlCodeTemp.substring(tempStart, tempEnd);
+    print('affectedClasses: $affectedClasses');
+    return affectedClasses;
+  }
 }
