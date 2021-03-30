@@ -10,9 +10,11 @@ class VertretungsTab extends StatefulWidget {
 }
 
 class _VertretungsTabState extends State<VertretungsTab> {
-  String htmlCode;
+  String? htmlCode;
   List<VertretungsEinheit> vertretungenHeute = [];
   List<VertretungsEinheit> vertretungenMorgen = [];
+  List<String> informationToday = [];
+  List<String> informationTomorrow = [];
   String dateTomorrow = 'Morgen';
   String dateToday = 'Heute';
   String lastEdited = '--';
@@ -30,6 +32,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
         vertretungenHeute = vpc1.getVertretungen();
         lastEdited = vpc1.getLastEdited();
         vpc1.getAffectedClasses();
+        informationToday = vpc1.getInformation();
         load = true;
         setState(() {});
       } else {
@@ -46,6 +49,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
         vertretungenMorgen = vpc2.getVertretungen();
         vpc2.getLastEdited();
         vpc2.getAffectedClasses();
+        informationTomorrow = vpc2.getInformation();
         load = true;
         setState(() {});
       } else {

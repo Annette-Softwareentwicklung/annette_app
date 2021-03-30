@@ -1,62 +1,44 @@
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class Test extends StatefulWidget {
+
+class TimetableCrawler extends StatefulWidget {
+  final String currentClass;
+  TimetableCrawler({required this.currentClass});
   @override
-  _TestState createState() => _TestState();
+  _TimetableCrawlerState createState() => _TimetableCrawlerState();
 }
 
-class _TestState extends State<Test> {
+class _TimetableCrawlerState extends State<TimetableCrawler> {
+  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+
   void makeRequest() async {
     print('call');
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
 
-    var response = await http.get(Uri.https(
-        'www.annettegymnasium.de', 'SP/stundenplan_oL/c/P9/c00001.htm'));
-    if (response.statusCode == 200) {
-      crawler(response.body);
-      //pattern.allMatches(response.body).forEach((match) => print(match.group(0)));
 
-    } else {
-      throw Exception('failed to load');
+    Future<String> _readData() async {
+      try {
+        return await rootBundle.loadString('assets/stundenplan.txt');
+      } catch (e) {
+        return 'error';
+      }
     }
+    pattern.allMatches(await _readData()).forEach((match) => print(match.group(0)));
+
+crawler(await _readData());
   }
 
   void crawler(String code) {
-    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-    String htmlCode = code;
-    htmlCode = htmlCode.substring(
-        htmlCode.indexOf('<', htmlCode.indexOf('>', htmlCode.indexOf('<TABLE'))),
-        htmlCode.lastIndexOf('</TABLE'));
-    htmlCode = htmlCode.substring(0, htmlCode.lastIndexOf('</TABLE'));
-    htmlCode =
-        htmlCode.substring(htmlCode.indexOf('<TR', htmlCode.indexOf('Freitag')));
-    //pattern.allMatches(htmlCode).forEach((match) => print(match.group(0)));
+    String timetableCode = code;
+    //pattern.allMatches(timetableCode).forEach((match) => print(match.group(0)));
 
-    List<int> startOfRow = [];
-    List<int> endOfRow = [];
-    int tempStartTR = 0;
-    int tempEndTR = 0;
-
-    do {
-      startOfRow.add(tempStartTR);
-      do {
-        tempStartTR = htmlCode.indexOf('<TR', tempStartTR + 1);
-        tempEndTR = htmlCode.indexOf('</TR', tempEndTR + 1);
-        tempEndTR++;
-        tempStartTR++;
-      } while (tempStartTR < tempEndTR);
-      endOfRow.add(tempEndTR--);
-      tempStartTR = tempEndTR + 5;
-    } while (htmlCode.indexOf('<TR', tempStartTR + 1) != -1);
-
-    for (int i = 0; i < startOfRow.length; i++) {
-      print('---$i');
-      String s = htmlCode.substring(startOfRow[i], endOfRow[i]);
-      if(s.contains('*') || s.length == 7) {} else {
-        pattern.allMatches(s).forEach((match) => print(match.group(0)));
-      }
+    while(timetableCode.indexOf(widget.currentClass) != -1) {
+      print(timetableCode.substring(timetableCode.indexOf(',,', timetableCode.indexOf(widget.currentClass) - 10) + 2, timetableCode.indexOf(',,', timetableCode.indexOf(widget.currentClass))));
+      timetableCode = timetableCode.substring(timetableCode.indexOf(widget.currentClass) + 10);
     }
+
+
   }
 
   @override
@@ -65,10 +47,9 @@ class _TestState extends State<Test> {
     super.initState();
     makeRequest();
   }
+
   @override
   Widget build(BuildContext context) {
     return Text('1');
   }
 }
-
-

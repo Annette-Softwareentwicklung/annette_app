@@ -1,11 +1,11 @@
 import 'package:annette_app/vertretung/vertretungsEinheit.dart';
 
 class VertretungsplanCrawler {
-  final String htmlCode;
+  final String? htmlCode;
   VertretungsplanCrawler({this.htmlCode});
 
   List<VertretungsEinheit> getVertretungen() {
-    String htmlCodeTemp = htmlCode;
+    String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('<table');
     tempStart = htmlCodeTemp.indexOf('<table', tempStart + 5);
     tempStart = htmlCodeTemp.indexOf('<table', tempStart + 5);
@@ -21,7 +21,7 @@ class VertretungsplanCrawler {
           htmlCodeTemp.indexOf('</tr'));
 
       String tempColumn = tempRow;
-      List<String> result = [];
+      List<String?> result = [];
       for (int i = 0; i < 9; i++) {
         int start;
         if (tempColumn.indexOf('<span') < tempColumn.indexOf('/td>') &&
@@ -44,20 +44,12 @@ class VertretungsplanCrawler {
 
       /*String klasse = '9D';
       if(result[0].contains(klasse.substring(0,1)) && result[0].contains(klasse.substring(1))) {
-      */if(true) {
-        vertretungen.add(new VertretungsEinheit(
-            result[1],
-            result[5],
-            result[4],
-            result[0],
-            result[8],
-            result[6],
-            result[2],
-            result[7],
-            result[3]));
+      */
+      if (true) {
+        vertretungen.add(new VertretungsEinheit(result[1], result[5], result[4],
+            result[0], result[8], result[6], result[2], result[7], result[3]));
       }
       print(result);
-
 
       htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('/tr>') + 4);
     }
@@ -65,7 +57,7 @@ class VertretungsplanCrawler {
   }
 
   String getCurrentDate() {
-    String htmlCodeTemp = htmlCode;
+    String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('<div class="mon_title">') + 23;
     int tempEnd = htmlCodeTemp.indexOf("/div", tempStart) - 1;
     String currentDate = htmlCodeTemp.substring(tempStart, tempEnd);
@@ -73,8 +65,36 @@ class VertretungsplanCrawler {
     return currentDate;
   }
 
+  List<String> getInformation() {
+    List<String> information = [];
+    String htmlCodeTemp = htmlCode!;
+
+    htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('Nachrichten'));
+    htmlCodeTemp = htmlCodeTemp.substring(0, htmlCodeTemp.indexOf('</table'));
+    htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</tr') + 5);
+    htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</tr') + 5);
+
+    if (htmlCodeTemp.indexOf('<tr') != -1) {
+      do {
+        htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('<td') + 29);
+        String s = htmlCodeTemp.substring(0, htmlCodeTemp.indexOf('</td'));
+        htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</td') + 5);
+
+        while (s.indexOf('<br') != -1) {
+          information.add(s.substring(0, htmlCodeTemp.indexOf('<')));
+          s = s.substring(s.indexOf('<br') + 4);
+        }
+        information.add(s);
+      } while (htmlCodeTemp.indexOf('<tr') != -1);
+    }
+    print('___Infos:___');
+    print(information);
+    print('____________');
+    return information;
+  }
+
   String getLastEdited() {
-    String htmlCodeTemp = htmlCode;
+    String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('Stand: ') + 7;
     int tempEnd = htmlCodeTemp.indexOf("<", tempStart);
     String lastEdited = htmlCodeTemp.substring(tempStart, tempEnd);
@@ -83,7 +103,7 @@ class VertretungsplanCrawler {
   }
 
   String getAffectedClasses() {
-    String htmlCodeTemp = htmlCode;
+    String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('Betroffene Klassen&nbsp;</td>') + 59;
     int tempEnd = htmlCodeTemp.indexOf("<", tempStart);
     String affectedClasses = htmlCodeTemp.substring(tempStart, tempEnd);
