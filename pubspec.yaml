@@ -26,15 +26,24 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  flutter_cupertino_localizations: ^1.0.1
+  flutter_native_timezone: ^1.0.10
+  flutter_local_notifications: ^5.0.0
+  sqflite: ^2.0.0+3
+  path: ^1.8.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.9.0
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/icon.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -47,6 +56,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - images/icon.png
     - assets/stundenplan.txt
   #   - images/a_dot_ham.jpeg
 
