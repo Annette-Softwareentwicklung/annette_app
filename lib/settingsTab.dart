@@ -54,44 +54,13 @@ class SettingsTab extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           ListTile(
-              title: Text('Stundenplan'),
+              title: Text('Klasse wählen'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
               onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return DefaultScaffold(
                           title: 'Wochentage', content: SetDays());
-                    }),
-                  )),
-          Divider(),
-          ListTile(
-              title: Text('Zeitplan'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                        title: 'Zeitplan',
-                        content: SetTimes(),
-                      );
-                    }),
-                  )),
-          Divider(),
-          ListTile(
-              title: Text('Fächer'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                        title: 'Fächer',
-                        content: ManageSubjects(key: subjectsAccess),
-                        fabLabel: 'Fach hinzufügen',
-                        fabIcon: Icon(Icons.add_circle),
-                        onFabPressed: () =>
-                            subjectsAccess.currentState!.addSubject(),
-                      );
-                      //return ManageSubjects();
                     }),
                   )),
           Divider(),

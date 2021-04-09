@@ -61,7 +61,7 @@ void helper(String? payload) async {
     try {
       await Future.delayed(Duration.zero, () async {
         navigationControllerAccess.currentState!.setState(() {
-          navigationControllerAccess.currentState!.tabIndex = 0;
+          navigationControllerAccess.currentState!.tabIndex = 1;
         });
         await Future.delayed(Duration(milliseconds: 500), () {
           navigationControllerAccess

@@ -29,7 +29,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
         VertretungsplanCrawler vpc1 =
             new VertretungsplanCrawler(htmlCode: htmlCode);
         dateToday = vpc1.getCurrentDate();
-        vertretungenHeute = vpc1.getVertretungen();
+        vertretungenHeute = await vpc1.getVertretungen();
         lastEdited = vpc1.getLastEdited();
         vpc1.getAffectedClasses();
         informationToday = vpc1.getInformation();
@@ -46,7 +46,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
         VertretungsplanCrawler vpc2 =
             new VertretungsplanCrawler(htmlCode: htmlCode);
         dateTomorrow = vpc2.getCurrentDate();
-        vertretungenMorgen = vpc2.getVertretungen();
+        vertretungenMorgen = await vpc2.getVertretungen();
         vpc2.getLastEdited();
         vpc2.getAffectedClasses();
         informationTomorrow = vpc2.getInformation();

@@ -1,10 +1,12 @@
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:annette_app/vertretung/vertretungsEinheit.dart';
 
 class VertretungsplanCrawler {
   final String? htmlCode;
   VertretungsplanCrawler({this.htmlCode});
 
-  List<VertretungsEinheit> getVertretungen() {
+  Future<List<VertretungsEinheit>> getVertretungen() async {
     String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('<table');
     tempStart = htmlCodeTemp.indexOf('<table', tempStart + 5);
@@ -42,10 +44,31 @@ class VertretungsplanCrawler {
         tempColumn = tempColumn.substring(tempColumn.indexOf('/td>') + 4);
       }
 
-      /*String klasse = '9D';
-      if(result[0].contains(klasse.substring(0,1)) && result[0].contains(klasse.substring(1))) {
-      */
-      if (true) {
+
+      Future<String> _getPath() async {
+        final _dir = await getApplicationDocumentsDirectory();
+        return _dir.path;
+      }
+
+      Future<String> _readData() async {
+        try {
+          final _path = await _getPath();
+          final _file = File('$_path/configuration.txt');
+
+          String contents = await _file.readAsString();
+          return contents;
+        } catch (e) {
+          return '';
+        }
+      }
+
+      String currentClass = await _readData();
+      currentClass = currentClass.substring(currentClass.indexOf('c:') + 2, currentClass.indexOf(';lk1'));
+
+
+      //currentClass = '9D';
+      if(result[0]!.contains(currentClass.substring(0,1)) && result[0]!.contains(currentClass.substring(1))) {
+      //if (true) {
         vertretungen.add(new VertretungsEinheit(result[1], result[5], result[4],
             result[0], result[8], result[6], result[2], result[7], result[3]));
       }

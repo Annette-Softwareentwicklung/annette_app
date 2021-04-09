@@ -1,3 +1,4 @@
+import 'package:annette_app/setClass.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/guide.dart';
@@ -110,10 +111,10 @@ class NavigationControllerState extends State<NavigationController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (tabIndex == 0) ? Text('Vertretungsplan') : (tabIndex == 1) ? Text('Hausaufgaben') : (tabIndex == 2) ? Text('Stundenplan') : Text('Einstellungen'),
+        title: (tabIndex == 0) ? Text('Vertretungsplan') : (tabIndex == 1) ? Text('Hausaufgaben') : (tabIndex == 2) ? Text('Stundenplan') : Text('Sonstiges'),
       ),
       body:
-      (tabIndex == 0) ? VertretungsTab() : (tabIndex == 1) ? HomeworkTab(key: homeworkTabAccess,) : SettingsTab(),
+      (tabIndex == 0) ? VertretungsTab() : (tabIndex == 1) ? HomeworkTab(key: homeworkTabAccess,) : (tabIndex == 2) ? SetClass() : SettingsTab(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -124,7 +125,7 @@ class NavigationControllerState extends State<NavigationController> {
             builder: (context) {
               return AddDialog(
                 onTaskCreated: (newTask) {
-                  if (tabIndex == 0) {
+                  if (tabIndex == 1) {
                     homeworkTabAccess.currentState!.insertTask(newTask);
                   }
                 },
@@ -137,7 +138,7 @@ class NavigationControllerState extends State<NavigationController> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            label: 'Vertretungsplan',
+            label: 'Vertretung',
             icon: Icon(Icons.list),
           ),
 
@@ -152,8 +153,8 @@ class NavigationControllerState extends State<NavigationController> {
           ),
 
           BottomNavigationBarItem(
-            label: 'Einstellungen',
-            icon: Icon(Icons.settings),
+            label: 'Sonstiges',
+            icon: Icon(Icons.more_horiz_rounded),
           ),
         ],
         type: BottomNavigationBarType.fixed,
