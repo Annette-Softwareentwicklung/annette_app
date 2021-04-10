@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,8 +10,9 @@ class SetClass extends StatefulWidget {
 }
 
 class _SetClassState extends State<SetClass> {
-  bool showGroups = false;
-  late String buttonText;
+  bool showGroupsOS = false;
+  bool showGroupsUS = false;
+  bool showFinishedConfiguration = false;
   late String configurationString;
   bool finished = false;
   List<String> configurationList = [];
@@ -33,6 +35,28 @@ class _SetClassState extends State<SetClass> {
   late String selectedGk13;
   late String selectedZk1;
   late String selectedZk2;
+
+  late String selectedReligionUS;
+  String selectedSecondLanguageUS = 'Freistunde';
+  late String selectedDiffUS;
+
+  List<String> religionUS = [
+    'Kath. Religion',
+    'Ev. Religion',
+    'Philosophie'
+  ];
+  List<String> secondLanguageUS = [
+    'Latein',
+    'Französisch'
+  ];
+  List<String> diffUS = [
+    'Informatik',
+    'Physik-Technik',
+    'Spanisch',
+    'Kunst',
+    'Geschichte'
+  ];
+
 
   List<String> lk1 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> lk2 = ['Freistunde', 'Mathe', 'Physik'];
@@ -84,7 +108,7 @@ class _SetClassState extends State<SetClass> {
     'Q2',
   ];
 
-  void setGroups() {
+  void setGroupsOS() async {
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
       return _dir.path;
@@ -96,16 +120,73 @@ class _SetClassState extends State<SetClass> {
       await _myFile.writeAsString(pData);
     }
 
+    String tempConfiguration;
+
     if (selectedClass == 'Q1') {
-      _writeData(
-          'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;');
+      tempConfiguration =
+      'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
+      await _writeData(tempConfiguration);
     } else if (selectedClass == 'Q2') {
-      _writeData(
-          'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:$selectedZk1;zk2:$selectedZk1;');
+      tempConfiguration =
+      'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:$selectedZk1;zk2:$selectedZk1;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
+      await _writeData(tempConfiguration);
     } else {
-      _writeData(
-          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;');
+      tempConfiguration =
+      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
+      await _writeData(tempConfiguration);
     }
+
+    setState(() {
+      showFinishedConfiguration = true;
+      finished = false;
+    });
+    activateTimetableCrawler(tempConfiguration);
+  }
+
+  void setGroupsUS() async {
+    Future<String> _getPath() async {
+      final _dir = await getApplicationDocumentsDirectory();
+      return _dir.path;
+    }
+
+    Future<void> _writeData(String pData) async {
+      final _path = await _getPath();
+      final _myFile = File('$_path/configuration.txt');
+      await _myFile.writeAsString(pData);
+    }
+
+    String tempConfiguration;
+
+
+
+    if (selectedClass.contains('8') || selectedClass.contains('9')) {
+      tempConfiguration =
+      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:$selectedDiffUS;';
+      await _writeData(tempConfiguration);
+    } else if (!selectedClass.contains('5')) {
+      tempConfiguration =
+      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:Freistunde;';
+      await _writeData(tempConfiguration);
+    } else {
+      tempConfiguration =
+      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
+      await _writeData(tempConfiguration);
+    }
+
+    setState(() {
+      showFinishedConfiguration = true;
+      finished = false;
+    });
+    activateTimetableCrawler(tempConfiguration);
+  }
+
+  void activateTimetableCrawler(pConfigurationString) async {
+    TimetableCrawler ttc1 =
+        new TimetableCrawler(configurationString: pConfigurationString);
+    await ttc1.setConfiguration();
+    setState(() {
+      finished = true;
+    });
   }
 
   void setClass() async {
@@ -120,11 +201,12 @@ class _SetClassState extends State<SetClass> {
       await _myFile.writeAsString(pData);
     }
 
+
     if (selectedClass == 'Q1' ||
         selectedClass == 'Q2' ||
         selectedClass == 'EF') {
       setState(() {
-        if(selectedClass == configurationList[0]) {
+        if (selectedClass == configurationList[0]) {
           selectedLk1 = configurationList[1];
           selectedLk2 = configurationList[2];
           selectedGk1 = configurationList[3];
@@ -162,22 +244,21 @@ class _SetClassState extends State<SetClass> {
           selectedZk2 = 'Freistunde';
         }
 
-
-        showGroups = true;
+        showGroupsOS = true;
       });
     } else {
-      _writeData(
-          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;');
-    }
-  }
-
-  String getButtonText() {
-    if (selectedClass == 'Q1' ||
-        selectedClass == 'Q2' ||
-        selectedClass == 'EF') {
-      return 'Kurse wählen';
-    } else {
-      return 'Speichern';
+      setState(() {
+        if (selectedClass == configurationList[0]) {
+          selectedReligionUS = configurationList[18];
+          selectedSecondLanguageUS = configurationList[19];
+          selectedDiffUS = configurationList[20];
+        } else {
+          selectedReligionUS = 'Freistunde';
+          selectedSecondLanguageUS  = 'Freistunde';
+          selectedDiffUS = 'Freistunde';
+        }
+      showGroupsUS = true;
+      });
     }
   }
 
@@ -205,7 +286,6 @@ class _SetClassState extends State<SetClass> {
         for (int i = 0; i < 13; i++) {
           int j = i + 1;
           int tempStart = (j < 10) ? 4 : 5;
-          print(tempStart);
           String tempString = contents.substring(
               contents.indexOf('gk$j:') + tempStart,
               contents.indexOf(';', contents.indexOf('gk$j:')));
@@ -216,6 +296,13 @@ class _SetClassState extends State<SetClass> {
             contents.indexOf(';', contents.indexOf('zk1:'))));
         tempContent.add(contents.substring(contents.indexOf('zk2:') + 4,
             contents.indexOf(';', contents.indexOf('zk2:'))));
+
+        tempContent.add(contents.substring(contents.indexOf('religionUS:') + 11,
+            contents.indexOf(';', contents.indexOf('religionUS:'))));
+        tempContent.add(contents.substring(contents.indexOf('sLanguageUS:') + 12,
+            contents.indexOf(';', contents.indexOf('sLanguageUS:'))));
+        tempContent.add(contents.substring(contents.indexOf('diffUS:') + 7,
+            contents.indexOf(';', contents.indexOf('diffUS:'))));
 
         return tempContent;
       } catch (e) {
@@ -239,6 +326,9 @@ class _SetClassState extends State<SetClass> {
         tempContent.add(gk13[0]);
         tempContent.add(zk1[0]);
         tempContent.add(zk2[0]);
+        tempContent.add(religionUS[0]);
+        tempContent.add(secondLanguageUS[0]);
+        tempContent.add(diffUS[0]);
         return tempContent;
       }
     }
@@ -256,7 +346,6 @@ class _SetClassState extends State<SetClass> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    buttonText = 'Speichern';
     load();
   }
 
@@ -266,7 +355,11 @@ class _SetClassState extends State<SetClass> {
         padding: EdgeInsets.all(20),
         constraints: BoxConstraints(maxWidth: 400),
         alignment: Alignment.center,
-        child: (showGroups) ? Groups() : Classes());
+        child: (showFinishedConfiguration)
+            ? FinishedConfiguration()
+            : (showGroupsOS)
+                ? GroupsOS()
+                : Classes());
   }
 
   Widget Classes() {
@@ -288,7 +381,6 @@ class _SetClassState extends State<SetClass> {
                     onSelectedItemChanged: (index) {
                       setState(() {
                         selectedClass = classes[index];
-                        buttonText = getButtonText();
                       });
                     },
                     children: new List<Text>.generate(
@@ -318,7 +410,7 @@ class _SetClassState extends State<SetClass> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Text(
-                      buttonText,
+                      'Kurse wählen',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     )),
@@ -332,7 +424,7 @@ class _SetClassState extends State<SetClass> {
     }
   }
 
-  Widget Groups() {
+  Widget GroupsOS() {
     return Container(
         child: CustomScrollView(
       slivers: <Widget>[
@@ -359,11 +451,12 @@ class _SetClassState extends State<SetClass> {
                         }).toList(),
                         onChanged: (String? newValue) {
                           setState(() {
-                          if (j == 1) {
-                            selectedLk1 = newValue!;
-                          } else {
-                            selectedLk2 = newValue!;
-                          } });
+                            if (j == 1) {
+                              selectedLk1 = newValue!;
+                            } else {
+                              selectedLk2 = newValue!;
+                            }
+                          });
                         },
                         value: (j == 1) ? selectedLk1 : selectedLk2,
                         hint: Text('Fach'),
@@ -396,59 +489,60 @@ class _SetClassState extends State<SetClass> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                        if(j == 1) {
-                          selectedGk1 = newValue!;
-                        } else if(j == 2) {
-                          selectedGk2 = newValue!;
-                        } else if(j == 3) {
-                          selectedGk3 = newValue!;
-                        } else if(j == 4) {
-                          selectedGk4 = newValue!;
-                        } else if(j == 5) {
-                          selectedGk5 = newValue!;
-                        } else if(j == 6) {
-                          selectedGk6 = newValue!;
-                        } else if(j == 7) {
-                          selectedGk7 = newValue!;
-                        } else if(j == 8) {
-                          selectedGk8 = newValue!;
-                        } else if(j == 9) {
-                          selectedGk9 = newValue!;
-                        } else if(j == 10) {
-                          selectedGk10 = newValue!;
-                        } else if(j == 11) {
-                          selectedGk11 = newValue!;
-                        } else if(j == 12) {
-                          selectedGk12 = newValue!;
-                        } else {
-                          selectedGk13 = newValue!;
-                        } });
+                          if (j == 1) {
+                            selectedGk1 = newValue!;
+                          } else if (j == 2) {
+                            selectedGk2 = newValue!;
+                          } else if (j == 3) {
+                            selectedGk3 = newValue!;
+                          } else if (j == 4) {
+                            selectedGk4 = newValue!;
+                          } else if (j == 5) {
+                            selectedGk5 = newValue!;
+                          } else if (j == 6) {
+                            selectedGk6 = newValue!;
+                          } else if (j == 7) {
+                            selectedGk7 = newValue!;
+                          } else if (j == 8) {
+                            selectedGk8 = newValue!;
+                          } else if (j == 9) {
+                            selectedGk9 = newValue!;
+                          } else if (j == 10) {
+                            selectedGk10 = newValue!;
+                          } else if (j == 11) {
+                            selectedGk11 = newValue!;
+                          } else if (j == 12) {
+                            selectedGk12 = newValue!;
+                          } else {
+                            selectedGk13 = newValue!;
+                          }
+                        });
                       },
                       value: (j == 1)
                           ? selectedGk1
                           : (j == 2)
-                          ? selectedGk2
-                          : (j == 3)
-                          ? selectedGk3
-                          : (j == 4)
-                          ? selectedGk4
-                          : (j == 5)
-                          ? selectedGk5
-                          : (j == 6)
-                          ? selectedGk6
-                          : (j == 7)
-                          ? selectedGk7
-                          : (j == 8)
-                          ? selectedGk8
-                          : (j == 9)
-                          ? selectedGk9
-                          : (j == 10)
-                          ? selectedGk10
-                          : (j == 11)
-                          ? selectedGk11
-                          : (j == 12)
-                          ? selectedGk12
-                          : selectedGk13,
+                              ? selectedGk2
+                              : (j == 3)
+                                  ? selectedGk3
+                                  : (j == 4)
+                                      ? selectedGk4
+                                      : (j == 5)
+                                          ? selectedGk5
+                                          : (j == 6)
+                                              ? selectedGk6
+                                              : (j == 7)
+                                                  ? selectedGk7
+                                                  : (j == 8)
+                                                      ? selectedGk8
+                                                      : (j == 9)
+                                                          ? selectedGk9
+                                                          : (j == 10)
+                                                              ? selectedGk10
+                                                              : (j == 11)
+                                                                  ? selectedGk11
+                                                                  : (j == 12)
+                                                                      ? selectedGk12
+                                                                      : selectedGk13,
                       hint: Text('Fach'),
                       icon: Icon(Icons.arrow_drop_down),
                     ),
@@ -505,7 +599,7 @@ class _SetClassState extends State<SetClass> {
             margin: EdgeInsets.all(15),
             child: TextButton(
               onPressed: () {
-                setGroups();
+                setGroupsOS();
               },
               child: Container(
                   padding: EdgeInsets.all(10),
@@ -530,5 +624,192 @@ class _SetClassState extends State<SetClass> {
         ])),
       ],
     ));
+  }
+
+  Widget FinishedConfiguration() {
+    if (finished) {
+      return Container(
+          padding: EdgeInsets.all(15),
+          //alignment: Alignment.center,
+          child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              controller: ScrollController(initialScrollOffset: 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  //Spacer(flex: 1),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 200,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'Fertig.',
+                      style: TextStyle(fontSize: 23),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 30),
+                    child: Text(
+                      'Deine Klasse wurde geändert!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ),
+                  CupertinoButton(
+                    color: (Theme.of(context).brightness == Brightness.light)
+                        ? Theme.of(context)
+                            .floatingActionButtonTheme
+                            .backgroundColor
+                        : Theme.of(context).accentColor,
+                    child: Text(
+                      'Los geht\'s',
+                      style: TextStyle(
+                          color: Theme.of(context)
+                              .floatingActionButtonTheme
+                              .foregroundColor),
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              )));
+    } else {
+      return CupertinoActivityIndicator();
+    }
+  }
+
+  Widget GroupsUS() {
+    return Container(
+        child: CustomScrollView(
+          slivers: <Widget>[
+
+            ///Religion
+            SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          'Religion:',
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                        DropdownButton<String>(
+                          items:
+                          religionUS.map<DropdownMenuItem<String>>((String? value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value!),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedReligionUS = newValue!;
+                            });
+                          },
+                          value: selectedReligionUS,
+                          hint: Text('Fach'),
+                          icon: Icon(Icons.arrow_drop_down),
+                        ),
+                      ])
+                ])),
+
+            ///2. Fremdsprache
+   if (!selectedClass.contains('5') && !selectedClass.contains('F')) SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          '2. Sprache:',
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                        DropdownButton<String>(
+                          items:
+                          secondLanguageUS.map<DropdownMenuItem<String>>((String? value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value!),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedSecondLanguageUS = newValue!;
+                            });
+                          },
+                          value: selectedSecondLanguageUS,
+                          hint: Text('Fach'),
+                          icon: Icon(Icons.arrow_drop_down),
+                        ),
+                      ])
+                ])),
+
+            ///Diff
+    if (selectedClass.contains('8') || selectedClass.contains('9')) SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          'Diff.-Fach:',
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                        DropdownButton<String>(
+                          items:
+                          diffUS.map<DropdownMenuItem<String>>((String? value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value!),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDiffUS = newValue!;
+                            });
+                          },
+                          value: selectedDiffUS,
+                          hint: Text('Fach'),
+                          icon: Icon(Icons.arrow_drop_down),
+                        ),
+                      ])
+                ])),
+
+            ///Button
+            SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Container(
+                    margin: EdgeInsets.all(15),
+                    child: TextButton(
+                      onPressed: () {
+                        setGroupsUS();
+                      },
+                      child: Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.center,
+                          //height: 50,
+                          constraints: BoxConstraints(
+                            minWidth: 150,
+                            minHeight: 50,
+                          ),
+                          //width: 150,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Text(
+                            'Speichern',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          )),
+                    ),
+                  ),
+                ])),
+          ],
+        ));
   }
 }

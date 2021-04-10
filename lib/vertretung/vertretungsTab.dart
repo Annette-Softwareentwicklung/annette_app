@@ -50,6 +50,8 @@ class _VertretungsTabState extends State<VertretungsTab> {
         vpc2.getLastEdited();
         vpc2.getAffectedClasses();
         informationTomorrow = vpc2.getInformation();
+        print('test');
+        print(informationTomorrow[0]);
         load = true;
         setState(() {});
       } else {
