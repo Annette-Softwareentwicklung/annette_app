@@ -1,12 +1,18 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class Test extends StatefulWidget {
+class TimetableCrawler extends StatefulWidget {
+  final String configurationString;
+  TimetableCrawler({required this.configurationString});
+
   @override
-  _TestState createState() => _TestState();
+  _TimetableCrawlerState createState() => _TimetableCrawlerState();
 }
 
-class _TestState extends State<Test> {
+class _TimetableCrawlerState extends State<TimetableCrawler> {
+  late String configurationString;
+
+
   void makeRequest() async {
     print('call');
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
@@ -76,7 +82,7 @@ class _TestState extends State<Test> {
       startOfTD.add(tempStartTD);
       do {
         tempStartTD = tempRow.indexOf('<TD', tempStartTD + 1);
-        tempEndTD = tempRow.indexOf('</TD>', tempEndTD + 1);
+        tempEndTD = tempRow.indexOf('</TD', tempEndTD + 1);
         tempStartTD++;
         tempEndTD++;
       } while (tempStartTD < tempEndTD);
@@ -99,6 +105,7 @@ class _TestState extends State<Test> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    configurationString = widget.configurationString;
     makeRequest();
   }
 

@@ -29,6 +29,11 @@ void createDb(Database db) async {
     "CREATE TABLE days(id INTEGER PRIMARY KEY, dayName TEXT, lesson1 TEXT, lesson2 TEXT, lesson3 TEXT, lesson4 TEXT, lesson5 TEXT, lesson6 TEXT, lesson7 TEXT, lesson8 TEXT, lesson9 TEXT, lesson10 TEXT, lesson11 TEXT)",
   );
 
+  //Erstellen der Tabelle für den Stundenplan
+  await db.execute(
+    "CREATE TABLE timetable(id INTEGER PRIMARY KEY, subject TEXT, room TEXT, dayNumber INTEGER, lessonNumber INTEGER)",
+  );
+
   //Einfügen der Standart-Werte
   insertStandardSubjects(db);
   insertDays(db);

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -37,7 +36,7 @@ class _SetClassState extends State<SetClass> {
 
   List<String> lk1 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> lk2 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk1 = ['Freistunde', 'Mathe', 'Physik'];
+  List<String> gk1 = ['Freistunde', 'Mathe', 'Physik', 'BI GK3'];
   List<String> gk2 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> gk3 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> gk4 = ['Freistunde', 'Mathe', 'Physik'];

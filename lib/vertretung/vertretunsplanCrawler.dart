@@ -44,7 +44,6 @@ class VertretungsplanCrawler {
         tempColumn = tempColumn.substring(tempColumn.indexOf('/td>') + 4);
       }
 
-
       Future<String> _getPath() async {
         final _dir = await getApplicationDocumentsDirectory();
         return _dir.path;
@@ -62,13 +61,30 @@ class VertretungsplanCrawler {
         }
       }
 
-      String currentClass = await _readData();
-      currentClass = currentClass.substring(currentClass.indexOf('c:') + 2, currentClass.indexOf(';lk1'));
+      String configurationString = await _readData();
+      String currentClass = configurationString.substring(
+          configurationString.indexOf('c:') + 2,
+          configurationString.indexOf(';', configurationString.indexOf('c:')));
 
+      bool relevant = false;
+      if (result[0]!.contains(currentClass.substring(0, 1)) &&
+          result[0]!.contains(currentClass.substring(1))) {
+        if (currentClass == 'EF' ||
+            currentClass == 'Q1' ||
+            currentClass == 'Q2') {
+          if(result[5] == null) {
+            relevant = true;
+          } else {
+            if(configurationString.contains(result[5]!)) {
+              relevant = true;
+            }
+          }
+        } else {
+          relevant = true;
+        }
+      }
 
-      //currentClass = '9D';
-      if(result[0]!.contains(currentClass.substring(0,1)) && result[0]!.contains(currentClass.substring(1))) {
-      //if (true) {
+      if (relevant) {
         vertretungen.add(new VertretungsEinheit(result[1], result[5], result[4],
             result[0], result[8], result[6], result[2], result[7], result[3]));
       }
