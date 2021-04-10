@@ -4,8 +4,6 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/manageSubjects.dart';
-import 'package:annette_app/setDaysSubjects.dart';
 
 class GuideDialog extends StatefulWidget {
   final VoidCallback? onCompleted;
@@ -37,12 +35,6 @@ class _GuideDialogState extends State<GuideDialog> {
                   duration: Duration(milliseconds: 200),
                   curve: Curves.bounceIn),
             ),
-            Subjects(context),
-            Days('Montag'),
-            Days('Dienstag'),
-            Days('Mittwoch'),
-            Days('Donnerstag'),
-            Days('Freitag'),
             Center(
               child: FinishedScreen(
                 onButtonPressed: () {
@@ -136,60 +128,8 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-/**
- * Dieses Widget beinhaltet die 2. Seite des Leitfadens.
- * Hier findet sich die Möglichkeit zum Einstellen der Fächer.
- */
-Widget Subjects(BuildContext context) {
-  final GlobalKey<ManageSubjectsState> subjectsAccess =
-      GlobalKey<ManageSubjectsState>();
-  return Container(
-    padding: EdgeInsets.all(15),
-    child: Column(
-      children: [
-        Text('Fächer',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-        Divider(),
-        Text(
-          'Trage hier alle deine Fächer ein. Du kannst zu den Vorhandenen weitere hinzufügen oder diese auch löschen. Die Fächer werden benötigt, um den Stundenplan zu erstellen.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontStyle: FontStyle.italic),
-        ),
-        Expanded(
-          child: ManageSubjects(key: subjectsAccess),
-        ),
-        Divider(),
-        CupertinoButton(
-          onPressed: () => subjectsAccess.currentState!.addSubject(),
-          color: (Theme.of(context).brightness == Brightness.light) ? Theme.of(context).floatingActionButtonTheme.backgroundColor : Theme.of(context).accentColor,
-          child: Text('Fach hinzufügen', style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.foregroundColor),),
-        ),
-      ],
-    ),
-  );
-}
 
-/**
- * Dieses Widget beinhaltet die Seite zum Einstellen des Stundenplans.
- * Der Tag, dessen Stundenplan eingestellt werden soll, wird per Parameter übergeben.
- */
-Widget Days(String pDay) {
-  return Container(
-      padding: EdgeInsets.all(15),
-      child: Column(
-        children: [
-          Text(pDay,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-          Divider(),
-          Text(
-              'Trage hier deinen Stundenplan für $pDay ein. Wähle die Fächer aus dem Dropdown-Menü.',
-              style: TextStyle(fontStyle: FontStyle.italic)),
-          Expanded(child: SetSubjects(pDay))
-        ],
-      ));
-}
+
 
 /**
  * Dieses Widget beinhaltet die letzte Seite des Leitfadens

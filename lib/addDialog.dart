@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/subject.dart';
-import 'package:annette_app/task.dart';
-import 'package:annette_app/taskDbInteraction.dart';
-import 'subjectsAtDay.dart';
-import 'subjectsAtDayDbInteraction.dart';
-import 'subjectDbInteraction.dart';
-import 'lessonStartTime.dart';
-import 'lessonStartTimeDbInteraction.dart';
+import 'package:annette_app/classes/subject.dart';
+import 'package:annette_app/classes/task.dart';
+import 'package:annette_app/database/taskDbInteraction.dart';
+import 'database/subjectDbInteraction.dart';
+import 'classes/lessonStartTime.dart';
+import 'database/lessonStartTimeDbInteraction.dart';
 import 'parseTime.dart';
 import 'manageNotifications.dart';
+import 'package:annette_app/currentValues.dart';
 
 /**
  * Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
@@ -23,6 +22,7 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
+  CurrentValues getCV = new CurrentValues();
   bool finished = false;
   int? nextId;
   DateTime currentTime = DateTime.now();
@@ -41,7 +41,6 @@ class _AddDialogState extends State<AddDialog> {
   DateTime? detectedDeadlineTime;
 
   late List<LessonStartTime> times;
-  late List<SubjectsAtDay> days;
   late List<Subject> subjects;
   List<String?> subjectNames = [];
 
@@ -62,7 +61,6 @@ class _AddDialogState extends State<AddDialog> {
     }
 
     times = await databaseGetAllTimes();
-    days = await databaseGetAllDays();
 
     getAutoValues();
 
@@ -81,27 +79,19 @@ class _AddDialogState extends State<AddDialog> {
    * Diese Methode sorgt dafür, dass die Werte aktuelles Fach, nächster Zeitpunkt laut Stundenplan und Zeitpunkt
    * der Benachrichtigung automatisch ermittelt werden.
    */
-  void getAutoValues() {
+  void getAutoValues() async {
     if (currentTime.weekday > 5 ||
-        currentTime.isBefore(getStartOfFirstLesson()) ||
-        getCurrentSubject() == null) {
+        currentTime.isBefore(getCV.getStartOfFirstLesson()) ||
+        await getCV.getCurrentSubject() == null) {
       autoTime = false;
     } else {
-      detectedSubject = getCurrentSubject();
-      detectedDeadlineTime = getNextLesson(detectedSubject);
+      detectedSubject = await getCV.getCurrentSubject();
+      detectedDeadlineTime = getCV.getNextLesson(detectedSubject);
       detectedNotificationTime = getNotificationTime(detectedDeadlineTime!);
     }
   }
 
-  /**
-   * Diese Methode gibt den Zeitpunkt des Starts der 1. Stunde am aktuellen Tag zurück.
-   */
-  DateTime getStartOfFirstLesson() {
-    DateTime temp =
-        new DateTime(currentTime.year, currentTime.month, currentTime.day);
-    temp = temp.add(parseDuration(times[0].time!));
-    return temp;
-  }
+
 
   /**
    * Diese Methode berechnet anhand eines per Parameter übergebenen Zetpunkts
@@ -116,158 +106,11 @@ class _AddDialogState extends State<AddDialog> {
     return temp;
   }
 
-  /**
-   * Diese Methode gibt den zeitpunkt zurück, wann der Benutzer das per Parameter
-   * übergebene Fach das nächste Mal laut Stundenplan hat.
-   */
-  DateTime? getNextLesson(String? pSubject) {
-    if (pSubject == null) {
-      return null;
-    }
-    bool gotNext = false;
-    late int lessonNumber;
-    DateTime nextLesson;
-
-    int i;
-
-    if (currentTime.weekday > 5) {
-      i = 5;
-    } else {
-      i = currentTime.weekday;
-    }
-
-    int exitLoop = 0;
-    int daysAdded = 0;
-
-    while (!gotNext) {
-      if (exitLoop > 5) {
-        return null;
-      }
-      exitLoop++;
-      if (i == 5) {
-        i = 0;
-        daysAdded = daysAdded + 2;
-      }
-
-      if (days[i].lesson1 == pSubject) {
-        gotNext = true;
-        lessonNumber = 1;
-      } else if (days[i].lesson2 == pSubject) {
-        gotNext = true;
-        lessonNumber = 2;
-      } else if (days[i].lesson3 == pSubject) {
-        gotNext = true;
-        lessonNumber = 3;
-      } else if (days[i].lesson4 == pSubject) {
-        gotNext = true;
-        lessonNumber = 4;
-      } else if (days[i].lesson5 == pSubject) {
-        gotNext = true;
-        lessonNumber = 5;
-      } else if (days[i].lesson6 == pSubject) {
-        gotNext = true;
-        lessonNumber = 6;
-      } else if (days[i].lesson7 == pSubject) {
-        gotNext = true;
-        lessonNumber = 7;
-      } else if (days[i].lesson8 == pSubject) {
-        gotNext = true;
-        lessonNumber = 8;
-      } else if (days[i].lesson9 == pSubject) {
-        gotNext = true;
-        lessonNumber = 9;
-      } else if (days[i].lesson10 == pSubject) {
-        gotNext = true;
-        lessonNumber = 10;
-      } else if (days[i].lesson11 == pSubject) {
-        gotNext = true;
-        lessonNumber = 11;
-      }
-      i++;
-      daysAdded++;
-    }
-
-    if (currentTime.weekday > 5) {
-      DateTime temp = currentTime;
-      if (currentTime.weekday == 6) {
-        temp = temp.subtract(new Duration(days: 1));
-      } else {
-        temp = temp.subtract(new Duration(days: 2));
-      }
-
-      nextLesson = new DateTime(temp.year, temp.month, temp.day);
-    } else {
-      nextLesson =
-          new DateTime(currentTime.year, currentTime.month, currentTime.day);
-    }
-
-    nextLesson = nextLesson.add(new Duration(days: daysAdded));
-    nextLesson = nextLesson.add(parseDuration(times[(lessonNumber - 1)].time!));
-
-    return nextLesson;
-  }
-
-  /**
-   * Diese Methode ermittelt das Schulfach, welches der Benutzer laut Stundenplan
-   * aktuell hat und gibt es als String zurück.
-   */
-  String? getCurrentSubject() {
-    int currentLesson = 0;
-    String? subject;
-    int weekdayForDays = currentTime.weekday - 1;
-
-    for (int i = 0; i < times.length; i++) {
-      DateTime temp =
-          new DateTime(currentTime.year, currentTime.month, currentTime.day);
-      temp = temp.add(parseDuration(times[i].time!));
-
-      if (currentTime.isAfter(temp)) {
-        if ((i == 0 && days[weekdayForDays].lesson1 != 'Freistunde') ||
-            (i == 1 && days[weekdayForDays].lesson2 != 'Freistunde') ||
-            (i == 2 && days[weekdayForDays].lesson3 != 'Freistunde') ||
-            (i == 3 && days[weekdayForDays].lesson4 != 'Freistunde') ||
-            (i == 4 && days[weekdayForDays].lesson5 != 'Freistunde') ||
-            (i == 5 && days[weekdayForDays].lesson6 != 'Freistunde') ||
-            (i == 6 && days[weekdayForDays].lesson7 != 'Freistunde') ||
-            (i == 7 && days[weekdayForDays].lesson8 != 'Freistunde') ||
-            (i == 8 && days[weekdayForDays].lesson9 != 'Freistunde') ||
-            (i == 9 && days[weekdayForDays].lesson10 != 'Freistunde') ||
-            (i == 10 && days[weekdayForDays].lesson11 != 'Freistunde')) {
-          currentLesson = i + 1;
-        }
-      }
-    }
-
-    if (currentLesson == 1) {
-      subject = days[weekdayForDays].lesson1;
-    } else if (currentLesson == 2) {
-      subject = days[weekdayForDays].lesson2;
-    } else if (currentLesson == 3) {
-      subject = days[weekdayForDays].lesson3;
-    } else if (currentLesson == 4) {
-      subject = days[weekdayForDays].lesson4;
-    } else if (currentLesson == 5) {
-      subject = days[weekdayForDays].lesson5;
-    } else if (currentLesson == 6) {
-      subject = days[weekdayForDays].lesson6;
-    } else if (currentLesson == 7) {
-      subject = days[weekdayForDays].lesson7;
-    } else if (currentLesson == 8) {
-      subject = days[weekdayForDays].lesson8;
-    } else if (currentLesson == 9) {
-      subject = days[weekdayForDays].lesson9;
-    } else if (currentLesson == 10) {
-      subject = days[weekdayForDays].lesson10;
-    } else if (currentLesson == 11) {
-      subject = days[weekdayForDays].lesson11;
-    }
-
-    return subject;
-  }
 
   ///Hilfsmethode zum Laden der Fächer und des Stundenplans.
   void load() async {
-    Future.delayed(Duration(seconds: 0), () {
+    Future.delayed(Duration(seconds: 0), () async {
+      await getCV.initialize();
       getSubjectsAndTimes();
     });
   }
@@ -438,7 +281,7 @@ class _AddDialogState extends State<AddDialog> {
 
                                       if (selectedSubject != 'Sonstiges') {
                                         detectedDeadlineTime =
-                                            getNextLesson(selectedSubject);
+                                            getCV.getNextLesson(selectedSubject);
                                         if (detectedDeadlineTime == null) {
                                           autoTime = false;
                                         } else {

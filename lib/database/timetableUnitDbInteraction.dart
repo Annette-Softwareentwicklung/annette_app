@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:annette_app/timetableUnit.dart';
+import 'package:annette_app/classes/timetableUnit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';

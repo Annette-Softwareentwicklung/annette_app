@@ -1,13 +1,13 @@
 import 'package:annette_app/classesMap.dart';
-import 'package:annette_app/subjectDbInteraction.dart';
-import 'package:annette_app/timetableUnit.dart';
-import 'package:annette_app/timetableUnitDbInteraction.dart';
+import 'package:annette_app/database/subjectDbInteraction.dart';
+import 'package:annette_app/classes/timetableUnit.dart';
+import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:annette_app/databaseCreate.dart';
-import 'package:annette_app/subject.dart';
+import 'package:annette_app/database/databaseCreate.dart';
+import 'package:annette_app/classes/subject.dart';
 
 class TimetableCrawler {
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk

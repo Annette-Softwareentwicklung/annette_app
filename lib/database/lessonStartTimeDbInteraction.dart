@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'databaseCreate.dart';
-import 'lessonStartTime.dart';
+import '../classes/lessonStartTime.dart';
 
 /**
  * Diese Methode fügt eine neue Anfangszeit einer Schulstunde in die Datenbank ein.

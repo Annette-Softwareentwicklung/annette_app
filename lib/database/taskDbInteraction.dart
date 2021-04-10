@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'databaseCreate.dart';
-import 'task.dart';
+import '../classes/task.dart';
 
 /**
  * Diese Methode fügt eine neue Hausaufgabe in die Datenbank ein.

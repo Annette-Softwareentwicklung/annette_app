@@ -451,13 +451,20 @@ class _SetClassState extends State<SetClass> {
                     ),
                     //width: 150,
                     decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: (Theme.of(context).brightness == Brightness.dark)
+                          ? Theme.of(context).accentColor
+                          : Colors.blue,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Text(
-                      'Kurse wählen',
+                      'Weiter',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: (Theme.of(context).brightness == Brightness.dark)
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                     )),
               ),
             ))
@@ -479,7 +486,7 @@ class _SetClassState extends State<SetClass> {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 int j = index + 1;
-                List<String> tempSubjects = (j == 1) ? lk1 :lk2;
+                List<String> tempSubjects = (j == 1) ? lk1 : lk2;
                 return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -488,8 +495,8 @@ class _SetClassState extends State<SetClass> {
                         style: TextStyle(fontSize: 17.0),
                       ),
                       DropdownButton<String>(
-                        items:
-                        tempSubjects.map<DropdownMenuItem<String>>((String? value) {
+                        items: tempSubjects
+                            .map<DropdownMenuItem<String>>((String? value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value!),
@@ -519,7 +526,31 @@ class _SetClassState extends State<SetClass> {
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               int j = index + 1;
-              List<String> tempSubjects = (j == 1) ? gk1 : (j == 2) ? gk2 : (j == 3) ? gk3 : (j == 4) ? gk4 : (j == 5) ? gk5 : (j == 6) ? gk6 : (j == 7) ? gk7 : (j == 8) ? gk8 : (j == 9) ? gk9 : (j == 10) ? gk10 : (j == 11) ? gk11 : (j == 12) ? gk12 : gk13;
+              List<String> tempSubjects = (j == 1)
+                  ? gk1
+                  : (j == 2)
+                      ? gk2
+                      : (j == 3)
+                          ? gk3
+                          : (j == 4)
+                              ? gk4
+                              : (j == 5)
+                                  ? gk5
+                                  : (j == 6)
+                                      ? gk6
+                                      : (j == 7)
+                                          ? gk7
+                                          : (j == 8)
+                                              ? gk8
+                                              : (j == 9)
+                                                  ? gk9
+                                                  : (j == 10)
+                                                      ? gk10
+                                                      : (j == 11)
+                                                          ? gk11
+                                                          : (j == 12)
+                                                              ? gk12
+                                                              : gk13;
               return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
@@ -528,7 +559,8 @@ class _SetClassState extends State<SetClass> {
                       style: TextStyle(fontSize: 17.0),
                     ),
                     DropdownButton<String>(
-                      items: tempSubjects.map<DropdownMenuItem<String>>((String? value) {
+                      items: tempSubjects
+                          .map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value!),
@@ -614,8 +646,8 @@ class _SetClassState extends State<SetClass> {
                         style: TextStyle(fontSize: 17.0),
                       ),
                       DropdownButton<String>(
-                        items:
-                        tempSubjects.map<DropdownMenuItem<String>>((String? value) {
+                        items: tempSubjects
+                            .map<DropdownMenuItem<String>>((String? value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value!),
@@ -659,13 +691,20 @@ class _SetClassState extends State<SetClass> {
                   ),
                   //width: 150,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: (Theme.of(context).brightness == Brightness.dark)
+                        ? Theme.of(context).accentColor
+                        : Colors.blue,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(
                     'Speichern',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: (Theme.of(context).brightness == Brightness.dark)
+                          ? Colors.black
+                          : Colors.white,
+                    ),
                   )),
             ),
           ),
@@ -717,13 +756,15 @@ class _SetClassState extends State<SetClass> {
                             .backgroundColor
                         : Theme.of(context).accentColor,
                     child: Text(
-                      'Los geht\'s',
+                      'Zurück zur App',
                       style: TextStyle(
                           color: Theme.of(context)
                               .floatingActionButtonTheme
                               .foregroundColor),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ],
               )));

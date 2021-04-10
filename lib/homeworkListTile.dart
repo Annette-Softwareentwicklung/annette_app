@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/defaultScaffold.dart';
 import 'package:annette_app/parseTime.dart';
-import 'package:annette_app/taskDbInteraction.dart';
+import 'package:annette_app/database/taskDbInteraction.dart';
 import 'customCheckbox.dart';
 import 'detailedView.dart';
-import 'task.dart';
+import 'classes/task.dart';
 import 'manageNotifications.dart';
 
 /**

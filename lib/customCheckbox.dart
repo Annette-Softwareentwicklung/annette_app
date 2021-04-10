@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/task.dart';
+import 'package:annette_app/classes/task.dart';
 
 /**
  * Die Klasse CustomCheckbox erstellt ein selbstgebautes Checkbox-Widget, welches abgehakt werden kann

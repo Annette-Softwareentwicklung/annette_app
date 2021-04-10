@@ -5,9 +5,9 @@ import 'package:flutter/gestures.dart';
  * bei der alle Informationen bezüglich der Aufgabe angezeigt werden können.
  */
 import 'package:flutter/material.dart';
-import 'package:annette_app/taskDbInteraction.dart';
+import 'package:annette_app/database/taskDbInteraction.dart';
 import 'manageNotifications.dart';
-import 'task.dart';
+import 'classes/task.dart';
 import 'parseTime.dart';
 
 class DetailedView extends StatefulWidget {

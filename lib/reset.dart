@@ -4,7 +4,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'databaseCreate.dart';
+import 'database/databaseCreate.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
@@ -230,7 +230,6 @@ class Reset extends StatelessWidget {
     await db.execute("DELETE FROM subjects");
     await db.execute("DELETE FROM days");
     insertStandardSubjects(db);
-    insertDays(db);
   }
 
   /**

@@ -1,18 +1,14 @@
+import 'package:annette_app/classicTimetable.dart';
+import 'package:annette_app/setClass.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/manageSubjects.dart';
 import 'package:annette_app/reset.dart';
-import 'package:annette_app/setDays.dart';
-import 'package:annette_app/setTimes.dart';
-import 'defaultScaffold.dart';
+import 'package:annette_app/defaultScaffold.dart';
 
 /**
  * Diese Klasse beinhaltet den Einstellungsbereich.
  * App => Menüleiste => Einstellungen
  */
 class SettingsTab extends StatelessWidget {
-  final GlobalKey<ManageSubjectsState> subjectsAccess =
-      GlobalKey<ManageSubjectsState>();
-
   /**
    * AboutDialog.
    * Dialog, der Informationen über diese App, wie zB Versionsnummer, bereit hält.
@@ -33,8 +29,7 @@ class SettingsTab extends StatelessWidget {
                   width: 36,
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
-      applicationLegalese:
-          'Annete App neue Version\n\n©2021 Jan Wermeckes',
+      applicationLegalese: 'Annete App neue Version\n\n©2021 Jan Wermeckes',
     );
   }
 
@@ -54,18 +49,29 @@ class SettingsTab extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           ListTile(
+              title: Text('Klassischer Stundenplan'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return DefaultScaffold(
+                      title: 'Stundenplan', content: ClassicTimetable());
+                }),
+              )),
+Divider(),ListTile(),
+          Divider(),
+          ListTile(
               title: Text('Klasse wählen'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
               onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return DefaultScaffold(
-                          title: 'Wochentage', content: SetDays());
+                          title: 'Klasse wählen', content: SetClass());
                     }),
                   )),
           Divider(),
-          ListTile(),
-          Divider(),
+
           ListTile(
             title: Text('Über diese App'),
             trailing:
