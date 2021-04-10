@@ -40,15 +40,8 @@ class _SetClassState extends State<SetClass> {
   String selectedSecondLanguageUS = 'Freistunde';
   late String selectedDiffUS;
 
-  List<String> religionUS = [
-    'Kath. Religion',
-    'Ev. Religion',
-    'Philosophie'
-  ];
-  List<String> secondLanguageUS = [
-    'Latein',
-    'Französisch'
-  ];
+  List<String> religionUS = ['Kath. Religion', 'Ev. Religion', 'Philosophie'];
+  List<String> secondLanguageUS = ['Latein', 'Französisch'];
   List<String> diffUS = [
     'Informatik',
     'Physik-Technik',
@@ -57,8 +50,7 @@ class _SetClassState extends State<SetClass> {
     'Geschichte'
   ];
 
-
-  List<String> lk1 = ['Freistunde', 'Mathe', 'Physik'];
+  List<String> lk1 = ['Freistunde', 'Mathe', 'PH LK'];
   List<String> lk2 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> gk1 = ['Freistunde', 'Mathe', 'Physik', 'BI GK3'];
   List<String> gk2 = ['Freistunde', 'Mathe', 'Physik'];
@@ -124,15 +116,15 @@ class _SetClassState extends State<SetClass> {
 
     if (selectedClass == 'Q1') {
       tempConfiguration =
-      'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
       await _writeData(tempConfiguration);
     } else if (selectedClass == 'Q2') {
       tempConfiguration =
-      'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:$selectedZk1;zk2:$selectedZk1;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:$selectedZk1;zk2:$selectedZk1;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
       await _writeData(tempConfiguration);
     } else {
       tempConfiguration =
-      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
       await _writeData(tempConfiguration);
     }
 
@@ -157,19 +149,43 @@ class _SetClassState extends State<SetClass> {
 
     String tempConfiguration;
 
+    if (selectedReligionUS == 'Kath. Religion') {
+      selectedReligionUS = 'KR';
+    } else if (selectedReligionUS == 'Ev. Religion') {
+      selectedReligionUS = 'ER';
+    } else {
+      selectedReligionUS = 'PPL';
+    }
 
+    if (selectedSecondLanguageUS == 'Französisch') {
+      selectedSecondLanguageUS = 'F6';
+    } else {
+      selectedSecondLanguageUS = 'L6';
+    }
+
+    if (selectedDiffUS == 'Physik-Technik') {
+      selectedDiffUS = 'PHd';
+    } else if (selectedDiffUS == 'Kunst') {
+      selectedDiffUS = 'KUd';
+    } else if (selectedDiffUS == 'Spanisch') {
+      selectedDiffUS = 'S8';
+    } else if (selectedDiffUS == 'Geschichte') {
+      selectedDiffUS = 'GEd';
+    } else {
+      selectedDiffUS = 'IFd';
+    }
 
     if (selectedClass.contains('8') || selectedClass.contains('9')) {
       tempConfiguration =
-      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:$selectedDiffUS;';
+          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:$selectedDiffUS;';
       await _writeData(tempConfiguration);
     } else if (!selectedClass.contains('5')) {
       tempConfiguration =
-      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:Freistunde;';
       await _writeData(tempConfiguration);
     } else {
       tempConfiguration =
-      'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
       await _writeData(tempConfiguration);
     }
 
@@ -200,7 +216,6 @@ class _SetClassState extends State<SetClass> {
       final _myFile = File('$_path/configuration.txt');
       await _myFile.writeAsString(pData);
     }
-
 
     if (selectedClass == 'Q1' ||
         selectedClass == 'Q2' ||
@@ -253,11 +268,11 @@ class _SetClassState extends State<SetClass> {
           selectedSecondLanguageUS = configurationList[19];
           selectedDiffUS = configurationList[20];
         } else {
-          selectedReligionUS = 'Freistunde';
-          selectedSecondLanguageUS  = 'Freistunde';
-          selectedDiffUS = 'Freistunde';
+          selectedReligionUS = 'Kath. Religion';
+          selectedSecondLanguageUS = 'Latein';
+          selectedDiffUS = 'Informatik';
         }
-      showGroupsUS = true;
+        showGroupsUS = true;
       });
     }
   }
@@ -297,12 +312,40 @@ class _SetClassState extends State<SetClass> {
         tempContent.add(contents.substring(contents.indexOf('zk2:') + 4,
             contents.indexOf(';', contents.indexOf('zk2:'))));
 
-        tempContent.add(contents.substring(contents.indexOf('religionUS:') + 11,
-            contents.indexOf(';', contents.indexOf('religionUS:'))));
-        tempContent.add(contents.substring(contents.indexOf('sLanguageUS:') + 12,
-            contents.indexOf(';', contents.indexOf('sLanguageUS:'))));
-        tempContent.add(contents.substring(contents.indexOf('diffUS:') + 7,
-            contents.indexOf(';', contents.indexOf('diffUS:'))));
+        String tempReligion = contents.substring(
+            contents.indexOf('religionUS:') + 11,
+            contents.indexOf(';', contents.indexOf('religionUS:')));
+        String temp2Language = contents.substring(
+            contents.indexOf('sLanguageUS:') + 12,
+            contents.indexOf(';', contents.indexOf('sLanguageUS:')));
+        String tempDiff = contents.substring(contents.indexOf('diffUS:') + 7,
+            contents.indexOf(';', contents.indexOf('diffUS:')));
+
+        if (tempReligion == 'KR') {
+          tempContent.add('Kath. Religion');
+        } else if (tempReligion == 'ER') {
+          tempContent.add('Ev. Religion');
+        } else {
+          tempContent.add('Philosophie');
+        }
+
+        if (temp2Language == 'F6') {
+          tempContent.add('Französisch');
+        } else {
+          tempContent.add('Latein');
+        }
+
+        if (tempDiff == 'PHd') {
+          tempContent.add('Physik-Technik');
+        } else if (tempDiff == 'KUd') {
+          tempContent.add('Kunst');
+        } else if (tempDiff == 'S8') {
+          tempContent.add('Spanisch');
+        } else if (tempDiff == 'GEd') {
+          tempContent.add('Geschichte');
+        } else {
+          tempContent.add('Informatik');
+        }
 
         return tempContent;
       } catch (e) {
@@ -359,7 +402,9 @@ class _SetClassState extends State<SetClass> {
             ? FinishedConfiguration()
             : (showGroupsOS)
                 ? GroupsOS()
-                : Classes());
+                : (showGroupsUS)
+                    ? GroupsUS()
+                    : Classes());
   }
 
   Widget Classes() {
@@ -434,6 +479,7 @@ class _SetClassState extends State<SetClass> {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 int j = index + 1;
+                List<String> tempSubjects = (j == 1) ? lk1 :lk2;
                 return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -443,7 +489,7 @@ class _SetClassState extends State<SetClass> {
                       ),
                       DropdownButton<String>(
                         items:
-                            lk1.map<DropdownMenuItem<String>>((String? value) {
+                        tempSubjects.map<DropdownMenuItem<String>>((String? value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value!),
@@ -473,6 +519,7 @@ class _SetClassState extends State<SetClass> {
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               int j = index + 1;
+              List<String> tempSubjects = (j == 1) ? gk1 : (j == 2) ? gk2 : (j == 3) ? gk3 : (j == 4) ? gk4 : (j == 5) ? gk5 : (j == 6) ? gk6 : (j == 7) ? gk7 : (j == 8) ? gk8 : (j == 9) ? gk9 : (j == 10) ? gk10 : (j == 11) ? gk11 : (j == 12) ? gk12 : gk13;
               return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
@@ -481,7 +528,7 @@ class _SetClassState extends State<SetClass> {
                       style: TextStyle(fontSize: 17.0),
                     ),
                     DropdownButton<String>(
-                      items: gk1.map<DropdownMenuItem<String>>((String? value) {
+                      items: tempSubjects.map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value!),
@@ -558,6 +605,7 @@ class _SetClassState extends State<SetClass> {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 int j = index + 1;
+                List<String> tempSubjects = (j == 1) ? zk1 : zk2;
                 return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -567,7 +615,7 @@ class _SetClassState extends State<SetClass> {
                       ),
                       DropdownButton<String>(
                         items:
-                            lk1.map<DropdownMenuItem<String>>((String? value) {
+                        tempSubjects.map<DropdownMenuItem<String>>((String? value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value!),
@@ -687,129 +735,130 @@ class _SetClassState extends State<SetClass> {
   Widget GroupsUS() {
     return Container(
         child: CustomScrollView(
-          slivers: <Widget>[
+      slivers: <Widget>[
+        ///Religion
+        SliverList(
+            delegate: SliverChildListDelegate.fixed([
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(
+                  'Religion:',
+                  style: TextStyle(fontSize: 17.0),
+                ),
+                DropdownButton<String>(
+                  items:
+                      religionUS.map<DropdownMenuItem<String>>((String? value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value!),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedReligionUS = newValue!;
+                    });
+                  },
+                  value: selectedReligionUS,
+                  hint: Text('Fach'),
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+              ])
+        ])),
 
-            ///Religion
-            SliverList(
-                delegate: SliverChildListDelegate.fixed([
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(
-                          'Religion:',
-                          style: TextStyle(fontSize: 17.0),
-                        ),
-                        DropdownButton<String>(
-                          items:
-                          religionUS.map<DropdownMenuItem<String>>((String? value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value!),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedReligionUS = newValue!;
-                            });
-                          },
-                          value: selectedReligionUS,
-                          hint: Text('Fach'),
-                          icon: Icon(Icons.arrow_drop_down),
-                        ),
-                      ])
-                ])),
-
-            ///2. Fremdsprache
-   if (!selectedClass.contains('5') && !selectedClass.contains('F')) SliverList(
-                delegate: SliverChildListDelegate.fixed([
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(
-                          '2. Sprache:',
-                          style: TextStyle(fontSize: 17.0),
-                        ),
-                        DropdownButton<String>(
-                          items:
-                          secondLanguageUS.map<DropdownMenuItem<String>>((String? value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value!),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedSecondLanguageUS = newValue!;
-                            });
-                          },
-                          value: selectedSecondLanguageUS,
-                          hint: Text('Fach'),
-                          icon: Icon(Icons.arrow_drop_down),
-                        ),
-                      ])
-                ])),
-
-            ///Diff
-    if (selectedClass.contains('8') || selectedClass.contains('9')) SliverList(
-                delegate: SliverChildListDelegate.fixed([
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(
-                          'Diff.-Fach:',
-                          style: TextStyle(fontSize: 17.0),
-                        ),
-                        DropdownButton<String>(
-                          items:
-                          diffUS.map<DropdownMenuItem<String>>((String? value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value!),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDiffUS = newValue!;
-                            });
-                          },
-                          value: selectedDiffUS,
-                          hint: Text('Fach'),
-                          icon: Icon(Icons.arrow_drop_down),
-                        ),
-                      ])
-                ])),
-
-            ///Button
-            SliverList(
-                delegate: SliverChildListDelegate.fixed([
-                  Container(
-                    margin: EdgeInsets.all(15),
-                    child: TextButton(
-                      onPressed: () {
-                        setGroupsUS();
-                      },
-                      child: Container(
-                          padding: EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          //height: 50,
-                          constraints: BoxConstraints(
-                            minWidth: 150,
-                            minHeight: 50,
-                          ),
-                          //width: 150,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: Text(
-                            'Speichern',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 18, color: Colors.white),
-                          )),
-                    ),
+        ///2. Fremdsprache
+        if (!selectedClass.contains('5') && !selectedClass.contains('F'))
+          SliverList(
+              delegate: SliverChildListDelegate.fixed([
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text(
+                    '2. Sprache:',
+                    style: TextStyle(fontSize: 17.0),
                   ),
-                ])),
-          ],
-        ));
+                  DropdownButton<String>(
+                    items: secondLanguageUS
+                        .map<DropdownMenuItem<String>>((String? value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value!),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedSecondLanguageUS = newValue!;
+                      });
+                    },
+                    value: selectedSecondLanguageUS,
+                    hint: Text('Fach'),
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                ])
+          ])),
+
+        ///Diff
+        if (selectedClass.contains('8') || selectedClass.contains('9'))
+          SliverList(
+              delegate: SliverChildListDelegate.fixed([
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text(
+                    'Diff.-Fach:',
+                    style: TextStyle(fontSize: 17.0),
+                  ),
+                  DropdownButton<String>(
+                    items:
+                        diffUS.map<DropdownMenuItem<String>>((String? value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value!),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedDiffUS = newValue!;
+                      });
+                    },
+                    value: selectedDiffUS,
+                    hint: Text('Fach'),
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                ])
+          ])),
+
+        ///Button
+        SliverList(
+            delegate: SliverChildListDelegate.fixed([
+          Container(
+            margin: EdgeInsets.all(15),
+            child: TextButton(
+              onPressed: () {
+                setGroupsUS();
+              },
+              child: Container(
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  //height: 50,
+                  constraints: BoxConstraints(
+                    minWidth: 150,
+                    minHeight: 50,
+                  ),
+                  //width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Text(
+                    'Speichern',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  )),
+            ),
+          ),
+        ])),
+      ],
+    ));
   }
 }
