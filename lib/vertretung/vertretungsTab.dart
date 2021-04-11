@@ -11,8 +11,8 @@ class VertretungsTab extends StatefulWidget {
 
 class _VertretungsTabState extends State<VertretungsTab> {
   String? htmlCode;
-  List<VertretungsEinheit> vertretungenHeute = [];
-  List<VertretungsEinheit> vertretungenMorgen = [];
+  List<VertretungsEinheit>? vertretungenHeute = [];
+  List<VertretungsEinheit>? vertretungenMorgen = [];
   List<String> informationToday = [];
   List<String> informationTomorrow = [];
   String dateTomorrow = 'Morgen';
@@ -29,13 +29,17 @@ class _VertretungsTabState extends State<VertretungsTab> {
         VertretungsplanCrawler vpc1 =
             new VertretungsplanCrawler(htmlCode: htmlCode);
         dateToday = vpc1.getCurrentDate();
-        vertretungenHeute = await vpc1.getVertretungen();
         lastEdited = vpc1.getLastEdited();
-        vpc1.getAffectedClasses();
         informationToday = vpc1.getInformation();
+        vertretungenHeute = await vpc1.getVertretungen();
+
+        /*
+        vpc1.getAffectedClasses();
+        */
         load = true;
         setState(() {});
       } else {
+
         load = false;
       }
 
@@ -46,16 +50,17 @@ class _VertretungsTabState extends State<VertretungsTab> {
         VertretungsplanCrawler vpc2 =
             new VertretungsplanCrawler(htmlCode: htmlCode);
         dateTomorrow = vpc2.getCurrentDate();
-        vertretungenMorgen = await vpc2.getVertretungen();
-        vpc2.getLastEdited();
-        vpc2.getAffectedClasses();
         informationTomorrow = vpc2.getInformation();
-        print('test');
-        print(informationTomorrow[0]);
+        vertretungenMorgen = await vpc2.getVertretungen();
+
+        /*
+        vpc2.getAffectedClasses();
+        */
         load = true;
         setState(() {});
       } else {
         load = false;
+
       }
     } catch (e) {
       load = false;
@@ -112,10 +117,10 @@ class _VertretungsTabState extends State<VertretungsTab> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return VertretungListTile(vertretungenHeute[
+                  return VertretungListTile(vertretungenHeute![
                       index]); // you can add your available item here
                 },
-                childCount: vertretungenHeute.length,
+                childCount: vertretungenHeute!.length,
               ),
             ),
             SliverList(
@@ -128,10 +133,10 @@ class _VertretungsTabState extends State<VertretungsTab> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return VertretungListTile(vertretungenMorgen[
+                  return VertretungListTile(vertretungenMorgen![
                       index]); // you can add your available item here
                 },
-                childCount: vertretungenMorgen.length,
+                childCount: vertretungenMorgen!.length,
               ),
             )
           ],

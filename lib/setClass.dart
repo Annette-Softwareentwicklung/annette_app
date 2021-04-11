@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SetClass extends StatefulWidget {
+  final bool isInGuide;
+  final VoidCallback onButtonPressed;
+  SetClass({required this.isInGuide, required this.onButtonPressed});
+
   @override
   _SetClassState createState() => _SetClassState();
 }
@@ -69,8 +73,6 @@ class _SetClassState extends State<SetClass> {
   List<String> gk13 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> zk1 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> zk2 = ['Freistunde', 'Mathe', 'Physik'];
-
-
 
   void setGroupsOS() async {
     Future<String> _getPath() async {
@@ -372,22 +374,33 @@ class _SetClassState extends State<SetClass> {
         padding: EdgeInsets.all(20),
         constraints: BoxConstraints(maxWidth: 400),
         alignment: Alignment.center,
-        child: (showFinishedConfiguration)
+        child:
+        SingleChildScrollView(child: Center(child:
+        (showFinishedConfiguration)
             ? FinishedConfiguration()
             : (showGroupsOS)
                 ? GroupsOS()
                 : (showGroupsUS)
                     ? GroupsUS()
-                    : Classes());
+                    : Classes()
+        ),),
+    );
   }
 
   Widget Classes() {
     if (finished) {
       return Center(
-        child: IntrinsicHeight(
             child: Column(
           children: [
-            Text('Klasse wählen:'),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                'Klasse wählen:',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+            ),
             Container(
                 height: 200,
                 decoration: BoxDecoration(
@@ -443,7 +456,7 @@ class _SetClassState extends State<SetClass> {
               ),
             ))
           ],
-        )),
+        )
       );
     } else {
       return CupertinoActivityIndicator();
@@ -717,11 +730,17 @@ class _SetClassState extends State<SetClass> {
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 30),
-                    child: Text(
-                      'Deine Klasse wurde geändert!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17),
-                    ),
+                    child: (widget.isInGuide)
+                        ? Text(
+                            'Viel Spaß beim Benutzen der App!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 17),
+                          )
+                        : Text(
+                            'Deine Klasse wurde geändert!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 17),
+                          ),
                   ),
                   CupertinoButton(
                     color: (Theme.of(context).brightness == Brightness.light)
@@ -729,14 +748,23 @@ class _SetClassState extends State<SetClass> {
                             .floatingActionButtonTheme
                             .backgroundColor
                         : Theme.of(context).accentColor,
-                    child: Text(
-                      'Zurück zur App',
-                      style: TextStyle(
-                          color: Theme.of(context)
-                              .floatingActionButtonTheme
-                              .foregroundColor),
-                    ),
+                    child: (widget.isInGuide)
+                        ? Text(
+                            'Los geht\'s',
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .floatingActionButtonTheme
+                                    .foregroundColor),
+                          )
+                        : Text(
+                            'Zurück zur App',
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .floatingActionButtonTheme
+                                    .foregroundColor),
+                          ),
                     onPressed: () {
+                      widget.onButtonPressed();
                       Navigator.of(context).pop();
                     },
                   ),

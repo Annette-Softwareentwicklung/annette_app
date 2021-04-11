@@ -1,4 +1,5 @@
 
+import 'package:annette_app/setClass.dart';
 /**
  * Diese Datei beinhaltet den Leitfaden, welcher beim ersten Start der App den Benutzer durch die Einstellungen führt.
  */
@@ -15,6 +16,8 @@ class GuideDialog extends StatefulWidget {
 
 class _GuideDialogState extends State<GuideDialog> {
   final controller = PageController(initialPage: 0);
+  bool page1 = true;
+
 
   /**
    * Erstellen des PageViews, welcher den Leitfanden mit dessen einzelnen Seiten anzeigt
@@ -26,23 +29,18 @@ class _GuideDialogState extends State<GuideDialog> {
       child: Container(
         constraints: BoxConstraints(maxHeight: 700, maxWidth: 350),
         //padding: EdgeInsets.all(15),
-        child: PageView(
-          controller: controller,
-          scrollDirection: Axis.horizontal,
-          children: [
-            WelcomeScreen(
-              onNextPage: () => controller.nextPage(
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.bounceIn),
-            ),
-            Center(
-              child: FinishedScreen(
-                onButtonPressed: () {
-                  widget.onCompleted!();
-                },
-              ),
-            ),
-          ],
+        child: (page1) ?
+        WelcomeScreen(onCompleted: () {
+          setState(() {
+            page1 = false;
+          });
+        },) :
+        Center(
+          child: SetClass(
+            onButtonPressed: () {
+              widget.onCompleted!();
+            }, isInGuide: true,
+          ),
         ),
       ),
     );
@@ -54,10 +52,8 @@ class _GuideDialogState extends State<GuideDialog> {
  * Hier findet sich eine Erklärung der Funktionen der App.
  */
 class WelcomeScreen extends StatelessWidget {
-  final VoidCallback? onNextPage;
-
-  WelcomeScreen({this.onNextPage});
-
+  final VoidCallback onCompleted;
+  WelcomeScreen({required this.onCompleted});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +74,7 @@ class WelcomeScreen extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(bottom: 10, top: 10),
                   child: Text(
-                    'Hausaufgaben Organizer',textAlign: TextAlign.center,
+                    'Annette App 3.0',textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -94,97 +90,39 @@ class WelcomeScreen extends StatelessWidget {
                       child: Column(children: [
                         Text('Herzlich Willkommen!',style: TextStyle(fontSize: 15),
                             textAlign: TextAlign.center),
-                        Text('Swipe einfach immer weiter nach links durch den Leitfaden, um alle Einstellungen vorzunehmen.',
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center),
                         Text(
                           'Verwalte und erstelle ganz unkompliziert neue Hausaufgaben. Das Fach, die Erledigungs-Frist und sogar der Zeitpunkt der Benachrichtigung werden dabei automatisch ermittelt. Neben dem Hinzufügen von Notizen kannst du selbsverständlich auch manuell alle Parameter beim Erstellen einer neuen Aufgabe bestimmen, und du hast zusätzlich die Möglichkeit, unter der Kategorie "Sonstiges" fach-unspezifische Aufgaben anzulegen.',
                           style: TextStyle(fontSize: 15),
                           textAlign: TextAlign.center),
                       ]),
                     )),
-                Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Spacer(),
-                        Text('Swipe',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold)),
-                        Icon(
-                          Icons.double_arrow,
-                          size: 50,
-                          color: Colors.blue,
-                        ),
-                        Spacer(),
-                      ],
-                    ))
-              ],
-            )));
-  }
-}
 
 
 
-
-/**
- * Dieses Widget beinhaltet die letzte Seite des Leitfadens
- * mit dem "Jetzt Starten"-Button.
- */
-class FinishedScreen extends StatelessWidget {
-  final VoidCallback? onButtonPressed;
-  FinishedScreen({Key? key, this.onButtonPressed}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(15),
-        //alignment: Alignment.center,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            controller: ScrollController(initialScrollOffset: 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                //Spacer(flex: 1),
-                Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: Icon(
-                    Icons.check_circle_outline,
-                    color: Colors.green,
-                    size: 200,
+        Container(
+            margin: EdgeInsets.all(15),
+            child: TextButton(
+              onPressed: () {
+                onCompleted();
+              },
+              child: Container(
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  //height: 50,
+                  constraints: BoxConstraints(
+                    minWidth: 150,
+                    minHeight: 50,
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    'Fertig.',
-                    style: TextStyle(fontSize: 23),
+                  //width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 30),
                   child: Text(
-                    'Viel Spaß beim Benutzen der App!',
+                    'Weiter',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17),
-                  ),
-                ),
-                CupertinoButton(
-                  color: (Theme.of(context).brightness == Brightness.light) ? Theme.of(context).floatingActionButtonTheme.backgroundColor : Theme.of(context).accentColor,
-                  child: Text('Los geht\'s', style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.foregroundColor),),
-                  onPressed: () {
-                    onButtonPressed!();
-                    Navigator.of(context).pop();
-                  },
-                  //child: Text('Los geht\'s'),
-                ),
-                //Spacer(flex: 1),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  )),))
               ],
             )));
   }

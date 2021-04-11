@@ -29,7 +29,7 @@ class SettingsTab extends StatelessWidget {
                   width: 36,
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
-      applicationLegalese: 'Annete App neue Version\n\n©2021 Jan Wermeckes',
+      applicationLegalese: 'Annete App neue Version\n\nAlle Angaben ohne Gewähr\n\n©2021 Jan Wermeckes',
     );
   }
 
@@ -78,7 +78,7 @@ Divider(),ListTile(),
               onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return DefaultScaffold(
-                          title: 'Klasse ändern', content: SetClass());
+                          title: 'Klasse ändern', content: SetClass(isInGuide: false,onButtonPressed: () {},));
                     }),
                   )),
           Divider(),

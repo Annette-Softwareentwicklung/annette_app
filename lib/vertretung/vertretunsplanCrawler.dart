@@ -7,6 +7,9 @@ class VertretungsplanCrawler {
   VertretungsplanCrawler({this.htmlCode});
 
   Future<List<VertretungsEinheit>> getVertretungen() async {
+
+    print('go');
+
     String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('<table');
     tempStart = htmlCodeTemp.indexOf('<table', tempStart + 5);
@@ -17,6 +20,7 @@ class VertretungsplanCrawler {
     List<VertretungsEinheit> vertretungen = [];
     String tempRow;
     htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('/tr>') + 4);
+
     while (htmlCodeTemp.indexOf('tr') != -1) {
       tempRow = htmlCodeTemp.substring(
           htmlCodeTemp.indexOf('>', htmlCodeTemp.indexOf('tr')) + 1,
@@ -57,7 +61,7 @@ class VertretungsplanCrawler {
           String contents = await _file.readAsString();
           return contents;
         } catch (e) {
-          return '';
+          return '5A';
         }
       }
 
@@ -65,30 +69,38 @@ class VertretungsplanCrawler {
       String currentClass = configurationString.substring(
           configurationString.indexOf('c:') + 2,
           configurationString.indexOf(';', configurationString.indexOf('c:')));
+      print(configurationString);
 
       bool relevant = false;
-      if (result[0]!.contains(currentClass.substring(0, 1)) &&
-          result[0]!.contains(currentClass.substring(1))) {
-        if (currentClass == 'EF' ||
-            currentClass == 'Q1' ||
-            currentClass == 'Q2') {
-          if(result[5] == null) {
-            relevant = true;
-          } else {
-            if(configurationString.contains(result[5]!)) {
+
+      if(result[0] == null)
+      {
+        ///Klassen-unspezifische Ereignisse
+        relevant = false;
+      } else
+      {
+        if (result[0]!.contains(currentClass.substring(0, 1)) &&
+            result[0]!.contains(currentClass.substring(1))) {
+          if (currentClass == 'EF' ||
+              currentClass == 'Q1' ||
+              currentClass == 'Q2') {
+            if (result[5] == null) {
               relevant = true;
+            } else {
+              if (configurationString.contains(result[5]!)) {
+                relevant = true;
+              }
             }
+          } else {
+            relevant = true;
           }
-        } else {
-          relevant = true;
         }
       }
-
       if (relevant) {
+
         vertretungen.add(new VertretungsEinheit(result[1], result[5], result[4],
             result[0], result[8], result[6], result[2], result[7], result[3]));
       }
-      print(result);
 
       htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('/tr>') + 4);
     }
@@ -100,7 +112,6 @@ class VertretungsplanCrawler {
     int tempStart = htmlCodeTemp.indexOf('<div class="mon_title">') + 23;
     int tempEnd = htmlCodeTemp.indexOf("/div", tempStart) - 1;
     String currentDate = htmlCodeTemp.substring(tempStart, tempEnd);
-    print('Current date: $currentDate');
     return currentDate;
   }
 
@@ -126,9 +137,6 @@ class VertretungsplanCrawler {
         information.add(s);
       } while (htmlCodeTemp.indexOf('<tr') != -1);
     }
-    print('___Infos:___');
-    print(information);
-    print('____________');
     return information;
   }
 
@@ -137,7 +145,6 @@ class VertretungsplanCrawler {
     int tempStart = htmlCodeTemp.indexOf('Stand: ') + 7;
     int tempEnd = htmlCodeTemp.indexOf("<", tempStart);
     String lastEdited = htmlCodeTemp.substring(tempStart, tempEnd);
-    print('lastEdited: $lastEdited');
     return lastEdited;
   }
 
@@ -146,7 +153,6 @@ class VertretungsplanCrawler {
     int tempStart = htmlCodeTemp.indexOf('Betroffene Klassen&nbsp;</td>') + 59;
     int tempEnd = htmlCodeTemp.indexOf("<", tempStart);
     String affectedClasses = htmlCodeTemp.substring(tempStart, tempEnd);
-    print('affectedClasses: $affectedClasses');
     return affectedClasses;
   }
 }
