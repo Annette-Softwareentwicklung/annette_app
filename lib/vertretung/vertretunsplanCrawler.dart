@@ -8,7 +8,6 @@ class VertretungsplanCrawler {
 
   Future<List<VertretungsEinheit>> getVertretungen() async {
 
-    print('go');
 
     String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('<table');
@@ -69,7 +68,6 @@ class VertretungsplanCrawler {
       String currentClass = configurationString.substring(
           configurationString.indexOf('c:') + 2,
           configurationString.indexOf(';', configurationString.indexOf('c:')));
-      print(configurationString);
 
       bool relevant = false;
 

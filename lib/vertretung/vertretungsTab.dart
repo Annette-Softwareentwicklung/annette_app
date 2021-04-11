@@ -20,7 +20,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
   String lastEdited = '--';
   bool load = true;
   void makeRequest() async {
-
     try {
       var response = await http.get(Uri.https(
           'www.annettegymnasium.de', 'SP/vertretung/Heute_KoL/subst_001.htm'));
@@ -39,7 +38,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
         load = true;
         setState(() {});
       } else {
-
         load = false;
       }
 
@@ -60,7 +58,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
         setState(() {});
       } else {
         load = false;
-
       }
     } catch (e) {
       load = false;
@@ -88,7 +85,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-
   }
 
   @override
@@ -110,9 +106,19 @@ class _VertretungsTabState extends State<VertretungsTab> {
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
               Container(
-                height: 50,
-                child: Text(dateToday),
-              )
+                //height: 50,
+                child: Container(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(dateToday),
+                        if (informationToday.length != 0)
+                          Text('Infos zum Tag:'),
+                        if (informationToday.length != 0)
+                          Text(informationToday.join('\n')),
+                      ]),
+                ),
+              ),
             ])),
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -154,4 +160,3 @@ class _VertretungsTabState extends State<VertretungsTab> {
     ));
   }
 }
-

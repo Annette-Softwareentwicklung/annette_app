@@ -370,12 +370,11 @@ class _SetClassState extends State<SetClass> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SafeArea(child: Container(
         padding: EdgeInsets.all(20),
-        constraints: BoxConstraints(maxWidth: 400),
         alignment: Alignment.center,
         child:
-        SingleChildScrollView(child: Center(child:
+        Center(child:
         (showFinishedConfiguration)
             ? FinishedConfiguration()
             : (showGroupsOS)
@@ -389,7 +388,8 @@ class _SetClassState extends State<SetClass> {
 
   Widget Classes() {
     if (finished) {
-      return Center(
+      return SingleChildScrollView(child: Container(
+          constraints: BoxConstraints(maxWidth: 400),
             child: Column(
           children: [
             Container(
@@ -457,7 +457,7 @@ class _SetClassState extends State<SetClass> {
             ))
           ],
         )
-      );
+      ));
     } else {
       return CupertinoActivityIndicator();
     }
