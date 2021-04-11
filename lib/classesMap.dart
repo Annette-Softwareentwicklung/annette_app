@@ -1,4 +1,4 @@
-List<String> getClassesFullName() {
+List<String> getSubjectsFullName() {
   List<String> classesFullName = [
     'Deutsch',
     'Mathe',
@@ -46,7 +46,7 @@ List<String> getClassesFullName() {
   return classesFullName;
 }
 
-List<String> getClassesAbbreviation() {
+List<String> getSubjectsAbbreviation() {
   List<String> classesAbbreviation = [
     'D',
     'M',
@@ -93,3 +93,36 @@ List<String> getClassesAbbreviation() {
 
   return classesAbbreviation;
 }
+
+List<String> getAllClasses () {
+///Liste aller Klassen bzw. Stufen
+return [
+  '5A',
+  '5B',
+  '5C',
+  '5D',
+  '5F',
+  '6A',
+  '6B',
+  '6C',
+  '6D',
+  '6F',
+  '7A',
+  '7B',
+  '7C',
+  '7D',
+  '7E',
+  '8A',
+  '8B',
+  '8C',
+  '8D',
+  '8E',
+  '9A',
+  '9B',
+  '9C',
+  '9D',
+  '9F',
+  'EF',
+  'Q1',
+  'Q2',
+];}

@@ -1,7 +1,7 @@
-import 'package:annette_app/classicTimetable.dart';
+import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/setClass.dart';
+import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/reset.dart';
 import 'package:annette_app/defaultScaffold.dart';
 
 /**
@@ -49,6 +49,17 @@ class SettingsTab extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           ListTile(
+              title: Text('Klassischer Vertretungsplan'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return DefaultScaffold(
+                      title: 'Vertretungsplan', content: ClassicVertretungsplan());
+                }),
+              )),
+          Divider(),
+          ListTile(
               title: Text('Klassischer Stundenplan'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
@@ -61,13 +72,13 @@ class SettingsTab extends StatelessWidget {
 Divider(),ListTile(),
           Divider(),
           ListTile(
-              title: Text('Klasse wählen'),
+              title: Text('Klasse ändern'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
               onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return DefaultScaffold(
-                          title: 'Klasse wählen', content: SetClass());
+                          title: 'Klasse ändern', content: SetClass());
                     }),
                   )),
           Divider(),
@@ -78,17 +89,6 @@ Divider(),ListTile(),
                 Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
             onTap: () => aboutDialog(context),
           ),
-          Divider(),
-          ListTile(
-              title: Text('Zurücksetzen'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                          title: 'Zurücksetzen', content: Reset());
-                    }),
-                  )),
           Divider(),
         ],
       ),

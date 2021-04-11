@@ -70,6 +70,8 @@ class CurrentValues {
    * übergebene Fach das nächste Mal laut Stundenplan hat.
    */
   DateTime? getNextLesson(String? pSubject) {
+    print(pSubject);
+
     if (pSubject == null) {
       return null;
     }
@@ -79,7 +81,6 @@ class CurrentValues {
     TimeTableUnit? nextTimeTableUnit;
     int i = currentTime.weekday;
     int exitLoop = 0;
-    int daysAdded = 0;
 
     while (!gotNext) {
       if (exitLoop > 5) {
@@ -105,27 +106,11 @@ class CurrentValues {
       }
       i++;
       exitLoop++;
-      daysAdded++;
     }
 
-    int lessonNumber = nextTimeTableUnit!.lessonNumber!;
-
-    if (currentTime.weekday > 5) {
-      DateTime temp = currentTime;
-      if (currentTime.weekday == 6) {
-        temp = temp.subtract(new Duration(days: 1));
-      } else {
-        temp = temp.subtract(new Duration(days: 2));
-      }
-
-      nextLesson = new DateTime(temp.year, temp.month, temp.day);
-    } else {
-      nextLesson =
-          new DateTime(currentTime.year, currentTime.month, currentTime.day);
-    }
-
-    nextLesson = nextLesson.add(new Duration(days: daysAdded));
-    nextLesson = nextLesson.add(parseDuration(times[(lessonNumber - 1)].time!));
+    nextLesson = new DateTime(currentTime.year, currentTime.month, currentTime.day);
+    nextLesson = nextLesson.add(new Duration(days: nextTimeTableUnit!.dayNumber! - (currentTime.weekday - 7)));
+    nextLesson = nextLesson.add(parseDuration(times[(nextTimeTableUnit.lessonNumber! - 1)].time!));
 
     return nextLesson;
   }

@@ -1,5 +1,4 @@
 import 'package:annette_app/classesMap.dart';
-import 'package:annette_app/database/subjectDbInteraction.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:annette_app/database/databaseCreate.dart';
-import 'package:annette_app/classes/subject.dart';
 
 class TimetableCrawler {
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
@@ -125,8 +123,8 @@ class TimetableCrawler {
     List<String> tempSubjects = [];
 
     ///Zuordnung: Abkürzung => Fachname
-    List<String> classesAbbreviation = getClassesAbbreviation();
-    List<String> classesFullName = getClassesFullName();
+    List<String> classesAbbreviation = getSubjectsAbbreviation();
+    List<String> classesFullName = getSubjectsFullName();
 
     List<TimeTableUnit> timetableUnits = await databaseGetAllTimeTableUnit();
 
@@ -165,22 +163,8 @@ class TimetableCrawler {
       if (!tempSubjects.contains(tempSubjectFullName)) {
         tempSubjects.add(tempSubjectFullName);
       }
-    }
 
-    ///Löscht alle vorhandenen Fächer
-    WidgetsFlutterBinding.ensureInitialized();
-    final Future<Database> database = openDatabase(
-      join(await getDatabasesPath(), 'local_database.db'),
-      onCreate: (db, version) {
-        createDb(db);
-      },
-      version: 1,
-    );
-    Database db = await database;
-    await db.execute("DELETE FROM subjects");
-
-    for (int i = 0; i < tempSubjects.length; i++) {
-      databaseInsertSubject(new Subject(name: tempSubjects[i]));
+      print(tempSubjects);
     }
   }
 }

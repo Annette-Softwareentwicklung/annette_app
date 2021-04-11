@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:annette_app/classesMap.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _SetClassState extends State<SetClass> {
   late String configurationString;
   bool finished = false;
   List<String> configurationList = [];
+  late List<String> classes;
 
   late String selectedClass;
   late String selectedLk1;
@@ -52,7 +54,7 @@ class _SetClassState extends State<SetClass> {
 
   List<String> lk1 = ['Freistunde', 'Mathe', 'PH LK'];
   List<String> lk2 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk1 = ['Freistunde', 'Mathe', 'Physik', 'BI GK3'];
+  List<String> gk1 = ['Freistunde', 'Mathe', 'Physik', 'BI GK3', 'L GK1'];
   List<String> gk2 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> gk3 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> gk4 = ['Freistunde', 'Mathe', 'Physik'];
@@ -68,37 +70,7 @@ class _SetClassState extends State<SetClass> {
   List<String> zk1 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> zk2 = ['Freistunde', 'Mathe', 'Physik'];
 
-  ///Liste aller Klassen bzw. Stufen
-  List<String> classes = [
-    '5A',
-    '5B',
-    '5C',
-    '5D',
-    '5F',
-    '6A',
-    '6B',
-    '6C',
-    '6D',
-    '6F',
-    '7A',
-    '7B',
-    '7C',
-    '7D',
-    '7E',
-    '8A',
-    '8B',
-    '8C',
-    '8D',
-    '8E',
-    '9A',
-    '9B',
-    '9C',
-    '9D',
-    '9F',
-    'EF',
-    'Q1',
-    'Q2',
-  ];
+
 
   void setGroupsOS() async {
     Future<String> _getPath() async {
@@ -278,6 +250,8 @@ class _SetClassState extends State<SetClass> {
   }
 
   void load() async {
+    classes = getAllClasses();
+
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
       return _dir.path;

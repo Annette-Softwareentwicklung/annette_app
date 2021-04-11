@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import '../classes/subject.dart';
 import '../classes/lessonStartTime.dart';
 
 /**
@@ -7,11 +6,6 @@ import '../classes/lessonStartTime.dart';
  * Diese Methode erstellt alle notwendigen Tabellen.
  */
 void createDb(Database db) async {
-
-  //Erstellen der Tabelle für die Schulfächer
-  await db.execute(
-    "CREATE TABLE subjects(id INTEGER PRIMARY KEY, name TEXT)",
-  );
 
   //Erstellen der Tabelle für den Zeitplan
   await db.execute(
@@ -29,7 +23,6 @@ void createDb(Database db) async {
   );
 
   //Einfügen der Standart-Werte
-  insertStandardSubjects(db);
   insertAnnetteTimes(db);
 }
 
@@ -59,26 +52,4 @@ void insertAnnetteTimes(Database database) async{
   await insertTime(new LessonStartTime(time: '16:10:00.000000'));
   await insertTime(new LessonStartTime(time: '17:00:00.000000'));
 
-}
-
-/**
- * Diese Methode fügt bereits eine Auswahl an Schulfächern in die Datenbank ein.
- * Sie wird unmittelbar nach dem Erstellen der Datenbank ausgeführt.
- */
-void insertStandardSubjects(Database database) async {
-  Future<void> insertSubject(Subject subject) async {
-    final Database db = await database;
-    await db.insert(
-      'subjects',
-      subject.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  await insertSubject(new Subject(name: 'Mathe'));
-  await insertSubject(new Subject(name: 'Deutsch'));
-  await insertSubject(new Subject(name: 'Englisch'));
-  await insertSubject(new Subject(name: 'Biologie'));
-  await insertSubject(new Subject(name: 'Erdkunde'));
-  await insertSubject(new Subject(name: 'Sport'));
 }

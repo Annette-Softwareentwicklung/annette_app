@@ -1,13 +1,14 @@
+import 'package:annette_app/classesMap.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/classes/subject.dart';
 import 'package:annette_app/classes/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
-import 'database/subjectDbInteraction.dart';
-import 'classes/lessonStartTime.dart';
-import 'database/lessonStartTimeDbInteraction.dart';
-import 'parseTime.dart';
-import 'manageNotifications.dart';
+import 'package:annette_app/classes/timetableUnit.dart';
+import 'package:annette_app/classes/lessonStartTime.dart';
+import 'package:annette_app/database/lessonStartTimeDbInteraction.dart';
+import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:annette_app/parseTime.dart';
+import 'package:annette_app/manageNotifications.dart';
 import 'package:annette_app/currentValues.dart';
 
 /**
@@ -41,8 +42,10 @@ class _AddDialogState extends State<AddDialog> {
   DateTime? detectedDeadlineTime;
 
   late List<LessonStartTime> times;
-  late List<Subject> subjects;
-  List<String?> subjectNames = [];
+  late List<TimeTableUnit> timetableUnits;
+  List<String> subjectCodes = [];
+  List<String> subjectNames = [];
+
 
   /**
    * Diese Methode fragt die Fächer, den Stundenplan sowie den zeitplan aus der Datenbank ab
@@ -53,11 +56,54 @@ class _AddDialogState extends State<AddDialog> {
    * automatischen Werte ermittelt werden.
    */
   void getSubjectsAndTimes() async {
-    subjects = await databaseGetAllSubjects();
+    ///Zuordnung: Abkürzung => Fachname
+    List<String> classesAbbreviation = getSubjectsAbbreviation();
+    List<String> classesFullName = getSubjectsFullName();
+    timetableUnits = await databaseGetAllTimeTableUnit();
 
     subjectNames.add('Sonstiges');
-    for (int i = 0; i < subjects.length; i++) {
-      subjectNames.add(subjects[i].name);
+    subjectCodes.add('-');
+
+
+    for (int i = 0; i < timetableUnits.length; i++) {
+      String tempSubjectAbbreviation = timetableUnits[i].subject!;
+
+
+      if (!subjectCodes.contains(tempSubjectAbbreviation)) {
+        subjectCodes.add(tempSubjectAbbreviation);
+      }
+      if (tempSubjectAbbreviation.contains('LK')) {
+        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
+            0, tempSubjectAbbreviation.indexOf('LK') - 1);
+      } else if (tempSubjectAbbreviation.contains('GK')) {
+        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
+            0, tempSubjectAbbreviation.indexOf('GK') - 1);
+      } else if (tempSubjectAbbreviation.contains('Z1')) {
+        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
+            0, tempSubjectAbbreviation.indexOf('Z1') - 1);
+      } else if (tempSubjectAbbreviation.contains('Z2')) {
+        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
+            0, tempSubjectAbbreviation.indexOf('Z2') - 1);
+      }
+
+      int tempPositionInList =
+      classesAbbreviation.indexOf(tempSubjectAbbreviation);
+      late String tempSubjectFullName;
+
+      if (tempPositionInList != -1) {
+        tempSubjectFullName = classesFullName[tempPositionInList];
+      } else {
+        tempSubjectFullName = tempSubjectAbbreviation;
+      }
+
+      if (tempSubjectFullName == 'Kath. Religion' ||
+          tempSubjectFullName == 'Ev. Religion') {
+        tempSubjectFullName = 'Religion';
+      }
+
+      if (!subjectNames.contains(tempSubjectFullName)) {
+        subjectNames.add(tempSubjectFullName);
+      }
     }
 
     times = await databaseGetAllTimes();
@@ -86,7 +132,7 @@ class _AddDialogState extends State<AddDialog> {
       autoTime = false;
     } else {
       detectedSubject = await getCV.getCurrentSubject();
-      detectedDeadlineTime = getCV.getNextLesson(detectedSubject);
+      detectedDeadlineTime =  getCV.getNextLesson(subjectCodes[subjectNames.indexOf(detectedSubject!)]);
       detectedNotificationTime = getNotificationTime(detectedDeadlineTime!);
     }
   }
@@ -281,7 +327,7 @@ class _AddDialogState extends State<AddDialog> {
 
                                       if (selectedSubject != 'Sonstiges') {
                                         detectedDeadlineTime =
-                                            getCV.getNextLesson(selectedSubject);
+                                            getCV.getNextLesson(subjectCodes[subjectNames.indexOf(selectedSubject!)]);
                                         if (detectedDeadlineTime == null) {
                                           autoTime = false;
                                         } else {
