@@ -99,25 +99,25 @@ class _VertretungsTabState extends State<VertretungsTab> {
     return SafeArea(
         child: RefreshIndicator(
       child: Column(children: [
-        Text('Stand: $lastEdited'),
+        Container(child: Text('Stand: $lastEdited'),padding: EdgeInsets.all(2),),
         Expanded(
             child: CustomScrollView(
           slivers: <Widget>[
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
               Container(
-                //height: 50,
-                child: Container(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(dateToday),
+                        Text(dateToday, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                         if (informationToday.length != 0)
-                          Text('Infos zum Tag:'),
+                          Text('Infos zum Tag:', style: TextStyle(fontSize: 17),),
                         if (informationToday.length != 0)
-                          Text(informationToday.join('\n')),
+                          Text(informationToday.join('\n'), style: TextStyle(fontSize: 17),),
                       ]),
-                ),
+                  padding: EdgeInsets.all(10),
+
+
               ),
             ])),
             SliverList(
@@ -131,11 +131,21 @@ class _VertretungsTabState extends State<VertretungsTab> {
             ),
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
-              Container(
-                height: 50,
-                child: Text(dateTomorrow),
-              )
-            ])),
+                  Container(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(dateTomorrow, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                          if (informationTomorrow.length != 0)
+                            Text('Infos zum Tag:', style: TextStyle(fontSize: 17),),
+                          if (informationTomorrow.length != 0)
+                            Text(informationTomorrow.join('\n'), style: TextStyle(fontSize: 17),),
+                        ]),
+                    padding: EdgeInsets.all(10),
+
+
+                  ),
+                ])),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {

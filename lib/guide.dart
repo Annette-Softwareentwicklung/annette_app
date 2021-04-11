@@ -115,13 +115,16 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   //width: 150,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blue,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(
                     'Weiter',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: TextStyle(fontSize: 18,
+                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
+
+              ),
                   )),))
               ],
             )));

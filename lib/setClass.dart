@@ -370,334 +370,355 @@ class _SetClassState extends State<SetClass> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Container(
-        padding: EdgeInsets.all(20),
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20),
         alignment: Alignment.center,
-        child:
-        Center(child:
-        (showFinishedConfiguration)
-            ? FinishedConfiguration()
-            : (showGroupsOS)
-                ? GroupsOS()
-                : (showGroupsUS)
-                    ? GroupsUS()
-                    : Classes()
-        ),),
+        child: Center(
+            child: (showFinishedConfiguration)
+                ? FinishedConfiguration()
+                : (showGroupsOS)
+                    ? GroupsOS()
+                    : (showGroupsUS)
+                        ? GroupsUS()
+                        : Classes()),
+      ),
     );
   }
 
   Widget Classes() {
     if (finished) {
-      return SingleChildScrollView(child: Container(
-          constraints: BoxConstraints(maxWidth: 400),
-            child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              child: Text(
-                'Klasse wählen:',
-                style: TextStyle(
-                  fontSize: 25,
-                ),
-              ),
-            ),
-            Container(
-                height: 200,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                child: CupertinoPicker(
-                    scrollController: FixedExtentScrollController(
-                        initialItem: classes.indexOf(selectedClass)),
-                    itemExtent: 33,
-                    onSelectedItemChanged: (index) {
-                      setState(() {
-                        selectedClass = classes[index];
-                      });
-                    },
-                    children: new List<Text>.generate(
-                        classes.length,
-                        (index) => Text(
-                              classes[index],
-                              style: TextStyle(fontSize: 25),
-                            )))),
-            IntrinsicWidth(
-                child: Container(
-              margin: EdgeInsets.all(15),
-              child: TextButton(
-                onPressed: () {
-                  setClass();
-                },
-                child: Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.center,
-                    //height: 50,
-                    constraints: BoxConstraints(
-                      minWidth: 150,
-                      minHeight: 50,
-                    ),
-                    //width: 150,
-                    decoration: BoxDecoration(
-                      color: (Theme.of(context).brightness == Brightness.dark)
-                          ? Theme.of(context).accentColor
-                          : Colors.blue,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
+      return SingleChildScrollView(
+          child: Container(
+              constraints: BoxConstraints(maxWidth: 400),
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
                     child: Text(
-                      'Weiter',
-                      textAlign: TextAlign.center,
+                      'Klasse wählen:',
                       style: TextStyle(
-                        fontSize: 18,
-                        color: (Theme.of(context).brightness == Brightness.dark)
-                            ? Colors.black
-                            : Colors.white,
+                        fontSize: 25,
                       ),
-                    )),
-              ),
-            ))
-          ],
-        )
-      ));
+                    ),
+                  ),
+                  Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: CupertinoPicker(
+                          scrollController: FixedExtentScrollController(
+                              initialItem: classes.indexOf(selectedClass)),
+                          itemExtent: 33,
+                          onSelectedItemChanged: (index) {
+                            setState(() {
+                              selectedClass = classes[index];
+                            });
+                          },
+                          children: new List<Text>.generate(
+                              classes.length,
+                              (index) => Text(
+                                    classes[index],
+                                    style: TextStyle(fontSize: 25),
+                                  )))),
+                  IntrinsicWidth(
+                      child: Container(
+                    margin: EdgeInsets.all(15),
+                    child: TextButton(
+                      onPressed: () {
+                        setClass();
+                      },
+                      child: Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.center,
+                          //height: 50,
+                          constraints: BoxConstraints(
+                            minWidth: 150,
+                            minHeight: 50,
+                          ),
+                          //width: 150,
+                          decoration: BoxDecoration(
+                            color: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? Theme.of(context).accentColor
+                                : Colors.blue,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Text(
+                            'Weiter',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: (Theme.of(context).brightness ==
+                                      Brightness.dark)
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
+                          )),
+                    ),
+                  ))
+                ],
+              )));
     } else {
       return CupertinoActivityIndicator();
     }
   }
 
   Widget GroupsOS() {
+    String infoText = 'Wähle hier deine individuellen Kurse. Dazu zählen die ';
+    if(selectedClass == 'Q1' || selectedClass == 'Q2') {
+       infoText = infoText + 'Leistungs- und ';
+    }
+    infoText = infoText + 'Grund';
+    if(selectedClass == 'Q2') {
+      infoText = infoText.replaceFirst(' und', ', ');
+      infoText = infoText + '- und Zusatz';
+    }
+    infoText = infoText + 'kurse.';
+
     return Container(
-        child: CustomScrollView(
-      slivers: <Widget>[
-        ///Leistungskurs
-        if (selectedClass == 'Q1' || selectedClass == 'Q2')
+        child: Column(children: [
+      Expanded(
+          child: CustomScrollView(
+        slivers: <Widget>[
+          ///Text
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                int j = index + 1;
-                List<String> tempSubjects = (j == 1) ? lk1 : lk2;
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text(
-                        'LK $j:',
-                        style: TextStyle(fontSize: 17.0),
-                      ),
-                      DropdownButton<String>(
-                        items: tempSubjects
-                            .map<DropdownMenuItem<String>>((String? value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value!),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            if (j == 1) {
-                              selectedLk1 = newValue!;
-                            } else {
-                              selectedLk2 = newValue!;
-                            }
-                          });
-                        },
-                        value: (j == 1) ? selectedLk1 : selectedLk2,
-                        hint: Text('Fach'),
-                        icon: Icon(Icons.arrow_drop_down),
-                      ),
-                    ]);
-              },
-              childCount: 2,
-            ),
-          ),
-
-        ///Grundkurs
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              int j = index + 1;
-              List<String> tempSubjects = (j == 1)
-                  ? gk1
-                  : (j == 2)
-                      ? gk2
-                      : (j == 3)
-                          ? gk3
-                          : (j == 4)
-                              ? gk4
-                              : (j == 5)
-                                  ? gk5
-                                  : (j == 6)
-                                      ? gk6
-                                      : (j == 7)
-                                          ? gk7
-                                          : (j == 8)
-                                              ? gk8
-                                              : (j == 9)
-                                                  ? gk9
-                                                  : (j == 10)
-                                                      ? gk10
-                                                      : (j == 11)
-                                                          ? gk11
-                                                          : (j == 12)
-                                                              ? gk12
-                                                              : gk13;
-              return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text(
-                      'GK $j:',
-                      style: TextStyle(fontSize: 17.0),
-                    ),
-                    DropdownButton<String>(
-                      items: tempSubjects
-                          .map<DropdownMenuItem<String>>((String? value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value!),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          if (j == 1) {
-                            selectedGk1 = newValue!;
-                          } else if (j == 2) {
-                            selectedGk2 = newValue!;
-                          } else if (j == 3) {
-                            selectedGk3 = newValue!;
-                          } else if (j == 4) {
-                            selectedGk4 = newValue!;
-                          } else if (j == 5) {
-                            selectedGk5 = newValue!;
-                          } else if (j == 6) {
-                            selectedGk6 = newValue!;
-                          } else if (j == 7) {
-                            selectedGk7 = newValue!;
-                          } else if (j == 8) {
-                            selectedGk8 = newValue!;
-                          } else if (j == 9) {
-                            selectedGk9 = newValue!;
-                          } else if (j == 10) {
-                            selectedGk10 = newValue!;
-                          } else if (j == 11) {
-                            selectedGk11 = newValue!;
-                          } else if (j == 12) {
-                            selectedGk12 = newValue!;
-                          } else {
-                            selectedGk13 = newValue!;
-                          }
-                        });
-                      },
-                      value: (j == 1)
-                          ? selectedGk1
-                          : (j == 2)
-                              ? selectedGk2
-                              : (j == 3)
-                                  ? selectedGk3
-                                  : (j == 4)
-                                      ? selectedGk4
-                                      : (j == 5)
-                                          ? selectedGk5
-                                          : (j == 6)
-                                              ? selectedGk6
-                                              : (j == 7)
-                                                  ? selectedGk7
-                                                  : (j == 8)
-                                                      ? selectedGk8
-                                                      : (j == 9)
-                                                          ? selectedGk9
-                                                          : (j == 10)
-                                                              ? selectedGk10
-                                                              : (j == 11)
-                                                                  ? selectedGk11
-                                                                  : (j == 12)
-                                                                      ? selectedGk12
-                                                                      : selectedGk13,
-                      hint: Text('Fach'),
-                      icon: Icon(Icons.arrow_drop_down),
-                    ),
-                  ]);
-            },
-            childCount: 13,
-          ),
-        ),
-
-        ///Zusatzkurs
-        if (selectedClass == 'Q2')
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                int j = index + 1;
-                List<String> tempSubjects = (j == 1) ? zk1 : zk2;
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text(
-                        'ZK $j:',
-                        style: TextStyle(fontSize: 17.0),
-                      ),
-                      DropdownButton<String>(
-                        items: tempSubjects
-                            .map<DropdownMenuItem<String>>((String? value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value!),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            if (j == 1) {
-                              selectedZk1 = newValue!;
-                            } else {
-                              selectedZk2 = newValue!;
-                            }
-                          });
-                        },
-                        value: (j == 1) ? selectedZk1 : selectedZk2,
-                        hint: Text('Fach'),
-                        icon: Icon(Icons.arrow_drop_down),
-                      ),
-                    ]);
-              },
-              childCount: 2,
-            ),
-          ),
-
-        ///Button
-        SliverList(
-            delegate: SliverChildListDelegate.fixed([
-          Container(
-            margin: EdgeInsets.all(15),
-            child: TextButton(
-              onPressed: () {
-                setGroupsOS();
-              },
-              child: Container(
-                  padding: EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  //height: 50,
-                  constraints: BoxConstraints(
-                    minWidth: 150,
-                    minHeight: 50,
-                  ),
-                  //width: 150,
+              delegate: SliverChildListDelegate.fixed([
+                Container(
+                  child: Text(infoText,style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic), textAlign: TextAlign.center,),
+                  padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: (Theme.of(context).brightness == Brightness.dark)
-                        ? Theme.of(context).accentColor
-                        : Colors.blue,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    border: Border(bottom: BorderSide(width: 1, color: Colors.grey)),
                   ),
-                  child: Text(
-                    'Speichern',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: (Theme.of(context).brightness == Brightness.dark)
-                          ? Colors.black
-                          : Colors.white,
-                    ),
-                  )),
+                ),
+              ])),
+          ///Leistungskurs
+          if (selectedClass == 'Q1' || selectedClass == 'Q2')
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  int j = index + 1;
+                  List<String> tempSubjects = (j == 1) ? lk1 : lk2;
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          'LK $j:',
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                        DropdownButton<String>(
+                          items: tempSubjects
+                              .map<DropdownMenuItem<String>>((String? value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value!),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              if (j == 1) {
+                                selectedLk1 = newValue!;
+                              } else {
+                                selectedLk2 = newValue!;
+                              }
+                            });
+                          },
+                          value: (j == 1) ? selectedLk1 : selectedLk2,
+                          hint: Text('Fach'),
+                          icon: Icon(Icons.arrow_drop_down),
+                        ),
+                      ]);
+                },
+                childCount: 2,
+              ),
+            ),
+
+          ///Grundkurs
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                int j = index + 1;
+                List<String> tempSubjects = (j == 1)
+                    ? gk1
+                    : (j == 2)
+                        ? gk2
+                        : (j == 3)
+                            ? gk3
+                            : (j == 4)
+                                ? gk4
+                                : (j == 5)
+                                    ? gk5
+                                    : (j == 6)
+                                        ? gk6
+                                        : (j == 7)
+                                            ? gk7
+                                            : (j == 8)
+                                                ? gk8
+                                                : (j == 9)
+                                                    ? gk9
+                                                    : (j == 10)
+                                                        ? gk10
+                                                        : (j == 11)
+                                                            ? gk11
+                                                            : (j == 12)
+                                                                ? gk12
+                                                                : gk13;
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Text(
+                        'GK $j:',
+                        style: TextStyle(fontSize: 17.0),
+                      ),
+                      DropdownButton<String>(
+                        items: tempSubjects
+                            .map<DropdownMenuItem<String>>((String? value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value!),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            if (j == 1) {
+                              selectedGk1 = newValue!;
+                            } else if (j == 2) {
+                              selectedGk2 = newValue!;
+                            } else if (j == 3) {
+                              selectedGk3 = newValue!;
+                            } else if (j == 4) {
+                              selectedGk4 = newValue!;
+                            } else if (j == 5) {
+                              selectedGk5 = newValue!;
+                            } else if (j == 6) {
+                              selectedGk6 = newValue!;
+                            } else if (j == 7) {
+                              selectedGk7 = newValue!;
+                            } else if (j == 8) {
+                              selectedGk8 = newValue!;
+                            } else if (j == 9) {
+                              selectedGk9 = newValue!;
+                            } else if (j == 10) {
+                              selectedGk10 = newValue!;
+                            } else if (j == 11) {
+                              selectedGk11 = newValue!;
+                            } else if (j == 12) {
+                              selectedGk12 = newValue!;
+                            } else {
+                              selectedGk13 = newValue!;
+                            }
+                          });
+                        },
+                        value: (j == 1)
+                            ? selectedGk1
+                            : (j == 2)
+                                ? selectedGk2
+                                : (j == 3)
+                                    ? selectedGk3
+                                    : (j == 4)
+                                        ? selectedGk4
+                                        : (j == 5)
+                                            ? selectedGk5
+                                            : (j == 6)
+                                                ? selectedGk6
+                                                : (j == 7)
+                                                    ? selectedGk7
+                                                    : (j == 8)
+                                                        ? selectedGk8
+                                                        : (j == 9)
+                                                            ? selectedGk9
+                                                            : (j == 10)
+                                                                ? selectedGk10
+                                                                : (j == 11)
+                                                                    ? selectedGk11
+                                                                    : (j == 12)
+                                                                        ? selectedGk12
+                                                                        : selectedGk13,
+                        hint: Text('Fach'),
+                        icon: Icon(Icons.arrow_drop_down),
+                      ),
+                    ]);
+              },
+              childCount: 13,
             ),
           ),
-        ])),
-      ],
-    ));
+
+          ///Zusatzkurs
+          if (selectedClass == 'Q2')
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  int j = index + 1;
+                  List<String> tempSubjects = (j == 1) ? zk1 : zk2;
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          'ZK $j:',
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                        DropdownButton<String>(
+                          items: tempSubjects
+                              .map<DropdownMenuItem<String>>((String? value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value!),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              if (j == 1) {
+                                selectedZk1 = newValue!;
+                              } else {
+                                selectedZk2 = newValue!;
+                              }
+                            });
+                          },
+                          value: (j == 1) ? selectedZk1 : selectedZk2,
+                          hint: Text('Fach'),
+                          icon: Icon(Icons.arrow_drop_down),
+                        ),
+                      ]);
+                },
+                childCount: 2,
+              ),
+            ),
+        ],
+      )),
+
+      ///Button
+
+      Container(
+        margin: EdgeInsets.all(15),
+        child: TextButton(
+          onPressed: () {
+            setGroupsOS();
+          },
+          child: Container(
+              padding: EdgeInsets.all(10),
+              alignment: Alignment.center,
+              height: 50,
+              width: 180,
+              decoration: BoxDecoration(
+                color: (Theme.of(context).brightness == Brightness.dark)
+                    ? Theme.of(context).accentColor
+                    : Colors.blue,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Text(
+                'Speichern',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: (Theme.of(context).brightness == Brightness.dark)
+                      ? Colors.black
+                      : Colors.white,
+                ),
+              )),
+        ),
+      ),
+    ]));
   }
 
   Widget FinishedConfiguration() {
@@ -776,52 +797,48 @@ class _SetClassState extends State<SetClass> {
   }
 
   Widget GroupsUS() {
-    return Container(
-        child: CustomScrollView(
-      slivers: <Widget>[
-        ///Religion
-        SliverList(
-            delegate: SliverChildListDelegate.fixed([
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(
-                  'Religion:',
-                  style: TextStyle(fontSize: 17.0),
-                ),
-                DropdownButton<String>(
-                  items:
-                      religionUS.map<DropdownMenuItem<String>>((String? value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value!),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedReligionUS = newValue!;
-                    });
-                  },
-                  value: selectedReligionUS,
-                  hint: Text('Fach'),
-                  icon: Icon(Icons.arrow_drop_down),
-                ),
-              ])
-        ])),
+    String infoText = 'Wähle hier deine individuellen Kurse. Dazu zähl';
 
-        ///2. Fremdsprache
-        if (!selectedClass.contains('5') && !selectedClass.contains('F'))
+    if(selectedClass.contains('5')) {
+      infoText = infoText + 't Religion.';
+    } else     if(!selectedClass.contains('8') && !selectedClass.contains('9')) {
+      infoText = infoText + 'en Religion und die zweite Fremdsprache.';
+
+    } else {
+      infoText = infoText + 'en Religion, die zweite Fremdsprache und dein Diff-Fach.';
+
+    }
+
+
+      return Container(
+        child: Column(children: [
+      Expanded(
+          child: CustomScrollView(
+        slivers: <Widget>[
+          ///Text
+            SliverList(
+                delegate: SliverChildListDelegate.fixed([
+              Container(
+                child: Text(infoText,style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic), textAlign: TextAlign.center,),
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+                ),
+              ),
+            ])),
+
+          ///Religion
           SliverList(
               delegate: SliverChildListDelegate.fixed([
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Text(
-                    '2. Sprache:',
+                    'Religion:',
                     style: TextStyle(fontSize: 17.0),
                   ),
                   DropdownButton<String>(
-                    items: secondLanguageUS
+                    items: religionUS
                         .map<DropdownMenuItem<String>>((String? value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -830,78 +847,104 @@ class _SetClassState extends State<SetClass> {
                     }).toList(),
                     onChanged: (String? newValue) {
                       setState(() {
-                        selectedSecondLanguageUS = newValue!;
+                        selectedReligionUS = newValue!;
                       });
                     },
-                    value: selectedSecondLanguageUS,
+                    value: selectedReligionUS,
                     hint: Text('Fach'),
                     icon: Icon(Icons.arrow_drop_down),
                   ),
                 ])
           ])),
 
-        ///Diff
-        if (selectedClass.contains('8') || selectedClass.contains('9'))
-          SliverList(
-              delegate: SliverChildListDelegate.fixed([
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(
-                    'Diff.-Fach:',
-                    style: TextStyle(fontSize: 17.0),
-                  ),
-                  DropdownButton<String>(
-                    items:
-                        diffUS.map<DropdownMenuItem<String>>((String? value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value!),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedDiffUS = newValue!;
-                      });
-                    },
-                    value: selectedDiffUS,
-                    hint: Text('Fach'),
-                    icon: Icon(Icons.arrow_drop_down),
-                  ),
-                ])
-          ])),
+          ///2. Fremdsprache
+          if (!selectedClass.contains('5') && !selectedClass.contains('F'))
+            SliverList(
+                delegate: SliverChildListDelegate.fixed([
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(
+                      '2. Sprache:',
+                      style: TextStyle(fontSize: 17.0),
+                    ),
+                    DropdownButton<String>(
+                      items: secondLanguageUS
+                          .map<DropdownMenuItem<String>>((String? value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value!),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedSecondLanguageUS = newValue!;
+                        });
+                      },
+                      value: selectedSecondLanguageUS,
+                      hint: Text('Fach'),
+                      icon: Icon(Icons.arrow_drop_down),
+                    ),
+                  ])
+            ])),
 
-        ///Button
-        SliverList(
-            delegate: SliverChildListDelegate.fixed([
-          Container(
-            margin: EdgeInsets.all(15),
-            child: TextButton(
-              onPressed: () {
-                setGroupsUS();
-              },
-              child: Container(
-                  padding: EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  //height: 50,
-                  constraints: BoxConstraints(
-                    minWidth: 150,
-                    minHeight: 50,
-                  ),
-                  //width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Text(
-                    'Speichern',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  )),
-            ),
-          ),
-        ])),
-      ],
-    ));
+          ///Diff
+          if (selectedClass.contains('8') || selectedClass.contains('9'))
+            SliverList(
+                delegate: SliverChildListDelegate.fixed([
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(
+                      'Diff.-Fach:',
+                      style: TextStyle(fontSize: 17.0),
+                    ),
+                    DropdownButton<String>(
+                      items:
+                          diffUS.map<DropdownMenuItem<String>>((String? value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value!),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedDiffUS = newValue!;
+                        });
+                      },
+                      value: selectedDiffUS,
+                      hint: Text('Fach'),
+                      icon: Icon(Icons.arrow_drop_down),
+                    ),
+                  ])
+            ])),
+        ],
+      )),
+
+      ///Button
+
+      Container(
+        margin: EdgeInsets.all(15),
+        child: TextButton(
+          onPressed: () {
+            setGroupsUS();
+          },
+          child: Container(
+              padding: EdgeInsets.all(10),
+              alignment: Alignment.center,
+              height: 50,
+              width: 180,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Text(
+                'Speichern',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              )),
+        ),
+      ),
+    ]));
   }
 }

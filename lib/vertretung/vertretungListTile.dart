@@ -35,11 +35,11 @@ class VertretungListTile extends StatelessWidget {
                       ),
                     )
                   : Text(''),
-              (vertretung.subject_new != null) ? Text(vertretung.subject_new!) : Text(''),
+              (vertretung.subject_new != null) ? Text(vertretung.subject_new!) : Text(vertretung.type!),
             ],
           ),
           if (vertretung.affectedClass != null) Text(vertretung.affectedClass!),
-          if (vertretung.type != null) Text(vertretung.type!),
+          if (vertretung.type != null && vertretung.subject_new != null) Text(vertretung.type!),
           if (vertretung.teacher_old != null) Text(vertretung.teacher_old!),
           if (vertretung.teacher_new != null) Text(vertretung.teacher_new!),
           if (vertretung.comment != null) Text(vertretung.comment!),
