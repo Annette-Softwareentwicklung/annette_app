@@ -11,9 +11,7 @@ import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/manageNotifications.dart';
 import 'package:annette_app/currentValues.dart';
 
-/**
- * Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
- */
+///Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
 class AddDialog extends StatefulWidget {
   final Function(Task)? onTaskCreated;
   AddDialog({this.onTaskCreated});
@@ -46,15 +44,13 @@ class _AddDialogState extends State<AddDialog> {
   List<String> subjectCodes = [];
   List<String> subjectNames = [];
 
+  ///   Diese Methode fragt die Fächer, den Stundenplan sowie den zeitplan aus der Datenbank ab
+  ///  und speichert diese Objekte in den entpsrechenden Listen.
+  ///  Außerdem wird als Auswahlmöglichkeit für den Dropdownbutton eine Liste mit allen
+  ///  Fächern zuzüglich der Option "Sonstiges" erstellt.
+  ///  Zudem sorgt diese Methode dafür, dass mittels der Methode getAutoValues() (s.u.) die
+  ///  automatischen Werte ermittelt werden.
 
-  /**
-   * Diese Methode fragt die Fächer, den Stundenplan sowie den zeitplan aus der Datenbank ab
-   * und speichert diese Objekte in den entpsrechenden Listen.
-   * Außerdem wird als Auswahlmöglichkeit für den Dropdownbutton eine Liste mit allen
-   * Fächern zuzüglich der Option "Sonstiges" erstellt.
-   * Zudem sorgt diese Methode dafür, dass mittels der Methode getAutoValues() (s.u.) die
-   * automatischen Werte ermittelt werden.
-   */
   void getSubjectsAndTimes() async {
     ///Zuordnung: Abkürzung => Fachname
     List<String> classesAbbreviation = getSubjectsAbbreviation();
@@ -64,10 +60,8 @@ class _AddDialogState extends State<AddDialog> {
     subjectNames.add('Sonstiges');
     subjectCodes.add('-');
 
-
     for (int i = 0; i < timetableUnits.length; i++) {
       String tempSubjectAbbreviation = timetableUnits[i].subject!;
-
 
       if (!subjectCodes.contains(tempSubjectAbbreviation)) {
         subjectCodes.add(tempSubjectAbbreviation);
@@ -87,7 +81,7 @@ class _AddDialogState extends State<AddDialog> {
       }
 
       int tempPositionInList =
-      classesAbbreviation.indexOf(tempSubjectAbbreviation);
+          classesAbbreviation.indexOf(tempSubjectAbbreviation);
       late String tempSubjectFullName;
 
       if (tempPositionInList != -1) {
@@ -108,12 +102,12 @@ class _AddDialogState extends State<AddDialog> {
 
     times = await databaseGetAllTimes();
 
-    getAutoValues();
-
+    await getAutoValues();
+    print(detectedSubject);
     if (detectedSubject == null) {
       selectedSubject = 'Sonstiges';
     } else {
-      selectedSubject = detectedSubject;
+      selectedSubject = subjectNames[subjectCodes.indexOf(detectedSubject!)];
     }
 
     setState(() {
@@ -125,19 +119,18 @@ class _AddDialogState extends State<AddDialog> {
    * Diese Methode sorgt dafür, dass die Werte aktuelles Fach, nächster Zeitpunkt laut Stundenplan und Zeitpunkt
    * der Benachrichtigung automatisch ermittelt werden.
    */
-  void getAutoValues() async {
+  Future<void> getAutoValues() async {
     if (currentTime.weekday > 5 ||
         currentTime.isBefore(getCV.getStartOfFirstLesson()) ||
         await getCV.getCurrentSubject() == null) {
       autoTime = false;
     } else {
       detectedSubject = await getCV.getCurrentSubject();
-      detectedDeadlineTime =  getCV.getNextLesson(subjectCodes[subjectNames.indexOf(detectedSubject!)]);
+      detectedDeadlineTime = getCV
+          .getNextLesson(subjectCodes[subjectCodes.indexOf(detectedSubject!)]);
       detectedNotificationTime = getNotificationTime(detectedDeadlineTime!);
     }
   }
-
-
 
   /**
    * Diese Methode berechnet anhand eines per Parameter übergebenen Zetpunkts
@@ -151,7 +144,6 @@ class _AddDialogState extends State<AddDialog> {
     temp = temp.add(new Duration(hours: 16));
     return temp;
   }
-
 
   ///Hilfsmethode zum Laden der Fächer und des Stundenplans.
   void load() async {
@@ -188,7 +180,9 @@ class _AddDialogState extends State<AddDialog> {
       errorSubject = true;
     }
 
-    if (deadlineTimeToInsert!.add(Duration(minutes: 1)).isBefore(DateTime.now())) {
+    if (deadlineTimeToInsert!
+        .add(Duration(minutes: 1))
+        .isBefore(DateTime.now())) {
       errorTime = true;
     }
 
@@ -196,11 +190,12 @@ class _AddDialogState extends State<AddDialog> {
       errorTime = true;
     }
 
-    if (subjectToInsert == 'Sonstiges' && (notesToInsert == null || notesToInsert == '')) {
+    if (subjectToInsert == 'Sonstiges' &&
+        (notesToInsert == null || notesToInsert == '')) {
       errorNotes = true;
     }
 
-    if(notesToInsert == '') {
+    if (notesToInsert == '') {
       notesToInsert = null;
     }
 
@@ -216,11 +211,12 @@ class _AddDialogState extends State<AddDialog> {
       databaseInsertTask(newTask);
 
       if (notificationTimeToInsert.isAfter(DateTime.now())) {
-        scheduleNotification(nextId!, subjectToInsert!, notesToInsert, deadlineTimeToInsert.toString(),
-            notificationTimeToInsert);
+        scheduleNotification(nextId!, subjectToInsert!, notesToInsert,
+            deadlineTimeToInsert.toString(), notificationTimeToInsert);
       } else if (notificationTimeToInsert
           .isAfter(DateTime.now().subtract(Duration(minutes: 1)))) {
-        showNotification(nextId!, subjectToInsert!, notesToInsert, deadlineTimeToInsert.toString());
+        showNotification(nextId!, subjectToInsert!, notesToInsert,
+            deadlineTimeToInsert.toString());
       }
 
       Navigator.pop(context);
@@ -277,8 +273,9 @@ class _AddDialogState extends State<AddDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      child: Container(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        child: Container(
           //height: 565,
           constraints: BoxConstraints(maxWidth: 350, maxHeight: 565),
           padding: (MediaQuery.of(context).orientation == Orientation.landscape)
@@ -286,9 +283,10 @@ class _AddDialogState extends State<AddDialog> {
               : EdgeInsets.all(10.0),
           child: (!finished)
               ? CupertinoActivityIndicator()
-              : SingleChildScrollView(child:Column(
-                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+              : SingleChildScrollView(
+                  child: Column(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
                       Text('Neue Hausaufgabe',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -320,14 +318,16 @@ class _AddDialogState extends State<AddDialog> {
                                     );
                                   }).toList(),
                                   onChanged: (value) {
-                                    setState(() {
+                                    setState(() async {
                                       selectedSubject = value;
                                       errorNotes = false;
                                       errorTime = false;
 
                                       if (selectedSubject != 'Sonstiges') {
                                         detectedDeadlineTime =
-                                            getCV.getNextLesson(subjectCodes[subjectNames.indexOf(selectedSubject!)]);
+                                            getCV.getNextLesson(subjectCodes[
+                                                subjectNames.indexOf(
+                                                    selectedSubject!)]);
                                         if (detectedDeadlineTime == null) {
                                           autoTime = false;
                                         } else {
@@ -354,9 +354,12 @@ class _AddDialogState extends State<AddDialog> {
                                     : 'Notizen (Optional)'),
                             onChanged: (text) {
                               setState(() {
-                                if (selectedSubject == 'Sonstiges' && text == '') {
+                                if (selectedSubject == 'Sonstiges' &&
+                                    text == '') {
                                   errorNotes = true;
-                                } else {errorNotes = false;}
+                                } else {
+                                  errorNotes = false;
+                                }
                                 notes = text;
                               });
                             },
@@ -373,149 +376,189 @@ class _AddDialogState extends State<AddDialog> {
                           //Spacer(flex: 1),
                           SizedBox(
                               height: 270,
-                              child: Column(children: [
-                          if (selectedSubject != 'Sonstiges' &&
-                              detectedDeadlineTime != null)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text('Zeit automatisch wählen',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w400)),
-                                CupertinoSwitch(
-                                  value: autoTime,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      autoTime = value;
-
-                                      if(autoTime) {
-                                        errorTime = false;
-                                      } else if (!autoTime && selectedTime.isBefore(DateTime.now().subtract(Duration(minutes: 1)))) {
-                                        errorTime = true;
-                                      }
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          if (autoTime)
-                            Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        width: 1, color: Theme.of(context).dividerColor)),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text('Erinnerungszeitpunkt:',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              Text(
-                                                  parseTimeToUserOutput(
-                                                      detectedNotificationTime
-                                                          .toString()),
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ])),
-                                    Divider(),
-                                    Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text('Zu erledigen bis:',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              Text(
-                                                  parseTimeToUserOutput(
-                                                      detectedDeadlineTime
-                                                          .toString()),
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ])),
-                                  ],
-                                )),
-                          if (!autoTime)
-                            Container(
-                                //padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        width: 1, color: Theme.of(context).dividerColor)),
-                                child: Column(
-                                    //crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        child: Text(
-                                            'Wähle eine Erinnerungs-Zeit:',
+                              child: Column(
+                                children: [
+                                  if (selectedSubject != 'Sonstiges' &&
+                                      detectedDeadlineTime != null)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text('Zeit automatisch wählen',
                                             style: TextStyle(
                                                 fontSize: 17,
                                                 fontWeight: FontWeight.w400)),
-                                      ),
-                                      SizedBox(
-                                          height: 150,
-                                          child: CupertinoDatePicker(
-                                            use24hFormat: true,
-                                            initialDateTime: selectedTime,
-                                            mode: CupertinoDatePickerMode.dateAndTime,
-                                            onDateTimeChanged: (value) {
-                                              selectedTime = value;
-                                              setState(() {
-                                                if (!selectedTime
-                                                    .add(Duration(minutes: 1))
-                                                    .isBefore(DateTime.now())) {
-                                                  errorTime = false;
-                                                } else {
-                                                  errorTime = true;
-                                                }
-                                              });
-                                            },
-                                          ))
-                                    ])),
-                          //Spacer(flex: 2),
-                          Container(
-                            margin: EdgeInsets.only(bottom: 20),
-                            child: (errorTime)
-                                ? Text(
-                                    'Ungültige Zeit',
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                : Text(''),
-                          ),  ],)),
+                                        CupertinoSwitch(
+                                          value: autoTime,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              autoTime = value;
+
+                                              if (autoTime) {
+                                                errorTime = false;
+                                              } else if (!autoTime &&
+                                                  selectedTime.isBefore(
+                                                      DateTime.now().subtract(
+                                                          Duration(
+                                                              minutes: 1)))) {
+                                                errorTime = true;
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  if (autoTime)
+                                    Container(
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: Border.all(
+                                                width: 1,
+                                                color: Theme.of(context)
+                                                    .dividerColor)),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                          'Erinnerungszeitpunkt:',
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400)),
+                                                      Text(
+                                                          parseTimeToUserOutput(
+                                                              detectedNotificationTime
+                                                                  .toString()),
+                                                          style: TextStyle(
+                                                              fontSize: 17,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                    ])),
+                                            Divider(),
+                                            Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Text('Zu erledigen bis:',
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400)),
+                                                      Text(
+                                                          parseTimeToUserOutput(
+                                                              detectedDeadlineTime
+                                                                  .toString()),
+                                                          style: TextStyle(
+                                                              fontSize: 17,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                    ])),
+                                          ],
+                                        )),
+                                  if (!autoTime)
+                                    Container(
+                                        //padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: Border.all(
+                                                width: 1,
+                                                color: Theme.of(context)
+                                                    .dividerColor)),
+                                        child: Column(
+                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                    'Wähle eine Erinnerungs-Zeit:',
+                                                    style: TextStyle(
+                                                        fontSize: 17,
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                              ),
+                                              SizedBox(
+                                                  height: 150,
+                                                  child: CupertinoDatePicker(
+                                                    use24hFormat: true,
+                                                    initialDateTime:
+                                                        selectedTime,
+                                                    mode:
+                                                        CupertinoDatePickerMode
+                                                            .dateAndTime,
+                                                    onDateTimeChanged: (value) {
+                                                      selectedTime = value;
+                                                      setState(() {
+                                                        if (!selectedTime
+                                                            .add(Duration(
+                                                                minutes: 1))
+                                                            .isBefore(DateTime
+                                                                .now())) {
+                                                          errorTime = false;
+                                                        } else {
+                                                          errorTime = true;
+                                                        }
+                                                      });
+                                                    },
+                                                  ))
+                                            ])),
+                                  //Spacer(flex: 2),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 20),
+                                    child: (errorTime)
+                                        ? Text(
+                                            'Ungültige Zeit',
+                                            style: TextStyle(color: Colors.red),
+                                          )
+                                        : Text(''),
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
 
-                      if(MediaQuery.of(context).size.height > 20000) Spacer(),
-                     //Spacer(),
+                      if (MediaQuery.of(context).size.height > 20000) Spacer(),
+                      //Spacer(),
                       CupertinoButton(
-                        color: (Theme.of(context).brightness == Brightness.light) ? Theme.of(context).floatingActionButtonTheme.backgroundColor : Theme.of(context).accentColor,
-                        //color: Theme.of(context).accentColor,
-                          child: Text('Hinzufügen', style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.foregroundColor),),
+                          color:
+                              (Theme.of(context).brightness == Brightness.light)
+                                  ? Theme.of(context)
+                                      .floatingActionButtonTheme
+                                      .backgroundColor
+                                  : Theme.of(context).accentColor,
+                          //color: Theme.of(context).accentColor,
+                          child: Text(
+                            'Hinzufügen',
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .floatingActionButtonTheme
+                                    .foregroundColor),
+                          ),
                           onPressed: () {
                             addTask();
                           }),
                       CupertinoButton(
                           child: Text('Abbrechen',
-                              style: TextStyle( color: Theme.of(context).accentColor)),//color: Colors.black54)),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .accentColor)), //color: Colors.black54)),
                           onPressed: () => Navigator.pop(context)),
                     ])),
-      ));
+        ));
   }
 }

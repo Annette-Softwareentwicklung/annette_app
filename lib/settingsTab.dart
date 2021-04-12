@@ -1,8 +1,11 @@
+
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/setClass.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/defaultScaffold.dart';
+
+import 'examPlan.dart';
 
 /**
  * Diese Klasse beinhaltet den Einstellungsbereich.
@@ -33,6 +36,8 @@ class SettingsTab extends StatelessWidget {
     );
   }
 
+
+
   /**
    * Ausgabe eines Widgets (Container) mit einer Liste mit folgenden Auswahlmöglichkeiten:
    *    - Stundenplan       Navigiert zu dem Scaffold Auswählen der Wochentage (zum anschließenden Einstellen des Stundenplans)
@@ -48,6 +53,17 @@ class SettingsTab extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       child: ListView(
         children: <Widget>[
+          ListTile(
+              title: Text('Klausurplan'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return DefaultScaffold(
+                      title: 'Klausurplan', content: ExamPlan());
+                }),
+              )),
+          Divider(),
           ListTile(
               title: Text('Klassischer Vertretungsplan'),
               trailing: Icon(Icons.chevron_right,

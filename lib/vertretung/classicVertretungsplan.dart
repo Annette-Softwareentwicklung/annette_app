@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -72,7 +73,8 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
               child: WebView(
                 initialUrl:
                    'https://www.annettegymnasium.de/SP/vertretung/Heute_KoL/subst_001.htm',
-                javascriptMode: JavascriptMode.unrestricted,
+                javascriptMode: JavascriptMode.unrestricted,          onProgress: (progress) => CupertinoActivityIndicator(),
+
                 onWebResourceError: (e) {
                   setState(() {
                     showError();
@@ -85,7 +87,8 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
               child: WebView(
                 initialUrl:
                     'https://www.annettegymnasium.de/SP/vertretung/Morgen_KoL/subst_001.htm',
-                javascriptMode: JavascriptMode.unrestricted,
+                javascriptMode: JavascriptMode.unrestricted,          onProgress: (progress) => CupertinoActivityIndicator(),
+
                 onWebResourceError: (e) {
                   setState(() {
                     showError();

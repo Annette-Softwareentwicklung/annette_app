@@ -1,22 +1,20 @@
 import 'dart:io';
-import 'package:annette_app/classesMap.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ClassicTimetable extends StatefulWidget {
+class ExamPlan extends StatefulWidget {
   @override
-  _ClassicTimetableState createState() => _ClassicTimetableState();
+  _ExamPlanState createState() => _ExamPlanState();
 }
 
-class _ClassicTimetableState extends State<ClassicTimetable> {
-  late String currentClassNumber;
-
+class _ExamPlanState extends State<ExamPlan> {
+  late String currentClass;
   bool finished = false;
   bool error = false;
 
-  void getCurrentClassNumber() async {
+  void getCurrentClass() async {
     error = false;
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
@@ -29,16 +27,19 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
         final _file = File('$_path/configuration.txt');
 
         String contents = await _file.readAsString();
-        return contents.substring(
+        contents = contents.substring(
             contents.indexOf('c:') + 2, contents.indexOf(';'));
+        if (contents == 'Q1' || contents == 'Q2') {
+          return contents;
+        } else {
+          return 'EF';
+        }
       } catch (e) {
-        return '5A';
+        return 'EF';
       }
     }
 
-    String currentClass = await _readData();
-    int classesNumber = getAllClasses().indexOf(currentClass) + 1;
-    currentClassNumber = classesNumber.toString().padLeft(5, '0');
+    currentClass = (await _readData()).toLowerCase();
     setState(() {
       finished = true;
     });
@@ -71,7 +72,7 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCurrentClassNumber();
+    getCurrentClass();
   }
 
   @override
@@ -80,9 +81,9 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
       return Center(
         child: WebView(
           initialUrl:
-          'https://www.annettegymnasium.de/SP/stundenplan_oL/c/P9/c$currentClassNumber.htm',
-          javascriptMode: JavascriptMode.unrestricted,          onProgress: (progress) => CupertinoActivityIndicator(),
-
+              'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf',
+          javascriptMode: JavascriptMode.unrestricted,
+          onProgress: (progress) => CupertinoActivityIndicator(),
           onWebResourceError: (e) {
             setState(() {
               showError();
@@ -98,21 +99,22 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: <Widget>[
                 SliverList(
-                    delegate: SliverChildListDelegate.fixed([
-          Container(
-
-          child: Text('Fehler\nZum Aktualisieren ziehen',textAlign: TextAlign.center,),
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 30),
-      )
-    ]),
-                ) ]),
-
-
-
+                  delegate: SliverChildListDelegate.fixed([
+                    Container(
+                      child: Text(
+                        'Fehler\nZum Aktualisieren ziehen',
+                        textAlign: TextAlign.center,
+                      ),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 30),
+                    )
+                  ]),
+                )
+              ]),
           onRefresh: () async {
             Future.delayed(Duration.zero, () {
-getCurrentClassNumber();            });
+              getCurrentClass();
+            });
           });
     } else {
       return Center(

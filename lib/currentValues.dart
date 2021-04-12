@@ -19,7 +19,7 @@ class CurrentValues {
    */
   DateTime getStartOfFirstLesson() {
     DateTime temp =
-        new DateTime(currentTime.year, currentTime.month, currentTime.day);
+    new DateTime(currentTime.year, currentTime.month, currentTime.day);
     temp = temp.add(parseDuration(times[0].time!));
     return temp;
   }
@@ -70,8 +70,6 @@ class CurrentValues {
    * übergebene Fach das nächste Mal laut Stundenplan hat.
    */
   DateTime? getNextLesson(String? pSubject) {
-    print(pSubject);
-
     if (pSubject == null) {
       return null;
     }
@@ -79,7 +77,7 @@ class CurrentValues {
     DateTime nextLesson;
     bool gotNext = false;
     TimeTableUnit? nextTimeTableUnit;
-    int i = currentTime.weekday;
+    int i = currentTime.weekday + 1;
     int exitLoop = 0;
 
     while (!gotNext) {
