@@ -57,7 +57,7 @@ class _SetClassState extends State<SetClass> {
   ];
 
   List<String> lk1 = ['Freistunde', 'Mathe', 'PH LK'];
-  List<String> lk2 = ['Freistunde', 'Mathe', 'Physik'];
+  List<String> lk2 = ['Freistunde', 'Mathe', 'GE LK'];
   List<String> gk1 = ['Freistunde', 'Mathe', 'Physik', 'BI GK3', 'L GK1'];
   List<String> gk2 = ['Freistunde', 'Mathe', 'Physik'];
   List<String> gk3 = ['Freistunde', 'Mathe', 'Physik'];
@@ -252,7 +252,7 @@ class _SetClassState extends State<SetClass> {
   }
 
   void load() async {
-    classes = getAllClasses();
+    classes = (await getAllClasses())!;
 
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();

@@ -19,6 +19,20 @@ class _VertretungsTabState extends State<VertretungsTab> {
   String dateToday = 'Heute';
   String lastEdited = '--';
   bool load = true;
+
+  final LinearGradient redYellowGradient = LinearGradient(colors: [
+    Color.fromRGBO(236, 112, 111, 1),
+    Color.fromRGBO(234, 157, 73, 1)
+  ]);
+  final LinearGradient lightGradient = LinearGradient(colors: [
+    Color.fromRGBO(74, 149, 236, 1),
+    Color.fromRGBO(110, 160, 200, 1)
+  ]);
+  final LinearGradient darkGradient = LinearGradient(colors: [
+    Color.fromRGBO(44, 119, 206, 1),
+    Color.fromRGBO(90, 140, 180, 1)
+  ]);
+
   void makeRequest() async {
     try {
       var response = await http.get(Uri.https(
@@ -32,6 +46,11 @@ class _VertretungsTabState extends State<VertretungsTab> {
         informationToday = vpc1.getInformation();
         vertretungenHeute = await vpc1.getVertretungen();
 
+        if (vertretungenHeute != null) {
+          vertretungenHeute!.sort((a, b) {
+            return a.lesson!.compareTo(b.lesson!);
+          });
+        }
         /*
         vpc1.getAffectedClasses();
         */
@@ -50,6 +69,11 @@ class _VertretungsTabState extends State<VertretungsTab> {
         dateTomorrow = vpc2.getCurrentDate();
         informationTomorrow = vpc2.getInformation();
         vertretungenMorgen = await vpc2.getVertretungen();
+        if (vertretungenMorgen != null) {
+          vertretungenMorgen!.sort((a, b) {
+            return a.lesson!.compareTo(b.lesson!);
+          });
+        }
         /*
         vpc2.getAffectedClasses();
         */
@@ -103,7 +127,9 @@ class _VertretungsTabState extends State<VertretungsTab> {
           padding: EdgeInsets.all(2),
         ),
         Expanded(
-            child: CustomScrollView(
+            child:
+
+            CustomScrollView(
           slivers: <Widget>[
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
@@ -111,23 +137,66 @@ class _VertretungsTabState extends State<VertretungsTab> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        dateToday,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                      Container(
+                        child: Text(
+                          dateToday,
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        padding: EdgeInsets.all(10),
                       ),
-                      if (informationToday.length != 0)
-                        Text(
-                          'Infos zum Tag:',
-                          style: TextStyle(fontSize: 17),
+                      Container(
+                        child: Column(
+                          children: [
+                            if (informationToday.length != 0)
+                              Text(
+                                'Infos zum Tag:',
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            else
+                              Text(
+                                'Keine weiteren Nachrichten',
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            if (informationToday.length != 0)
+                              Text(
+                                informationToday.join('\n'),
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.start,
                         ),
-                      if (informationToday.length != 0)
-                        Text(
-                          informationToday.join('\n'),
-                          style: TextStyle(fontSize: 17),
+                        padding: EdgeInsets.only(
+                            top: 10, bottom: 10, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          //color: Colors.black12,
+                          gradient:
+                              (Theme.of(context).brightness == Brightness.dark)
+                                  ? darkGradient
+                                  : lightGradient,
+                          borderRadius: BorderRadius.circular(10),
+                          //border: Border.all(color: Theme.of(context).accentColor, width: 1),
                         ),
+                        width: double.infinity,
+                        //margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                      )
                     ]),
-                padding: EdgeInsets.all(10),
+                margin:
+                    EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(10),
+                  //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
+                ),
               ),
             ])),
             if (vertretungenHeute!.length != 0)
@@ -142,24 +211,25 @@ class _VertretungsTabState extends State<VertretungsTab> {
             if (vertretungenHeute!.length == 0)
               SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    Container(
-                      child: Center(
-                          child: Text(
-                            'Keine Vertretungen',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(top:10, left: 10,right: 10,bottom: 25),
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: Theme.of(context).accentColor, width: 1)),
+                Container(
+                  child: Center(
+                      child: Text(
+                    'Keine Vertretungen',
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
+                    textAlign: TextAlign.center,
+                  )),
+                  padding: EdgeInsets.all(10),
+                  margin:
+                      EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: Theme.of(context).accentColor, width: 1)),
+                ),
               ])),
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
@@ -167,23 +237,63 @@ class _VertretungsTabState extends State<VertretungsTab> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        dateTomorrow,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                      Container(
+                        child: Text(
+                          dateTomorrow,
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        padding: EdgeInsets.all(10),
                       ),
-                      if (informationTomorrow.length != 0)
-                        Text(
-                          'Infos zum Tag:',
-                          style: TextStyle(fontSize: 17),
+                      Container(
+                        child: Column(
+                          children: [
+                            if (informationTomorrow.length != 0)
+                              Text(
+                                'Infos zum Tag:',
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            else
+                              Text(
+                                'Keine weiteren Nachrichten',
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            if (informationTomorrow.length != 0)
+                              Text(
+                                informationTomorrow.join('\n'),
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.start,
                         ),
-                      if (informationTomorrow.length != 0)
-                        Text(
-                          informationTomorrow.join('\n'),
-                          style: TextStyle(fontSize: 17),
+                        padding: EdgeInsets.only(
+                            top: 10, bottom: 10, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          gradient:
+                              (Theme.of(context).brightness == Brightness.dark)
+                                  ? darkGradient
+                                  : lightGradient,
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        width: double.infinity,
+                      )
                     ]),
-                padding: EdgeInsets.all(10),
+                margin:
+                    EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(10),
+                  //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
+                ),
               ),
             ])),
             if (vertretungenMorgen!.length != 0)
@@ -199,8 +309,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
             if (vertretungenMorgen!.length == 0)
               SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                Container(
-                  child: Center(
+                Container(child:Center(
                       child: Text(
                     'Keine Vertretungen',
                     style: TextStyle(
@@ -209,18 +318,23 @@ class _VertretungsTabState extends State<VertretungsTab> {
                     textAlign: TextAlign.center,
                   )),
                   padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.only(top:10, left: 10,right: 10,bottom: 25),
-                  height: 50,
+
                   decoration: BoxDecoration(
                       color: Colors.black12,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                          color: Theme.of(context).accentColor, width: 1)),
+                      border: Border.all(color: Theme.of(context).accentColor, width: 1),
+    ),
+
+                  margin:
+                  EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
+                  height: 50,
+
                 ),
+
               ])),
           ],
           physics: const AlwaysScrollableScrollPhysics(),
-        )),
+      )),
       ]),
       //color: Colors.red,
       onRefresh: () {

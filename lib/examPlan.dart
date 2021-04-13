@@ -168,7 +168,7 @@ url            ,          javascriptMode: JavascriptMode.unrestricted,
               ]),
           onRefresh: () async {
             Future.delayed(Duration.zero, () {
-              getCurrentClass();
+              changePlan(selectedClass);
             });
           }): Center(
         child: CupertinoActivityIndicator(),

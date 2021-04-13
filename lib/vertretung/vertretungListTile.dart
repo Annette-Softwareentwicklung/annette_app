@@ -6,8 +6,16 @@ class VertretungListTile extends StatelessWidget {
 
   VertretungListTile(this.vertretung);
 
-  final Shader linearGradient = LinearGradient(
+  final Shader linearGradient1 = LinearGradient(
     colors: <Color>[Color(0xffDA44bb), Color(0xff8921aa)],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
+  final Shader lightGradient = LinearGradient(
+    colors: <Color>[Colors.blue, Colors.tealAccent],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
+  final Shader darkGradient = LinearGradient(
+    colors: <Color>[Colors.tealAccent, Colors.blue],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   @override
@@ -17,7 +25,7 @@ class VertretungListTile extends StatelessWidget {
       constraints: BoxConstraints(minHeight: 200),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: Colors.black12,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20),
       ),
@@ -32,11 +40,11 @@ class VertretungListTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        foreground: Paint()..shader = linearGradient,
+                        foreground: Paint()..shader = (Theme.of(context).brightness == Brightness.dark) ? darkGradient : lightGradient,
                       ),
                     )
                   : Text(''),
-              (vertretung.subject_new != null) ? Text(vertretung.subject_new!) : Text(vertretung.type!),
+              Text((vertretung.subject_new != null) ? vertretung.subject_new! : vertretung.type!, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
             ],
           ),
           if (vertretung.affectedClass != null) Text(vertretung.affectedClass!),
@@ -46,7 +54,7 @@ class VertretungListTile extends StatelessWidget {
           if (vertretung.comment != null) Text(vertretung.comment!),
           if (vertretung.room != null) Text(vertretung.room!),
           if (vertretung.subject_new != null) Text(vertretung.subject_new!),
-          if (vertretung.subject_old != null) Text(vertretung.subject_old!),
+          if (vertretung.subject_old != null && vertretung.subject_old != vertretung.subject_new) Text(vertretung.subject_old!),
         ],
       ),
     );

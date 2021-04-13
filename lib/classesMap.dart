@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 List<String> getSubjectsFullName() {
   List<String> classesFullName = [
     'Deutsch',
@@ -94,35 +96,17 @@ List<String> getSubjectsAbbreviation() {
   return classesAbbreviation;
 }
 
-List<String> getAllClasses () {
-///Liste aller Klassen bzw. Stufen
-return [
-  '5A',
-  '5B',
-  '5C',
-  '5D',
-  '5F',
-  '6A',
-  '6B',
-  '6C',
-  '6D',
-  '6F',
-  '7A',
-  '7B',
-  '7C',
-  '7D',
-  '7E',
-  '8A',
-  '8B',
-  '8C',
-  '8D',
-  '8E',
-  '9A',
-  '9B',
-  '9C',
-  '9D',
-  '9F',
-  'EF',
-  'Q1',
-  'Q2',
-];}
+Future<List<String>?> getAllClasses () async {
+  Future<List<String>?> _getClassesList() async {
+    try {
+      var response = await http.get(
+          Uri.http('janw.bplaced.net', 'annetteapp/data/klassenListe.txt'));
+      if (response.statusCode == 200) {
+        return response.body.split(',');
+      }
+      return null;} catch (e) {
+      return null;
+    }
+  }
+  return await _getClassesList();
+}

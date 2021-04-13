@@ -37,11 +37,21 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
     }
 
     String currentClass = await _readData();
-    int classesNumber = getAllClasses().indexOf(currentClass) + 1;
-    currentClassNumber = classesNumber.toString().padLeft(5, '0');
-    setState(() {
-      finished = true;
-    });
+
+    if(await getAllClasses() == null) {
+      setState(() {
+        error = true;
+        finished = false;
+        showError();
+      });
+    } else {
+      int classesNumber = (await getAllClasses())!.indexOf(currentClass) + 1;
+      currentClassNumber = classesNumber.toString().padLeft(5, '0');
+      setState(() {
+        finished = true;
+      });
+    }
+
   }
 
   void showError() {
@@ -80,9 +90,9 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
       return Center(
         child: WebView(
           initialUrl:
-          'https://www.annettegymnasium.de/SP/stundenplan_oL/c/P9/c$currentClassNumber.htm',
-          javascriptMode: JavascriptMode.unrestricted,          onProgress: (progress) => CupertinoActivityIndicator(),
-
+              'https://www.annettegymnasium.de/SP/stundenplan_oL/c/P9/c$currentClassNumber.htm',
+          javascriptMode: JavascriptMode.unrestricted,
+          onProgress: (progress) => CupertinoActivityIndicator(),
           onWebResourceError: (e) {
             setState(() {
               showError();
@@ -98,21 +108,22 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: <Widget>[
                 SliverList(
-                    delegate: SliverChildListDelegate.fixed([
-          Container(
-
-          child: Text('Fehler\nZum Aktualisieren ziehen',textAlign: TextAlign.center,),
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 30),
-      )
-    ]),
-                ) ]),
-
-
-
+                  delegate: SliverChildListDelegate.fixed([
+                    Container(
+                      child: Text(
+                        'Fehler\nZum Aktualisieren ziehen',
+                        textAlign: TextAlign.center,
+                      ),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 30),
+                    )
+                  ]),
+                )
+              ]),
           onRefresh: () async {
             Future.delayed(Duration.zero, () {
-getCurrentClassNumber();            });
+              getCurrentClassNumber();
+            });
           });
     } else {
       return Center(

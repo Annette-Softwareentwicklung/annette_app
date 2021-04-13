@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:annette_app/database/databaseCreate.dart';
+import 'package:http/http.dart' as http;
 
 class TimetableCrawler {
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
@@ -29,12 +30,26 @@ class TimetableCrawler {
     }
 
     //pattern.allMatches(await _readData()).forEach((match) => print(match.group(0)));
-    await setTimetable(await _readData());
+    //await setTimetable(await _readData());
+
+    Future<String> _getDifExport() async {
+      try {
+      var response = await http.get(
+          Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplan.txt'));
+      if (response.statusCode == 200) {
+        return response.body;
+      }
+      return 'error1';} catch (e) {
+        return 'error2';
+      }
+    }
+    //pattern.allMatches(await _getDifExport()).forEach((match) => print(match.group(0)));
+    await setTimetable(await _getDifExport());
+
     await setSubjects();
   }
 
   Future<void> setTimetable(String code) async {
-
     ///Löscht alle Stundenplan-Einträge
     WidgetsFlutterBinding.ensureInitialized();
     final Future<Database> database = openDatabase(
@@ -95,24 +110,34 @@ class TimetableCrawler {
         print('unterstufe');
 
         //Überprüfung Religion
-        if(tempTimetableUnit.subject! == 'KR' || tempTimetableUnit.subject! == 'ER' ||tempTimetableUnit.subject! == 'PL' || tempTimetableUnit.subject! == 'PPL') {
-          if(configurationString.contains(tempTimetableUnit.subject!))  {
+        if (tempTimetableUnit.subject! == 'KR' ||
+            tempTimetableUnit.subject! == 'ER' ||
+            tempTimetableUnit.subject! == 'PL' ||
+            tempTimetableUnit.subject! == 'PPL') {
+          if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
           }
         }
         //2. Sprache
-        else if(!currentClass.contains('5') && !currentClass.contains('F') && (tempTimetableUnit.subject! == 'L6' || tempTimetableUnit.subject! == 'F6')) {
-          if(configurationString.contains(tempTimetableUnit.subject!))  {
+        else if (!currentClass.contains('5') &&
+            !currentClass.contains('F') &&
+            (tempTimetableUnit.subject! == 'L6' ||
+                tempTimetableUnit.subject! == 'F6')) {
+          if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
           }
         }
         //Diff
-        else if((currentClass.contains('8') || currentClass.contains('9')) && (tempTimetableUnit.subject! == 'GEd' || tempTimetableUnit.subject! == 'IFd'  || tempTimetableUnit.subject! == 'PHd' || tempTimetableUnit.subject! == 'S8' || tempTimetableUnit.subject! == 'KUd')) {
-          if(configurationString.contains(tempTimetableUnit.subject!))  {
+        else if ((currentClass.contains('8') || currentClass.contains('9')) &&
+            (tempTimetableUnit.subject! == 'GEd' ||
+                tempTimetableUnit.subject! == 'IFd' ||
+                tempTimetableUnit.subject! == 'PHd' ||
+                tempTimetableUnit.subject! == 'S8' ||
+                tempTimetableUnit.subject! == 'KUd')) {
+          if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
           }
-        }
-        else {
+        } else {
           databaseInsertTimetableUnit(tempTimetableUnit);
         }
       }
