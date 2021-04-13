@@ -11,10 +11,13 @@ class ExamPlan extends StatefulWidget {
 
 class _ExamPlanState extends State<ExamPlan> {
   late String currentClass;
+  int selectedClass = 0;
   bool finished = false;
   bool error = false;
+  late WebViewController controller;
+  late String url;
 
-  void getCurrentClass() async {
+  Future<int> getCurrentClass() async {
     error = false;
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
@@ -39,7 +42,32 @@ class _ExamPlanState extends State<ExamPlan> {
       }
     }
 
-    currentClass = (await _readData()).toLowerCase();
+    String s =  (await _readData()).toLowerCase();
+    if(s == 'q1') {
+      return 1;
+    } else if(s == 'q2') {
+      return 2;
+    } else {
+      return 0;
+    }
+  }
+
+  void changePlan (int pClass) {
+    setState(() {
+      finished = false;
+      error = false;
+    });
+
+    if(pClass == 1) {
+      currentClass = 'q1';
+    } else if(pClass == 2) {
+      currentClass = 'q2';
+    } else {
+      currentClass = 'ef';
+    }
+    selectedClass = pClass;
+    url = 'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf';
+    controller.loadUrl(url);
     setState(() {
       finished = true;
     });
@@ -68,33 +96,60 @@ class _ExamPlanState extends State<ExamPlan> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void load() async{
+      if(await getCurrentClass() == 1) {
+        currentClass = 'q1';
+      } else if(await getCurrentClass() == 2) {
+        currentClass = 'q2';
+      } else {
+        currentClass = 'ef';
+      }
+      selectedClass = await getCurrentClass();
+      url = 'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf';
+      setState(() {
+        finished = true;
+      });
+    }
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCurrentClass();
+    load();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (finished) {
-      return Center(
-        child: WebView(
-          initialUrl:
-              'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf',
-          javascriptMode: JavascriptMode.unrestricted,
-          onProgress: (progress) => CupertinoActivityIndicator(),
-          onWebResourceError: (e) {
-            setState(() {
-              showError();
-              error = true;
-              finished = false;
-            });
-          },
-        ),
-      );
-    } else if (error) {
-      return RefreshIndicator(
+    return
+
+      Container(child: Center(child:Column(children: [
+      Container(child: CupertinoSlidingSegmentedControl<int>(
+      children: {0: Container(child: Text('EF'), padding: EdgeInsets.symmetric(horizontal: 30),),1: Text('Q1'),2: Text('Q2'), },
+        onValueChanged: (int? value) {
+          changePlan(value!);},
+        groupValue: selectedClass,
+      ),margin: EdgeInsets.only(bottom: 15),),
+        Expanded(child:
+
+        (finished) ?
+        Center(
+          child: WebView(
+            initialUrl:
+url            ,          javascriptMode: JavascriptMode.unrestricted,
+            onProgress: (progress) => CupertinoActivityIndicator(),
+              onWebViewCreated: (WebViewController webViewController) {
+                controller = webViewController;},
+            onWebResourceError: (e) {
+              setState(() {
+                showError();
+                error = true;
+                finished = false;
+              });
+            },
+          ),
+        ) : (error) ?
+       RefreshIndicator(
           child: CustomScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: <Widget>[
@@ -115,11 +170,15 @@ class _ExamPlanState extends State<ExamPlan> {
             Future.delayed(Duration.zero, () {
               getCurrentClass();
             });
-          });
-    } else {
-      return Center(
+          }): Center(
         child: CupertinoActivityIndicator(),
-      );
-    }
+      )
+
+
+
+        ),
+      ],
+      crossAxisAlignment: CrossAxisAlignment.center,)), padding: EdgeInsets.all(15),);
+
   }
 }

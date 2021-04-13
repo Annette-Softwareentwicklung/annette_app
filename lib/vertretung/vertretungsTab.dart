@@ -50,7 +50,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
         dateTomorrow = vpc2.getCurrentDate();
         informationTomorrow = vpc2.getInformation();
         vertretungenMorgen = await vpc2.getVertretungen();
-
         /*
         vpc2.getAffectedClasses();
         */
@@ -99,62 +98,126 @@ class _VertretungsTabState extends State<VertretungsTab> {
     return SafeArea(
         child: RefreshIndicator(
       child: Column(children: [
-        Container(child: Text('Stand: $lastEdited'),padding: EdgeInsets.all(2),),
+        Container(
+          child: Text('Stand: $lastEdited'),
+          padding: EdgeInsets.all(2),
+        ),
         Expanded(
             child: CustomScrollView(
           slivers: <Widget>[
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
               Container(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(dateToday, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
-                        if (informationToday.length != 0)
-                          Text('Infos zum Tag:', style: TextStyle(fontSize: 17),),
-                        if (informationToday.length != 0)
-                          Text(informationToday.join('\n'), style: TextStyle(fontSize: 17),),
-                      ]),
-                  padding: EdgeInsets.all(10),
-
-
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        dateToday,
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      if (informationToday.length != 0)
+                        Text(
+                          'Infos zum Tag:',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      if (informationToday.length != 0)
+                        Text(
+                          informationToday.join('\n'),
+                          style: TextStyle(fontSize: 17),
+                        ),
+                    ]),
+                padding: EdgeInsets.all(10),
               ),
             ])),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return VertretungListTile(vertretungenHeute![
-                      index]); // you can add your available item here
-                },
-                childCount: vertretungenHeute!.length,
+            if (vertretungenHeute!.length != 0)
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return VertretungListTile(vertretungenHeute![index]);
+                  },
+                  childCount: vertretungenHeute!.length,
+                ),
               ),
-            ),
+            if (vertretungenHeute!.length == 0)
+              SliverList(
+                  delegate: SliverChildListDelegate.fixed([
+                    Container(
+                      child: Center(
+                          child: Text(
+                            'Keine Vertretungen',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(top:10, left: 10,right: 10,bottom: 25),
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                              color: Theme.of(context).accentColor, width: 1)),
+                    ),
+              ])),
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
-                  Container(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(dateTomorrow, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
-                          if (informationTomorrow.length != 0)
-                            Text('Infos zum Tag:', style: TextStyle(fontSize: 17),),
-                          if (informationTomorrow.length != 0)
-                            Text(informationTomorrow.join('\n'), style: TextStyle(fontSize: 17),),
-                        ]),
-                    padding: EdgeInsets.all(10),
-
-
-                  ),
-                ])),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return VertretungListTile(vertretungenMorgen![
-                      index]); // you can add your available item here
-                },
-                childCount: vertretungenMorgen!.length,
+              Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        dateTomorrow,
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      if (informationTomorrow.length != 0)
+                        Text(
+                          'Infos zum Tag:',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      if (informationTomorrow.length != 0)
+                        Text(
+                          informationTomorrow.join('\n'),
+                          style: TextStyle(fontSize: 17),
+                        ),
+                    ]),
+                padding: EdgeInsets.all(10),
               ),
-            )
+            ])),
+            if (vertretungenMorgen!.length != 0)
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return VertretungListTile(vertretungenMorgen![
+                        index]); // you can add your available item here
+                  },
+                  childCount: vertretungenMorgen!.length,
+                ),
+              ),
+            if (vertretungenMorgen!.length == 0)
+              SliverList(
+                  delegate: SliverChildListDelegate.fixed([
+                Container(
+                  child: Center(
+                      child: Text(
+                    'Keine Vertretungen',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.center,
+                  )),
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.only(top:10, left: 10,right: 10,bottom: 25),
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: Theme.of(context).accentColor, width: 1)),
+                ),
+              ])),
           ],
           physics: const AlwaysScrollableScrollPhysics(),
         )),

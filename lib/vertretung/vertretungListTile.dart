@@ -13,6 +13,7 @@ class VertretungListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       constraints: BoxConstraints(minHeight: 200),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(

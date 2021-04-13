@@ -1,4 +1,5 @@
 
+import 'package:annette_app/classes/showWebview.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/setClass.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
@@ -85,7 +86,37 @@ class SettingsTab extends StatelessWidget {
                       title: 'Stundenplan', content: ClassicTimetable());
                 }),
               )),
-Divider(),ListTile(),
+          Divider(), ListTile(),Divider(),ListTile(
+              title: Text('Moodle'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return DefaultScaffold(
+                      title: 'Moodle', content: ShowWebview(url: 'https://moodle.annettegymnasium.de/',));
+                }),
+              )),
+          Divider(),ListTile(
+              title: Text('Annette Homepage'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return DefaultScaffold(
+                      title: 'Annette Homepage', content: ShowWebview(url: 'https://www.annettegymnasium.de/',));
+                }),
+              )),
+          Divider(),ListTile(
+              title: Text('Kalender'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return DefaultScaffold(
+                      title: 'Kalender', content: ShowWebview(url: 'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now',));
+                }),
+              )),
+          Divider(),ListTile(),
           Divider(),
           ListTile(
               title: Text('Klasse ändern'),
