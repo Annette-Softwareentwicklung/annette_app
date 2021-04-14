@@ -1,55 +1,27 @@
-import 'package:annette_app/classesMap.dart';
+import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:annette_app/database/databaseCreate.dart';
-import 'package:http/http.dart' as http;
 
 class TimetableCrawler {
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-  final String configurationString;
-
-  TimetableCrawler({required this.configurationString});
 
   late String currentClass;
 
-  Future<void> setConfiguration() async {
+  Future<void> setConfiguration(String configurationString, String difExport) async {
     currentClass = configurationString.substring(
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
 
-    Future<String> _readData() async {
-      try {
-        return await rootBundle.loadString('assets/stundenplan.txt');
-      } catch (e) {
-        return 'error';
-      }
-    }
-
-    //pattern.allMatches(await _readData()).forEach((match) => print(match.group(0)));
-    //await setTimetable(await _readData());
-
-    Future<String> _getDifExport() async {
-      try {
-      var response = await http.get(
-          Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplan.txt'));
-      if (response.statusCode == 200) {
-        return response.body;
-      }
-      return 'error1';} catch (e) {
-        return 'error2';
-      }
-    }
-    //pattern.allMatches(await _getDifExport()).forEach((match) => print(match.group(0)));
-    await setTimetable(await _getDifExport());
-
+    //pattern.allMatches(difExport).forEach((match) => print(match.group(0)));
+    await setTimetable(difExport, configurationString);
     await setSubjects();
-  }
+}
 
-  Future<void> setTimetable(String code) async {
+  Future<void> setTimetable(String code, String configurationString) async {
     ///Löscht alle Stundenplan-Einträge
     WidgetsFlutterBinding.ensureInitialized();
     final Future<Database> database = openDatabase(

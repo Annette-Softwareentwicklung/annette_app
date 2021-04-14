@@ -207,7 +207,8 @@ class _VertretungsTabState extends State<VertretungsTab> {
                           },
                           childCount: vertretungenHeute!.length,
                         ),
-                      )else
+                      ),
+                    if (vertretungenHeute!.length == 0)
                       SliverList(
                           delegate: SliverChildListDelegate.fixed([
                             Container(
@@ -226,8 +227,8 @@ class _VertretungsTabState extends State<VertretungsTab> {
                               decoration: BoxDecoration(
                                   color: Colors.black12,
                                   borderRadius: BorderRadius.circular(10),
-                                  //border: Border.all(color: Theme.of(context).accentColor, width: 1),
-                              ),
+                                  border: Border.all(
+                                      color: Theme.of(context).accentColor, width: 1)),
                             ),
                           ])),
                     SliverList(
@@ -321,7 +322,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
                               decoration: BoxDecoration(
                                 color: Colors.black12,
                                 borderRadius: BorderRadius.circular(10),
-                               // border: Border.all(color: Theme.of(context).accentColor, width: 1),
+                                border: Border.all(color: Theme.of(context).accentColor, width: 1),
                               ),
 
                               margin:

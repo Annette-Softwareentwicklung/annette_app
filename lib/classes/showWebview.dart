@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../widgetParts.dart';
+
 class ShowWebview extends StatefulWidget {
   final String url;
   ShowWebview({required this.url});
@@ -44,14 +46,8 @@ class _ShowWebviewState extends State<ShowWebview> {
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildListDelegate.fixed([
-                  Container(
-                    child: Text(
-                      'Fehler\nZum Aktualisieren ziehen',
-                      textAlign: TextAlign.center,
-                    ),
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 30),
-                  )
+                  errorInternetContainer(context),
+
                 ]),
               )
             ]),

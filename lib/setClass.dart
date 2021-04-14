@@ -1,6 +1,8 @@
 import 'dart:io';
-import 'package:annette_app/classesMap.dart';
+import 'package:annette_app/onlineFiles.dart';
+import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
+import 'package:annette_app/widgetParts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,6 +24,8 @@ class _SetClassState extends State<SetClass> {
   bool finished = false;
   List<String> configurationList = [];
   late List<String> classes;
+  bool errorInternet = false;
+  OnlineFiles onlineFiles = new OnlineFiles();
 
   late String selectedClass;
   late String selectedLk1;
@@ -91,22 +95,19 @@ class _SetClassState extends State<SetClass> {
     if (selectedClass == 'Q1') {
       tempConfiguration =
           'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
-      await _writeData(tempConfiguration);
     } else if (selectedClass == 'Q2') {
       tempConfiguration =
           'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:$selectedZk1;zk2:$selectedZk1;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
-      await _writeData(tempConfiguration);
     } else {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
-      await _writeData(tempConfiguration);
     }
 
+      await activateTimetableCrawler(tempConfiguration);
+      await _writeData(tempConfiguration);
     setState(() {
       showFinishedConfiguration = true;
-      finished = false;
     });
-    activateTimetableCrawler(tempConfiguration);
   }
 
   void setGroupsUS() async {
@@ -152,31 +153,24 @@ class _SetClassState extends State<SetClass> {
     if (selectedClass.contains('8') || selectedClass.contains('9')) {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:$selectedDiffUS;';
-      await _writeData(tempConfiguration);
     } else if (!selectedClass.contains('5')) {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:Freistunde;';
-      await _writeData(tempConfiguration);
     } else {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
-      await _writeData(tempConfiguration);
     }
 
-    setState(() {
-      showFinishedConfiguration = true;
-      finished = false;
-    });
-    activateTimetableCrawler(tempConfiguration);
+      await activateTimetableCrawler(tempConfiguration);
+      await _writeData(tempConfiguration);
+      setState(() {
+        showFinishedConfiguration = true;
+      });
   }
 
-  void activateTimetableCrawler(pConfigurationString) async {
-    TimetableCrawler ttc1 =
-        new TimetableCrawler(configurationString: pConfigurationString);
-    await ttc1.setConfiguration();
-    setState(() {
-      finished = true;
-    });
+  Future<void> activateTimetableCrawler(pConfigurationString) async {
+    TimetableCrawler ttc1 = new TimetableCrawler();
+    await ttc1.setConfiguration(pConfigurationString, onlineFiles.difExport);
   }
 
   void setClass() async {
@@ -252,113 +246,119 @@ class _SetClassState extends State<SetClass> {
   }
 
   void load() async {
-    classes = (await getAllClasses())!;
+    if (await onlineFiles.initialize() == false) {
+      setState(() {
+        errorInternet = true;
+      });
+    } else {
+      classes =  onlineFiles.allClasses();
 
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
-
-    Future<List<String>> _readData() async {
-      List<String> tempContent = [];
-      try {
-        final _path = await _getPath();
-        final _file = File('$_path/configuration.txt');
-
-        String contents = await _file.readAsString();
-
-        tempContent.add(contents.substring(contents.indexOf('c:') + 2,
-            contents.indexOf(';', contents.indexOf('c:'))));
-        tempContent.add(contents.substring(contents.indexOf('lk1:') + 4,
-            contents.indexOf(';', contents.indexOf('lk1:'))));
-        tempContent.add(contents.substring(contents.indexOf('lk2:') + 4,
-            contents.indexOf(';', contents.indexOf('lk2:'))));
-
-        for (int i = 0; i < 13; i++) {
-          int j = i + 1;
-          int tempStart = (j < 10) ? 4 : 5;
-          String tempString = contents.substring(
-              contents.indexOf('gk$j:') + tempStart,
-              contents.indexOf(';', contents.indexOf('gk$j:')));
-          tempContent.add(tempString);
-        }
-
-        tempContent.add(contents.substring(contents.indexOf('zk1:') + 4,
-            contents.indexOf(';', contents.indexOf('zk1:'))));
-        tempContent.add(contents.substring(contents.indexOf('zk2:') + 4,
-            contents.indexOf(';', contents.indexOf('zk2:'))));
-
-        String tempReligion = contents.substring(
-            contents.indexOf('religionUS:') + 11,
-            contents.indexOf(';', contents.indexOf('religionUS:')));
-        String temp2Language = contents.substring(
-            contents.indexOf('sLanguageUS:') + 12,
-            contents.indexOf(';', contents.indexOf('sLanguageUS:')));
-        String tempDiff = contents.substring(contents.indexOf('diffUS:') + 7,
-            contents.indexOf(';', contents.indexOf('diffUS:')));
-
-        if (tempReligion == 'KR') {
-          tempContent.add('Kath. Religion');
-        } else if (tempReligion == 'ER') {
-          tempContent.add('Ev. Religion');
-        } else {
-          tempContent.add('Philosophie');
-        }
-
-        if (temp2Language == 'F6') {
-          tempContent.add('Französisch');
-        } else {
-          tempContent.add('Latein');
-        }
-
-        if (tempDiff == 'PHd') {
-          tempContent.add('Physik-Technik');
-        } else if (tempDiff == 'KUd') {
-          tempContent.add('Kunst');
-        } else if (tempDiff == 'S8') {
-          tempContent.add('Spanisch');
-        } else if (tempDiff == 'GEd') {
-          tempContent.add('Geschichte');
-        } else {
-          tempContent.add('Informatik');
-        }
-
-        return tempContent;
-      } catch (e) {
-        print('No configuration');
-        tempContent.clear();
-        tempContent.add(classes[0]);
-        tempContent.add(lk1[0]);
-        tempContent.add(lk2[0]);
-        tempContent.add(gk1[0]);
-        tempContent.add(gk2[0]);
-        tempContent.add(gk3[0]);
-        tempContent.add(gk4[0]);
-        tempContent.add(gk5[0]);
-        tempContent.add(gk6[0]);
-        tempContent.add(gk7[0]);
-        tempContent.add(gk8[0]);
-        tempContent.add(gk9[0]);
-        tempContent.add(gk10[0]);
-        tempContent.add(gk11[0]);
-        tempContent.add(gk12[0]);
-        tempContent.add(gk13[0]);
-        tempContent.add(zk1[0]);
-        tempContent.add(zk2[0]);
-        tempContent.add(religionUS[0]);
-        tempContent.add(secondLanguageUS[0]);
-        tempContent.add(diffUS[0]);
-        return tempContent;
+      Future<String> _getPath() async {
+        final _dir = await getApplicationDocumentsDirectory();
+        return _dir.path;
       }
+
+      Future<List<String>> _readData() async {
+        List<String> tempContent = [];
+        try {
+          final _path = await _getPath();
+          final _file = File('$_path/configuration.txt');
+
+          String contents = await _file.readAsString();
+
+          tempContent.add(contents.substring(contents.indexOf('c:') + 2,
+              contents.indexOf(';', contents.indexOf('c:'))));
+          tempContent.add(contents.substring(contents.indexOf('lk1:') + 4,
+              contents.indexOf(';', contents.indexOf('lk1:'))));
+          tempContent.add(contents.substring(contents.indexOf('lk2:') + 4,
+              contents.indexOf(';', contents.indexOf('lk2:'))));
+
+          for (int i = 0; i < 13; i++) {
+            int j = i + 1;
+            int tempStart = (j < 10) ? 4 : 5;
+            String tempString = contents.substring(
+                contents.indexOf('gk$j:') + tempStart,
+                contents.indexOf(';', contents.indexOf('gk$j:')));
+            tempContent.add(tempString);
+          }
+
+          tempContent.add(contents.substring(contents.indexOf('zk1:') + 4,
+              contents.indexOf(';', contents.indexOf('zk1:'))));
+          tempContent.add(contents.substring(contents.indexOf('zk2:') + 4,
+              contents.indexOf(';', contents.indexOf('zk2:'))));
+
+          String tempReligion = contents.substring(
+              contents.indexOf('religionUS:') + 11,
+              contents.indexOf(';', contents.indexOf('religionUS:')));
+          String temp2Language = contents.substring(
+              contents.indexOf('sLanguageUS:') + 12,
+              contents.indexOf(';', contents.indexOf('sLanguageUS:')));
+          String tempDiff = contents.substring(contents.indexOf('diffUS:') + 7,
+              contents.indexOf(';', contents.indexOf('diffUS:')));
+
+          if (tempReligion == 'KR') {
+            tempContent.add('Kath. Religion');
+          } else if (tempReligion == 'ER') {
+            tempContent.add('Ev. Religion');
+          } else {
+            tempContent.add('Philosophie');
+          }
+
+          if (temp2Language == 'F6') {
+            tempContent.add('Französisch');
+          } else {
+            tempContent.add('Latein');
+          }
+
+          if (tempDiff == 'PHd') {
+            tempContent.add('Physik-Technik');
+          } else if (tempDiff == 'KUd') {
+            tempContent.add('Kunst');
+          } else if (tempDiff == 'S8') {
+            tempContent.add('Spanisch');
+          } else if (tempDiff == 'GEd') {
+            tempContent.add('Geschichte');
+          } else {
+            tempContent.add('Informatik');
+          }
+
+          return tempContent;
+        } catch (e) {
+          print('No configuration');
+          tempContent.clear();
+          tempContent.add(classes[0]);
+          tempContent.add(lk1[0]);
+          tempContent.add(lk2[0]);
+          tempContent.add(gk1[0]);
+          tempContent.add(gk2[0]);
+          tempContent.add(gk3[0]);
+          tempContent.add(gk4[0]);
+          tempContent.add(gk5[0]);
+          tempContent.add(gk6[0]);
+          tempContent.add(gk7[0]);
+          tempContent.add(gk8[0]);
+          tempContent.add(gk9[0]);
+          tempContent.add(gk10[0]);
+          tempContent.add(gk11[0]);
+          tempContent.add(gk12[0]);
+          tempContent.add(gk13[0]);
+          tempContent.add(zk1[0]);
+          tempContent.add(zk2[0]);
+          tempContent.add(religionUS[0]);
+          tempContent.add(secondLanguageUS[0]);
+          tempContent.add(diffUS[0]);
+          return tempContent;
+        }
+      }
+
+      configurationList = await _readData();
+      print(configurationList);
+      selectedClass = configurationList[0];
+
+      setState(() {
+        finished = true;
+      });
     }
-
-    configurationList = await _readData();
-    print(configurationList);
-    selectedClass = configurationList[0];
-
-    setState(() {
-      finished = true;
-    });
   }
 
   @override
@@ -375,13 +375,33 @@ class _SetClassState extends State<SetClass> {
         padding: EdgeInsets.symmetric(horizontal: 20),
         alignment: Alignment.center,
         child: Center(
-            child: (showFinishedConfiguration)
-                ? FinishedConfiguration()
-                : (showGroupsOS)
-                    ? GroupsOS()
-                    : (showGroupsUS)
-                        ? GroupsUS()
-                        : Classes()),
+            child: (errorInternet)
+                ? RefreshIndicator(
+                    child: CustomScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: <Widget>[
+                        SliverList(
+                          delegate: SliverChildListDelegate.fixed(
+                            [
+                              errorInternetContainer(context),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    onRefresh: () async {
+                      Future.delayed(Duration.zero, () {
+                        errorInternet = false;
+                        load();
+                      });
+                    })
+                : (showFinishedConfiguration)
+                    ? FinishedConfiguration()
+                    : (showGroupsOS)
+                        ? GroupsOS()
+                        : (showGroupsUS)
+                            ? GroupsUS()
+                            : Classes()),
       ),
     );
   }
@@ -467,11 +487,11 @@ class _SetClassState extends State<SetClass> {
 
   Widget GroupsOS() {
     String infoText = 'Wähle hier deine individuellen Kurse. Dazu zählen die ';
-    if(selectedClass == 'Q1' || selectedClass == 'Q2') {
-       infoText = infoText + 'Leistungs- und ';
+    if (selectedClass == 'Q1' || selectedClass == 'Q2') {
+      infoText = infoText + 'Leistungs- und ';
     }
     infoText = infoText + 'Grund';
-    if(selectedClass == 'Q2') {
+    if (selectedClass == 'Q2') {
       infoText = infoText.replaceFirst(' und', ', ');
       infoText = infoText + '- und Zusatz';
     }
@@ -485,14 +505,20 @@ class _SetClassState extends State<SetClass> {
           ///Text
           SliverList(
               delegate: SliverChildListDelegate.fixed([
-                Container(
-                  child: Text(infoText,style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic), textAlign: TextAlign.center,),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(width: 1, color: Colors.grey)),
-                  ),
-                ),
-              ])),
+            Container(
+              child: Text(
+                infoText,
+                style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
+                textAlign: TextAlign.center,
+              ),
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+              ),
+            ),
+          ])),
+
           ///Leistungskurs
           if (selectedClass == 'Q1' || selectedClass == 'Q2')
             SliverList(
@@ -799,33 +825,36 @@ class _SetClassState extends State<SetClass> {
   Widget GroupsUS() {
     String infoText = 'Wähle hier deine individuellen Kurse. Dazu zähl';
 
-    if(selectedClass.contains('5')) {
+    if (selectedClass.contains('5')) {
       infoText = infoText + 't Religion.';
-    } else     if(!selectedClass.contains('8') && !selectedClass.contains('9')) {
+    } else if (!selectedClass.contains('8') && !selectedClass.contains('9')) {
       infoText = infoText + 'en Religion und die zweite Fremdsprache.';
-
     } else {
-      infoText = infoText + 'en Religion, die zweite Fremdsprache und dein Diff-Fach.';
-
+      infoText =
+          infoText + 'en Religion, die zweite Fremdsprache und dein Diff-Fach.';
     }
 
-
-      return Container(
+    return Container(
         child: Column(children: [
       Expanded(
           child: CustomScrollView(
         slivers: <Widget>[
           ///Text
-            SliverList(
-                delegate: SliverChildListDelegate.fixed([
-              Container(
-                child: Text(infoText,style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic), textAlign: TextAlign.center,),
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(width: 1, color: Colors.grey)),
-                ),
+          SliverList(
+              delegate: SliverChildListDelegate.fixed([
+            Container(
+              child: Text(
+                infoText,
+                style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
+                textAlign: TextAlign.center,
               ),
-            ])),
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+              ),
+            ),
+          ])),
 
           ///Religion
           SliverList(

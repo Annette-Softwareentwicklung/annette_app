@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:annette_app/widgetParts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -155,14 +156,8 @@ url            ,          javascriptMode: JavascriptMode.unrestricted,
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    Container(
-                      child: Text(
-                        'Fehler\nZum Aktualisieren ziehen',
-                        textAlign: TextAlign.center,
-                      ),
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 30),
-                    )
+                    errorInternetContainer(context),
+
                   ]),
                 )
               ]),

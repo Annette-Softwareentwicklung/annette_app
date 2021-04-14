@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../widgetParts.dart';
+
 class ClassicVertretungsplan extends StatefulWidget {
   @override
   _ClassicVertretungsplanState createState() => _ClassicVertretungsplanState();
@@ -42,14 +44,8 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildListDelegate.fixed([
-                  Container(
-                    child: Text(
-                      'Fehler\nZum Aktualisieren ziehen',
-                      textAlign: TextAlign.center,
-                    ),
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 30),
-                  )
+                  errorInternetContainer(context),
+
                 ]),
               )
             ]),

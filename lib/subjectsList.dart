@@ -1,4 +1,3 @@
-import 'package:http/http.dart' as http;
 
 List<String> getSubjectsFullName() {
   List<String> classesFullName = [
@@ -96,17 +95,4 @@ List<String> getSubjectsAbbreviation() {
   return classesAbbreviation;
 }
 
-Future<List<String>?> getAllClasses () async {
-  Future<List<String>?> _getClassesList() async {
-    try {
-      var response = await http.get(
-          Uri.http('janw.bplaced.net', 'annetteapp/data/klassenListe.txt'));
-      if (response.statusCode == 200) {
-        return response.body.split(',');
-      }
-      return null;} catch (e) {
-      return null;
-    }
-  }
-  return await _getClassesList();
-}
+

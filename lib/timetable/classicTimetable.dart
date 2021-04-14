@@ -1,9 +1,11 @@
 import 'dart:io';
-import 'package:annette_app/classesMap.dart';
+import 'package:annette_app/onlineFiles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../widgetParts.dart';
 
 class ClassicTimetable extends StatefulWidget {
   @override
@@ -12,12 +14,22 @@ class ClassicTimetable extends StatefulWidget {
 
 class _ClassicTimetableState extends State<ClassicTimetable> {
   late String currentClassNumber;
-
+  OnlineFiles onlineFiles = new OnlineFiles();
   bool finished = false;
   bool error = false;
 
   void getCurrentClassNumber() async {
     error = false;
+
+    if(await onlineFiles.initialize() == false) {
+      setState(() {
+        error = true;
+        finished = false;
+        showError();
+      });
+   } else
+
+    {
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
       return _dir.path;
@@ -38,14 +50,8 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
 
     String currentClass = await _readData();
 
-    if(await getAllClasses() == null) {
-      setState(() {
-        error = true;
-        finished = false;
-        showError();
-      });
-    } else {
-      int classesNumber = (await getAllClasses())!.indexOf(currentClass) + 1;
+
+      int classesNumber = onlineFiles.allClasses().indexOf(currentClass) + 1;
       currentClassNumber = classesNumber.toString().padLeft(5, '0');
       setState(() {
         finished = true;
@@ -109,14 +115,8 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    Container(
-                      child: Text(
-                        'Fehler\nZum Aktualisieren ziehen',
-                        textAlign: TextAlign.center,
-                      ),
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 30),
-                    )
+                    errorInternetContainer(context),
+
                   ]),
                 )
               ]),
