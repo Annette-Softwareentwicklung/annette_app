@@ -33,10 +33,9 @@ class SettingsTab extends StatelessWidget {
                   width: 36,
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
-      applicationLegalese: 'Annete App neue Version\n\nAlle Angaben ohne Gewähr\n\n©2021 Jan Wermeckes',
+      applicationLegalese: 'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\n\nAlle Angaben ohne Gewähr!\n\nKontakt: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
     );
   }
-
 
 
   /**
@@ -50,7 +49,7 @@ class SettingsTab extends StatelessWidget {
    */
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SafeArea(child: Container(
       padding: EdgeInsets.all(10.0),
       child: ListView(
         children: <Widget>[
@@ -133,12 +132,12 @@ class SettingsTab extends StatelessWidget {
           ListTile(
             title: Text('Über diese App'),
             trailing:
-                Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
+            Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
             onTap: () => aboutDialog(context),
           ),
           Divider(),
         ],
       ),
-    );
+    ));
   }
 }

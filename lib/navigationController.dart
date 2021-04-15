@@ -2,6 +2,7 @@ import 'package:annette_app/setClass.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/timetable/timetableTab.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/guide.dart';
 import 'homeworkTab.dart';
@@ -116,7 +117,7 @@ class NavigationControllerState extends State<NavigationController> {
         title: (tabIndex == 0) ? Text('Vertretungsplan') : (tabIndex == 1) ? Text('Hausaufgaben') : (tabIndex == 2) ? Text('Stundenplan') : Text('Sonstiges'),
       ),
       body:
-      (tabIndex == 0) ? VertretungsTab() : (tabIndex == 1) ? HomeworkTab(key: homeworkTabAccess,) : (tabIndex == 2) ? /*TimetableTab()*/ ClassicTimetable() : SettingsTab(),
+      (tabIndex == 0) ? VertretungsTab() : (tabIndex == 1) ? HomeworkTab(key: homeworkTabAccess,) : (tabIndex == 2) ? TimetableTab() : SettingsTab(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -141,22 +142,26 @@ class NavigationControllerState extends State<NavigationController> {
         items: [
           BottomNavigationBarItem(
             label: 'Vertretung',
-            icon: Icon(Icons.list),
+            icon: Icon(CupertinoIcons.rectangle_grid_1x2),
+            //icon: Icon(Icons.list),
           ),
 
           BottomNavigationBarItem(
             label: 'Hausaufgaben',
-            icon: Icon(Icons.list),
+            icon: Icon(CupertinoIcons.square_list),
+            //icon: Icon(Icons.list),
           ),
 
           BottomNavigationBarItem(
             label: 'Stundenplan',
-            icon: Icon(Icons.list),
+            icon: Icon(CupertinoIcons.calendar),
+            //icon: Icon(Icons.date_range_rounded),
           ),
 
           BottomNavigationBarItem(
             label: 'Sonstiges',
-            icon: Icon(Icons.more_horiz_rounded),
+            icon: Icon(CupertinoIcons.ellipsis),
+            //icon: Icon(Icons.more_horiz_rounded),
           ),
         ],
         type: BottomNavigationBarType.fixed,

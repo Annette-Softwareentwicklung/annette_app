@@ -1043,13 +1043,13 @@ class _SetClassState extends State<SetClass> {
               height: 50,
               width: 180,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blue,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Text(
                 'Speichern',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                style: TextStyle(fontSize: 18, color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white),
               )),
         ),
       ),
