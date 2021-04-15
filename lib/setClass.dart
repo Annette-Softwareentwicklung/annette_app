@@ -67,7 +67,7 @@ class _SetClassState extends State<SetClass> {
   late List<List<String>> groupsQ2List;
 
 
-  List<String> lk1 = ['Freistunde'];
+  List<String> lk1 = ['Freistunde',];
   List<String> lk2 = ['Freistunde'];
   List<String> gk1 = ['Freistunde'];
   List<String> gk2 = ['Freistunde'];
@@ -253,23 +253,23 @@ class _SetClassState extends State<SetClass> {
 
       setState(() {
         if (selectedClass == configurationList[0]) {
-          selectedLk1 = configurationList[1];
-          selectedLk2 = configurationList[2];
-          selectedGk1 = configurationList[3];
-          selectedGk2 = configurationList[4];
-          selectedGk3 = configurationList[5];
-          selectedGk4 = configurationList[6];
-          selectedGk5 = configurationList[7];
-          selectedGk6 = configurationList[8];
-          selectedGk7 = configurationList[9];
-          selectedGk8 = configurationList[10];
-          selectedGk9 = configurationList[11];
-          selectedGk10 = configurationList[12];
-          selectedGk11 = configurationList[13];
-          selectedGk12 = configurationList[14];
-          selectedGk13 = configurationList[15];
-          selectedZk1 = configurationList[16];
-          selectedZk2 = configurationList[17];
+          selectedLk1 = (lk1.contains(configurationList[1])) ? configurationList[1] : 'Freistunde';
+          selectedLk2 = (lk2.contains(configurationList[2])) ? configurationList[2] : 'Freistunde';
+          selectedGk1 = (gk1.contains(configurationList[3])) ? configurationList[3] : 'Freistunde';
+          selectedGk2 = (gk2.contains(configurationList[4])) ? configurationList[4] : 'Freistunde';
+          selectedGk3 = (gk3.contains(configurationList[5])) ? configurationList[5] : 'Freistunde';
+          selectedGk4 = (gk4.contains(configurationList[6])) ? configurationList[6] : 'Freistunde';
+          selectedGk5 = (gk5.contains(configurationList[7])) ? configurationList[7] : 'Freistunde';
+          selectedGk6 = (gk6.contains(configurationList[8])) ? configurationList[8] : 'Freistunde';
+          selectedGk7 = (gk7.contains(configurationList[9])) ? configurationList[9] : 'Freistunde';
+          selectedGk8 = (gk8.contains(configurationList[10])) ? configurationList[10] : 'Freistunde';
+          selectedGk9 = (gk9.contains(configurationList[11])) ? configurationList[11] : 'Freistunde';
+          selectedGk10 = (gk10.contains(configurationList[12])) ? configurationList[12] : 'Freistunde';
+          selectedGk11 = (gk11.contains(configurationList[13])) ? configurationList[13] : 'Freistunde';
+          selectedGk12 = (gk12.contains(configurationList[14])) ? configurationList[14] : 'Freistunde';
+          selectedGk13 = (gk13.contains(configurationList[15])) ? configurationList[15] : 'Freistunde';
+          selectedZk1 = (zk1.contains(configurationList[16])) ? configurationList[16] : 'Freistunde';
+          selectedZk2 = (zk2.contains(configurationList[17])) ? configurationList[17] : 'Freistunde';
         } else {
           selectedLk1 = 'Freistunde';
           selectedLk2 = 'Freistunde';
@@ -551,7 +551,7 @@ class _SetClassState extends State<SetClass> {
     } else {
       return Center(child: Column(children: [
         CupertinoActivityIndicator(),
-      Text('Auswahlmöglichkeiten laden.'),
+      Text('Lade Auswahlmöglichkeiten.'),
       ],
       mainAxisSize: MainAxisSize.min,
       ),);
@@ -568,7 +568,13 @@ class _SetClassState extends State<SetClass> {
       infoText = infoText.replaceFirst(' und', ', ');
       infoText = infoText + '- und Zusatz';
     }
-    infoText = infoText + 'kurse.';
+    infoText = infoText + 'kurse';
+
+    if (selectedClass == 'Q1' || selectedClass == 'EF') {
+      infoText = infoText + ' sowie dein Sportkurs';
+    }
+
+    infoText = infoText + '.';
 
     return Container(
         child: Column(children: [
@@ -666,7 +672,7 @@ class _SetClassState extends State<SetClass> {
                 return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Text(
+                      Text(((selectedClass == 'Q1' && j == 10) || (selectedClass == 'EF' && j == 13)) ? 'Sport:' :
                         'GK $j:',
                         style: TextStyle(fontSize: 17.0),
                       ),
@@ -739,7 +745,7 @@ class _SetClassState extends State<SetClass> {
                       ),
                     ]);
               },
-              childCount: 13,
+              childCount: (selectedClass == 'Q2') ? 9 : (selectedClass == 'Q1') ? 10 : 13,
             ),
           ),
 
