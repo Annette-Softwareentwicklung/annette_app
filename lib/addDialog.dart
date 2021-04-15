@@ -318,7 +318,7 @@ class _AddDialogState extends State<AddDialog> {
                                     );
                                   }).toList(),
                                   onChanged: (value) {
-                                    setState(() async {
+                                    setState(() {
                                       selectedSubject = value;
                                       errorNotes = false;
                                       errorTime = false;

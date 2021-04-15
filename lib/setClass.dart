@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:annette_app/onlineFiles.dart';
-import 'package:annette_app/subjectsList.dart';
+import 'package:annette_app/timetable/groupsEF.dart';
+import 'package:annette_app/timetable/groupsQ1.dart';
+import 'package:annette_app/timetable/groupsQ2.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:annette_app/widgetParts.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,23 +62,28 @@ class _SetClassState extends State<SetClass> {
     'Geschichte'
   ];
 
-  List<String> lk1 = ['Freistunde', 'Mathe', 'PH LK'];
-  List<String> lk2 = ['Freistunde', 'Mathe', 'GE LK'];
-  List<String> gk1 = ['Freistunde', 'Mathe', 'Physik', 'BI GK3', 'L GK1'];
-  List<String> gk2 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk3 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk4 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk5 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk6 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk7 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk8 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk9 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk10 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk11 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk12 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> gk13 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> zk1 = ['Freistunde', 'Mathe', 'Physik'];
-  List<String> zk2 = ['Freistunde', 'Mathe', 'Physik'];
+  late List<List<String>> groupsEfList;
+  late List<List<String>> groupsQ1List;
+  late List<List<String>> groupsQ2List;
+
+
+  List<String> lk1 = ['Freistunde'];
+  List<String> lk2 = ['Freistunde'];
+  List<String> gk1 = ['Freistunde'];
+  List<String> gk2 = ['Freistunde'];
+  List<String> gk3 = ['Freistunde'];
+  List<String> gk4 = ['Freistunde'];
+  List<String> gk5 = ['Freistunde'];
+  List<String> gk6 = ['Freistunde'];
+  List<String> gk7 = ['Freistunde'];
+  List<String> gk8 = ['Freistunde'];
+  List<String> gk9 = ['Freistunde'];
+  List<String> gk10 = ['Freistunde'];
+  List<String> gk11 = ['Freistunde'];
+  List<String> gk12 = ['Freistunde'];
+  List<String> gk13 = ['Freistunde'];
+  List<String> zk1 = ['Freistunde'];
+  List<String> zk2 = ['Freistunde'];
 
   void setGroupsOS() async {
     Future<String> _getPath() async {
@@ -188,6 +195,62 @@ class _SetClassState extends State<SetClass> {
     if (selectedClass == 'Q1' ||
         selectedClass == 'Q2' ||
         selectedClass == 'EF') {
+      if(selectedClass == 'EF') {
+        lk1.addAll(groupsEfList[0]);
+        lk2.addAll(groupsEfList[1]);
+        gk1.addAll(groupsEfList[2]);
+        gk2.addAll(groupsEfList[3]);
+        gk3.addAll(groupsEfList[4]);
+        gk4.addAll(groupsEfList[5]);
+        gk5.addAll(groupsEfList[6]);
+        gk6.addAll(groupsEfList[7]);
+        gk7.addAll(groupsEfList[8]);
+        gk8.addAll(groupsEfList[9]);
+        gk9.addAll(groupsEfList[10]);
+        gk10.addAll(groupsEfList[11]);
+        gk11.addAll(groupsEfList[12]);
+        gk12.addAll(groupsEfList[13]);
+        gk13.addAll(groupsEfList[14]);
+        zk1.addAll(groupsEfList[15]);
+        zk2.addAll(groupsEfList[16]);
+      } else if(selectedClass == 'Q1') {
+        lk1.addAll(groupsQ1List[0]);
+        lk2.addAll(groupsQ1List[1]);
+        gk1.addAll(groupsQ1List[2]);
+        gk2.addAll(groupsQ1List[3]);
+        gk3.addAll(groupsQ1List[4]);
+        gk4.addAll(groupsQ1List[5]);
+        gk5.addAll(groupsQ1List[6]);
+        gk6.addAll(groupsQ1List[7]);
+        gk7.addAll(groupsQ1List[8]);
+        gk8.addAll(groupsQ1List[9]);
+        gk9.addAll(groupsQ1List[10]);
+        gk10.addAll(groupsQ1List[11]);
+        gk11.addAll(groupsQ1List[12]);
+        gk12.addAll(groupsQ1List[13]);
+        gk13.addAll(groupsQ1List[14]);
+        zk1.addAll(groupsQ1List[15]);
+        zk2.addAll(groupsQ1List[16]);
+      } else {
+        lk1.addAll(groupsQ2List[0]);
+        lk2.addAll(groupsQ2List[1]);
+        gk1.addAll(groupsQ2List[2]);
+        gk2.addAll(groupsQ2List[3]);
+        gk3.addAll(groupsQ2List[4]);
+        gk4.addAll(groupsQ2List[5]);
+        gk5.addAll(groupsQ2List[6]);
+        gk6.addAll(groupsQ2List[7]);
+        gk7.addAll(groupsQ2List[8]);
+        gk8.addAll(groupsQ2List[9]);
+        gk9.addAll(groupsQ2List[10]);
+        gk10.addAll(groupsQ2List[11]);
+        gk11.addAll(groupsQ2List[12]);
+        gk12.addAll(groupsQ2List[13]);
+        gk13.addAll(groupsQ2List[14]);
+        zk1.addAll(groupsQ2List[15]);
+        zk2.addAll(groupsQ2List[16]);
+      }
+
       setState(() {
         if (selectedClass == configurationList[0]) {
           selectedLk1 = configurationList[1];
@@ -246,11 +309,17 @@ class _SetClassState extends State<SetClass> {
   }
 
   void load() async {
-    if (await onlineFiles.initialize() == false) {
+    GroupsEF gEF = new GroupsEF();
+    GroupsQ1 gQ1 = new GroupsQ1();
+    GroupsQ2 gQ2 = new GroupsQ2();
+    if (await onlineFiles.initialize() == false || await gEF.initialize() == false || await gQ1.initialize() == false || await gQ2.initialize() == false) {
       setState(() {
         errorInternet = true;
       });
     } else {
+      groupsEfList = gEF.getGroupsEf();
+      groupsQ1List = gQ1.getGroupsQ1();
+      groupsQ2List = gQ2.getGroupsQ2();
       classes = onlineFiles.allClasses();
 
       Future<String> _getPath() async {
@@ -352,7 +421,6 @@ class _SetClassState extends State<SetClass> {
       }
 
       configurationList = await _readData();
-      print(configurationList);
       selectedClass = configurationList[0];
 
       setState(() {
@@ -481,7 +549,12 @@ class _SetClassState extends State<SetClass> {
                 ],
               )));
     } else {
-      return CupertinoActivityIndicator();
+      return Center(child: Column(children: [
+        CupertinoActivityIndicator(),
+      Text('Auswahlmöglichkeiten laden.'),
+      ],
+      mainAxisSize: MainAxisSize.min,
+      ),);
     }
   }
 

@@ -1,5 +1,5 @@
 
-import 'package:annette_app/classes/showWebview.dart';
+import 'package:annette_app/showWebview.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/setClass.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';

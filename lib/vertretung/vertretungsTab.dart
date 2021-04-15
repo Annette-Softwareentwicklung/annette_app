@@ -40,7 +40,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc1 =
-        new VertretungsplanCrawler(htmlCode: htmlCode);
+            new VertretungsplanCrawler(htmlCode: htmlCode);
         dateToday = vpc1.getCurrentDate();
         lastEdited = vpc1.getLastEdited();
         informationToday = vpc1.getInformation();
@@ -65,7 +65,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc2 =
-        new VertretungsplanCrawler(htmlCode: htmlCode);
+            new VertretungsplanCrawler(htmlCode: htmlCode);
         dateTomorrow = vpc2.getCurrentDate();
         informationTomorrow = vpc2.getInformation();
         vertretungenMorgen = await vpc2.getVertretungen();
@@ -97,7 +97,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
             ),
             Container(
               child:
-              Text('Laden fehlgeschlagen', style: TextStyle(fontSize: 17)),
+                  Text('Laden fehlgeschlagen', style: TextStyle(fontSize: 17)),
               margin: EdgeInsets.only(left: 15),
             ),
           ],
@@ -121,228 +121,226 @@ class _VertretungsTabState extends State<VertretungsTab> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: RefreshIndicator(
-          child: Column(children: [
-            Container(
-              child: Text('Stand: $lastEdited'),
-              padding: EdgeInsets.all(2),
+      child: Column(children: [
+        Container(
+          child: Text('Stand: $lastEdited'),
+          padding: EdgeInsets.all(2),
+        ),
+        Expanded(
+            child: SingleChildScrollView(
+          child: Flex(
+            mainAxisSize: MainAxisSize.min,
+            direction: (MediaQuery.of(context).orientation == Orientation.landscape) ? Axis.horizontal : Axis.vertical,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(child: vertretungToday(), flex: 1, fit: FlexFit.loose,),
+              Flexible(child: vertretungTomorrow(), flex: 1,fit: FlexFit.loose,),
+            ],
+          ),
+          physics: const AlwaysScrollableScrollPhysics(),
+        ))
+      ]),
+      //color: Colors.red,
+      onRefresh: () {
+        return Future.delayed(Duration.zero, () {
+          setState(() {
+            makeRequest();
+          });
+        });
+      },
+    ));
+  }
+
+  Container vertretungToday() {
+    List<Widget> children = [];
+
+    children.add(Container(
+      child: Column(
+        children: [
+          Container(
+            child: Text(
+              dateToday,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            Expanded(
-                child:
+            padding: EdgeInsets.all(10),
+          ),
+          Container(
+            child: Column(
+              children: [
+                if (informationToday.length != 0)
+                  Text(
+                    'Infos zum Tag:',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  )
+                else
+                  Text(
+                    'Keine weiteren Nachrichten',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                if (informationToday.length != 0)
+                  Text(
+                    informationToday.join('\n'),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+              ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+            decoration: BoxDecoration(
+              //color: Colors.black12,
+              gradient: (Theme.of(context).brightness == Brightness.dark)
+                  ? darkGradient
+                  : lightGradient,
+              borderRadius: BorderRadius.circular(10),
+              //border: Border.all(color: Theme.of(context).accentColor, width: 1),
+            ),
+            width: double.infinity,
+            //margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+          )
+        ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
+      decoration: BoxDecoration(
+        color: Colors.black12,
+        borderRadius: BorderRadius.circular(10),
+        //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
+      ),
+    ));
 
-                CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                        delegate: SliverChildListDelegate.fixed([
-                          Container(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      dateToday,
-                                      style: TextStyle(
-                                          fontSize: 22, fontWeight: FontWeight.bold),
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                  ),
-                                  Container(
-                                    child: Column(
-                                      children: [
-                                        if (informationToday.length != 0)
-                                          Text(
-                                            'Infos zum Tag:',
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        else
-                                          Text(
-                                            'Keine weiteren Nachrichten',
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        if (informationToday.length != 0)
-                                          Text(
-                                            informationToday.join('\n'),
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                      ],
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                    ),
-                                    padding: EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 10, right: 10),
-                                    decoration: BoxDecoration(
-                                      //color: Colors.black12,
-                                      gradient:
-                                      (Theme.of(context).brightness == Brightness.dark)
-                                          ? darkGradient
-                                          : lightGradient,
-                                      borderRadius: BorderRadius.circular(10),
-                                      //border: Border.all(color: Theme.of(context).accentColor, width: 1),
-                                    ),
-                                    width: double.infinity,
-                                    //margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                                  )
-                                ]),
-                            margin:
-                            EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(10),
-                              //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
-                            ),
-                          ),
-                        ])),
-                    if (vertretungenHeute!.length != 0)
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return VertretungListTile(vertretungenHeute![index]);
-                          },
-                          childCount: vertretungenHeute!.length,
-                        ),
-                      )else
-                      SliverList(
-                          delegate: SliverChildListDelegate.fixed([
-                            Container(
-                              child: Center(
-                                  child: Text(
-                                    'Keine Vertretungen',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  )),
-                              padding: EdgeInsets.all(10),
-                              margin:
-                              EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: Colors.black12,
-                                  borderRadius: BorderRadius.circular(10),
-                                  //border: Border.all(color: Theme.of(context).accentColor, width: 1),
-                              ),
-                            ),
-                          ])),
-                    SliverList(
-                        delegate: SliverChildListDelegate.fixed([
-                          Container(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      dateTomorrow,
-                                      style: TextStyle(
-                                          fontSize: 22, fontWeight: FontWeight.bold),
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                  ),
-                                  Container(
-                                    child: Column(
-                                      children: [
-                                        if (informationTomorrow.length != 0)
-                                          Text(
-                                            'Infos zum Tag:',
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        else
-                                          Text(
-                                            'Keine weiteren Nachrichten',
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        if (informationTomorrow.length != 0)
-                                          Text(
-                                            informationTomorrow.join('\n'),
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                      ],
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                    ),
-                                    padding: EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 10, right: 10),
-                                    decoration: BoxDecoration(
-                                      gradient:
-                                      (Theme.of(context).brightness == Brightness.dark)
-                                          ? darkGradient
-                                          : lightGradient,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    width: double.infinity,
-                                  )
-                                ]),
-                            margin:
-                            EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(10),
-                              //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
-                            ),
-                          ),
-                        ])),
-                    if (vertretungenMorgen!.length != 0)
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return VertretungListTile(vertretungenMorgen![
-                            index]); // you can add your available item here
-                          },
-                          childCount: vertretungenMorgen!.length,
-                        ),
-                      ),
-                    if (vertretungenMorgen!.length == 0)
-                      SliverList(
-                          delegate: SliverChildListDelegate.fixed([
-                            Container(child:Center(
-                                child: Text(
-                                  'Keine Vertretungen',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )),
-                              padding: EdgeInsets.all(10),
+    if (vertretungenHeute!.length != 0) {
+      vertretungenHeute!.forEach((element) {
+        children.add(VertretungListTile(element));
+      });
+    } else {
+      children.add(Container(
+        child: Center(
+            child: Text(
+          'Keine Vertretungen',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+          textAlign: TextAlign.center,
+        )),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.circular(10),
+          //border: Border.all(color: Theme.of(context).accentColor, width: 1),
+        ),
+      ));
+    }
 
-                              decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: BorderRadius.circular(10),
-                               // border: Border.all(color: Theme.of(context).accentColor, width: 1),
-                              ),
+    return Container(
+        width: double.infinity,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, children: children));
+  }
 
-                              margin:
-                              EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
-                              height: 50,
+  Container vertretungTomorrow() {
+    List<Widget> children = [];
+    children.add(Container(
+      child: Column(
+        children: [
+          Container(
+            child: Text(
+              dateTomorrow,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            padding: EdgeInsets.all(10),
+          ),
+          Container(
+            child: Column(
+              children: [
+                if (informationTomorrow.length != 0)
+                  Text(
+                    'Infos zum Tag:',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  )
+                else
+                  Text(
+                    'Keine weiteren Nachrichten',
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                if (informationTomorrow.length != 0)
+                  Text(
+                    informationTomorrow.join('\n'),
+                    style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+              ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+            decoration: BoxDecoration(
+              //color: Colors.black12,
+              gradient: (Theme.of(context).brightness == Brightness.dark)
+                  ? darkGradient
+                  : lightGradient,
+              borderRadius: BorderRadius.circular(10),
+              //border: Border.all(color: Theme.of(context).accentColor, width: 1),
+            ),
+            width: double.infinity,
+            //margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+          )
+        ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      margin: EdgeInsets.only(top: (MediaQuery.of(context).orientation == Orientation.portrait) ? 25 : 10 , left: 10, right: 10, bottom: 5),
+      decoration: BoxDecoration(
+        color: Colors.black12,
+        borderRadius: BorderRadius.circular(10),
+        //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
+      ),
+    ));
 
-                            ),
+    if (vertretungenMorgen!.length != 0) {
+      vertretungenMorgen!.forEach((element) {
+        children.add(VertretungListTile(element));
+      });
+    } else {
+      children.add(Container(
+        child: Center(
+            child: Text(
+          'Keine Vertretungen',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+          textAlign: TextAlign.center,
+        )),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.circular(10),
+          //border: Border.all(color: Theme.of(context).accentColor, width: 1),
+        ),
+      ));
+    }
 
-                          ])),
-                  ],
-                  physics: const AlwaysScrollableScrollPhysics(),
-                )),
-          ]),
-          //color: Colors.red,
-          onRefresh: () {
-            return Future.delayed(Duration.zero, () {
-              setState(() {
-                makeRequest();
-              });
-            });
-          },
-        ));
+    return Container(
+        width: double.infinity,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, children: children));
   }
 }
