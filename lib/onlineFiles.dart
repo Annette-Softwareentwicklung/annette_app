@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 class OnlineFiles {
   late List<String> classesList;
   late String difExport;
+  late int newVersion;
 
   Future<bool> initialize () async{
     Future<List<String>?> _getClassesList() async {
@@ -29,10 +30,24 @@ class OnlineFiles {
       }
     }
 
+    Future<int?> _getNewVersion() async {
+      try {
+        var response = await http.get(
+            Uri.http('janw.bplaced.net', 'annetteapp/data/version.txt'));
+        if (response.statusCode == 200) {
+          return int.tryParse(response.body);
+        }
+        return null;
+      } catch (e) {
+        return null;
+      }
+    }
 
-    if(await _getDifExport() != null && await _getClassesList() != null) {
+
+    if(await _getDifExport() != null && await _getClassesList() != null && await _getNewVersion() != null) {
       difExport = (await _getDifExport())!;
       classesList = (await _getClassesList())!;
+      newVersion = (await _getNewVersion())!;
       return true;
     } else {
       return false;
@@ -45,5 +60,9 @@ class OnlineFiles {
 
   String difExportFile () {
     return difExport;
+  }
+
+  int getNewVersion () {
+    return newVersion;
   }
 }

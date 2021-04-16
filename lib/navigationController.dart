@@ -1,6 +1,7 @@
 import 'package:annette_app/setClass.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/timetable/timetableTab.dart';
+import 'package:annette_app/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +91,8 @@ class NavigationControllerState extends State<NavigationController> {
         },
       );
     }
+
+    update(context);
   }
 
   /**

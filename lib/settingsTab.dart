@@ -85,7 +85,8 @@ class SettingsTab extends StatelessWidget {
                       title: 'Stundenplan', content: ClassicTimetable());
                 }),
               )),
-          Divider(), ListTile(),Divider(),ListTile(
+          Divider(), ListTile(),
+        /*Divider(),ListTile(
               title: Text('Moodle'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
@@ -94,7 +95,7 @@ class SettingsTab extends StatelessWidget {
                   return DefaultScaffold(
                       title: 'Moodle', content: ShowWebview(url: 'https://moodle.annettegymnasium.de/',));
                 }),
-              )),
+              )),*/
           Divider(),ListTile(
               title: Text('Annette Homepage'),
               trailing: Icon(Icons.chevron_right,

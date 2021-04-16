@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:annette_app/database/databaseCreate.dart';
 
@@ -11,7 +14,7 @@ class TimetableCrawler {
 
   late String currentClass;
 
-  Future<void> setConfiguration(String configurationString, String difExport) async {
+  Future<void> setConfiguration(String configurationString, String difExport, int newVersion) async {
     currentClass = configurationString.substring(
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
@@ -19,6 +22,19 @@ class TimetableCrawler {
     //pattern.allMatches(difExport).forEach((match) => print(match.group(0)));
     await setTimetable(difExport, configurationString);
     await setSubjects();
+
+    Future<String> _getPath() async {
+      final _dir = await getApplicationDocumentsDirectory();
+      return _dir.path;
+    }
+
+    Future<void> _writeData(int newVersion) async {
+      final _path = await _getPath();
+      final _myFile = File('$_path/version.txt');
+      await _myFile.writeAsString(newVersion.toString());
+    }
+
+    await _writeData(newVersion);
 }
 
   Future<void> setTimetable(String code, String configurationString) async {
@@ -64,7 +80,6 @@ class TimetableCrawler {
       int tempLessonNumber = int.tryParse(timetableCode.substring(
           timetableCode.indexOf(',,') - 1, timetableCode.indexOf(',,')))!;
 
-      print('$tempSubject $tempRoom $tempDayNumber $tempLessonNumber');
 
       TimeTableUnit tempTimetableUnit = new TimeTableUnit(
           subject: tempSubject,
@@ -76,10 +91,8 @@ class TimetableCrawler {
           currentClass == 'Q2') {
         if (configurationString.contains(tempTimetableUnit.subject!)) {
           databaseInsertTimetableUnit(tempTimetableUnit);
-          print('check');
         }
       } else {
-        print('unterstufe');
 
         //Überprüfung Religion
         if (tempTimetableUnit.subject! == 'KR' ||
@@ -161,7 +174,6 @@ class TimetableCrawler {
         tempSubjects.add(tempSubjectFullName);
       }
 
-      print(tempSubjects);
     }
   }
 }

@@ -10,7 +10,7 @@ ThemeData darkTheme(BuildContext context) {
         dateTimePickerTextStyle: TextStyle(color: Colors.white),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(foregroundColor: Colors.black),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(foregroundColor: Colors.white, backgroundColor: Colors.blue),
     buttonTheme: ButtonThemeData(buttonColor: Colors.tealAccent),
   );
 }
