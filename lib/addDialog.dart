@@ -555,8 +555,10 @@ class _AddDialogState extends State<AddDialog> {
                       CupertinoButton(
                           child: Text('Abbrechen',
                               style: TextStyle(
-                                  color: Theme.of(context)
-                                      .accentColor)), //color: Colors.black54)),
+                                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white70 : Colors.black54,
+                                //color: Theme.of(context).accentColor
+                              )
+                          ),
                           onPressed: () => Navigator.pop(context)),
                     ])),
         ));

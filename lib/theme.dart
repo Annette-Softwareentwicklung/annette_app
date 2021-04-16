@@ -3,21 +3,29 @@ import 'package:flutter/material.dart';
 
 ThemeData darkTheme(BuildContext context) {
   return ThemeData(
-    textButtonTheme: TextButtonThemeData(style: ButtonStyle(foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.white))),
+    textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+            foregroundColor:
+                MaterialStateProperty.resolveWith((states) => Colors.white))),
     brightness: Brightness.dark,
     cupertinoOverrideTheme: CupertinoThemeData(
       textTheme: CupertinoTextThemeData(
         dateTimePickerTextStyle: TextStyle(color: Colors.white),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(foregroundColor: Colors.white, backgroundColor: Colors.blue),
+    floatingActionButtonTheme:
+        FloatingActionButtonThemeData(foregroundColor: Colors.black),
     buttonTheme: ButtonThemeData(buttonColor: Colors.tealAccent),
+    //accentColor: Colors.blueAccent,
   );
 }
 
 ThemeData lightTheme(BuildContext context) {
   return ThemeData(
-    textButtonTheme: TextButtonThemeData(style: ButtonStyle(foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black))),
+    textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+            foregroundColor:
+                MaterialStateProperty.resolveWith((states) => Colors.black))),
     brightness: Brightness.light,
     accentColor: Colors.black54,
     floatingActionButtonTheme: FloatingActionButtonThemeData(
