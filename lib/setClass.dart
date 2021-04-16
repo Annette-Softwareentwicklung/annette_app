@@ -309,9 +309,14 @@ class _SetClassState extends State<SetClass> {
   }
 
   void load() async {
+    setState(() {
+      finished = false;
+      errorInternet = false;
+    });
     GroupsEF gEF = new GroupsEF();
     GroupsQ1 gQ1 = new GroupsQ1();
     GroupsQ2 gQ2 = new GroupsQ2();
+
     if (await onlineFiles.initialize() == false || await gEF.initialize() == false || await gQ1.initialize() == false || await gQ2.initialize() == false) {
       setState(() {
         errorInternet = true;
@@ -421,7 +426,7 @@ class _SetClassState extends State<SetClass> {
       }
 
       configurationList = await _readData();
-      selectedClass = configurationList[0];
+      selectedClass = (classes.contains(configurationList[0])) ? configurationList[0] : '5A';
 
       setState(() {
         finished = true;

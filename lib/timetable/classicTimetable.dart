@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 import '../widgetParts.dart';
 
@@ -17,6 +18,8 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
   OnlineFiles onlineFiles = new OnlineFiles();
   bool finished = false;
   bool error = false;
+  late String tempUrl;
+
 
   void getCurrentClassNumber() async {
     error = false;
@@ -53,9 +56,22 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
 
       int classesNumber = onlineFiles.allClasses().indexOf(currentClass) + 1;
       currentClassNumber = classesNumber.toString().padLeft(5, '0');
-      setState(() {
+      try{
+        var response = await http.get(
+            Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplanPfad.txt'));
+        if (response.statusCode == 200) {
+          tempUrl = response.body;
+        }
+
+          setState(() {
         finished = true;
-      });
+      });} catch(e) {
+        setState(() {
+          showError();
+          finished = false;
+          error = true;
+        });
+      }
     }
 
   }
@@ -96,7 +112,7 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
       return Center(
         child: WebView(
           initialUrl:
-              'https://www.annettegymnasium.de/SP/stundenplan_oL/c/P9/c$currentClassNumber.htm',
+              'https://www.annettegymnasium.de/$tempUrl/c$currentClassNumber.htm',
           javascriptMode: JavascriptMode.unrestricted,
           onProgress: (progress) => CupertinoActivityIndicator(),
           onWebResourceError: (e) {
