@@ -28,7 +28,7 @@ class NavigationController extends StatefulWidget {
 class NavigationControllerState extends State<NavigationController> {
   int tabIndex = 0;
   final GlobalKey<HomeworkTabState> homeworkTabAccess =
-  GlobalKey<HomeworkTabState>();
+      GlobalKey<HomeworkTabState>();
 
   /**
    * Diese Methode sorgt dafür, dass bei erstmaligem Starten der App
@@ -49,8 +49,7 @@ class NavigationControllerState extends State<NavigationController> {
       barrierDismissible: false,
       useSafeArea: true,
       builder: (context) {
-        return GuideDialog(
-        );
+        return GuideDialog();
       },
     );
   }
@@ -107,7 +106,6 @@ class NavigationControllerState extends State<NavigationController> {
     });
   }
 
-
   /**
    * Anzeige des Scaffolds mit "bottomNavigationBar". Je nach dem welcher Tab in der Menüleiste
    * ausgewählt ist, wird der entsprechende Tab angezeigt.
@@ -117,11 +115,25 @@ class NavigationControllerState extends State<NavigationController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (tabIndex == 0) ? Text('Vertretungsplan') : (tabIndex == 1) ? Text('Hausaufgaben') : (tabIndex == 2) ? Text('Stundenplan') : Text('Sonstiges'),
+        title: (tabIndex == 0)
+            ? Text('Vertretungsplan')
+            : (tabIndex == 1)
+                ? Text('Hausaufgaben')
+                : (tabIndex == 2)
+                    ? Text('Stundenplan')
+                    : Text('Sonstiges'),
       ),
-      body:
-      (tabIndex == 0) ? VertretungsTab() : (tabIndex == 1) ? HomeworkTab(key: homeworkTabAccess,) : (tabIndex == 2) ? TimetableTab() : SettingsTab(),
+      body: (tabIndex == 0)
+          ? VertretungsTab()
+          : (tabIndex == 1)
+              ? HomeworkTab(
+                  key: homeworkTabAccess,
+                )
+              : (tabIndex == 2)
+                  ? TimetableTab()
+                  : SettingsTab(),
       floatingActionButton: FloatingActionButton(
+        elevation: 0,
         child: Icon(Icons.add),
         onPressed: () {
           showDialog(
@@ -141,40 +153,84 @@ class NavigationControllerState extends State<NavigationController> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            label: 'Vertretung',
-            icon: Icon(CupertinoIcons.rectangle_grid_1x2),
-            //icon: Icon(Icons.list),
-          ),
-
-          BottomNavigationBarItem(
-            label: 'Hausaufgaben',
-            icon: Icon(CupertinoIcons.square_list),
-            //icon: Icon(Icons.list),
-          ),
-
-          BottomNavigationBarItem(
-            label: 'Stundenplan',
-            icon: Icon(CupertinoIcons.calendar),
-            //icon: Icon(Icons.date_range_rounded),
-          ),
-
-          BottomNavigationBarItem(
-            label: 'Sonstiges',
-            icon: Icon(CupertinoIcons.ellipsis),
-            //icon: Icon(Icons.more_horiz_rounded),
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          setState(() {
-            tabIndex = index;
-          });
-        },
-        currentIndex: tabIndex,
-      ),
+      /*bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            bottomBarItem(
+              icon: CupertinoIcons.rectangle_grid_1x2,
+              text: 'Vertretung',index: 0
+            ),
+            bottomBarItem(
+              icon: CupertinoIcons.square_list,
+              text: 'Hausaufgaben',index: 1
+            ),
+            Container(height: 1,),
+            bottomBarItem(
+              icon: CupertinoIcons.calendar,
+              text: 'Stundenplan',index: 2
+            ),
+            bottomBarItem(
+              icon: CupertinoIcons.ellipsis,
+              text: 'Sonstiges',index: 3
+            ),
+          ],
+        ),
+      ),*/
+      bottomNavigationBar: bottomBar(),
     );
   }
+
+  Widget bottomBar () {
+    return BottomNavigationBar(
+      items: [
+        BottomNavigationBarItem(
+          label: 'Vertretung',
+          icon: Icon(CupertinoIcons.rectangle_grid_1x2),
+          //icon: Icon(Icons.list),
+        ),
+
+        BottomNavigationBarItem(
+          label: 'Hausaufgaben',
+          icon: Icon(CupertinoIcons.square_list),
+          //icon: Icon(Icons.list),
+        ),
+
+        BottomNavigationBarItem(
+          label: 'Stundenplan',
+          icon: Icon(CupertinoIcons.calendar),
+          //icon: Icon(Icons.date_range_rounded),
+        ),
+
+        BottomNavigationBarItem(
+          label: 'Sonstiges',
+          icon: Icon(CupertinoIcons.ellipsis),
+          //icon: Icon(Icons.more_horiz_rounded),
+        ),
+      ],
+      type: BottomNavigationBarType.fixed,
+      onTap: (index) {
+        setState(() {
+          tabIndex = index;
+        });
+      },
+      currentIndex: tabIndex,
+    );}
 }
+
+Widget bottomBarItem({required IconData icon, required String text, required int index}) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon),
+        Text(text),
+      ],
+    ),
+  );
+}
+
+
