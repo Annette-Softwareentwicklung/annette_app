@@ -143,7 +143,7 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
           });
     } else {
       return Center(
-        child: CupertinoActivityIndicator(),
+        child: Column(children: [CupertinoActivityIndicator(),Text('Laden ...')],mainAxisSize: MainAxisSize.min,),
       );
     }
   }

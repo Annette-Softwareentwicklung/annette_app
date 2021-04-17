@@ -29,6 +29,7 @@ class _SetClassState extends State<SetClass> {
   bool errorInternet = false;
   OnlineFiles onlineFiles = new OnlineFiles();
   late int newVersion;
+  late List<String> newTimes;
 
   late String selectedClass;
   late String selectedLk1;
@@ -178,7 +179,7 @@ class _SetClassState extends State<SetClass> {
 
   Future<void> activateTimetableCrawler(pConfigurationString) async {
     TimetableCrawler ttc1 = new TimetableCrawler();
-    await ttc1.setConfiguration(pConfigurationString, onlineFiles.difExport, newVersion);
+    await ttc1.setConfiguration(pConfigurationString, onlineFiles.difExport, newVersion, newTimes);
   }
 
   void setClass() async {
@@ -328,6 +329,7 @@ class _SetClassState extends State<SetClass> {
       groupsQ2List = gQ2.getGroupsQ2();
       classes = onlineFiles.allClasses();
       newVersion = onlineFiles.getNewVersion();
+      newTimes = onlineFiles.getTimes();
 
       Future<String> _getPath() async {
         final _dir = await getApplicationDocumentsDirectory();

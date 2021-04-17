@@ -85,7 +85,7 @@ class _TimetableTabState extends State<TimetableTab> {
   Widget build(BuildContext context) {
     return SafeArea(child: Container(child: Center(child: Column(children: [
       CupertinoSlidingSegmentedControl(children: {
-        0:Container(child: Text('Aktuell'), padding: EdgeInsets.symmetric(horizontal: 30),),
+        0:Container(child: Text('Jetzt'), padding: EdgeInsets.symmetric(horizontal: 30),),
         1:Container(child: Text('Gesamt'), padding: EdgeInsets.symmetric(horizontal: 30),),
         2:Container(child: Text('Zeitplan'), padding: EdgeInsets.symmetric(horizontal: 30),),
       }, onValueChanged: (int? value) {
