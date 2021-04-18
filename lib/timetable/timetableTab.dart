@@ -141,8 +141,8 @@ class _TimetableTabState extends State<TimetableTab> {
                         'subject_old',
                         'affectedClass',
                         'comment',
-                        'teacher_old',
-                        'teacher_new',
+                        'WWW',
+                        'MMM',
                         'A211',
                         'lesson')),
                 timeDivider('8:45 Uhr'),
@@ -243,18 +243,56 @@ class _TimetableTabState extends State<TimetableTab> {
             ],
             mainAxisAlignment: MainAxisAlignment.end,
           ),
+
+          if(vertretung != null && vertretung.teacher_new != null && vertretung.teacher_old != vertretung.teacher_new)Row(
+            children: [
+                     Text(
+                          vertretung.teacher_new!,
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold),
+                        ),
+
+                    Container(child: Text(
+                      (vertretung.teacher_old != null) ? vertretung.teacher_old! : '',
+                      style: TextStyle(
+                          fontSize: 25,
+                          decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.normal),
+                    ),margin: EdgeInsets.only(right: 5, left: 5),),
+                    Icon(CupertinoIcons.person_fill),
+
+
+
+            ],
+            mainAxisAlignment: MainAxisAlignment.end,
+          ),
+
           if (vertretung != null)
-            Container(
-              child: Text(
-                'Hinweis: ' + vertretung.type! + ', ' + vertretung.comment!,
+            Container(child:Row(children: [
+              Container(
+                child: Text(
+    (vertretung.comment != null) ? vertretung.type! + ':': vertretung.type! ,
+                  style: TextStyle(
+                    fontSize: 17,color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(right: 5),
+              ),
+              if(vertretung.comment != null)
+              Text(
+                vertretung.comment!,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(top: 15),
-            ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.start,),
+            margin: EdgeInsets.only(top: 15),),
         ],
         mainAxisSize: MainAxisSize.min,
       ),

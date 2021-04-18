@@ -80,14 +80,14 @@ class VertretungListTile extends StatelessWidget {
                               decoration: TextDecoration.lineThrough,
                               fontWeight: FontWeight.bold),
                         ),
-                        margin: EdgeInsets.only(left: 5, right: 5),
+                        margin: EdgeInsets.only(left: 5),
                       ),
-                    Text(
+                    /*Container(margin: EdgeInsets.only(left: 5,),child: Text(
                       '(' + vertretung.affectedClass! + ')',
                       style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.normal),
-                    ),
+                    ),),*/
                   ],
                 ),
               ),
