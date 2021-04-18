@@ -47,6 +47,9 @@ class GroupsQ2 {
           tempList.add(s);
           tempCode = tempCode.substring(tempCode.indexOf('</B'));
         }
+        tempList.sort((a,b) {
+          return a.compareTo(b);
+        });
         groupsQ2List.add(tempList);
       }
 
@@ -69,6 +72,9 @@ class GroupsQ2 {
           tempList.add(s);
           tempCode = tempCode.substring(tempCode.indexOf('</B'));
         }
+        tempList.sort((a,b) {
+          return a.compareTo(b);
+        });
         groupsQ2List.add(tempList);
       }
 

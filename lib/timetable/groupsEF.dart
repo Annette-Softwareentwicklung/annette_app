@@ -50,6 +50,9 @@ class GroupsEF {
             tempList.add(s);
             tempCode = tempCode.substring(tempCode.indexOf('</B'));
           }
+          tempList.sort((a,b) {
+            return a.compareTo(b);
+          });
           groupsEfList.add(tempList);
       }
 

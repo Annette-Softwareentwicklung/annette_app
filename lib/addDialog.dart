@@ -56,6 +56,9 @@ class _AddDialogState extends State<AddDialog> {
     List<String> classesAbbreviation = getSubjectsAbbreviation();
     List<String> classesFullName = getSubjectsFullName();
     timetableUnits = await databaseGetAllTimeTableUnit();
+    timetableUnits.sort((a, b) {
+      return a.subject!.compareTo(b.subject!);
+    });
 
     subjectNames.add('Sonstiges');
     subjectCodes.add('-');

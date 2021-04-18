@@ -187,18 +187,24 @@ class VertretungListTile extends StatelessWidget {
           ),
           Row(
             children: [
-              if(vertretung.type != null &&
+              if(vertretung.comment != null &&
     !vertretung.type!
         .toLowerCase()
         .contains('vertretung') &&
     !vertretung.type!.toLowerCase().contains('raum') &&
-    vertretung.subject_new != null && vertretung.room != null)Text(
+    vertretung.subject_new != null && vertretung.room != null)
+                Text(
                 (vertretung.comment != null) ?
                     vertretung.type! + ':' : vertretung.type!, style: TextStyle(
                     fontSize: 25,
                     color: Colors.red,
                     decoration: TextDecoration.none,
                     fontWeight: FontWeight.normal),
+              ) else if (vertretung.comment != null) Text(
+                'Hinweis:', style: TextStyle(
+                  fontSize: 25,
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.normal),
               ),
               if(vertretung.comment != null) Text(
                  vertretung.comment!,

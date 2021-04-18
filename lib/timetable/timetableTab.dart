@@ -132,6 +132,13 @@ class _TimetableTabState extends State<TimetableTab> {
             child: Container(
             child: Column(
               children: [
+                Container(
+                  width: double.infinity,
+                  child: Text('Montag', style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),),margin: EdgeInsets.only(bottom: 15),
+                ),
                 timeDivider('8:00 Uhr'),
                 displayTimetableUnit(
                     allTimeTableUnits[0],
@@ -275,7 +282,7 @@ class _TimetableTabState extends State<TimetableTab> {
                 child: Text(
     (vertretung.comment != null) ? vertretung.type! + ':': vertretung.type! ,
                   style: TextStyle(
-                    fontSize: 17,color: Colors.red,
+                    fontSize: 20,color: Colors.red,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -286,7 +293,7 @@ class _TimetableTabState extends State<TimetableTab> {
               Text(
                 vertretung.comment!,
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
               ),

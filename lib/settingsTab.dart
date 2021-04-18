@@ -1,4 +1,3 @@
-
 import 'package:annette_app/showWebview.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/setClass.dart';
@@ -33,7 +32,7 @@ class SettingsTab extends StatelessWidget {
                   width: 36,
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
-      applicationLegalese: 'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\n\nAlle Angaben ohne Gewähr!\n\nKontakt: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
+      applicationLegalese: 'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nAlle Angaben ohne Gewähr!\n\nKontakt: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
     );
   }
 
@@ -74,7 +73,7 @@ class SettingsTab extends StatelessWidget {
                       title: 'Vertretungsplan', content: ClassicVertretungsplan());
                 }),
               )),
-          Divider(),
+         /* Divider(),
           ListTile(
               title: Text('Klassischer Stundenplan'),
               trailing: Icon(Icons.chevron_right,
@@ -84,7 +83,7 @@ class SettingsTab extends StatelessWidget {
                   return DefaultScaffold(
                       title: 'Stundenplan', content: ClassicTimetable());
                 }),
-              )),
+              )),*/
           Divider(), ListTile(),
         /*Divider(),ListTile(
               title: Text('Moodle'),

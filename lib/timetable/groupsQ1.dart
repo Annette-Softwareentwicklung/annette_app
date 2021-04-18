@@ -47,6 +47,9 @@ String tempUrl;
           tempList.add(s);
           tempCode = tempCode.substring(tempCode.indexOf('</B'));
         }
+        tempList.sort((a,b) {
+          return a.compareTo(b);
+        });
         groupsQ1List.add(tempList);
       }
 
@@ -69,6 +72,9 @@ String tempUrl;
           tempList.add(s);
           tempCode = tempCode.substring(tempCode.indexOf('</B'));
         }
+        tempList.sort((a,b) {
+          return a.compareTo(b);
+        });
         groupsQ1List.add(tempList);
       }
 
