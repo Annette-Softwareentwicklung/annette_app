@@ -270,7 +270,7 @@ class _TimetableTabState extends State<TimetableTab> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.black12,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
             ),
             constraints: BoxConstraints(
                 // minHeight: 200,
