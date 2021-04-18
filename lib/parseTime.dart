@@ -78,3 +78,8 @@ String parseTimeToUserOutput (String s, [DateTime? pComparisonTime]) {
 
   return '$weekday, $day. $month, $hour:$minute Uhr';
 }
+
+String getTimeFromDuration(Duration pDuration) {
+  DateTime temp = new DateTime(0).add(pDuration);
+  return temp.hour.toString() + ':' + temp.minute.toString().padLeft(2, '0') + ' Uhr';
+}
