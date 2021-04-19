@@ -94,8 +94,10 @@ class TimetableCrawler {
 
       int tempDayNumber =
           int.tryParse(timetableCode.substring(0, timetableCode.indexOf(',')))!;
+      timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
+
       int tempLessonNumber = int.tryParse(timetableCode.substring(
-          timetableCode.indexOf(',,') - 1, timetableCode.indexOf(',,')))!;
+          0, timetableCode.indexOf(',,')))!;
 
 
       TimeTableUnit tempTimetableUnit = new TimeTableUnit(
@@ -118,6 +120,7 @@ class TimetableCrawler {
             tempTimetableUnit.subject! == 'PPL') {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
+
           }
         }
         //2. Sprache
@@ -127,6 +130,7 @@ class TimetableCrawler {
                 tempTimetableUnit.subject! == 'F6')) {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
+
           }
         }
         //Diff
@@ -138,6 +142,7 @@ class TimetableCrawler {
                 tempTimetableUnit.subject! == 'KUd')) {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
+
           }
         } else {
           databaseInsertTimetableUnit(tempTimetableUnit);

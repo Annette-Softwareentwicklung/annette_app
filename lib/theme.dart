@@ -16,7 +16,7 @@ ThemeData darkTheme(BuildContext context) {
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(foregroundColor: Colors.black),
     buttonTheme: ButtonThemeData(buttonColor: Colors.tealAccent),
-    //accentColor: Colors.blueAccent,
+    accentColor: Colors.lightBlueAccent,
   );
 }
 

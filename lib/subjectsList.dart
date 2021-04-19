@@ -42,7 +42,8 @@ List<String> getSubjectsFullName() {
     'Orientierungsstunde',
     'Nicht angegeben',
     'Physik',
-    'Schwimmen'
+    'Schwimmen',
+    'Sowi'
   ];
 
   return classesFullName;
@@ -91,7 +92,8 @@ List<String> getSubjectsAbbreviation() {
     'OS',
     '&nbsp;',
     'PH',
-    'SI'
+    'SI',
+    'SW'
   ];
 
   return classesAbbreviation;

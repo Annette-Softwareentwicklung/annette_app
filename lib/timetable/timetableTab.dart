@@ -76,6 +76,9 @@ class _TimetableTabState extends State<TimetableTab> {
     subjectFullnames = getSubjectsFullName();
     allTimes = await databaseGetAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
+
+    allTimeTableUnits.forEach((element) {print(element.subject! + ':  ' + element.lessonNumber!.toString());});
+
     allTimeTableUnits.sort((a, b) {
       return a.lessonNumber!.compareTo(b.lessonNumber!);
     });
@@ -132,7 +135,6 @@ class _TimetableTabState extends State<TimetableTab> {
       }
     }
 
-    displayTimetable.clear();
     displayTimetable.insert(
       0,
       Container(
@@ -148,8 +150,7 @@ class _TimetableTabState extends State<TimetableTab> {
       ),
     );
 
-    await setDay(2, 3, true);
-    isNow = true;
+
     displayTimetable.add(Container(
       margin: EdgeInsets.only(bottom: 40),
     ));
@@ -170,7 +171,7 @@ class _TimetableTabState extends State<TimetableTab> {
               MediaQueryData.fromWindow(window).padding.top -
               110.0;
           scrollController.animateTo(animationHeight,
-              duration: Duration(milliseconds: 500), curve: Curves.ease);
+              duration: Duration(milliseconds: 500), curve: Curves.linear);
         });
       } catch (e) {}
     }
@@ -197,7 +198,7 @@ class _TimetableTabState extends State<TimetableTab> {
 
     int i = 2;
     while (allTimeTableUnits.indexWhere((element) =>
-            (element.dayNumber! == pWeekday && element.lessonNumber! >= i)) !=
+            (element.dayNumber! == pWeekday && element.lessonNumber! >= i )) !=
         -1) {
       tempDuration = parseDuration(allTimes[(i - 1)].time!) -
           parseDuration(allTimes[(i - 2)].time!) -
@@ -276,7 +277,7 @@ class _TimetableTabState extends State<TimetableTab> {
                               110.0;
                           scrollController.animateTo(animationHeight,
                               duration: Duration(milliseconds: 500),
-                              curve: Curves.ease);
+                              curve: Curves.linear);
                         });
                       } catch (e) {
                         print(e);
@@ -342,9 +343,12 @@ class _TimetableTabState extends State<TimetableTab> {
           ),
           Expanded(
             child: Container(
-              height: (isNow) ? 3 : 1,
+              height: (isNow) ? 5 : 1,
               margin: EdgeInsets.only(left: 10),
-              color: (isNow) ? Colors.red : Colors.black,
+              decoration: BoxDecoration(
+                color: (isNow) ? Colors.red : (Theme.of(context).brightness == Brightness.dark) ? Colors.white54 : Colors.black,
+                borderRadius: (isNow) ? BorderRadius.circular(2) : BorderRadius.circular(0),
+              ),
             ),
           ),
         ],
