@@ -26,6 +26,7 @@ class VertretungListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(vertretung.subject_new! + vertretung.type!);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       //constraints: BoxConstraints(minHeight: 200),
@@ -187,7 +188,7 @@ class VertretungListTile extends StatelessWidget {
           ),
           Row(
             children: [
-              if(vertretung.comment != null &&
+             if(
     !vertretung.type!
         .toLowerCase()
         .contains('vertretung') &&

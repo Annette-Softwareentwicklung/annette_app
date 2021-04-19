@@ -41,7 +41,8 @@ List<String> getSubjectsFullName() {
     'Latein Förder',
     'Orientierungsstunde',
     'Nicht angegeben',
-    'Physik'
+    'Physik',
+    'Schwimmen'
   ];
 
   return classesFullName;
@@ -89,7 +90,8 @@ List<String> getSubjectsAbbreviation() {
     'L FÖ',
     'OS',
     '&nbsp;',
-    'PH'
+    'PH',
+    'SI'
   ];
 
   return classesAbbreviation;
