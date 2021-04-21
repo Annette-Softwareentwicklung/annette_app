@@ -79,6 +79,36 @@ class NavigationControllerState extends State<NavigationController> {
     }
 
     if (await _readData() == 0) {
+      Future<bool> _readConfiguration() async {
+        try {
+          final _path = await _getPath();
+          final _file = File('$_path/data.txt');
+
+          String contents = await _file.readAsString();
+          if (contents.length == 0) {
+            print('NoConfiguration');
+            return false;
+          } else {
+            print('configuration');
+            return true;
+          }
+        } catch (e) {
+          print('NoConfiguration');
+          return false;
+        }
+      }
+
+      Future<void> _writeConfiguration() async {
+        final _path = await _getPath();
+        final _myFile = File('$_path/configuration.txt');
+        await _myFile.writeAsString(
+            'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Kath. Religion;sLanguageUS:Freistunde;diffUS:Freistunde;');
+      }
+
+      if(!await _readConfiguration()) {
+        _writeConfiguration();
+      }
+
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -183,7 +213,7 @@ class NavigationControllerState extends State<NavigationController> {
     );
   }
 
-  Widget bottomBar () {
+  Widget bottomBar() {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
@@ -191,19 +221,16 @@ class NavigationControllerState extends State<NavigationController> {
           icon: Icon(CupertinoIcons.rectangle_grid_1x2),
           //icon: Icon(Icons.list),
         ),
-
         BottomNavigationBarItem(
           label: 'Hausaufgaben',
           icon: Icon(CupertinoIcons.square_list),
           //icon: Icon(Icons.list),
         ),
-
         BottomNavigationBarItem(
           label: 'Stundenplan',
           icon: Icon(CupertinoIcons.calendar),
           //icon: Icon(Icons.date_range_rounded),
         ),
-
         BottomNavigationBarItem(
           label: 'Sonstiges',
           icon: Icon(CupertinoIcons.ellipsis),
@@ -217,10 +244,12 @@ class NavigationControllerState extends State<NavigationController> {
         });
       },
       currentIndex: tabIndex,
-    );}
+    );
+  }
 }
 
-Widget bottomBarItem({required IconData icon, required String text, required int index}) {
+Widget bottomBarItem(
+    {required IconData icon, required String text, required int index}) {
   return Container(
     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
     child: Column(
@@ -232,5 +261,3 @@ Widget bottomBarItem({required IconData icon, required String text, required int
     ),
   );
 }
-
-

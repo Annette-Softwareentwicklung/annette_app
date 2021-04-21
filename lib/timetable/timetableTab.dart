@@ -8,9 +8,10 @@ import 'package:annette_app/showWebview.dart';
 import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/vertretung/vertretungsEinheit.dart';
+import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 class TimetableTab extends StatefulWidget {
   @override
   _TimetableTabState createState() => _TimetableTabState();
@@ -29,6 +30,13 @@ class _TimetableTabState extends State<TimetableTab> {
   ScrollController scrollController = new ScrollController();
   GlobalKey globalKeyNow = new GlobalKey();
   bool isNow = false;
+
+  late String htmlCode;
+  bool vertretungsplanError = false;
+  List<VertretungsEinheit>? vertretungenHeute = [];
+  List<VertretungsEinheit>? vertretungenMorgen = [];
+  String? dateTomorrow;
+  String?  dateToday;
 
   final Shader lightGradient = LinearGradient(
     colors: <Color>[Colors.blue, Colors.tealAccent],
@@ -70,14 +78,54 @@ class _TimetableTabState extends State<TimetableTab> {
     return subjectFullname;
   }
 
+  Future<bool> vertretunsplan () async {
+    try {
+      var response = await http.get(Uri.https(
+          'www.annettegymnasium.de', 'SP/vertretung/Heute_KoL/subst_001.htm'));
+      if (response.statusCode == 200) {
+        htmlCode = response.body;
+        VertretungsplanCrawler vpc1 =
+        new VertretungsplanCrawler(htmlCode: htmlCode);
+        dateToday = vpc1.getCurrentDate();
+        vertretungenHeute = await vpc1.getVertretungen();
+
+        if (vertretungenHeute != null) {
+          vertretungenHeute!.sort((a, b) {
+            return a.lesson!.compareTo(b.lesson!);
+          });
+        }
+      }
+
+      response = await http.get(Uri.https(
+          'www.annettegymnasium.de', 'SP/vertretung/Morgen_KoL/subst_001.htm'));
+      if (response.statusCode == 200) {
+        htmlCode = response.body;
+        VertretungsplanCrawler vpc2 =
+        new VertretungsplanCrawler(htmlCode: htmlCode);
+        dateTomorrow = vpc2.getCurrentDate();
+        vertretungenMorgen = await vpc2.getVertretungen();
+        if (vertretungenMorgen != null) {
+          vertretungenMorgen!.sort((a, b) {
+            return a.lesson!.compareTo(b.lesson!);
+          });
+        }
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
   void load() async {
+    //vertretungsplanError = await  vertretunsplan();
     subjectAbbreviation = getSubjectsAbbreviation();
     subjectFullnames = getSubjectsFullName();
     allTimes = await databaseGetAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
     allTimes.forEach((element) {print(element.id!.toString() + ':  ' + element.time!.toString());});
-
-    //allTimeTableUnits.forEach((element) {print(element.subject! + ':  ' + element.lessonNumber!.toString());});
 
     allTimeTableUnits.sort((a, b) {
       return a.lessonNumber!.compareTo(b.lessonNumber!);

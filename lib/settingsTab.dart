@@ -32,7 +32,7 @@ class SettingsTab extends StatelessWidget {
                   width: 36,
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
-      applicationLegalese: 'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nAlle Angaben ohne Gewähr!\n\nKontakt: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
+      applicationLegalese: 'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nAlle Angaben ohne Gewähr!\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
     );
   }
 

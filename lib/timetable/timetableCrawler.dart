@@ -37,7 +37,6 @@ class TimetableCrawler {
     await db.execute("DELETE FROM times");
 
     for(int i=0; i<times.length; i++) {
-      print(times[i]);
       databaseInsertTime(new LessonStartTime(time: times[i]));
     }
     Future<String> _getPath() async {
@@ -69,7 +68,6 @@ class TimetableCrawler {
     await db.execute("DELETE FROM timetable");
 
     String timetableCode = code;
-    //pattern.allMatches(timetableCode).forEach((match) => print(match.group(0)));
 
     while (timetableCode.indexOf(currentClass) != -1) {
       String tempRoom = '-';
@@ -116,15 +114,10 @@ timetableCode.indexOf(',') != 0
 
         int tempPosition = configurationString.indexOf(tempTimetableUnit.subject!);
         if(tempPosition != -1) {
-print(configurationString);
-print(tempPosition);
-print(tempTimetableUnit.subject!);
           String tempString = configurationString.substring(tempPosition - 1);
 
-           print(tempString.substring(0, 6));
             if(tempString.indexOf(':') == 0) {
               databaseInsertTimetableUnit(tempTimetableUnit);
-              print('#' + tempTimetableUnit.subject! + ' ' + tempTimetableUnit.lessonNumber!.toString());
             }
 
         }
@@ -142,8 +135,6 @@ print(tempTimetableUnit.subject!);
             tempTimetableUnit.subject! == 'PPL') {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
-            print(tempTimetableUnit.subject! + tempTimetableUnit.lessonNumber!.toString());
-
           }
         }
         //2. Sprache
@@ -153,8 +144,6 @@ print(tempTimetableUnit.subject!);
                 tempTimetableUnit.subject! == 'F6')) {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
-            print(tempTimetableUnit.subject! + tempTimetableUnit.lessonNumber!.toString());
-
           }
         }
         //Diff
@@ -166,8 +155,6 @@ print(tempTimetableUnit.subject!);
                 tempTimetableUnit.subject! == 'KUd')) {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
-            print(tempTimetableUnit.subject! + tempTimetableUnit.lessonNumber!.toString());
-
           }
         } else {
           databaseInsertTimetableUnit(tempTimetableUnit);
