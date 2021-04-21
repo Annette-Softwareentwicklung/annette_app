@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:annette_app/classes/lessonStartTime.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
 import 'package:annette_app/database/lessonStartTimeDbInteraction.dart';
@@ -91,8 +90,7 @@ class _TimetableTabState extends State<TimetableTab> {
       displayDayString = 'Montag';
       await setDay(1, null, null);
     } else {
-      print('now');
-      displayDayString = 'abc';
+      displayDayString = '--';
       int currentLessonNumber = 0;
       bool isInBreak = false;
       int i = 0;
@@ -248,7 +246,7 @@ class _TimetableTabState extends State<TimetableTab> {
                 CupertinoSlidingSegmentedControl(
                   children: {
                     0: Container(
-                      child: Text('Jetzt'),
+                      child: Text('Aktuell'),
                       padding: EdgeInsets.symmetric(horizontal: 30),
                     ),
                     1: Container(

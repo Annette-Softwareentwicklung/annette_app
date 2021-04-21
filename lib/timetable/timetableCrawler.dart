@@ -78,13 +78,17 @@ class TimetableCrawler {
 
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
+if(
+timetableCode.indexOf(',') != 0
+) {
+
       if (timetableCode.indexOf('Kobi') == 1) {
         tempRoom = 'Kobi';
       }
 
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 2);
       String tempSubject =
-          timetableCode.substring(0, timetableCode.indexOf('"'));
+      timetableCode.substring(0, timetableCode.indexOf('"'));
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
       if (timetableCode.indexOf(',') != 0) {
@@ -93,7 +97,7 @@ class TimetableCrawler {
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
       int tempDayNumber =
-          int.tryParse(timetableCode.substring(0, timetableCode.indexOf(',')))!;
+      int.tryParse(timetableCode.substring(0, timetableCode.indexOf(',')))!;
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
       int tempLessonNumber = int.tryParse(timetableCode.substring(
@@ -112,7 +116,6 @@ class TimetableCrawler {
           databaseInsertTimetableUnit(tempTimetableUnit);
         }
       } else {
-
         //Überprüfung Religion
         if (tempTimetableUnit.subject! == 'KR' ||
             tempTimetableUnit.subject! == 'ER' ||
@@ -120,7 +123,6 @@ class TimetableCrawler {
             tempTimetableUnit.subject! == 'PPL') {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
-
           }
         }
         //2. Sprache
@@ -130,7 +132,6 @@ class TimetableCrawler {
                 tempTimetableUnit.subject! == 'F6')) {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
-
           }
         }
         //Diff
@@ -142,12 +143,15 @@ class TimetableCrawler {
                 tempTimetableUnit.subject! == 'KUd')) {
           if (configurationString.contains(tempTimetableUnit.subject!)) {
             databaseInsertTimetableUnit(tempTimetableUnit);
-
           }
         } else {
           databaseInsertTimetableUnit(tempTimetableUnit);
         }
       }
+    } else {
+  print('Fehler $timetableCode');
+}
+
     }
   }
 
