@@ -23,7 +23,7 @@ void createDb(Database db) async {
   );
 
   //Einfügen der Standart-Werte
-  insertAnnetteTimes(db);
+  //insertAnnetteTimes(db);
 }
 
 /**

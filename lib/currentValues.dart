@@ -53,6 +53,8 @@ class CurrentValues {
       }
     }
 
+    print('cl: $currentLesson');
+
     int tempIndex = allTimetableUnits.indexWhere((element) =>
         element.lessonNumber == currentLesson &&
         element.dayNumber == weekdayForDays);

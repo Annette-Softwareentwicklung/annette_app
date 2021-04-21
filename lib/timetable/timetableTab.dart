@@ -75,8 +75,9 @@ class _TimetableTabState extends State<TimetableTab> {
     subjectFullnames = getSubjectsFullName();
     allTimes = await databaseGetAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
+    allTimes.forEach((element) {print(element.id!.toString() + ':  ' + element.time!.toString());});
 
-    allTimeTableUnits.forEach((element) {print(element.subject! + ':  ' + element.lessonNumber!.toString());});
+    //allTimeTableUnits.forEach((element) {print(element.subject! + ':  ' + element.lessonNumber!.toString());});
 
     allTimeTableUnits.sort((a, b) {
       return a.lessonNumber!.compareTo(b.lessonNumber!);
@@ -109,8 +110,6 @@ class _TimetableTabState extends State<TimetableTab> {
         }
       }
 
-      print(currentLessonNumber);
-      print(isInBreak);
 
       if (currentLessonNumber == 0) {
         await setDay(DateTime.now().weekday, null, null);
@@ -125,7 +124,6 @@ class _TimetableTabState extends State<TimetableTab> {
           displayDayString = 'Jetzt';
           isNow = true;
         } else {
-          print('..');
           int temp = DateTime.now().weekday + 1;
           await setDay((temp == 5) ? 1 : temp, null, null);
           displayDayString = (temp == 5) ? 'Montag' : 'Morgen';

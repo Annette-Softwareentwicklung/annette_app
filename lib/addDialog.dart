@@ -106,12 +106,17 @@ class _AddDialogState extends State<AddDialog> {
     times = await databaseGetAllTimes();
 
     await getAutoValues();
-    print(detectedSubject);
     if (detectedSubject == null) {
       selectedSubject = 'Sonstiges';
     } else {
       selectedSubject = subjectNames[subjectCodes.indexOf(detectedSubject!)];
     }
+
+print(subjectNames[4]);
+    print('sub: $selectedSubject, det. $detectedSubject');
+
+    print(subjectCodes[4]);
+    subjectCodes.forEach((element) {print(element);});
 
     setState(() {
       finished = true;
