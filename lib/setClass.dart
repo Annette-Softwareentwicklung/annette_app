@@ -54,6 +54,8 @@ class _SetClassState extends State<SetClass> {
   String selectedSecondLanguageUS = 'Freistunde';
   late String selectedDiffUS;
 
+  late List<int> classesLanguage6;
+
   List<String> religionUS = ['Kath. Religion', 'Ev. Religion', 'Philosophie'];
   List<String> secondLanguageUS = ['Latein', 'Französisch'];
   List<String> diffUS = [
@@ -141,11 +143,27 @@ class _SetClassState extends State<SetClass> {
       selectedReligionUS = 'PPL';
     }
 
-    if (selectedSecondLanguageUS == 'Französisch') {
-      selectedSecondLanguageUS = 'F6';
+    bool tempLanguage6 = false;
+    classesLanguage6.forEach((element) {
+      if (selectedClass.contains(element.toString())) {
+        tempLanguage6 = true;
+      }
+      });
+
+    if(tempLanguage6) {
+      if (selectedSecondLanguageUS == 'Französisch') {
+        selectedSecondLanguageUS = 'F6';
+      } else {
+        selectedSecondLanguageUS = 'L6';
+      }
     } else {
-      selectedSecondLanguageUS = 'L6';
+      if (selectedSecondLanguageUS == 'Französisch') {
+        selectedSecondLanguageUS = 'F7';
+      } else {
+        selectedSecondLanguageUS = 'L7';
+      }
     }
+
 
     if (selectedDiffUS == 'Physik-Technik') {
       selectedDiffUS = 'PHd';
@@ -162,7 +180,7 @@ class _SetClassState extends State<SetClass> {
     if (selectedClass.contains('8') || selectedClass.contains('9')) {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:$selectedDiffUS;';
-    } else if (!selectedClass.contains('5')) {
+    } else if (!selectedClass.contains('5') && !selectedClass.contains('6')) {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:Freistunde;';
     } else {
@@ -324,6 +342,7 @@ class _SetClassState extends State<SetClass> {
         errorInternet = true;
       });
     } else {
+      classesLanguage6 = onlineFiles.getLanguage6();
       groupsEfList = gEF.getGroupsEf();
       groupsQ1List = gQ1.getGroupsQ1();
       groupsQ2List = gQ2.getGroupsQ2();
@@ -913,7 +932,7 @@ class _SetClassState extends State<SetClass> {
   Widget GroupsUS() {
     String infoText = 'Wähle hier deine individuellen Kurse. Dazu zähl';
 
-    if (selectedClass.contains('5')) {
+    if (selectedClass.contains('5') || selectedClass.contains('6')) {
       infoText = infoText + 't Religion.';
     } else if (!selectedClass.contains('8') && !selectedClass.contains('9')) {
       infoText = infoText + 'en Religion und die zweite Fremdsprache.';
@@ -975,7 +994,7 @@ class _SetClassState extends State<SetClass> {
           ])),
 
           ///2. Fremdsprache
-          if (!selectedClass.contains('5') && !selectedClass.contains('F'))
+          if (!selectedClass.contains('5') && !selectedClass.contains('6') && !selectedClass.contains('F'))
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
               Row(

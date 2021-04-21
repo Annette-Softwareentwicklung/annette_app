@@ -16,7 +16,8 @@ class TimetableCrawler {
 
   late String currentClass;
 
-  Future<void> setConfiguration(String configurationString, String difExport, int newVersion, List<String> times) async {
+  Future<void> setConfiguration(String configurationString, String difExport,
+      int newVersion, List<String> times) async {
     currentClass = configurationString.substring(
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
@@ -36,7 +37,7 @@ class TimetableCrawler {
     Database db = await database;
     await db.execute("DELETE FROM times");
 
-    for(int i=0; i<times.length; i++) {
+    for (int i = 0; i < times.length; i++) {
       databaseInsertTime(new LessonStartTime(time: times[i]));
     }
     Future<String> _getPath() async {
@@ -51,7 +52,6 @@ class TimetableCrawler {
     }
 
     await _writeData(newVersion);
-
   }
 
   Future<void> setTimetable(String code, String configurationString) async {
@@ -77,94 +77,84 @@ class TimetableCrawler {
 
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
-if(
-timetableCode.indexOf(',') != 0
-) {
-
-      if (timetableCode.indexOf('Kobi') == 1) {
-        tempRoom = 'Kobi';
-      }
-
-      timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 2);
-      String tempSubject =
-      timetableCode.substring(0, timetableCode.indexOf('"'));
-      timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
-
       if (timetableCode.indexOf(',') != 0) {
-        tempRoom = timetableCode.substring(1, timetableCode.indexOf('",'));
-      }
-      timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
+        if (timetableCode.indexOf('Kobi') == 1) {
+          tempRoom = 'Kobi';
+        }
 
-      int tempDayNumber =
-      int.tryParse(timetableCode.substring(0, timetableCode.indexOf(',')))!;
-      timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
+        timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 2);
+        String tempSubject =
+            timetableCode.substring(0, timetableCode.indexOf('"'));
+        timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
-      int tempLessonNumber = int.tryParse(timetableCode.substring(
-          0, timetableCode.indexOf(',,')))!;
+        if (timetableCode.indexOf(',') != 0) {
+          tempRoom = timetableCode.substring(1, timetableCode.indexOf('",'));
+        }
+        timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
+        int tempDayNumber = int.tryParse(
+            timetableCode.substring(0, timetableCode.indexOf(',')))!;
+        timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
-      TimeTableUnit tempTimetableUnit = new TimeTableUnit(
-          subject: tempSubject,
-          dayNumber: tempDayNumber,
-          lessonNumber: tempLessonNumber,
-          room: tempRoom);
-      if (currentClass == 'EF' ||
-          currentClass == 'Q1' ||
-          currentClass == 'Q2') {
+        int tempLessonNumber = int.tryParse(
+            timetableCode.substring(0, timetableCode.indexOf(',,')))!;
 
-        int tempPosition = configurationString.indexOf(tempTimetableUnit.subject!);
-        if(tempPosition != -1) {
-          String tempString = configurationString.substring(tempPosition - 1);
+        TimeTableUnit tempTimetableUnit = new TimeTableUnit(
+            subject: tempSubject,
+            dayNumber: tempDayNumber,
+            lessonNumber: tempLessonNumber,
+            room: tempRoom);
+        if (currentClass == 'EF' ||
+            currentClass == 'Q1' ||
+            currentClass == 'Q2') {
+          int tempPosition =
+              configurationString.indexOf(tempTimetableUnit.subject!);
+          if (tempPosition != -1) {
+            String tempString = configurationString.substring(tempPosition - 1);
 
-            if(tempString.indexOf(':') == 0) {
+            if (tempString.indexOf(':') == 0) {
               databaseInsertTimetableUnit(tempTimetableUnit);
             }
-
-        }
-
-
-
-
-
-
-      } else {
-        //Überprüfung Religion
-        if (tempTimetableUnit.subject! == 'KR' ||
-            tempTimetableUnit.subject! == 'ER' ||
-            tempTimetableUnit.subject! == 'PL' ||
-            tempTimetableUnit.subject! == 'PPL') {
-          if (configurationString.contains(tempTimetableUnit.subject!)) {
-            databaseInsertTimetableUnit(tempTimetableUnit);
-          }
-        }
-        //2. Sprache
-        else if (!currentClass.contains('5') &&
-            !currentClass.contains('F') &&
-            (tempTimetableUnit.subject! == 'L6' ||
-                tempTimetableUnit.subject! == 'F6')) {
-          if (configurationString.contains(tempTimetableUnit.subject!)) {
-            databaseInsertTimetableUnit(tempTimetableUnit);
-          }
-        }
-        //Diff
-        else if ((currentClass.contains('8') || currentClass.contains('9')) &&
-            (tempTimetableUnit.subject! == 'GEd' ||
-                tempTimetableUnit.subject! == 'IFd' ||
-                tempTimetableUnit.subject! == 'PHd' ||
-                tempTimetableUnit.subject! == 'S8' ||
-                tempTimetableUnit.subject! == 'KUd')) {
-          if (configurationString.contains(tempTimetableUnit.subject!)) {
-            databaseInsertTimetableUnit(tempTimetableUnit);
           }
         } else {
-          databaseInsertTimetableUnit(tempTimetableUnit);
-
+          //Überprüfung Religion
+          if (tempTimetableUnit.subject! == 'KR' ||
+              tempTimetableUnit.subject! == 'ER' ||
+              tempTimetableUnit.subject! == 'PL' ||
+              tempTimetableUnit.subject! == 'PPL') {
+            if (configurationString.contains(tempTimetableUnit.subject!)) {
+              databaseInsertTimetableUnit(tempTimetableUnit);
+            }
+          }
+          //2. Sprache
+          else if (!currentClass.contains('5') &&
+              !currentClass.contains('6') &&
+              !currentClass.contains('F') &&
+              (tempTimetableUnit.subject! == 'L6' ||
+                  tempTimetableUnit.subject! == 'F6' ||
+                  tempTimetableUnit.subject! == 'L7' ||
+                  tempTimetableUnit.subject! == 'F7')) {
+            if (configurationString.contains(tempTimetableUnit.subject!)) {
+              databaseInsertTimetableUnit(tempTimetableUnit);
+            }
+          }
+          //Diff
+          else if ((currentClass.contains('8') || currentClass.contains('9')) &&
+              (tempTimetableUnit.subject! == 'GEd' ||
+                  tempTimetableUnit.subject! == 'IFd' ||
+                  tempTimetableUnit.subject! == 'PHd' ||
+                  tempTimetableUnit.subject! == 'S8' ||
+                  tempTimetableUnit.subject! == 'KUd')) {
+            if (configurationString.contains(tempTimetableUnit.subject!)) {
+              databaseInsertTimetableUnit(tempTimetableUnit);
+            }
+          } else {
+            databaseInsertTimetableUnit(tempTimetableUnit);
+          }
         }
+      } else {
+        print('Fehler $timetableCode');
       }
-    } else {
-  print('Fehler $timetableCode');
-}
-
     }
   }
 
@@ -212,7 +202,6 @@ timetableCode.indexOf(',') != 0
       if (!tempSubjects.contains(tempSubjectFullName)) {
         tempSubjects.add(tempSubjectFullName);
       }
-
     }
   }
 }
