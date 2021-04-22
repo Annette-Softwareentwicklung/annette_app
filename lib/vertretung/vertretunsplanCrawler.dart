@@ -77,6 +77,9 @@ class VertretungsplanCrawler {
         relevant = false;
       } else
       {
+
+
+
         if (result[0]!.contains(currentClass.substring(0, 1)) &&
             result[0]!.contains(currentClass.substring(1))) {
           if (currentClass == 'EF' ||
@@ -94,10 +97,14 @@ class VertretungsplanCrawler {
           }
         }
       }
+
+
+
       if (relevant) {
 
         vertretungen.add(new VertretungsEinheit(result[1], result[5], result[4],
             result[0], result[8], result[6], result[2], result[7], result[3]));
+
       }
 
       htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('/tr>') + 4);

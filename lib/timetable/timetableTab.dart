@@ -125,7 +125,6 @@ class _TimetableTabState extends State<TimetableTab> {
     subjectFullnames = getSubjectsFullName();
     allTimes = await databaseGetAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
-    allTimes.forEach((element) {print(element.id!.toString() + ':  ' + element.time!.toString());});
 
     allTimeTableUnits.sort((a, b) {
       return a.lessonNumber!.compareTo(b.lessonNumber!);

@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:annette_app/vertretung/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,7 @@ class VertretungListTile extends StatelessWidget {
   final Shader darkGradient = LinearGradient(
     colors: <Color>[Colors.blue, Colors.tealAccent],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
   /*final Shader darkGradient = LinearGradient(
     colors: <Color>[Colors.tealAccent, Colors.blue],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));*/
@@ -64,14 +64,17 @@ class VertretungListTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color:
-                        (vertretung.subject_new != vertretung.subject_old &&
-                            vertretung.subject_old != null && vertretung.subject_new != null)                                ? Colors.red
-                                : null,
+                        color: (vertretung.subject_old != null &&
+                                vertretung.subject_new != null &&
+                                vertretung.subject_new !=
+                                    vertretung.subject_old)
+                            ? Colors.red
+                            : null,
                       ),
                     ),
-                    if (vertretung.subject_new != vertretung.subject_old &&
-                        vertretung.subject_old != null && vertretung.subject_new != null)
+                    if (vertretung.subject_old != null &&
+                        vertretung.subject_new != null &&
+                        vertretung.subject_new != vertretung.subject_old)
                       Container(
                         child: Text(
                           vertretung.subject_old!,
@@ -159,25 +162,28 @@ class VertretungListTile extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(right: 5),
                         child: Text(
-                          vertretung.teacher_new!,
+                          (vertretung.teacher_new != null) ? vertretung.teacher_new! : 'Fehler',
                           style: TextStyle(
                               fontSize: 25,
                               color: Colors.red,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                    Container(child: Text(
-                      vertretung.teacher_old!,
-                      style: TextStyle(
-                          fontSize: 25,
-                          decoration: (vertretung.type != null &&
-                                  vertretung.type!
-                                      .toLowerCase()
-                                      .contains('vertretung'))
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                          fontWeight: FontWeight.normal),
-                    ),margin: EdgeInsets.only(right: 5),),
+                    Container(
+                      child: Text(
+                        (vertretung.teacher_old != null) ? vertretung.teacher_old! : 'Fehler',
+                        style: TextStyle(
+                            fontSize: 25,
+                            decoration: (vertretung.type != null &&
+                                    vertretung.type!
+                                        .toLowerCase()
+                                        .contains('vertretung'))
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      margin: EdgeInsets.only(right: 5),
+                    ),
                     Icon(CupertinoIcons.person_fill),
                   ],
                 ),
@@ -187,32 +193,36 @@ class VertretungListTile extends StatelessWidget {
           ),
           Row(
             children: [
-             if(
-    !vertretung.type!
-        .toLowerCase()
-        .contains('vertretung') &&
-    !vertretung.type!.toLowerCase().contains('raum') &&
-    vertretung.subject_new != null && vertretung.room != null)
+              if (!vertretung.type!.toLowerCase().contains('vertretung') &&
+                  !vertretung.type!.toLowerCase().contains('raum') &&
+                  vertretung.subject_new != null &&
+                  vertretung.room != null)
                 Text(
-                (vertretung.comment != null) ?
-                    vertretung.type! + ':' : vertretung.type!, style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.red,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal),
-              ) else if (vertretung.comment != null) Text(
-                'Hinweis:', style: TextStyle(
-                  fontSize: 25,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal),
-              ),
-              if(vertretung.comment != null) Text(
-                 vertretung.comment!,
-                style: TextStyle(
-                    fontSize: 25,
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.normal),
-              ),
+                  (vertretung.comment != null)
+                      ? vertretung.type! + ':'
+                      : vertretung.type!,
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.red,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal),
+                )
+              else if (vertretung.comment != null)
+                Text(
+                  'Hinweis:',
+                  style: TextStyle(
+                      fontSize: 25,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal),
+                ),
+              if (vertretung.comment != null)
+                Text(
+                  vertretung.comment!,
+                  style: TextStyle(
+                      fontSize: 25,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal),
+                ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
