@@ -607,7 +607,9 @@ class _SetClassState extends State<SetClass> {
     return Container(
         child: Column(children: [
       Expanded(
-          child: CustomScrollView(
+          child: Scrollbar(
+
+            child: CustomScrollView(
         slivers: <Widget>[
           ///Text
           SliverList(
@@ -818,7 +820,7 @@ class _SetClassState extends State<SetClass> {
               ),
             ),
         ],
-      )),
+      ),),),
 
       ///Button
 
@@ -944,7 +946,7 @@ class _SetClassState extends State<SetClass> {
     return Container(
         child: Column(children: [
       Expanded(
-          child: CustomScrollView(
+          child: Scrollbar(child: CustomScrollView(
         slivers: <Widget>[
           ///Text
           SliverList(
@@ -1055,7 +1057,9 @@ class _SetClassState extends State<SetClass> {
                   ])
             ])),
         ],
-      )),
+      ),
+    ),
+      ),
 
       ///Button
 

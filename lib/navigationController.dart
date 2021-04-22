@@ -153,7 +153,7 @@ class NavigationControllerState extends State<NavigationController> {
                     ? Text('Stundenplan')
                     : Text('Sonstiges'),
       ),
-      body: (tabIndex == 0)
+      body:  (tabIndex == 0)
           ? VertretungsTab()
           : (tabIndex == 1)
               ? HomeworkTab(
