@@ -1,3 +1,4 @@
+import 'package:annette_app/database/databaseCreate.dart';
 import 'package:annette_app/setClass.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/timetable/timetableTab.dart';
@@ -79,6 +80,7 @@ class NavigationControllerState extends State<NavigationController> {
     }
 
     if (await _readData() == 0) {
+      databaseAnnetteTimes();
       Future<bool> _readConfiguration() async {
         try {
           final _path = await _getPath();

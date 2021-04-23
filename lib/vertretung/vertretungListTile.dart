@@ -216,13 +216,14 @@ class VertretungListTile extends StatelessWidget {
                       fontWeight: FontWeight.normal),
                 ),
               if (vertretung.comment != null)
-                Text(
+                Expanded(child: Text(
                   vertretung.comment!,
+                  textAlign: TextAlign.end,
                   style: TextStyle(
                       fontSize: 25,
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.normal),
-                ),
+                ),),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),

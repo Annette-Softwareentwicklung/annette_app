@@ -172,8 +172,8 @@ class _TimetableTabState extends State<TimetableTab> {
           isNow = true;
         } else {
           int temp = DateTime.now().weekday + 1;
-          await setDay((temp == 5) ? 1 : temp, null, null);
-          displayDayString = (temp == 5) ? 'Montag' : 'Morgen';
+          await setDay((temp == 6) ? 1 : temp, null, null);
+          displayDayString = (temp == 6) ? 'Montag' : 'Morgen';
         }
       }
     }
@@ -415,7 +415,9 @@ class _TimetableTabState extends State<TimetableTab> {
       child: Column(
         children: [
           Row(
+            //crossAxisAlignment: () ?  CrossAxisAlignment.start : null,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
             children: [
               Text(
                 timeTableUnit.lessonNumber!.toString(),
@@ -429,10 +431,11 @@ class _TimetableTabState extends State<TimetableTab> {
                         : lightGradient,*/
                 ),
               ),
-              Text(
+              Expanded(child: IntrinsicWidth(child: Container(child: Text(
                 getSubjectFullname(timeTableUnit.subject!),
+                textAlign: TextAlign.end,
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
+              ),),),),
             ],
           ),
           Row(
