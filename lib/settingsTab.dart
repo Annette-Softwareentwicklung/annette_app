@@ -1,5 +1,4 @@
 import 'package:annette_app/showWebview.dart';
-import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/setClass.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class SettingsTab extends StatelessWidget {
                   width: 36,
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
-      applicationLegalese: 'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nAlle Angaben ohne Gewähr!\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
+      applicationLegalese: 'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
     );
   }
 

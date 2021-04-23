@@ -292,15 +292,15 @@ class _TimetableTabState extends State<TimetableTab> {
                   children: {
                     0: Container(
                       child: Text('Aktuell'),
-                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      padding: EdgeInsets.symmetric(horizontal: 25),
                     ),
                     1: Container(
                       child: Text('Gesamt'),
-                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      padding: EdgeInsets.symmetric(horizontal: 25),
                     ),
                     2: Container(
                       child: Text('Zeitplan'),
-                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      padding: EdgeInsets.symmetric(horizontal: 25),
                     ),
                   },
                   onValueChanged: (int? value) {
