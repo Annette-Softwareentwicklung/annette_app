@@ -54,7 +54,7 @@ class _SetClassState extends State<SetClass> {
   String selectedSecondLanguageUS = 'Freistunde';
   late String selectedDiffUS;
 
-  late List<int> classesLanguage6;
+  late List<int>? classesLanguage6;
 
   List<String> religionUS = ['Kath. Religion', 'Ev. Religion', 'Philosophie'];
   List<String> secondLanguageUS = ['Latein', 'Französisch'];
@@ -144,11 +144,13 @@ class _SetClassState extends State<SetClass> {
     }
 
     bool tempLanguage6 = false;
-    classesLanguage6.forEach((element) {
+
+    if(classesLanguage6 != null) {
+    classesLanguage6!.forEach((element) {
       if (selectedClass.contains(element.toString())) {
         tempLanguage6 = true;
       }
-      });
+      });}
 
     if(tempLanguage6) {
       if (selectedSecondLanguageUS == 'Französisch') {
@@ -343,6 +345,7 @@ class _SetClassState extends State<SetClass> {
       });
     } else {
       classesLanguage6 = onlineFiles.getLanguage6();
+
       groupsEfList = gEF.getGroupsEf();
       groupsQ1List = gQ1.getGroupsQ1();
       groupsQ2List = gQ2.getGroupsQ2();

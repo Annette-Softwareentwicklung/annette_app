@@ -1,44 +1,11 @@
 import 'package:http/http.dart' as http;
 
 class OnlineFiles {
-  late List<String> classesList;
   late String difExport;
   late int newVersion;
   late List<String> times;
-  late List<int> language6;
 
   Future<bool> initialize() async {
-    Future<List<String>?> _getClassesList() async {
-      try {
-        var response = await http.get(
-            Uri.http('janw.bplaced.net', 'annetteapp/data/klassenListe.txt'));
-        if (response.statusCode == 200) {
-          return response.body.split(',');
-        }
-        return null;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    Future<List<int>?> _getLanguage6() async {
-      try {
-        var response = await http
-            .get(Uri.http('janw.bplaced.net', 'annetteapp/data/sprache6.txt'));
-        if (response.statusCode == 200) {
-          List<String> temp = response.body.split(',');
-          List<int> result = [];
-          temp.forEach((element) {
-            result.add(int.tryParse(element)!);
-          });
-          return result;
-        }
-        return null;
-      } catch (e) {
-        return null;
-      }
-    }
-
     Future<String?> _getDifExport() async {
       try {
         var response = await http.get(
@@ -78,14 +45,10 @@ class OnlineFiles {
       }
     }
 
-    if (await _getLanguage6() != null &&
-        await _getNewTimes() != null &&
+    if (await _getNewTimes() != null &&
         await _getDifExport() != null &&
-        await _getClassesList() != null &&
         await _getNewVersion() != null) {
       difExport = (await _getDifExport())!;
-      language6 = (await _getLanguage6())!;
-      classesList = (await _getClassesList())!;
       newVersion = (await _getNewVersion())!;
       times = (await _getNewTimes())!;
       return true;
@@ -95,11 +58,45 @@ class OnlineFiles {
   }
 
   List<String> allClasses() {
-    return classesList;
+    List<String> classes = [];
+
+    for (int i = 5; i < 10; i++) {
+      classes.add(i.toString() + 'A');
+      classes.add(i.toString() + 'B');
+      classes.add(i.toString() + 'C');
+      classes.add(i.toString() + 'D');
+
+      if (difExport.contains(i.toString() + 'F')) {
+        classes.add(i.toString() + 'F');
+      } else {
+        classes.add(i.toString() + 'E');
+      }
+    }
+    classes.add('EF');
+    classes.add('Q1');
+    classes.add('Q2');
+
+    return classes;
   }
 
-  List<int> getLanguage6() {
-    return language6;
+  List<int>? getLanguage6() {
+    String s1 = difExport;
+    String s2;
+    List<int> secondLanguage6 = [];
+
+    while (s1.indexOf('L6') != -1) {
+      s2 = s1.substring(0, s1.indexOf('L6'));
+      s2 = s2.substring(s2.lastIndexOf(',,'));
+
+      s2 = s2.substring(s2.indexOf(',"') + 2);
+
+      int i = int.tryParse(s2.substring(0, 1))!;
+      if (!secondLanguage6.contains(i)) {
+        secondLanguage6.add(i);
+      }
+      s1 = s1.substring(s1.indexOf('L6') + 3);
+    }
+    return secondLanguage6;
   }
 
   String difExportFile() {
