@@ -11,6 +11,7 @@ class ExamPlan extends StatefulWidget {
 }
 
 class _ExamPlanState extends State<ExamPlan> {
+
   late String currentClass;
   int selectedClass = 0;
   bool finished = false;
@@ -43,25 +44,25 @@ class _ExamPlanState extends State<ExamPlan> {
       }
     }
 
-    String s =  (await _readData()).toLowerCase();
-    if(s == 'q1') {
+    String s = (await _readData()).toLowerCase();
+    if (s == 'q1') {
       return 1;
-    } else if(s == 'q2') {
+    } else if (s == 'q2') {
       return 2;
     } else {
       return 0;
     }
   }
 
-  void changePlan (int pClass) {
+  void changePlan(int pClass) {
     setState(() {
       finished = false;
       error = false;
     });
 
-    if(pClass == 1) {
+    if (pClass == 1) {
       currentClass = 'q1';
-    } else if(pClass == 2) {
+    } else if (pClass == 2) {
       currentClass = 'q2';
     } else {
       currentClass = 'ef';
@@ -97,21 +98,20 @@ class _ExamPlanState extends State<ExamPlan> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void load() async{
-      if(await getCurrentClass() == 1) {
-        currentClass = 'q1';
-      } else if(await getCurrentClass() == 2) {
-        currentClass = 'q2';
-      } else {
-        currentClass = 'ef';
-      }
-      selectedClass = await getCurrentClass();
-      url = 'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf';
-      setState(() {
-        finished = true;
-      });
+  void load() async {
+    if (await getCurrentClass() == 1) {
+      currentClass = 'q1';
+    } else if (await getCurrentClass() == 2) {
+      currentClass = 'q2';
+    } else {
+      currentClass = 'ef';
     }
-
+    selectedClass = await getCurrentClass();
+    url = 'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf';
+    setState(() {
+      finished = true;
+    });
+  }
 
   @override
   void initState() {
@@ -122,58 +122,72 @@ class _ExamPlanState extends State<ExamPlan> {
 
   @override
   Widget build(BuildContext context) {
-    return
-
-      Container(child: Center(child:Column(children: [
-      Container(child: CupertinoSlidingSegmentedControl<int>(
-      children: {0: Container(child: Text('EF'), padding: EdgeInsets.symmetric(horizontal: 30),),1: Text('Q1'),2: Text('Q2'), },
-        onValueChanged: (int? value) {
-          changePlan(value!);},
-        groupValue: selectedClass,
-      ),margin: EdgeInsets.only(bottom: 15),),
-        Expanded(child:
-
-        (finished) ?
-        Center(
-          child: WebView(
-            initialUrl:
-url            ,          javascriptMode: JavascriptMode.unrestricted,
-            onProgress: (progress) => CupertinoActivityIndicator(),
-              onWebViewCreated: (WebViewController webViewController) {
-                controller = webViewController;},
-            onWebResourceError: (e) {
-              setState(() {
-                showError();
-                error = true;
-                finished = false;
-              });
-            },
+    return Container(
+      child: Center(
+          child: Column(
+        children: [
+          Container(
+            child: CupertinoSlidingSegmentedControl<int>(
+              children: {
+                0: Container(
+                  child: Text('EF'),
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                ),
+                1: Text('Q1'),
+                2: Text('Q2'),
+              },
+              onValueChanged: (int? value) {
+                changePlan(value!);
+              },
+              groupValue: selectedClass,
+            ),
+            margin: EdgeInsets.only(bottom: 15),
           ),
-        ) : (error) ?
-       RefreshIndicator(
-          child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    errorInternetContainer(context),
+          Expanded(
+              child: (finished)
+                  ? Center(
+                      child:
 
-                  ]),
-                )
-              ]),
-          onRefresh: () async {
-            Future.delayed(Duration.zero, () {
-              changePlan(selectedClass);
-            });
-          }): Center(
-        child: CupertinoActivityIndicator(),
-      )
-
-
-
-        ),
-      ],
-      crossAxisAlignment: CrossAxisAlignment.center,)), padding: EdgeInsets.all(15),);
-
+                WebView(
+                        initialUrl: url,
+                        javascriptMode: JavascriptMode.unrestricted,
+                        onProgress: (progress) => CupertinoActivityIndicator(),
+                        onWebViewCreated:
+                            (WebViewController webViewController) {
+                          controller = webViewController;
+                        },
+                        onWebResourceError: (e) {
+                          setState(() {
+                            showError();
+                            error = true;
+                            finished = false;
+                          });
+                        },
+                      ),
+                    )
+                  : (error)
+                      ? RefreshIndicator(
+                          child: CustomScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              slivers: <Widget>[
+                                SliverList(
+                                  delegate: SliverChildListDelegate.fixed([
+                                    errorInternetContainer(context),
+                                  ]),
+                                )
+                              ]),
+                          onRefresh: () async {
+                            Future.delayed(Duration.zero, () {
+                              changePlan(selectedClass);
+                            });
+                          })
+                      : Center(
+                          child: CupertinoActivityIndicator(),
+                        )),
+        ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+      )),
+      padding: EdgeInsets.all(15),
+    );
   }
 }

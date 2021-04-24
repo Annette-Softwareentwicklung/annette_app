@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:annette_app/classes/lessonStartTime.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
@@ -608,9 +609,8 @@ class _TimetableTabState extends State<TimetableTab> {
 
   Container zeitraster() {
     return Container(
-      child: ShowWebview(
-        url: 'https://www.annettegymnasium.de/SP/Pausenregelung.jpg',
-      ),
+      child: (Platform.isIOS) ? ShowWebview(url: 'https://www.annettegymnasium.de/SP/Pausenregelung.jpg',) :
+      Image.network('https://www.annettegymnasium.de/SP/Pausenregelung.jpg'),
     );
   }
 

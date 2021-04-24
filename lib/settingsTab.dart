@@ -94,6 +94,7 @@ class SettingsTab extends StatelessWidget {
                       title: 'Moodle', content: ShowWebview(url: 'https://moodle.annettegymnasium.de/',));
                 }),
               )),*/
+
           Divider(),ListTile(
               title: Text('Annette Homepage'),
               trailing: Icon(Icons.chevron_right,
