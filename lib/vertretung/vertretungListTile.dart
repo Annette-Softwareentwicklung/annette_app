@@ -26,6 +26,7 @@ class VertretungListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(vertretung.subject_new);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       //constraints: BoxConstraints(minHeight: 200),
@@ -60,7 +61,9 @@ class VertretungListTile extends StatelessWidget {
                     Text(
                       (vertretung.subject_new != null)
                           ? vertretung.subject_new!
-                          : vertretung.type!,
+                          : (vertretung.subject_old != null)
+                              ? vertretung.subject_old!
+                              : vertretung.type!,
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -162,7 +165,9 @@ class VertretungListTile extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(right: 5),
                         child: Text(
-                          (vertretung.teacher_new != null) ? vertretung.teacher_new! : 'Fehler',
+                          (vertretung.teacher_new != null)
+                              ? vertretung.teacher_new!
+                              : 'Fehler',
                           style: TextStyle(
                               fontSize: 25,
                               color: Colors.red,
@@ -171,7 +176,9 @@ class VertretungListTile extends StatelessWidget {
                       ),
                     Container(
                       child: Text(
-                        (vertretung.teacher_old != null) ? vertretung.teacher_old! : 'Fehler',
+                        (vertretung.teacher_old != null)
+                            ? vertretung.teacher_old!
+                            : 'Fehler',
                         style: TextStyle(
                             fontSize: 25,
                             decoration: (vertretung.type != null &&
@@ -193,10 +200,11 @@ class VertretungListTile extends StatelessWidget {
           ),
           Row(
             children: [
-              if (!vertretung.type!.toLowerCase().contains('vertretung') &&
+             if (!vertretung.type!.toLowerCase().contains('vertretung') &&
                   !vertretung.type!.toLowerCase().contains('raum') &&
-                  vertretung.subject_new != null &&
-                  vertretung.room != null)
+              vertretung.subject_old != null
+                  //&& vertretung.room != null
+             )
                 Text(
                   (vertretung.comment != null)
                       ? vertretung.type! + ':'
@@ -216,14 +224,16 @@ class VertretungListTile extends StatelessWidget {
                       fontWeight: FontWeight.normal),
                 ),
               if (vertretung.comment != null)
-                Expanded(child: Text(
-                  vertretung.comment!,
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                      fontSize: 25,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.normal),
-                ),),
+                Expanded(
+                  child: Text(
+                    vertretung.comment!,
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                        fontSize: 25,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.normal),
+                  ),
+                ),
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),

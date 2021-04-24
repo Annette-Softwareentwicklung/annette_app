@@ -2,8 +2,11 @@ import 'dart:io';
 import 'package:annette_app/widgetParts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class ExamPlan extends StatefulWidget {
   @override
@@ -11,13 +14,11 @@ class ExamPlan extends StatefulWidget {
 }
 
 class _ExamPlanState extends State<ExamPlan> {
-
+  late File file;
   late String currentClass;
   int selectedClass = 0;
   bool finished = false;
   bool error = false;
-  late WebViewController controller;
-  late String url;
 
   Future<int> getCurrentClass() async {
     error = false;
@@ -54,7 +55,7 @@ class _ExamPlanState extends State<ExamPlan> {
     }
   }
 
-  void changePlan(int pClass) {
+  void changePlan(int pClass) async {
     setState(() {
       finished = false;
       error = false;
@@ -68,14 +69,13 @@ class _ExamPlanState extends State<ExamPlan> {
       currentClass = 'ef';
     }
     selectedClass = pClass;
-    url = 'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf';
-    controller.loadUrl(url);
+    file = await loadFromNetwork('klausur_$currentClass');
     setState(() {
       finished = true;
     });
   }
 
-  void showError() {
+  void showError(BuildContext context) {
     final snackBar = SnackBar(
       duration: Duration(seconds: 3),
       content: Row(
@@ -107,7 +107,7 @@ class _ExamPlanState extends State<ExamPlan> {
       currentClass = 'ef';
     }
     selectedClass = await getCurrentClass();
-    url = 'http://janw.bplaced.net/annetteapp/data/klausur_$currentClass.pdf';
+    file = await loadFromNetwork('klausur_$currentClass');
     setState(() {
       finished = true;
     });
@@ -146,23 +146,8 @@ class _ExamPlanState extends State<ExamPlan> {
           Expanded(
               child: (finished)
                   ? Center(
-                      child:
-
-                WebView(
-                        initialUrl: url,
-                        javascriptMode: JavascriptMode.unrestricted,
-                        onProgress: (progress) => CupertinoActivityIndicator(),
-                        onWebViewCreated:
-                            (WebViewController webViewController) {
-                          controller = webViewController;
-                        },
-                        onWebResourceError: (e) {
-                          setState(() {
-                            showError();
-                            error = true;
-                            finished = false;
-                          });
-                        },
+                      child: PDFView(
+                        filePath: file.path,
                       ),
                     )
                   : (error)
@@ -182,12 +167,33 @@ class _ExamPlanState extends State<ExamPlan> {
                             });
                           })
                       : Center(
-                          child: CupertinoActivityIndicator(),
+                          child: Column(
+                            children: [
+                              CupertinoActivityIndicator(),
+                              Text('Lade Klausurplan ...'),
+                            ],
+                            mainAxisSize: MainAxisSize.min,
+                          ),
                         )),
         ],
         crossAxisAlignment: CrossAxisAlignment.center,
       )),
       padding: EdgeInsets.all(15),
     );
+  }
+
+  Future<File> loadFromNetwork(String plan) async {
+    final response = await http
+        .get(Uri.http('janw.bplaced.net', 'annetteapp/data/$plan.pdf'));
+    final bytes = response.bodyBytes;
+    return _storeFile(plan, bytes);
+  }
+
+  Future<File> _storeFile(plan, bytes) async {
+    final filename = '$plan.pdf';
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/$filename');
+    await file.writeAsBytes(bytes, flush: true);
+    return file;
   }
 }
