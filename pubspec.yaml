@@ -33,8 +33,6 @@ dependencies:
   flutter_local_notifications: ^5.0.0
   sqflite: ^2.0.0+3
   path: ^1.8.0
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
@@ -60,7 +58,6 @@ flutter:
   assets:
     - images/icon.png
     - assets/stundenplan.txt
-  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
