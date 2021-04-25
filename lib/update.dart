@@ -74,6 +74,17 @@ Future<void> update (BuildContext context) async {
       var response = await http.get(
           Uri.http('janw.bplaced.net', 'annetteapp/data/version.txt'));
       if (response.statusCode == 200) {
+
+        try {
+          HttpClient client = HttpClient();
+          HttpClientRequest req = await client.getUrl(Uri.parse(
+              'http://janw.bplaced.net/annetteapp/data/stundenplan.txt'));
+          HttpClientResponse tempResponse = await req.close();
+          String t = tempResponse.headers.value(
+              HttpHeaders.lastModifiedHeader)!;
+          print('Zuletzt geändert: $t');
+        } catch (e) {}
+
         if (version < (int.tryParse(response.body))!) {
           if (await updateTimetable((int.tryParse(response.body))!)) {
             ScaffoldMessenger.of(context).showSnackBar(

@@ -16,17 +16,12 @@ class VertretungListTile extends StatelessWidget {
     colors: <Color>[Colors.blue, Colors.tealAccent],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
-  final Shader darkGradient = LinearGradient(
-    colors: <Color>[Colors.blue, Colors.tealAccent],
-  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
-
   /*final Shader darkGradient = LinearGradient(
     colors: <Color>[Colors.tealAccent, Colors.blue],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));*/
 
   @override
   Widget build(BuildContext context) {
-    print(vertretung.subject_new);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       //constraints: BoxConstraints(minHeight: 200),
@@ -47,11 +42,8 @@ class VertretungListTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        foreground: Paint()
-                          ..shader =
-                              (Theme.of(context).brightness == Brightness.dark)
-                                  ? darkGradient
-                                  : lightGradient,
+                        color: Colors.blue,
+                        //foreground: Paint()..shader = lightGradient,
                       ),
                     )
                   : Text(''),
@@ -157,54 +149,70 @@ class VertretungListTile extends StatelessWidget {
                     decoration: TextDecoration.none,
                     fontWeight: FontWeight.normal),
               ),
-              Container(
-                child: Row(
-                  children: [
-                    if (vertretung.type != null &&
-                        vertretung.type!.toLowerCase().contains('vertretung'))
+
+                Container(
+                  child: Row(
+                    children: [
+                      if (vertretung.type != null &&
+                          (vertretung.teacher_new != null) &&
+                          vertretung.type!.toLowerCase().contains('vertretung'))
+                        Container(
+                          margin: EdgeInsets.only(right: 5),
+                          child: Text(
+                            (vertretung.teacher_new != null)
+                                ? vertretung.teacher_new!
+                                : 'Fehler',
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ) else if(vertretung.teacher_new != null && vertretung.teacher_new != vertretung.teacher_old)
+                        Container(
+                          margin: EdgeInsets.only(right: 5),
+                          child: Text(
+                                vertretung.teacher_new!,
+                            style: TextStyle(
+                                fontSize: 25,
+                                //color: Colors.red,
+                                //fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      if(vertretung.teacher_old != null)
                       Container(
-                        margin: EdgeInsets.only(right: 5),
                         child: Text(
-                          (vertretung.teacher_new != null)
-                              ? vertretung.teacher_new!
+                          (vertretung.teacher_old != null)
+                              ? vertretung.teacher_old!
                               : 'Fehler',
                           style: TextStyle(
                               fontSize: 25,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold),
+                              decoration: (vertretung.type != null &&
+                                      vertretung.type!
+                                          .toLowerCase()
+                                          .contains('vertretung'))
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              fontWeight: FontWeight.normal),
                         ),
+                        margin: EdgeInsets.only(right: 5),
                       ),
-                    Container(
-                      child: Text(
-                        (vertretung.teacher_old != null)
-                            ? vertretung.teacher_old!
-                            : 'Fehler',
-                        style: TextStyle(
-                            fontSize: 25,
-                            decoration: (vertretung.type != null &&
-                                    vertretung.type!
-                                        .toLowerCase()
-                                        .contains('vertretung'))
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      margin: EdgeInsets.only(right: 5),
-                    ),
-                    Icon(CupertinoIcons.person_fill),
-                  ],
-                ),
-              )
+                      if (vertretung.teacher_old != null ||
+                          vertretung.teacher_new != null)
+                      Icon(CupertinoIcons.person_fill),
+                    ],
+                  ),
+                )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
           Row(
             children: [
-             if (!vertretung.type!.toLowerCase().contains('vertretung') &&
+              if (!vertretung.type!.toLowerCase().contains('vertretung') &&
                   !vertretung.type!.toLowerCase().contains('raum') &&
-              vertretung.subject_old != null
-                  //&& vertretung.room != null
-             )
+                  vertretung.subject_old != null
+              //&& vertretung.room != null
+              )
                 Text(
                   (vertretung.comment != null)
                       ? vertretung.type! + ':'
