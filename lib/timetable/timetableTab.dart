@@ -9,7 +9,7 @@ import 'package:annette_app/showWebview.dart';
 import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/timetableURL.dart';
-import 'package:annette_app/vertretung/vertretungsEinheit.dart';
+import 'package:annette_app/classes/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

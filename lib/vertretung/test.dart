@@ -1,5 +1,5 @@
 import 'package:annette_app/vertretung/vertretungListTile.dart';
-import 'package:annette_app/vertretung/vertretungsEinheit.dart';
+import 'package:annette_app/classes/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
