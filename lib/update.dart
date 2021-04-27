@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -51,30 +52,27 @@ Future<void> update (BuildContext context) async {
       return _dir.path;
     }
 
-    Future<void> _writeData(int newVersion) async {
+    Future<void> _writeData(DateTime newVersion) async {
       final _path = await _getPath();
       final _myFile = File('$_path/version.txt');
       await _myFile.writeAsString(newVersion.toString());
     }
 
-    Future<int?> _readData() async {
+    Future<DateTime?> _readData() async {
       try {
         final _path = await _getPath();
         final _file = File('$_path/version.txt');
 
         String contents = await _file.readAsString();
-        return (int.tryParse(contents))!;
+        return DateTime.parse(contents);
       } catch (e) {
         return null;
       }
     }
-    int? version = await _readData();
+    DateTime? version = await _readData();
 
     if(version != null) {
-      var response = await http.get(
-          Uri.http('janw.bplaced.net', 'annetteapp/data/version.txt'));
-      if (response.statusCode == 200) {
-
+      DateTime versionNew;
         try {
           HttpClient client = HttpClient();
           HttpClientRequest req = await client.getUrl(Uri.parse(
@@ -83,24 +81,30 @@ Future<void> update (BuildContext context) async {
           String t = tempResponse.headers.value(
               HttpHeaders.lastModifiedHeader)!;
           print('Zuletzt geändert: $t');
+          versionNew = getLastModifiedTime(t)!;
+
+          if (version.isBefore(versionNew)) {
+            if (await updateTimetable(versionNew)) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  snackBarTimetableUpdated);
+              await _writeData(versionNew);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  snackBarTimetableUpdateFailed);
+            }
+          }
         } catch (e) {}
 
-        if (version < (int.tryParse(response.body))!) {
-          if (await updateTimetable((int.tryParse(response.body))!)) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                snackBarTimetableUpdated);
-            await _writeData((int.tryParse(response.body))!);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-                snackBarTimetableUpdateFailed);
-          }
-        }
-      }
+
+
+
     }
-    } catch(e) {}
+    } catch(e) {
+    print(e);
+  }
 }
 
-Future<bool> updateTimetable (int newVersion) async {
+Future<bool> updateTimetable (DateTime newVersion) async {
   try {
     String stundenplanDIF;
 

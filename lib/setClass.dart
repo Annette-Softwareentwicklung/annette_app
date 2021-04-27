@@ -28,7 +28,7 @@ class _SetClassState extends State<SetClass> {
   late List<String> classes;
   bool errorInternet = false;
   OnlineFiles onlineFiles = new OnlineFiles();
-  late int newVersion;
+  late DateTime newVersion;
 
   late String selectedClass;
   late String selectedLk1;

@@ -14,7 +14,7 @@ class TimetableCrawler {
   late String currentClass;
 
   Future<void> setConfiguration(String configurationString, String difExport,
-      int newVersion) async {
+      DateTime newVersion) async {
     currentClass = configurationString.substring(
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
@@ -29,7 +29,7 @@ class TimetableCrawler {
       return _dir.path;
     }
 
-    Future<void> _writeData(int newVersion) async {
+    Future<void> _writeData(DateTime newVersion) async {
       final _path = await _getPath();
       final _myFile = File('$_path/version.txt');
       await _myFile.writeAsString(newVersion.toString());

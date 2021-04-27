@@ -1,9 +1,5 @@
 import 'classes/lessonStartTime.dart';
 
-/**
- * Diese Methode gibt alle sich in der Tabelle befindlichen Anfangszeiten der Schulstunden zurück.
- * Die Rückgabe geschieht in Form einer Liste mit einzelnen Objekten der Klasse LessonStartTime.
- */
 List<LessonStartTime> getAllTimes() {
   List<LessonStartTime> temp = [];
   temp.add(new LessonStartTime(id: 1,time: '8:00:00.000000'));

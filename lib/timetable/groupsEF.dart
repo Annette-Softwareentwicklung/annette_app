@@ -1,18 +1,16 @@
 import 'package:http/http.dart' as http;
+
+import '../timetableURL.dart';
 class GroupsEF {
   List<List<String>> groupsEfList = [];
   Future<bool> initialize () async{
     Future<String?> _getTimetable() async {
       try {
-        String tempUrl;
+        String? tempUrl = await getTimetableURL();
+        if (tempUrl != null) {
+
 
         var response = await http.get(
-            Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplanPfad.txt'));
-        if (response.statusCode == 200) {
-          tempUrl = response.body;
-
-
-        response = await http.get(
             Uri.https('www.annettegymnasium.de', '$tempUrl/c00026.htm'));
         if (response.statusCode == 200) {
           return response.body;

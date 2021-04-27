@@ -1,17 +1,18 @@
 import 'package:http/http.dart' as http;
+
+import '../timetableURL.dart';
 class GroupsQ2 {
   List<List<String>> groupsQ2List = [];
   Future<bool> initialize () async{
     Future<String?> _getTimetable() async {
       try {
-        String tempUrl;
-        var response = await http.get(
-            Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplanPfad.txt'));
-        if (response.statusCode == 200) {
-          tempUrl = response.body;
+        String? tempUrl = await getTimetableURL();
+        if (tempUrl != null) {
 
 
-           response = await http.get(
+          var
+
+          response = await http.get(
             Uri.https('www.annettegymnasium.de', '$tempUrl/c00028.htm'));
         if (response.statusCode == 200) {
           return response.body;

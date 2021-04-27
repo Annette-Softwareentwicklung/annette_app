@@ -1,8 +1,10 @@
+import 'dart:io';
+import 'package:annette_app/parseTime.dart';
 import 'package:http/http.dart' as http;
 
 class OnlineFiles {
   late String difExport;
-  late int newVersion;
+  late DateTime newVersion;
 
   Future<bool> initialize() async {
     Future<String?> _getDifExport() async {
@@ -18,14 +20,15 @@ class OnlineFiles {
       }
     }
 
-    Future<int?> _getNewVersion() async {
+    Future<DateTime?> _getNewVersion() async {
       try {
-        var response = await http
-            .get(Uri.http('janw.bplaced.net', 'annetteapp/data/version.txt'));
-        if (response.statusCode == 200) {
-          return int.tryParse(response.body);
-        }
-        return null;
+        HttpClient client = HttpClient();
+        HttpClientRequest req = await client.getUrl(Uri.parse(
+            'http://janw.bplaced.net/annetteapp/data/stundenplan.txt'));
+        HttpClientResponse tempResponse = await req.close();
+        String t = tempResponse.headers.value(
+            HttpHeaders.lastModifiedHeader)!;
+        return getLastModifiedTime(t);
       } catch (e) {
         return null;
       }
@@ -89,7 +92,7 @@ class OnlineFiles {
     return difExport;
   }
 
-  int getNewVersion() {
+  DateTime getNewVersion() {
     return newVersion;
   }
 }

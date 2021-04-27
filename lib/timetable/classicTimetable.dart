@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../timetableURL.dart';
 import '../widgetParts.dart';
 
 class ClassicTimetable extends StatefulWidget {
@@ -57,11 +58,8 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
       int classesNumber = onlineFiles.allClasses().indexOf(currentClass) + 1;
       currentClassNumber = classesNumber.toString().padLeft(5, '0');
       try{
-        var response = await http.get(
-            Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplanPfad.txt'));
-        if (response.statusCode == 200) {
-          tempUrl = response.body;
-        }
+          tempUrl = (await getTimetableURL())!;
+
 
           setState(() {
         finished = true;
