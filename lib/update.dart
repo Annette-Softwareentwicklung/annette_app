@@ -102,13 +102,9 @@ Future<void> update (BuildContext context) async {
 
 Future<bool> updateTimetable (int newVersion) async {
   try {
-    List<String> newTimes;
     String stundenplanDIF;
-    var response = await http.get(
-        Uri.http('janw.bplaced.net', 'annetteapp/data/zeitraster.txt'));
-    if (response.statusCode == 200) {
-      newTimes = response.body.split(',');
-       response = await http.get(
+
+       var response = await http.get(
         Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplan.txt'));
     if (response.statusCode == 200) {
         stundenplanDIF = response.body;
@@ -132,10 +128,10 @@ Future<bool> updateTimetable (int newVersion) async {
         String currentClass = configuration.substring(configuration.indexOf('c:') + 2, configuration.indexOf(';'));
         if(stundenplanDIF.contains(currentClass)) {
           TimetableCrawler timetableCrawler = new TimetableCrawler();
-          timetableCrawler.setConfiguration(configuration, stundenplanDIF, newVersion,newTimes);
+          timetableCrawler.setConfiguration(configuration, stundenplanDIF, newVersion);
           return true;
         }
-    }}
+    }
     return false;
   } catch (e) {
     return false;

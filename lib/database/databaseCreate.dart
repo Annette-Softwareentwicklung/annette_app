@@ -10,9 +10,9 @@ import '../classes/lessonStartTime.dart';
 void createDb(Database db) async {
 
   //Erstellen der Tabelle für den Zeitplan
-  await db.execute(
+  /*await db.execute(
     "CREATE TABLE times(id INTEGER PRIMARY KEY, time TEXT)",
-  );
+  );*/
 
   //Erstellen der Tabelle für die Hausaufgaben
   await db.execute(
@@ -23,9 +23,6 @@ void createDb(Database db) async {
   await db.execute(
     "CREATE TABLE timetable(id INTEGER PRIMARY KEY, subject TEXT, room TEXT, dayNumber INTEGER, lessonNumber INTEGER)",
   );
-
-  //Einfügen der Standart-Werte
-  //insertAnnetteTimes(db);
 }
 
 /**

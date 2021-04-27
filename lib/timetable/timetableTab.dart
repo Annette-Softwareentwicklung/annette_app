@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:annette_app/classes/lessonStartTime.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
-import 'package:annette_app/database/lessonStartTimeDbInteraction.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:annette_app/lessonStartTimes.dart';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/showWebview.dart';
 import 'package:annette_app/subjectsList.dart';
@@ -124,7 +124,7 @@ class _TimetableTabState extends State<TimetableTab> {
     //vertretungsplanError = await  vertretunsplan();
     subjectAbbreviation = getSubjectsAbbreviation();
     subjectFullnames = getSubjectsFullName();
-    allTimes = await databaseGetAllTimes();
+    allTimes = getAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
 
     allTimeTableUnits.sort((a, b) {

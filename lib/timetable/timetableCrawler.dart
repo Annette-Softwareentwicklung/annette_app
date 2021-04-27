@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:annette_app/classes/lessonStartTime.dart';
-import 'package:annette_app/database/lessonStartTimeDbInteraction.dart';
 import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
@@ -17,7 +14,7 @@ class TimetableCrawler {
   late String currentClass;
 
   Future<void> setConfiguration(String configurationString, String difExport,
-      int newVersion, List<String> times) async {
+      int newVersion) async {
     currentClass = configurationString.substring(
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
@@ -26,20 +23,7 @@ class TimetableCrawler {
     await setTimetable(difExport, configurationString);
     await setSubjects();
 
-    WidgetsFlutterBinding.ensureInitialized();
-    final Future<Database> database = openDatabase(
-      join(await getDatabasesPath(), 'local_database.db'),
-      onCreate: (db, version) {
-        createDb(db);
-      },
-      version: 1,
-    );
-    Database db = await database;
-    await db.execute("DELETE FROM times");
 
-    for (int i = 0; i < times.length; i++) {
-      databaseInsertTime(new LessonStartTime(time: times[i]));
-    }
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
       return _dir.path;

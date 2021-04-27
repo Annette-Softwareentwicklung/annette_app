@@ -1,5 +1,5 @@
-import 'package:annette_app/database/lessonStartTimeDbInteraction.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:annette_app/lessonStartTimes.dart';
 import 'package:annette_app/parseTime.dart';
 import 'classes/lessonStartTime.dart';
 import 'classes/timetableUnit.dart';
@@ -10,7 +10,7 @@ class CurrentValues {
   late List<TimeTableUnit> allTimetableUnits;
 
   Future<void> initialize() async {
-    times = await databaseGetAllTimes();
+    times =  getAllTimes();
     allTimetableUnits = await databaseGetAllTimeTableUnit();
   }
 

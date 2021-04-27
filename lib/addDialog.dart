@@ -5,11 +5,12 @@ import 'package:annette_app/classes/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
 import 'package:annette_app/classes/timetableUnit.dart';
 import 'package:annette_app/classes/lessonStartTime.dart';
-import 'package:annette_app/database/lessonStartTimeDbInteraction.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/manageNotifications.dart';
 import 'package:annette_app/currentValues.dart';
+
+import 'lessonStartTimes.dart';
 
 ///Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
 class AddDialog extends StatefulWidget {
@@ -103,7 +104,7 @@ class _AddDialogState extends State<AddDialog> {
       }
     }
 
-    times = await databaseGetAllTimes();
+    times = getAllTimes();
 
     await getAutoValues();
     if (detectedSubject == null) {
