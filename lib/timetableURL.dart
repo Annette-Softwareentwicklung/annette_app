@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 
 Future<String?> getTimetableURL() async {
   late String htmlCode;
-  print('go');
   try {
     var response = await http
         .get(Uri.https(

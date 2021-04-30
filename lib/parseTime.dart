@@ -180,7 +180,6 @@ DateTime? getLastModifiedTime(String s) {
     List<String> time = tempList[4].split(':');
     DateTime temp = new DateTime(
         int.tryParse(tempList[3])!, month, int.tryParse(tempList[1])!,int.tryParse(time[0])!,int.tryParse(time[1])!);
-    print(temp);
     return temp;
   } catch (e) {
     print(e);

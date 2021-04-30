@@ -30,6 +30,8 @@ class _SetClassState extends State<SetClass> {
   OnlineFiles onlineFiles = new OnlineFiles();
   late DateTime newVersion;
 
+  late bool q2Initialize;
+
   late String selectedClass;
   late String selectedLk1;
   late String selectedLk2;
@@ -338,17 +340,24 @@ class _SetClassState extends State<SetClass> {
     GroupsQ1 gQ1 = new GroupsQ1();
     GroupsQ2 gQ2 = new GroupsQ2();
 
-    if (await onlineFiles.initialize() == false || await gEF.initialize() == false || await gQ1.initialize() == false || await gQ2.initialize() == false) {
+    if (await onlineFiles.initialize() == false || await gEF.initialize() == false || await gQ1.initialize() == false ){//|| await gQ2.initialize() == false) {
       setState(() {
         errorInternet = true;
       });
     } else {
+      q2Initialize = await gQ2.initialize();
+
       classesLanguage6 = onlineFiles.getLanguage6();
 
       groupsEfList = gEF.getGroupsEf();
       groupsQ1List = gQ1.getGroupsQ1();
+      if(q2Initialize) {
       groupsQ2List = gQ2.getGroupsQ2();
+      }
       classes = onlineFiles.allClasses();
+      if(!q2Initialize) {
+        classes.removeLast();
+      }
       newVersion = onlineFiles.getNewVersion();
 
       Future<String> _getPath() async {

@@ -25,6 +25,11 @@ class GroupsQ2 {
 
     if(await _getTimetable() != null) {
       String htmlCode = (await _getTimetable())!;
+
+      if(!htmlCode.toUpperCase().contains('LK')) {
+        return false;
+      }
+
       htmlCode = htmlCode.replaceAll('Gk', 'GK');
       htmlCode = htmlCode.replaceAll('Lk', 'LK');
 
