@@ -123,20 +123,29 @@ class VertretungsplanCrawler {
   List<String> getInformation() {
     List<String> information = [];
     String htmlCodeTemp = htmlCode!;
+    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+
 
     htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('Nachrichten'));
     htmlCodeTemp = htmlCodeTemp.substring(0, htmlCodeTemp.indexOf('</table'));
     htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</tr') + 5);
     htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</tr') + 5);
 
+
+
     if (htmlCodeTemp.indexOf('<tr') != -1) {
       do {
+
         htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('<td') + 29);
         String s = htmlCodeTemp.substring(0, htmlCodeTemp.indexOf('</td'));
         htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</td') + 5);
 
-        while (s.indexOf('<br') != -1) {
-          information.add(s.substring(0, htmlCodeTemp.indexOf('<')));
+        s = s.replaceAll('<b>', '');
+        s = s.replaceAll('</b>', '');
+        //s = s.replaceAll('<br>', '');
+        pattern.allMatches(s).forEach((match) => print(match.group(0)));
+        while (s.indexOf('<br>') != -1) {
+          information.add(s.substring(0, s.indexOf('<br>')));
           s = s.substring(s.indexOf('<br') + 4);
         }
         information.add(s);
