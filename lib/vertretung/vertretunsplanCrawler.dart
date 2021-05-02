@@ -143,7 +143,7 @@ class VertretungsplanCrawler {
         s = s.replaceAll('<b>', '');
         s = s.replaceAll('</b>', '');
         //s = s.replaceAll('<br>', '');
-        pattern.allMatches(s).forEach((match) => print(match.group(0)));
+        //pattern.allMatches(s).forEach((match) => print(match.group(0)));
         while (s.indexOf('<br>') != -1) {
           information.add(s.substring(0, s.indexOf('<br>')));
           s = s.substring(s.indexOf('<br') + 4);
