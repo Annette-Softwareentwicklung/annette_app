@@ -82,6 +82,9 @@ class _AddDialogState extends State<AddDialog> {
       } else if (tempSubjectAbbreviation.contains('Z2')) {
         tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
             0, tempSubjectAbbreviation.indexOf('Z2') - 1);
+      }  else if (tempSubjectAbbreviation.contains('VT')) {
+        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
+            0, tempSubjectAbbreviation.indexOf('VT') + 2);
       }
 
       int tempPositionInList =

@@ -53,7 +53,6 @@ class CurrentValues {
       }
     }
 
-    print('cl: $currentLesson');
 
     int tempIndex = allTimetableUnits.indexWhere((element) =>
         element.lessonNumber == currentLesson &&
@@ -108,8 +107,12 @@ class CurrentValues {
       exitLoop++;
     }
 
+    int temp = nextTimeTableUnit!.dayNumber! - currentTime.weekday;
+    if(temp < 1)
+      temp+= 7;
     nextLesson = new DateTime(currentTime.year, currentTime.month, currentTime.day);
-    nextLesson = nextLesson.add(new Duration(days: nextTimeTableUnit!.dayNumber! - (currentTime.weekday - 7)));
+    //nextLesson = nextLesson.add(new Duration(days: nextTimeTableUnit!.dayNumber! - (currentTime.weekday)));
+    nextLesson = nextLesson.add(new Duration(days: temp));
     nextLesson = nextLesson.add(parseDuration(times[(nextTimeTableUnit.lessonNumber! - 1)].time!));
 
     return nextLesson;
