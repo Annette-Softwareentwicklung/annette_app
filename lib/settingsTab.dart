@@ -34,7 +34,7 @@ class SettingsTab extends StatelessWidget {
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
       applicationLegalese:
-          'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
+          'Annete App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nDer Stundenplan wird automatisch bei jeden Neustart der App und beim Einstellen der Klasse aktualisiert.\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
     );
   }
 
