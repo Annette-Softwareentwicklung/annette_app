@@ -1,4 +1,4 @@
-package com.example.annette_app
+package eu.devstudios.annetteapp
 
 import io.flutter.embedding.android.FlutterActivity
 
