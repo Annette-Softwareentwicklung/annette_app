@@ -190,7 +190,7 @@ class _SetClassState extends State<SetClass> {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
     }
-
+print(tempConfiguration);
     await activateTimetableCrawler(tempConfiguration);
     await _writeData(tempConfiguration);
     setState(() {

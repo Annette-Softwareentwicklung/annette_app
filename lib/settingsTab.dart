@@ -40,12 +40,9 @@ class SettingsTab extends StatelessWidget {
 
   /**
    * Ausgabe eines Widgets (Container) mit einer Liste mit folgenden Auswahlmöglichkeiten:
-   *    - Stundenplan       Navigiert zu dem Scaffold Auswählen der Wochentage (zum anschließenden Einstellen des Stundenplans)
-   *    - Zeitplan          Navigiert zu dem Scaffold zum Einstellen des Zeitplans
-   *    - Fächer            Navigiert zu dem Scaffold Verwalten der Fächer
+   *
    *
    *    - Über diese App    Öffnet den AboutDialog (s.o.)
-   *    - Zurücksetzen      Navigiert zu dem Scaffold zum Zurücksetzen der App
    */
   @override
   Widget build(BuildContext context) {

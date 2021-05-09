@@ -4,11 +4,10 @@ import 'package:annette_app/classes/vertretungsEinheit.dart';
 
 class VertretungsplanCrawler {
   final String? htmlCode;
+
   VertretungsplanCrawler({this.htmlCode});
 
   Future<List<VertretungsEinheit>> getVertretungen() async {
-
-
     String htmlCodeTemp = htmlCode!;
     int tempStart = htmlCodeTemp.indexOf('<table');
     tempStart = htmlCodeTemp.indexOf('<table', tempStart + 5);
@@ -71,15 +70,10 @@ class VertretungsplanCrawler {
 
       bool relevant = false;
 
-      if(result[0] == null)
-      {
+      if (result[0] == null) {
         ///Klassen-unspezifische Ereignisse
         relevant = false;
-      } else
-      {
-
-
-
+      } else {
         if (result[0]!.contains(currentClass.substring(0, 1)) &&
             result[0]!.contains(currentClass.substring(1))) {
           if (currentClass == 'EF' ||
@@ -93,18 +87,106 @@ class VertretungsplanCrawler {
               }
             }
           } else {
-            relevant = true;
+            ///Unterstufe Religion, Fremdsprache, Diff hier filtern.
+
+            /// Filter Latein
+            if (result.indexWhere((element) =>
+                        element != null && element.contains('L6')) !=
+                    -1 ||
+                result.indexWhere((element) =>
+                        element != null && element.contains('L7')) !=
+                    -1) {
+              if (configurationString.contains('sLanguageUS:L6;') ||
+                  configurationString.contains('sLanguageUS:L7;')) {
+                relevant = true;
+              }
+            } else
+
+            ///Französisch
+            if (result.indexWhere((element) =>
+                        element != null && element.contains('F6')) !=
+                    -1 ||
+                result.indexWhere((element) =>
+                        element != null && element.contains('F7')) !=
+                    -1) {
+              if (configurationString.contains('sLanguageUS:F6;') ||
+                  configurationString.contains('sLanguageUS:F7;')) {
+                relevant = true;
+              }
+            } else
+
+            ///Kath. Religion
+            if ((result[4] != null && result[4]!.contains('KR')) ||
+                (result[5] != null && result[5]!.contains('KR'))) {
+              if (configurationString.contains('religionUS:KR;')) {
+                relevant = true;
+              }
+            }else
+
+              ///Ev. Religion
+            if ((result[4] != null && result[4]!.contains('ER')) ||
+                (result[5] != null && result[5]!.contains('ER'))) {
+              if (configurationString.contains('religionUS:ER;')) {
+                relevant = true;
+              }
+            }else
+
+              ///PPL
+            if ((result[4] != null && result[4]!.contains('PPL')) ||
+                (result[5] != null && result[5]!.contains('PPL'))) {
+              if (configurationString.contains('religionUS:PPL;')) {
+                relevant = true;
+              }
+            }else
+
+              ///S8
+            if ((result[4] != null && result[4]!.contains('S8')) ||
+                (result[5] != null && result[5]!.contains('S8'))) {
+              if (configurationString.contains('diffUS:S8;')) {
+                relevant = true;
+              }
+            }else
+
+              ///IFd
+            if ((result[4] != null && result[4]!.contains('IFd')) ||
+                (result[5] != null && result[5]!.contains('IFd'))) {
+              if (configurationString.contains('diffUS:IFd;')) {
+                relevant = true;
+              }
+            }else
+
+              ///KUd
+            if ((result[4] != null && result[4]!.contains('KUd')) ||
+                (result[5] != null && result[5]!.contains('KUd'))) {
+              if (configurationString.contains('diffUS:KUd;')) {
+                relevant = true;
+              }
+            }else
+
+              ///PHd
+            if ((result[4] != null && result[4]!.contains('PHd')) ||
+                (result[5] != null && result[5]!.contains('PHd'))) {
+              if (configurationString.contains('diffUS:PHd;')) {
+                relevant = true;
+              }
+            }else
+
+              ///GEd
+            if ((result[4] != null && result[4]!.contains('GEd')) ||
+                (result[5] != null && result[5]!.contains('GEd'))) {
+              if (configurationString.contains('diffUS:GEd;')) {
+                relevant = true;
+              }
+            } else {
+              relevant = true;
+            }
           }
         }
       }
 
-
-
       if (relevant) {
-
         vertretungen.add(new VertretungsEinheit(result[1], result[5], result[4],
             result[0], result[8], result[6], result[2], result[7], result[3]));
-
       }
 
       htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('/tr>') + 4);
@@ -125,17 +207,13 @@ class VertretungsplanCrawler {
     String htmlCodeTemp = htmlCode!;
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
 
-
     htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('Nachrichten'));
     htmlCodeTemp = htmlCodeTemp.substring(0, htmlCodeTemp.indexOf('</table'));
     htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</tr') + 5);
     htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</tr') + 5);
 
-
-
     if (htmlCodeTemp.indexOf('<tr') != -1) {
       do {
-
         htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('<td') + 29);
         String s = htmlCodeTemp.substring(0, htmlCodeTemp.indexOf('</td'));
         htmlCodeTemp = htmlCodeTemp.substring(htmlCodeTemp.indexOf('</td') + 5);
