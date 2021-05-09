@@ -30,14 +30,15 @@ class _GuideDialogState extends State<GuideDialog> {
         padding: EdgeInsets.only(top: 10),
         constraints: BoxConstraints(maxHeight: 700, maxWidth: 350),
         //padding: EdgeInsets.all(15),
-        child: (page1)
-            ? WelcomeScreen(
+        child:  (page1)
+            ? Scrollbar(
+            child:WelcomeScreen(
                 onCompleted: () {
                   setState(() {
                     page1 = false;
                   });
                 },
-              )
+              ),)
             : Center(
                 child: SetClass(
                   onButtonPressed: () {
@@ -101,7 +102,7 @@ class WelcomeScreen extends StatelessWidget {
                             style: TextStyle(fontSize: 15),
                             textAlign: TextAlign.center),
                         Text(
-                            'Die neue Annette App bietet dir zahlreiche Funktionen: Individuell gefilterter Vertretungsplan, individueller Stundenplan mit automatischer Erkennung der aktuellen Stunde, Hausaufgaben Verwaltung mit automatischer Einstellung der verschiedenen Parameter anhand deines Stundenplans, Klausurplan und vieles mehr!\n\nDas Abfragen des Stunden- und Vertretungsplans sowie das Erstellen von Hausaufgaben während des Schulalltages war noch nie so einfach!',
+                            'Die neue Annette App bietet dir zahlreiche Funktionen: Individuell gefilterter Vertretungsplan, individueller Stundenplan mit automatischer Erkennung der aktuellen Stunde, Hausaufgaben Verwaltung mit automatischer Einstellung der verschiedenen Parameter anhand deines Stundenplans, Klausurplan und vieles mehr!\n\nDas Abfragen des Stunden- und Vertretungsplans sowie das Erstellen von Hausaufgaben während des Schulalltages war noch nie so einfach!\n\nKlicke auf "Weiter" um fortzufahren.',
                             style: TextStyle(fontSize: 15),
                             textAlign: TextAlign.center),
                       ]),
