@@ -256,7 +256,6 @@ class _AddDialogState extends State<AddDialog> {
    */
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     load();
     getNextId();
