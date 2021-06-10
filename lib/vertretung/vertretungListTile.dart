@@ -154,9 +154,9 @@ class VertretungListTile extends StatelessWidget {
                   children: [
                     ///Anzeige "Lehrer neu"
 
-                    if ((vertretung.teacher_new != null &&
-                            vertretung.teacher_old! !=
-                                vertretung.teacher_new) ||
+                    if (
+                    (vertretung.teacher_new != null && vertretung.teacher_old != null &&
+                            vertretung.teacher_old! != vertretung.teacher_new) ||
                         (vertretung.teacher_new != null &&
                             vertretung.type != null &&
                             vertretung.type!
@@ -224,8 +224,8 @@ class VertretungListTile extends StatelessWidget {
           Row(
             children: [
               if (!vertretung.type!.toLowerCase().contains('vertretung') &&
-                  !vertretung.type!.toLowerCase().contains('raum') &&
-                  vertretung.subject_old != null
+                  !vertretung.type!.toLowerCase().contains('raum')
+                  && vertretung.subject_old != null
               //&& vertretung.room != null
               )
                 Text(
