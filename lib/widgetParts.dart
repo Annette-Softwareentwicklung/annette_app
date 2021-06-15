@@ -9,7 +9,7 @@ Container errorInternetContainer(BuildContext context) {
           size: 100,
           color: Theme.of(context).accentColor,
         ),
-        Text('Fehler beim Verbindungsaufbau.\nZum Aktualisieren ziehen.', textAlign: TextAlign.center,),
+        Text('Fehler beim Verbindungsaufbau.\nBitte überprüfe deine Internet-Verbindung!\nZum Aktualisieren ziehen.', textAlign: TextAlign.center,),
       ],
       mainAxisSize: MainAxisSize.min,
     ),
