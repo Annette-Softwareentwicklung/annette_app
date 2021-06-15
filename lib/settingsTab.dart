@@ -8,17 +8,52 @@ import 'package:annette_app/defaultScaffold.dart';
 
 import 'examPlan.dart';
 
+import 'dart:io';
+import 'package:annette_app/parseTime.dart';
+import 'package:annette_app/timetable/timetableCrawler.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+
 /**
  * Diese Klasse beinhaltet den Einstellungsbereich.
  * App => Menüleiste => Einstellungen
  */
 class SettingsTab extends StatelessWidget {
+  Future<DateTime?> getTimetableVersion() async {
+    try {
+      Future<String> _getPath() async {
+        final _dir = await getApplicationDocumentsDirectory();
+        return _dir.path;
+      }
+
+      Future<DateTime?> _readData() async {
+        try {
+          final _path = await _getPath();
+          final _file = File('$_path/version.txt');
+
+          String contents = await _file.readAsString();
+          return DateTime.parse(contents);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      return await _readData();
+
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   /**
    * AboutDialog.
    * Dialog, der Informationen über diese App, wie zB Versionsnummer, bereit hält.
    * Zusätzlich besitzt er ein von Flutter automatisch generiertes Verzeichnis der lizenzen der Packages.
    */
-  void aboutDialog(context) {
+  void aboutDialog(context) async {
+    DateTime? version = await getTimetableVersion();
     showAboutDialog(
       context: context,
       applicationName: 'Annette App',
@@ -34,7 +69,7 @@ class SettingsTab extends StatelessWidget {
                   image: AssetImage('images/icon.png'),
                   fit: BoxFit.fill))),
       applicationLegalese:
-          'Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Einstellen der Klasse aktualisiert.\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
+          'Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nInternet-Verbindung für bestimmte Funktionen erforderlich.\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Einstellen der Klasse aktualisiert.\n\nDer aktuell verwendete Stundenplan ist von Stand:\n${(version != null) ? version.toString() : "Fehler"}\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
     );
   }
 
