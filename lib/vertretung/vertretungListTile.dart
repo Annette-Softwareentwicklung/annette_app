@@ -226,7 +226,6 @@ class VertretungListTile extends StatelessWidget {
               if (!vertretung.type!.toLowerCase().contains('vertretung') &&
                   !vertretung.type!.toLowerCase().contains('raum')
                   && vertretung.subject_old != null
-              //&& vertretung.room != null
               )
                 Text(
                   (vertretung.comment != null)

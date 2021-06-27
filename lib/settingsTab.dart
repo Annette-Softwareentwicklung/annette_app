@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 /**
  * Diese Klasse beinhaltet den Einstellungsbereich.
  * App => Menüleiste => Einstellungen
@@ -136,7 +138,11 @@ class SettingsTab extends StatelessWidget {
               title: Text('Annette Homepage'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
+              onTap: () async {
+                  await launch('https://www.annettegymnasium.de/');
+              }
+
+              /*() => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return DefaultScaffold(
                           title: 'Annette Homepage',
@@ -144,7 +150,9 @@ class SettingsTab extends StatelessWidget {
                             url: 'https://www.annettegymnasium.de/',
                           ));
                     }),
-                  )),
+                  ),
+            */
+            ),
           if(Platform.isIOS)
             Divider(),
           if(Platform.isIOS)
@@ -152,7 +160,10 @@ class SettingsTab extends StatelessWidget {
               title: Text('Kalender'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
+              onTap: () async {
+              await launch('https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now');
+              }
+              /*onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return DefaultScaffold(
                           title: 'Kalender',
@@ -161,7 +172,7 @@ class SettingsTab extends StatelessWidget {
                                 'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now',
                           ));
                     }),
-                  )),
+                  )*/),
           Divider(),
             ListTile(),
           Divider(),
