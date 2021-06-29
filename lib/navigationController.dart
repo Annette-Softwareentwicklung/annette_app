@@ -1,12 +1,10 @@
-import 'package:annette_app/database/databaseCreate.dart';
-import 'package:annette_app/setClass.dart';
-import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/timetable/timetableTab.dart';
 import 'package:annette_app/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/guide.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'homeworkTab.dart';
 import 'settingsTab.dart';
 import 'addDialog.dart';
@@ -135,6 +133,32 @@ class NavigationControllerState extends State<NavigationController> {
     new Future.delayed(Duration.zero, () {
       showGuide();
     });
+
+    final QuickActions quickActions = QuickActions();
+    quickActions.initialize((String shortcutType) {
+      print(shortcutType);
+
+      ///Quickaction "Stundenplan"
+      if(shortcutType == 'timetable') {
+        print('timetable');
+        setState(() {
+          tabIndex = 2;
+        });
+      }
+
+      ///Quickaction "Neue newHomework"
+      if(shortcutType == 'newHomework') {
+        print('newHomework');
+        new Future.delayed(Duration.zero, () {
+          showNewHomeworkDialog();
+        });
+      }
+    });
+
+    quickActions.setShortcutItems(<ShortcutItem>[
+      const ShortcutItem(type: 'newHomework', localizedTitle: 'Neue Hausaufgabe',icon: 'icon_add'),
+      const ShortcutItem(type: 'timetable', localizedTitle: 'Stundenplan',icon: 'icon_plan'),
+    ]);
   }
 
   /**
@@ -167,20 +191,7 @@ class NavigationControllerState extends State<NavigationController> {
         elevation: 0,
         child: Icon(Icons.add),
         onPressed: () {
-          showDialog(
-            context: context,
-            barrierDismissible: true,
-            useSafeArea: true,
-            builder: (context) {
-              return AddDialog(
-                onTaskCreated: (newTask) {
-                  if (tabIndex == 1) {
-                    homeworkTabAccess.currentState!.insertTask(newTask);
-                  }
-                },
-              );
-            },
-          );
+          showNewHomeworkDialog();
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -211,6 +222,24 @@ class NavigationControllerState extends State<NavigationController> {
         ),
       ),*/
       bottomNavigationBar: bottomBar(),
+    );
+  }
+
+  /// Öffnet das Dialogfenster zum Erstellen einer neuen Hausaufgabe
+  void showNewHomeworkDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      useSafeArea: true,
+      builder: (context) {
+        return AddDialog(
+          onTaskCreated: (newTask) {
+            if (tabIndex == 1) {
+              homeworkTabAccess.currentState!.insertTask(newTask);
+            }
+          },
+        );
+      },
     );
   }
 
