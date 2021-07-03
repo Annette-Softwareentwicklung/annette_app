@@ -259,12 +259,7 @@ class HomeworkTabState extends State<HomeworkTab> {
    * entfernt werden kann. Dies geschieht ohne Animation, da das Listenelement schon
    * zur Seite "rausgewischt" wurde und daher nicht mehr sichtbar ist.
    */
-  void deleteFromList(int i, bool isID) {
-    if(isID) {
-      i = tasks.indexWhere((element) => element.id == i);
-    }
-
-
+  void deleteFromList(int i) {
     Task removedTask = tasks.removeAt(i);
     listAccess.currentState!.removeItem(i, (context, animation) => Container());
     if (tasks.length == 0) {
@@ -530,7 +525,7 @@ class HomeworkTabState extends State<HomeworkTab> {
                                     onDetailedViewCheckedtask: (value) =>
                                         detailedViewDeleteTask(value!),
                                     onRemove: (value) => removeFromList(value!),
-                                    onDelete: (value) => deleteFromList(value!, false),
+                                    onDelete: (value) => deleteFromList(value!),
                                     onDetail: (task) {
                                       detailedViewAccess.currentState!
                                           .update(task);
