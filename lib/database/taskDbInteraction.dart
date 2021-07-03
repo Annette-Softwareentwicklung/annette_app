@@ -90,7 +90,7 @@ Future<Task> databaseGetSpecificTask(int pId) async {
         subject: maps[i]['subject'],
         notes: maps[i]['notes'],
         notificationTime: maps[i]['notificationTime'],
-        isChecked: maps[i]['isChecked'],
+        isChecked: maps[i]['isChecked'], deadlineTime: maps[i]['deadlineTime'],
       );
     });
 

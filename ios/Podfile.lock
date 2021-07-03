@@ -1,7 +1,7 @@
 PODS:
-  - Flutter (1.0.0)
-  - flutter_local_notifications (0.0.1):
+  - awesome_notifications (0.0.2):
     - Flutter
+  - Flutter (1.0.0)
   - flutter_native_timezone (0.0.1):
     - Flutter
   - flutter_pdfview (1.0.2):
@@ -22,8 +22,8 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
   - Flutter (from `Flutter`)
-  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_timezone (from `.symlinks/plugins/flutter_native_timezone/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -37,10 +37,10 @@ SPEC REPOS:
     - FMDB
 
 EXTERNAL SOURCES:
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
   Flutter:
     :path: Flutter
-  flutter_local_notifications:
-    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_native_timezone:
     :path: ".symlinks/plugins/flutter_native_timezone/ios"
   flutter_pdfview:
@@ -57,8 +57,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  awesome_notifications: 74462bc8e68b11f8235d78422266886759e9da61
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_native_timezone: 5f05b2de06c9776b4cc70e1839f03de178394d22
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -66,7 +66,7 @@ SPEC CHECKSUMS:
   quick_actions: 6cb2390c4dab0e737c94573c27e18d9666710720
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
+  webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 

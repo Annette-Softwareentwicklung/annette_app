@@ -16,7 +16,7 @@ class Task {
   final int? id;
   final String? subject;
   final String? notes;
-  final String? notificationTime;
+  String? notificationTime;
   final String? deadlineTime;
   int? isChecked;
 
@@ -25,7 +25,7 @@ class Task {
       this.subject,
       this.notes,
       this.notificationTime,
-      this.deadlineTime,
+        this.deadlineTime,
       this.isChecked});
 
   Map<String, dynamic> toMap() {
