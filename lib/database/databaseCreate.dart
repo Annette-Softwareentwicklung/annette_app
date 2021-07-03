@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../classes/lessonStartTime.dart';
 
 /**
  * Diese Methode wird aufgerufen, wenn die Datenbank noch nicht existieren sollte.

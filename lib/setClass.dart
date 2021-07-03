@@ -4,7 +4,7 @@ import 'package:annette_app/timetable/groupsEF.dart';
 import 'package:annette_app/timetable/groupsQ1.dart';
 import 'package:annette_app/timetable/groupsQ2.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
-import 'package:annette_app/widgetParts.dart';
+import 'package:annette_app/custom_widgets/errorInternetContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';

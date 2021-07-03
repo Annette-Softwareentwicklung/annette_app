@@ -1,8 +1,8 @@
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/lessonStartTimes.dart';
 import 'package:annette_app/parseTime.dart';
-import 'classes/lessonStartTime.dart';
-import 'classes/timetableUnit.dart';
+import 'package:annette_app/fundamentals/lessonStartTime.dart';
+import 'package:annette_app/fundamentals/timetableUnit.dart';
 
 class CurrentValues {
   DateTime currentTime = DateTime.now();
@@ -14,9 +14,7 @@ class CurrentValues {
     allTimetableUnits = await databaseGetAllTimeTableUnit();
   }
 
-  /**
-   * Diese Methode gibt den Zeitpunkt des Starts der 1. Stunde am aktuellen Tag zurück.
-   */
+  /// Diese Methode gibt den Zeitpunkt des Starts der 1. Stunde am aktuellen Tag zurück.
   DateTime getStartOfFirstLesson() {
     DateTime temp =
     new DateTime(currentTime.year, currentTime.month, currentTime.day);
@@ -66,10 +64,8 @@ class CurrentValues {
     return timetableUnit;
   }
 
-  /**
-   * Diese Methode gibt den zeitpunkt zurück, wann der Benutzer das per Parameter
-   * übergebene Fach das nächste Mal laut Stundenplan hat.
-   */
+  /// Diese Methode gibt den zeitpunkt zurück, wann der Benutzer das per Parameter
+  /// übergebene Fach das nächste Mal laut Stundenplan hat.
   DateTime? getNextLesson(String? pSubject) {
     if (pSubject == null) {
       return null;

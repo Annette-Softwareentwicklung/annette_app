@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:annette_app/subjectsList.dart';
-import 'package:annette_app/classes/timetableUnit.dart';
+import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';

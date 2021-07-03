@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:annette_app/defaultScaffold.dart';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
-import 'customCheckbox.dart';
+import 'custom_widgets/customCheckbox.dart';
 import 'detailedView.dart';
-import 'classes/task.dart';
+import 'package:annette_app/fundamentals/task.dart';
 import 'manageNotifications.dart';
 
 /**

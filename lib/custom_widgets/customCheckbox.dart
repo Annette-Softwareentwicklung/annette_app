@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/classes/task.dart';
+import 'package:annette_app/fundamentals/task.dart';
 
-/**
- * Die Klasse CustomCheckbox erstellt ein selbstgebautes Checkbox-Widget, welches abgehakt werden kann
- * und dabei ein entsprechendes VoidCallback an das Eltern Widget übermittelt.
- */
+/// Die Klasse CustomCheckbox erstellt ein selbstgebautes Checkbox-Widget, welches abgehakt werden kann
+/// und dabei ein entsprechendes VoidCallback an das Eltern Widget übermittelt.
 class CustomCheckbox extends StatefulWidget {
   final Task? task;
   final VoidCallback? onChanged;

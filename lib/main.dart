@@ -10,7 +10,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'translation.dart';
 
 /// Die Datei main.dart mit der Methode "main()"ist der Einstiegspunkt der App.
-///
 /// Außerdem wird hier das Plugin für die Systembenachrichtigungen initialisiert.
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -52,6 +51,7 @@ void main() async {
   runApp(MyApp());
 }
 
+///Öffnet die Detailansicht, wenn auf eine Benachrichtigung geklickt wird.
 void helper(String? payload) async {
   bool load;
   do {
@@ -74,9 +74,7 @@ void helper(String? payload) async {
   } while (!load);
 }
 
-/**
- * Einstiegspunkt der App.
- */
+/// Einstiegspunkt der App.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

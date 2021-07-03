@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-/**
- * Diese Datei beinhaltet die Detailansicht einer Hausaufgabe,
- * bei der alle Informationen bezüglich der Aufgabe angezeigt werden können.
- */
 import 'package:flutter/material.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
 import 'manageNotifications.dart';
-import 'classes/task.dart';
+import 'package:annette_app/fundamentals/task.dart';
 import 'parseTime.dart';
 
+/// Diese Datei beinhaltet die Detailansicht einer Hausaufgabe,
+/// bei der alle Informationen bezüglich der Aufgabe angezeigt werden können.
 class DetailedView extends StatefulWidget {
   final Task? task;
   final Function(int?)? onReload;
@@ -328,10 +326,8 @@ class DetailedViewState extends State<DetailedView> {
         });
   }
 
-  /**
-   * Diese Methode dient dazu, im Querformat eine andere Aufgabe in der Detailansicht anzuzeigen
-   * und die Detailansicht so zu aktualisieren.
-   */
+  /// Diese Methode dient dazu, im Querformat eine andere Aufgabe in der Detailansicht anzuzeigen
+  /// und die Detailansicht so zu aktualisieren.
   update(Task? pTask) {
     setState(() {
       task = pTask;
@@ -373,9 +369,7 @@ class DetailedViewState extends State<DetailedView> {
     }
   }
 
-  /**
-   * Rückgabe eines Containers mit der gesamten Detailansicht.
-   */
+  /// Rückgabe eines Containers mit der gesamten Detailansicht.
   @override
   Widget build(BuildContext context) {
     if (task == null) {
@@ -613,10 +607,8 @@ class DetailedViewState extends State<DetailedView> {
   }
 }
 
-/**
- * Dieses Widget gibt einen Container zurück, welche in die Detailanscht eingebunden wird.
- * Dieses Widget beinhaltet das Fach der Hausaufgabe.
- */
+/// Dieses Widget gibt einen Container zurück, welche in die Detailanscht eingebunden wird.
+/// Dieses Widget beinhaltet das Fach der Hausaufgabe.
 Widget Subject(String pSubject) {
   return Container(
     margin: EdgeInsets.only(bottom: 10.0),

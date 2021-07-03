@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:annette_app/classes/vertretungsEinheit.dart';
+import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 
 class VertretungsplanCrawler {
   final String? htmlCode;

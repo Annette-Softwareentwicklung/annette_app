@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:annette_app/defaultScaffold.dart';
 import 'package:annette_app/homeworkListTile.dart';
-import 'package:annette_app/classes/task.dart';
+import 'package:annette_app/fundamentals/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
 import 'package:annette_app/detailedView.dart';
 import 'dart:async';

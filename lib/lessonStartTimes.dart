@@ -1,4 +1,4 @@
-import 'classes/lessonStartTime.dart';
+import 'package:annette_app/fundamentals/lessonStartTime.dart';
 
 List<LessonStartTime> getAllTimes() {
   List<LessonStartTime> temp = [];

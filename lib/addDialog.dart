@@ -1,10 +1,10 @@
 import 'package:annette_app/subjectsList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/classes/task.dart';
+import 'package:annette_app/fundamentals/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
-import 'package:annette_app/classes/timetableUnit.dart';
-import 'package:annette_app/classes/lessonStartTime.dart';
+import 'package:annette_app/fundamentals/timetableUnit.dart';
+import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/manageNotifications.dart';
