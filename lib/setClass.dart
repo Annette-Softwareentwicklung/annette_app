@@ -173,6 +173,7 @@ class _SetClassState extends State<SetClass> {
     } else if (selectedDiffUS == 'Kunst') {
       selectedDiffUS = 'KUd';
     } else if (selectedDiffUS == 'Spanisch') {
+      ///Spanisch ab Klasse 9 muss hier berücksichtigt werden.
       selectedDiffUS = 'S8';
     } else if (selectedDiffUS == 'Geschichte') {
       selectedDiffUS = 'GEd';
@@ -180,7 +181,7 @@ class _SetClassState extends State<SetClass> {
       selectedDiffUS = 'IFd';
     }
 
-    if (selectedClass.contains('8') || selectedClass.contains('9')) {
+    if (selectedClass.contains('9') || selectedClass.contains('10')) {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:$selectedDiffUS;';
     } else if (!selectedClass.contains('5') && !selectedClass.contains('6')) {
@@ -190,7 +191,6 @@ class _SetClassState extends State<SetClass> {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
     }
-print(tempConfiguration);
     await activateTimetableCrawler(tempConfiguration);
     await _writeData(tempConfiguration);
     setState(() {
@@ -207,12 +207,6 @@ print(tempConfiguration);
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
       return _dir.path;
-    }
-
-    Future<void> _writeData(String pData) async {
-      final _path = await _getPath();
-      final _myFile = File('$_path/configuration.txt');
-      await _myFile.writeAsString(pData);
     }
 
     if (selectedClass == 'Q1' ||
@@ -422,6 +416,8 @@ print(tempConfiguration);
           } else if (tempDiff == 'KUd') {
             tempContent.add('Kunst');
           } else if (tempDiff == 'S8') {
+            tempContent.add('Spanisch');
+          } else if (tempDiff == 'S9') {
             tempContent.add('Spanisch');
           } else if (tempDiff == 'GEd') {
             tempContent.add('Geschichte');
@@ -946,7 +942,7 @@ print(tempConfiguration);
 
     if (selectedClass.contains('5') || selectedClass.contains('6')) {
       infoText = infoText + 't Religion.';
-    } else if (!selectedClass.contains('8') && !selectedClass.contains('9')) {
+    } else if (!selectedClass.contains('9') && !selectedClass.contains('10')) {
       infoText = infoText + 'en Religion und die zweite Fremdsprache.';
     } else {
       infoText =
@@ -1037,7 +1033,7 @@ print(tempConfiguration);
             ])),
 
           ///Diff
-          if (selectedClass.contains('8') || selectedClass.contains('9'))
+          if (selectedClass.contains('9') || selectedClass.contains('10'))
             SliverList(
                 delegate: SliverChildListDelegate.fixed([
               Row(

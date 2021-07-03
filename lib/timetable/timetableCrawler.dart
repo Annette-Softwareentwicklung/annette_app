@@ -9,8 +9,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:annette_app/database/databaseCreate.dart';
 
 class TimetableCrawler {
-  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-
   late String currentClass;
 
   Future<void> setConfiguration(String configurationString, String difExport,
@@ -19,7 +17,6 @@ class TimetableCrawler {
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
 
-    //pattern.allMatches(difExport).forEach((match) => print(match.group(0)));
     await setTimetable(difExport, configurationString);
     await setSubjects();
 
@@ -123,11 +120,12 @@ class TimetableCrawler {
             }
           }
           //Diff
-          else if ((currentClass.contains('8') || currentClass.contains('9')) &&
+          else if ((currentClass.contains('9') || currentClass.contains('10')) &&
               (tempTimetableUnit.subject! == 'GEd' ||
                   tempTimetableUnit.subject! == 'IFd' ||
                   tempTimetableUnit.subject! == 'PHd' ||
                   tempTimetableUnit.subject! == 'S8' ||
+                  tempTimetableUnit.subject! == 'S9' ||
                   tempTimetableUnit.subject! == 'KUd')) {
             if (configurationString.contains(tempTimetableUnit.subject!)) {
               databaseInsertTimetableUnit(tempTimetableUnit);

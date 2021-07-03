@@ -45,7 +45,9 @@ List<String> getSubjectsFullName() {
     'Schwimmen',
     'Sowi',
     'Latein',
-    'Französisch'
+    'Französisch',
+    'Spanisch',
+    'Spanisch',
   ];
 
   return classesFullName;
@@ -97,7 +99,9 @@ List<String> getSubjectsAbbreviation() {
     'SI',
     'SW',
     'L7',
-    'F7'
+    'F7',
+    'S9',
+    'S11',
   ];
 
   return classesAbbreviation;

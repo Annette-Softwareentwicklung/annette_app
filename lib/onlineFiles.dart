@@ -46,10 +46,13 @@ class OnlineFiles {
     }
   }
 
+  ///Gibt eine Liste mit allen Klassen, die es gibt, zurück.
   List<String> allClasses() {
     List<String> classes = [];
 
-    for (int i = 5; i < 10; i++) {
+    ///Für Klasse 10 i<11, ohne Klasse 10 i<10
+    int temp = (difExport.contains('10A')) ? 11 : 10;
+    for (int i = 5; i < temp; i++) {
       classes.add(i.toString() + 'A');
       classes.add(i.toString() + 'B');
       classes.add(i.toString() + 'C');
