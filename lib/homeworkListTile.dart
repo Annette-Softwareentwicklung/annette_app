@@ -77,8 +77,22 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
   ///Man bekommt in 1 Stunde eine Benachrichtigung.
   ///Die Aufgabe wird in der Datenbank aktualisiert und, sofern die Detailansicht aufgerufen ist,
   ///wird diese auch aktualisiert.
-  void notificationInOneHour() {
-    DateTime tempTime = DateTime.now().add(Duration(hours: 1));
+  void remindMeLater(String time) {
+    DateTime tempTime;
+
+    if(time == 'afternoon') {
+      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,16);
+    }
+    else if(time == 'evening') {
+      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,20);
+    }
+    else if(time == 'tomorrowMorning') {
+      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,(DateTime.now().day + 1),9);
+    }
+    else {
+      tempTime = DateTime.now().add(Duration(hours: 1));
+    }
+
     task!.notificationTime = tempTime.toString();
     cancelNotification(task!.id!);
     scheduleNotification(
@@ -139,7 +153,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
                 if (value == SlideActionType.secondary) {
                   return true;
                 } else {
-                  notificationInOneHour();
+                  remindMeLater('oneHour');
                   return false;
                 }
               },
@@ -175,7 +189,18 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
                 foregroundColor: Colors.white,
                 icon: CupertinoIcons.timer,
                 onTap: () {
-                  notificationInOneHour();
+                  remindMeLater('oneHour');
+                },
+              ),
+
+              IconSlideAction(
+                closeOnTap: true,
+                color: Colors.blueGrey,
+                caption: (DateTime.now().hour < 16) ? 'Nachmittag' : (DateTime.now().hour < 20) ? 'Am Abend' : 'Morgen',
+                foregroundColor: Colors.white,
+                icon: CupertinoIcons.timer,
+                onTap: () {
+                  remindMeLater((DateTime.now().hour < 16) ? 'afternoon' : (DateTime.now().hour < 20) ? 'evening' : 'tomorrowMorning');
                 },
               ),
             ],
