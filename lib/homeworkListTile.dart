@@ -7,6 +7,7 @@ import 'custom_widgets/customCheckbox.dart';
 import 'detailedView.dart';
 import 'package:annette_app/fundamentals/task.dart';
 import 'manageNotifications.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 /**
  * Diese Klasse kann den Listen-Eintrag einer Hausaufgabe anzeigen. Die Aufgabe sowie die
@@ -21,6 +22,7 @@ class HomeworkListTile extends StatefulWidget {
   final Function(int?)? onDelete;
   final Function(Task?)? onDetail;
   final Function(int?)? onReload;
+  final Function(int)? onDetailedViewReload;///Callback zum Aktualisieren der Detailansicht. Task-ID als Parameter.
   final Animation? animation;
 
   HomeworkListTile(
@@ -32,6 +34,7 @@ class HomeworkListTile extends StatefulWidget {
       this.onDetail,
       this.index,
       this.onReload,
+      this.onDetailedViewReload,
       this.animation})
       : super(key: key);
 
@@ -115,6 +118,19 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
   }
 */
 
+  ///Man bekommt in 1 Stunde eine Benachrichtigung.
+  ///Die Aufgabe wird in der Datenbank aktualisiert und, sofern die Detailansicht aufgerufen ist,
+  ///wird diese auch aktualisiert.
+  void notificationInOneHour() {
+    DateTime tempTime = DateTime.now().add(Duration(hours: 1));
+    task!.notificationTime = tempTime.toString();
+    cancelNotification(task!.id!);
+    scheduleNotification(
+        task!.id!, task!.subject!, task!.notes, task!.deadlineTime!, tempTime);
+    databaseUpdateTask(task!);
+    widget.onDetailedViewReload!(task!.id!);
+  }
+
   /**
    * Sollten die Notizen zu lang sein, werden diese mit Punkten abgekürzt.
    */
@@ -157,15 +173,63 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
 
     return SizeTransition(
         sizeFactor: widget.animation as Animation<double>,
-        child: Dismissible(
+        child: Slidable(
             key: widget.key!,
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) {
-              cancelNotification(task!.id);
-              databaseDeleteTask(task!.id);
-              widget.onDelete!(widget.index);
-            },
-            background: backgroundItem(),
+            actionPane: SlidableScrollActionPane(),
+            actionExtentRatio: 1 / 4,
+            dismissal: SlidableDismissal(
+              closeOnCanceled: true,
+              dragDismissible: true,
+              onWillDismiss: (value) {
+                if (value == SlideActionType.secondary) {
+                  return true;
+                } else {
+                  notificationInOneHour();
+                  return false;
+                }
+              },
+              onDismissed: (value) {
+                if (value == SlideActionType.secondary) {
+                  cancelNotification(task!.id);
+                  databaseDeleteTask(task!.id);
+                  widget.onDelete!(widget.index);
+                }
+              },
+              child: SlidableDrawerDismissal(),
+            ),
+            secondaryActions: [
+              IconSlideAction(
+                closeOnTap: true,
+                color: Colors.red,
+                icon: CupertinoIcons.delete_solid,
+                foregroundColor: Colors.white,
+                onTap: () {
+                  cancelNotification(task!.id);
+                  databaseDeleteTask(task!.id);
+                  widget.onDelete!(widget.index);
+                },
+              ),
+            ],
+            actions: [
+              IconSlideAction(
+                closeOnTap: true,
+                color: Colors.orange,
+                caption: '1 Stunde',
+                foregroundColor: Colors.white,
+                icon: CupertinoIcons.timer,
+                onTap: () {
+                  notificationInOneHour();
+                },
+              ),
+              /*IconSlideAction(
+                closeOnTap: true,
+                color: Colors.blueGrey,
+                caption: 'Morgen Nachmittag',
+                foregroundColor: Colors.white,
+                icon: CupertinoIcons.timer,
+              ),*/
+            ],
+            closeOnScroll: true,
             child: Card(
               child: ListTile(
                   leading: CustomCheckbox(
@@ -223,3 +287,55 @@ Widget backgroundItem() {
     ),
   );
 }
+
+/*
+return SizeTransition(
+        sizeFactor: widget.animation as Animation<double>,
+        child: Dismissible(
+            key: widget.key!,
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) {
+              cancelNotification(task!.id);
+              databaseDeleteTask(task!.id);
+              widget.onDelete!(widget.index);
+            },
+            background: backgroundItem(),
+            child: Card(
+              child: ListTile(
+                  leading: CustomCheckbox(
+                    key: checkBoxKey,
+                    task: task,
+                    onChanged: () {
+                      check();
+                    },
+                  ),
+                  title: (task!.subject == 'Sonstiges')
+                      ? Text(notes!)
+                      : Text(task!.subject!),
+                  subtitle: listTilesubtitle,
+                  trailing: Icon(Icons.info_outlined,
+                      color: Theme.of(context).accentColor),
+                  onTap: () {
+                    if (MediaQuery.of(context).orientation ==
+                        Orientation.landscape) {
+                      widget.onDetail!(task);
+                    } else {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return DefaultScaffold(
+                          title: 'Details',
+                          content: DetailedView(
+                            isParallelDetail: false,
+                            task: task,
+                            onRemove: (int) {
+                              widget.onDetailedViewCheckedtask!(task!.id);
+                              Navigator.of(context).pop();
+                            },
+                            onReload: (value) => widget.onReload!(value),
+                          ),
+                        );
+                      }));
+                    }
+                  }),
+            )));
+ */

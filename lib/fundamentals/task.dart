@@ -14,7 +14,7 @@ class Task {
   final int? id;
   final String? subject;
   final String? notes;
-  final String? notificationTime;
+  String? notificationTime;
   final String? deadlineTime;
   int? isChecked;
 

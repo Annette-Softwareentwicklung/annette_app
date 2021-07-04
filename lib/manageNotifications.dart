@@ -3,7 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'parseTime.dart';
 
-//Initialisierung des PlugIns für den Zugriff auf die System-Bnachrichigungen.
+///Initialisierung des PlugIns für den Zugriff auf die System-Bnachrichigungen.
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 

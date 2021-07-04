@@ -348,6 +348,11 @@ class HomeworkTabState extends State<HomeworkTab> {
       finished = true;
     });
   }
+  
+  void reloadDetailedView (int pTaskId) {
+    detailedViewAccess.currentState!
+        .update(tasks.firstWhere((element) => element.id == pTaskId));
+  }
 
   void reload(int? reloadID) async {
     Task? tempTask;
@@ -531,6 +536,7 @@ class HomeworkTabState extends State<HomeworkTab> {
                                           .update(task);
                                     },
                                     onReload: (value) => reload(value),
+                                    onDetailedViewReload: (value) => reloadDetailedView(value),
                                     index: index,
                                     animation: animation,
                                   );
