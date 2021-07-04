@@ -130,7 +130,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
         child: Slidable(
           controller: slidableController,
             key: widget.key!,
-            actionPane: SlidableScrollActionPane(),
+            actionPane: SlidableDrawerActionPane(),
             actionExtentRatio: 1 / 4,
             dismissal: SlidableDismissal(
               closeOnCanceled: true,

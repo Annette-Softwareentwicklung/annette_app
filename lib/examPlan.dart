@@ -67,10 +67,18 @@ class _ExamPlanState extends State<ExamPlan> {
       currentClass = 'ef';
     }
     selectedClass = pClass;
-    file = await loadFromNetwork('klausur_$currentClass');
-    setState(() {
-      finished = true;
-    });
+    try {
+      file = await loadFromNetwork('klausur_$currentClass');
+      setState(() {
+        finished = true;
+      });
+    } catch (e) {
+      setState(() {
+        finished = false;
+        error = true;
+      });
+      showError(context);
+    }
   }
 
   void showError(BuildContext context) {
@@ -105,10 +113,19 @@ class _ExamPlanState extends State<ExamPlan> {
       currentClass = 'ef';
     }
     selectedClass = await getCurrentClass();
+    try{
     file = await loadFromNetwork('klausur_$currentClass');
     setState(() {
       finished = true;
     });
+  } catch (e) {
+      setState(() {
+        finished = false;
+        error = true;
+      });
+      showError(context);
+    }
+
   }
 
   @override
