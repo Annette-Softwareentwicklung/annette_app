@@ -9,10 +9,8 @@ import 'package:annette_app/detailedView.dart';
 import 'dart:async';
 import 'dart:io';
 
-/**
- * Diese Klasse beinhaltet den Tab mit der Hausaufgaben-Listen-Ansicht.
- * App => Menüleiste => Hausaufgaben
- */
+/// Diese Klasse beinhaltet den Tab mit der Hausaufgaben-Listen-Ansicht.
+/// App => Menüleiste => Hausaufgaben
 class HomeworkTab extends StatefulWidget {
   HomeworkTab({Key? key}) : super(key: key);
 
@@ -31,11 +29,9 @@ class HomeworkTabState extends State<HomeworkTab> {
   int? orderValue;
   Task? defaultToShowOnDetailedSplitView;
 
-  /**
-   * Wenn eine neue Hausaufgabe über den "AddDialog" eingetragen wurde, wird diese als
-   * Parameter an diese Methode übergeben, welche die Aufgabe dann mit einer
-   * Animation an die Liste mit den Hausaufgaben anfügt.
-   */
+  /// Wenn eine neue Hausaufgabe über den "AddDialog" eingetragen wurde, wird diese als
+  /// Parameter an diese Methode übergeben, welche die Aufgabe dann mit einer
+  /// Animation an die Liste mit den Hausaufgaben anfügt.
   void insertTask(Task pTask) async {
     late int i;
     switch (orderValue) {
@@ -209,14 +205,12 @@ class HomeworkTabState extends State<HomeworkTab> {
     return await _getIndex();
   }
 
-  /**
-   * Diese Methode wird aufgerufen, wenn eine Aufgabe durch Anklicken der Checkbox
-   * abgehakt wurde. Die Id der abgehakten Aufgabe wird per Parameter übergeben,
-   * sodass diese aus der Liste, welche die aktuell angezeigten Aufgaben enthält,
-   * entfernt werden kann. Dies geschieht mit einer Animation, damit die Liste
-   * nicht unkontrolliert hin und her springt und der Benutzer nachvollziehen kann,
-   * was passiert ist.
-   */
+  /// Diese Methode wird aufgerufen, wenn eine Aufgabe durch Anklicken der Checkbox
+  /// abgehakt wurde. Die Id der abgehakten Aufgabe wird per Parameter übergeben,
+  /// sodass diese aus der Liste, welche die aktuell angezeigten Aufgaben enthält,
+  /// entfernt werden kann. Dies geschieht mit einer Animation, damit die Liste
+  /// nicht unkontrolliert hin und her springt und der Benutzer nachvollziehen kann,
+  /// was passiert ist.
   void removeFromList(int i) {
     tasks[i].isChecked = 1;
     Task removedTask = tasks.removeAt(i);
@@ -235,7 +229,7 @@ class HomeworkTabState extends State<HomeworkTab> {
       });
     }
 
-    if(removedTask.id == defaultToShowOnDetailedSplitView?.id) {
+    if (removedTask.id == defaultToShowOnDetailedSplitView?.id) {
       defaultToShowOnDetailedSplitView = null;
     }
     if (MediaQuery.of(context).orientation == Orientation.landscape) {
@@ -252,13 +246,11 @@ class HomeworkTabState extends State<HomeworkTab> {
     }
   }
 
-  /**
-   * Diese Methode wird aufgerufen, wenn eine Aufgabe durch Wischen nach links
-   * gelöscht wurde. Die Id der gelöschten Aufgabe wird per Parameter übergeben,
-   * sodass diese aus der Liste, welche die aktuell angezeigten Aufgaben enthält,
-   * entfernt werden kann. Dies geschieht ohne Animation, da das Listenelement schon
-   * zur Seite "rausgewischt" wurde und daher nicht mehr sichtbar ist.
-   */
+  /// Diese Methode wird aufgerufen, wenn eine Aufgabe durch Wischen nach links
+  /// gelöscht wurde. Die Id der gelöschten Aufgabe wird per Parameter übergeben,
+  /// sodass diese aus der Liste, welche die aktuell angezeigten Aufgaben enthält,
+  /// entfernt werden kann. Dies geschieht ohne Animation, da das Listenelement schon
+  /// zur Seite "rausgewischt" wurde und daher nicht mehr sichtbar ist.
   void deleteFromList(int i) {
     Task removedTask = tasks.removeAt(i);
     listAccess.currentState!.removeItem(i, (context, animation) => Container());
@@ -267,7 +259,7 @@ class HomeworkTabState extends State<HomeworkTab> {
         load();
       });
     }
-    if(removedTask.id == defaultToShowOnDetailedSplitView?.id) {
+    if (removedTask.id == defaultToShowOnDetailedSplitView?.id) {
       defaultToShowOnDetailedSplitView = null;
     }
 
@@ -333,10 +325,8 @@ class HomeworkTabState extends State<HomeworkTab> {
     });
   }
 
-  /**
-   * Diese Methode fragt alle Hausaufgaben aus der Datenbank ab und
-   * speichert diese als Liste in der Variable "tasks".
-   */
+  /// Diese Methode fragt alle Hausaufgaben aus der Datenbank ab und
+  /// speichert diese als Liste in der Variable "tasks".
   void getTasks() async {
     tasks = await databaseGetAllTasks(orderValue);
     setState(() {
@@ -348,10 +338,13 @@ class HomeworkTabState extends State<HomeworkTab> {
       finished = true;
     });
   }
-  
-  void reloadDetailedView (int pTaskId) {
-    detailedViewAccess.currentState!
-        .update(tasks.firstWhere((element) => element.id == pTaskId));
+
+  ///Aktualisiert die Detailansicht
+  void reloadDetailedView(int pTaskId) {
+    try {
+      detailedViewAccess.currentState!
+          .update(tasks.firstWhere((element) => element.id == pTaskId));
+    } catch (e) {}
   }
 
   void reload(int? reloadID) async {
@@ -362,14 +355,12 @@ class HomeworkTabState extends State<HomeworkTab> {
     tasks.clear();
     tasks = await databaseGetAllTasks(orderValue);
 
-
-
     if (reloadID != null) {
       print('rID $reloadID');
       tempTask = tasks[tasks.indexWhere((element) => element.id == reloadID)];
     }
     setState(() {
-      if(tempTask != null) {
+      if (tempTask != null) {
         defaultToShowOnDetailedSplitView = tempTask;
       } else if (tasks.length > 0) {
         defaultToShowOnDetailedSplitView = tasks[0];
@@ -427,10 +418,8 @@ class HomeworkTabState extends State<HomeworkTab> {
     return await _readData();
   }
 
-  /**
-   * Beim Initialisieren dieses Tabs werden mit der Methode load()
-   * alle Hausaufgaben aus der Datenbank geladen.
-   */
+  /// Beim Initialisieren dieses Tabs werden mit der Methode load()
+  /// alle Hausaufgaben aus der Datenbank geladen.
   @override
   void initState() {
     // TODO: implement initState
@@ -438,13 +427,11 @@ class HomeworkTabState extends State<HomeworkTab> {
     load();
   }
 
-  /**
-   * Dieses Widget (Container) gibt alle Hausaufgaben in einer Liste aus.
-   * Klickt man auf eine Hausaufgabe, öffnet sich eine Detailansicht.
-   * Wenn sich das Gerät im Querformat befindet, wird die Detailansicht paralell im
-   * Splitview angezeigt. beim Drehen wir hier standardmäßig die erste Aufgabe aus der Liste
-   * angezeigt.
-   */
+  /// Dieses Widget (Container) gibt alle Hausaufgaben in einer Liste aus.
+  /// Klickt man auf eine Hausaufgabe, öffnet sich eine Detailansicht.
+  /// Wenn sich das Gerät im Querformat befindet, wird die Detailansicht paralell im
+  /// Splitview angezeigt. beim Drehen wir hier standardmäßig die erste Aufgabe aus der Liste
+  /// angezeigt.
   @override
   Widget build(BuildContext context) {
     if (finished == true) {
@@ -536,7 +523,8 @@ class HomeworkTabState extends State<HomeworkTab> {
                                           .update(task);
                                     },
                                     onReload: (value) => reload(value),
-                                    onDetailedViewReload: (value) => reloadDetailedView(value),
+                                    onDetailedViewReload: (value) =>
+                                        reloadDetailedView(value),
                                     index: index,
                                     animation: animation,
                                   );
@@ -558,7 +546,8 @@ class HomeworkTabState extends State<HomeworkTab> {
                 onReload: (value) => reload(value),
                 onRemove: (value) => detailedViewDeleteTask(value!),
                 key: detailedViewAccess,
-                task: defaultToShowOnDetailedSplitView,//task: (tasks.length > 0) ? tasks[0] : null,
+                task:
+                    defaultToShowOnDetailedSplitView, //task: (tasks.length > 0) ? tasks[0] : null,
               ))),
           ])));
     } else {

@@ -9,11 +9,9 @@ import 'package:annette_app/fundamentals/task.dart';
 import 'manageNotifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-/**
- * Diese Klasse kann den Listen-Eintrag einer Hausaufgabe anzeigen. Die Aufgabe sowie die
- * Id der position in der Liste werden neben den Funktionen, welche bei weiteren Aktionen wie
- * dem Löschen aufgerufen werden sollen, als Parameter übergeben.
- */
+/// Diese Klasse kann den Listen-Eintrag einer Hausaufgabe anzeigen. Die Aufgabe sowie die
+/// Id der position in der Liste werden neben den Funktionen, welche bei weiteren Aktionen wie
+/// dem Löschen aufgerufen werden sollen, als Parameter übergeben.
 class HomeworkListTile extends StatefulWidget {
   final Task task;
   final int? index;
@@ -49,10 +47,8 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
 
   final ObjectKey checkBoxKey = ObjectKey(CustomCheckboxState);
 
-  /**
-   * Diese Methode wird aufgerufen, wenn die Aufgabe abgehakt wurde.
-   * Sollte ein Haken gesetzt sein, wird die Methode remove() aufgerufen.
-   */
+  /// Diese Methode wird aufgerufen, wenn die Aufgabe abgehakt wurde.
+  /// Sollte ein Haken gesetzt sein, wird die Methode remove() aufgerufen.
   void check() {
     if (isChecked == 0) {
       isChecked = 1;
@@ -62,14 +58,12 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
     }
   }
 
-  /**
-   * Nach einer Zeitspanne von 2 Sekunden wird geprüft, ob die Aufgabe nach wie vor
-   * abgehakt ist. Sollte dem so sein, wird die Aufgabe aus der Datenbank gelöscht und
-   * die geplante System-Benachrichtigung storniert.
-   * Durch diese 2 Sekunden hat der Benutzer noch die Möglichkeit, die Aufgabe
-   * wieder "entabzuhaken", sie also wieder als noch nicht erledigt an gezeigt wird.
-   * Dann wird die Aufgabe auch nicht gelöscht.
-   */
+  /// Nach einer Zeitspanne von 2 Sekunden wird geprüft, ob die Aufgabe nach wie vor
+  /// abgehakt ist. Sollte dem so sein, wird die Aufgabe aus der Datenbank gelöscht und
+  /// die geplante System-Benachrichtigung storniert.
+  /// Durch diese 2 Sekunden hat der Benutzer noch die Möglichkeit, die Aufgabe
+  /// wieder "entabzuhaken", sie also wieder als noch nicht erledigt an gezeigt wird.
+  /// Dann wird die Aufgabe auch nicht gelöscht.
   void remove() async {
     Future.delayed(Duration(seconds: 2), () {
       if (isChecked == 1) {
@@ -79,44 +73,6 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
       }
     });
   }
-
-  ///Zurzeit nicht in Verwendung
-  /*
-  void check() {
-    if (isChecked == 0) {
-      isChecked = 1;
-      remove();
-      cancelNotification(task.id);
-    } else {
-      isChecked = 0;
-
-      if (DateTime.parse(task.notificationTime).isAfter(DateTime.now())) {
-        scheduleNotification(task.id, task.subject, task.notes,
-            task.deadlineTime, DateTime.parse(task.notificationTime));
-      } else if (DateTime.parse(task.notificationTime)
-          .isAfter(DateTime.now().subtract(Duration(minutes: 1)))) {
-        showNotification(task.id, task.subject, task.notes, task.deadlineTime);
-      }
-    }
-
-    databaseUpdateTask(new Task(
-        id: task.id,
-        subject: task.subject,
-        notes: task.notes,
-        notificationTime: task.notificationTime,
-        deadlineTime: task.deadlineTime,
-        isChecked: isChecked));
-  }
-
-  void remove() async {
-    Future.delayed(Duration(seconds: 2), () {
-      if (isChecked == 1) {
-        widget.onRemove(widget.index);
-        //cancelNotification(task.id);
-      }
-    });
-  }
-*/
 
   ///Man bekommt in 1 Stunde eine Benachrichtigung.
   ///Die Aufgabe wird in der Datenbank aktualisiert und, sofern die Detailansicht aufgerufen ist,
@@ -131,9 +87,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
     widget.onDetailedViewReload!(task!.id!);
   }
 
-  /**
-   * Sollten die Notizen zu lang sein, werden diese mit Punkten abgekürzt.
-   */
+  /// Sollten die Notizen zu lang sein, werden diese mit Punkten abgekürzt.
   @override
   void initState() {
     // TODO: implement initState
@@ -150,12 +104,10 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
     }
   }
 
-  /**
-   * Erstellen eines Listen-Elements, welche eine Hausaufgabe anzeigen kann.
-   * Im Titel steht das Fach, im Untertitel die näheren Informationen.
-   * Links beim Listenelement befindet sich die Checkbox, mit der man die Aufgaben abhaken kann.
-   * Klickt man auf das Listen-Element, wird es in der Detailansicht angezeigt.
-   */
+  /// Erstellen eines Listen-Elements, welche eine Hausaufgabe anzeigen kann.
+  /// Im Titel steht das Fach, im Untertitel die näheren Informationen.
+  /// Links beim Listenelement befindet sich die Checkbox, mit der man die Aufgaben abhaken kann.
+  /// Klickt man auf das Listen-Element, wird es in der Detailansicht angezeigt.
   @override
   Widget build(BuildContext context) {
     ///Erstellen des Widgets für den "Untertitel" des Listen-Elements mit Notizen und Frist.
@@ -170,10 +122,13 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
             : null,
       )
     ]);
+    ///Controller zum Steuern des "Slidable"-Widgets
+    SlidableController slidableController = new SlidableController();
 
     return SizeTransition(
         sizeFactor: widget.animation as Animation<double>,
         child: Slidable(
+          controller: slidableController,
             key: widget.key!,
             actionPane: SlidableScrollActionPane(),
             actionExtentRatio: 1 / 4,
@@ -197,16 +152,18 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
               },
               child: SlidableDrawerDismissal(),
             ),
+
             secondaryActions: [
+              ///SlideAction zum Löschen der Aufgabe
               IconSlideAction(
                 closeOnTap: true,
                 color: Colors.red,
                 icon: CupertinoIcons.delete_solid,
                 foregroundColor: Colors.white,
                 onTap: () {
-                  cancelNotification(task!.id);
-                  databaseDeleteTask(task!.id);
-                  widget.onDelete!(widget.index);
+                  ///Wird "Löschen" ausgewählt, wird das Listtile "dismissed". Dies hat dann auch
+                  ///zur Folge, dass die Aufgabe gelöscht wird.
+                  slidableController.activeState!.dismiss(actionType: SlideActionType.secondary);
                 },
               ),
             ],
@@ -221,13 +178,6 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
                   notificationInOneHour();
                 },
               ),
-              /*IconSlideAction(
-                closeOnTap: true,
-                color: Colors.blueGrey,
-                caption: 'Morgen Nachmittag',
-                foregroundColor: Colors.white,
-                icon: CupertinoIcons.timer,
-              ),*/
             ],
             closeOnScroll: true,
             child: Card(
@@ -270,72 +220,3 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
             )));
   }
 }
-
-/**
- * Dieses Widget wird im Hintergrund angezeigt, wenn das Listenelement
- * zur Seite raus gewischt wird.
- * (Roter Hintergrund mit Mülleimer-Icon)
- */
-Widget backgroundItem() {
-  return Container(
-    color: Colors.red,
-    alignment: Alignment.centerRight,
-    padding: EdgeInsets.only(right: 20.0),
-    child: Icon(
-      CupertinoIcons.delete_solid,
-      color: Colors.white,
-    ),
-  );
-}
-
-/*
-return SizeTransition(
-        sizeFactor: widget.animation as Animation<double>,
-        child: Dismissible(
-            key: widget.key!,
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) {
-              cancelNotification(task!.id);
-              databaseDeleteTask(task!.id);
-              widget.onDelete!(widget.index);
-            },
-            background: backgroundItem(),
-            child: Card(
-              child: ListTile(
-                  leading: CustomCheckbox(
-                    key: checkBoxKey,
-                    task: task,
-                    onChanged: () {
-                      check();
-                    },
-                  ),
-                  title: (task!.subject == 'Sonstiges')
-                      ? Text(notes!)
-                      : Text(task!.subject!),
-                  subtitle: listTilesubtitle,
-                  trailing: Icon(Icons.info_outlined,
-                      color: Theme.of(context).accentColor),
-                  onTap: () {
-                    if (MediaQuery.of(context).orientation ==
-                        Orientation.landscape) {
-                      widget.onDetail!(task);
-                    } else {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return DefaultScaffold(
-                          title: 'Details',
-                          content: DetailedView(
-                            isParallelDetail: false,
-                            task: task,
-                            onRemove: (int) {
-                              widget.onDetailedViewCheckedtask!(task!.id);
-                              Navigator.of(context).pop();
-                            },
-                            onReload: (value) => widget.onReload!(value),
-                          ),
-                        );
-                      }));
-                    }
-                  }),
-            )));
- */

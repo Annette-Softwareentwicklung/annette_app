@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 
-/**
- * Diese Klasse beinhaltet einen (zunächst leeren) Stadard-Scaffold.
- * Der Titel des Scaffolds wird als String und der Inhalt wird als Widget per Parameter übergeben.
- * Zusätzlich können Parameter für einen FloatingActionButton übergeben werden,
- * welcher dann enstprechend auch mit Funktion eingefügt wird.
- *
- * Dieser Standard-Scaffold wird benötigt, um ein sich in einem Container befindenes Feature,
- * zum Beispiel das auswählen des Zeitplans, als eigenes "Fenster" anzeigen zu können.
- */
+/// Diese Klasse beinhaltet einen (zunächst leeren) Stadard-Scaffold.
+/// Der Titel des Scaffolds wird als String und der Inhalt wird als Widget per Parameter übergeben.
+/// Zusätzlich können Parameter für einen FloatingActionButton übergeben werden,
+/// welcher dann enstprechend auch mit Funktion eingefügt wird.
+///
+/// Dieser Standard-Scaffold wird benötigt, um ein sich in einem Container befindenes Feature,
+/// zum Beispiel das auswählen des Zeitplans, als eigenes "Fenster" anzeigen zu können.
 class DefaultScaffold extends StatelessWidget {
 
   final String? title;
   final Widget? content;
 
-  //Für einen optionalen FloatingActionButton
+  ///Für einen optionalen FloatingActionButton
   final String? fabLabel;
   final Icon? fabIcon;
   final Function? onFabPressed;
@@ -30,7 +28,7 @@ class DefaultScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (fabLabel == null) {
-      //Falls kein FloatingActionButton gefordert:
+      ///Falls kein FloatingActionButton gefordert:
       return Scaffold(
         appBar: AppBar(
           title: Text(title!),
@@ -38,7 +36,7 @@ class DefaultScaffold extends StatelessWidget {
         body: SafeArea(child: content!),//SafeArea(child: content),
       );
     } else {
-      // Falls FloatingActionButton gefordert:
+      /// Falls FloatingActionButton gefordert:
       return Scaffold(
         appBar: AppBar(
           title: Text(title!),
