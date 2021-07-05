@@ -121,8 +121,6 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   void load() async {
-
-  //vertretungsplanError = await  vertretunsplan();
     subjectAbbreviation = getSubjectsAbbreviation();
     subjectFullnames = getSubjectsFullName();
     allTimes = getAllTimes();
@@ -143,7 +141,6 @@ class _TimetableTabState extends State<TimetableTab> {
       displayDayString = '--';
       int currentLessonNumber = 0;
       bool isInBreak = false;
-      int i = 0;
 
       for (int i = 0; i < allTimes.length; i++) {
         if (!DateTime.now()
@@ -353,6 +350,9 @@ class _TimetableTabState extends State<TimetableTab> {
         ? SingleChildScrollView(
             controller: scrollController,
             child: Container(
+              constraints: BoxConstraints(
+                maxWidth: 500,
+              ),
               child: Column(
                 children: displayTimetable,
                 crossAxisAlignment: CrossAxisAlignment.end,
