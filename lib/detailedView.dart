@@ -530,7 +530,9 @@ class DetailedViewState extends State<DetailedView> {
                 Icon(CupertinoIcons.timer,color: Colors.orange,),
               Container(
                 margin: EdgeInsets.only(left: 15),
-                child:Text('In 1 Stunde erinnern'),),
+                child:Text('In 1 Stunde erinnern',
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),),
               ],),
             ),
           ),
@@ -544,8 +546,10 @@ class DetailedViewState extends State<DetailedView> {
                 Icon(CupertinoIcons.timer,color: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blueGrey,),
                 Container(
                   margin: EdgeInsets.only(left: 15),
-                  child:Text((DateTime.now().hour < 16) ? 'Am Nachmittag erinnern' : (DateTime.now().hour < 20) ? 'Am Abend erinnern' : 'Am Morgen erinnern',
-                ), ),
+                  child:Text(
+                    (DateTime.now().hour < 16) ? 'Am Nachmittag erinnern' : (DateTime.now().hour < 20) ? 'Am Abend erinnern' : 'Am Morgen erinnern',
+                style: TextStyle(fontWeight: FontWeight.w500),
+                  ), ),
               ],),
             ),
           ),
@@ -605,7 +609,7 @@ class DetailedViewState extends State<DetailedView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('Notizen:', style: TextStyle(fontSize: 17)),
-                Text(
+                SelectableText(
                   pNotes,
                   style: TextStyle(
                     fontSize: 17,
