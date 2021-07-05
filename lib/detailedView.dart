@@ -517,6 +517,7 @@ class DetailedViewState extends State<DetailedView> {
 
   Widget quickNotifications() {
     return Container(
+      margin: EdgeInsets.only(top: 20),
       child: Column(
         children: [
           OutlinedButton(
@@ -524,6 +525,7 @@ class DetailedViewState extends State<DetailedView> {
               remindMeLater('oneHour');
             },
             child: Container(
+              padding: EdgeInsets.all(10),
               child: Row(children: [
                 Icon(CupertinoIcons.timer,color: Colors.orange,),
               Container(
@@ -537,6 +539,7 @@ class DetailedViewState extends State<DetailedView> {
               remindMeLater((DateTime.now().hour < 16) ? 'afternoon' : (DateTime.now().hour < 20) ? 'evening' : 'tomorrowMorning');
             },
             child: Container(
+              padding: EdgeInsets.all(10),
               child: Row(children: [
                 Icon(CupertinoIcons.timer,color: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blueGrey,),
                 Container(
