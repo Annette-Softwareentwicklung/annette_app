@@ -3,6 +3,22 @@ import 'package:flutter/material.dart';
 
 ThemeData darkTheme(BuildContext context) {
   return ThemeData(
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.white),
+
+    textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(
+          fontSize: 17,
+        )),
+
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateColor.resolveWith((states) => Colors.lightBlueAccent),
+        foregroundColor: MaterialStateColor.resolveWith((states) => Colors.black),
+  ),
+    ),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
             foregroundColor:
@@ -23,6 +39,21 @@ ThemeData darkTheme(BuildContext context) {
 
 ThemeData lightTheme(BuildContext context) {
   return ThemeData(
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black87),
+
+        textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(
+           fontSize: 17,
+         )),
+
+  ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateColor.resolveWith((states) => Colors.blue),
+      ),
+    ),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
             foregroundColor:

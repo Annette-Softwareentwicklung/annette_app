@@ -89,11 +89,11 @@ class DetailedViewState extends State<DetailedView> {
                 ),
               ),
               actions: [
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('Abbrechen'),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () async {
                     if (!errorDeadlineTime) {
                       Task newTask = new Task(
@@ -105,7 +105,6 @@ class DetailedViewState extends State<DetailedView> {
                           notes: task!.notes);
                       databaseUpdateTask(newTask);
 
-
                       setState(() {
                         task = newTask;
                       });
@@ -113,7 +112,6 @@ class DetailedViewState extends State<DetailedView> {
                       Navigator.pop(context);
                       if (DateTime.parse(task!.notificationTime!)
                           .isAfter(DateTime.now())) {
-
                         cancelNotification(task!.id);
                         await Future.delayed(Duration(seconds: 1), () {});
 
@@ -185,11 +183,11 @@ class DetailedViewState extends State<DetailedView> {
                 ),
               )),
               actions: [
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('Abbrechen'),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () {
                     if (!errorNotificationTime) {
                       Task newTask = new Task(
@@ -280,11 +278,11 @@ class DetailedViewState extends State<DetailedView> {
                 ),
               ),
               actions: [
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('Abbrechen'),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () async {
                     if (!errorNotes) {
                       if (updateNotes == '' || updateNotes == null) {
@@ -304,19 +302,19 @@ class DetailedViewState extends State<DetailedView> {
                       widget.onReload!(task!.id);
                       Navigator.pop(context);
 
-                    if (DateTime.parse(task!.notificationTime!)
-                        .isAfter(DateTime.now())) {
+                      if (DateTime.parse(task!.notificationTime!)
+                          .isAfter(DateTime.now())) {
+                        cancelNotification(task!.id);
+                        await Future.delayed(Duration(seconds: 1), () {});
 
-                      cancelNotification(task!.id);
-                      await Future.delayed(Duration(seconds: 1), () {});
-
-                      scheduleNotification(
-                          newTask.id!,
-                          newTask.subject!,
-                          newTask.notes,
-                          newTask.deadlineTime.toString(),
-                          DateTime.parse(newTask.notificationTime!));
-                    }}
+                        scheduleNotification(
+                            newTask.id!,
+                            newTask.subject!,
+                            newTask.notes,
+                            newTask.deadlineTime.toString(),
+                            DateTime.parse(newTask.notificationTime!));
+                      }
+                    }
                   },
                   child: Text('Ändern'),
                 ),
@@ -388,10 +386,11 @@ class DetailedViewState extends State<DetailedView> {
             child: Center(
                 child: Column(
               children: <Widget>[
-                Subject(task!.subject!),
-                if (task!.notes != null) Notes(task!.notes!, context),
-                Deadlinetime(task!.deadlineTime!, context),
-                Notificationtime(task!.notificationTime!, context),
+                subjectWidget(task!.subject!),
+                if (task!.notes != null) notesWidget(task!.notes!, context),
+                deadlinetimeWidget(task!.deadlineTime!, context),
+                notificationtimeWidget(task!.notificationTime!, context),
+                quickNotifications(),
               ],
             ))),
         Center(
@@ -492,7 +491,67 @@ class DetailedViewState extends State<DetailedView> {
     }
   }
 
-  Widget Deadlinetime(String pTime, BuildContext context) {
+  void remindMeLater(String time) {
+    DateTime tempTime;
+
+    if(time == 'afternoon') {
+      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,16);
+    }
+    else if(time == 'evening') {
+      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,20);
+    }
+    else if(time == 'tomorrowMorning') {
+      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,(DateTime.now().day + 1),9);
+    }
+    else {
+      tempTime = DateTime.now().add(Duration(hours: 1));
+    }
+
+    task!.notificationTime = tempTime.toString();
+    cancelNotification(task!.id!);
+    scheduleNotification(
+        task!.id!, task!.subject!, task!.notes, task!.deadlineTime!, tempTime);
+    databaseUpdateTask(task!);
+    setState(() {});
+  }
+
+  Widget quickNotifications() {
+    return Container(
+      child: Column(
+        children: [
+          OutlinedButton(
+            onPressed: () {
+              remindMeLater('oneHour');
+            },
+            child: Container(
+              child: Row(children: [
+                Icon(CupertinoIcons.timer,color: Colors.orange,),
+              Container(
+                margin: EdgeInsets.only(left: 15),
+                child:Text('In 1 Stunde erinnern'),),
+              ],),
+            ),
+          ),
+          OutlinedButton(
+            onPressed: () {
+              remindMeLater((DateTime.now().hour < 16) ? 'afternoon' : (DateTime.now().hour < 20) ? 'evening' : 'tomorrowMorning');
+            },
+            child: Container(
+              child: Row(children: [
+                Icon(CupertinoIcons.timer,color: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blueGrey,),
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  child:Text((DateTime.now().hour < 16) ? 'Am Nachmittag erinnern' : (DateTime.now().hour < 20) ? 'Am Abend erinnern' : 'Am Morgen erinnern',
+                ), ),
+              ],),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget deadlinetimeWidget(String pTime, BuildContext context) {
     return Container(
         margin: EdgeInsets.only(bottom: 10.0, top: 20),
         alignment: Alignment.topLeft,
@@ -530,7 +589,7 @@ class DetailedViewState extends State<DetailedView> {
         ));
   }
 
-  Widget Notes(String pNotes, BuildContext context) {
+  Widget notesWidget(String pNotes, BuildContext context) {
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(bottom: 10.0, top: 20),
@@ -570,7 +629,7 @@ class DetailedViewState extends State<DetailedView> {
     );
   }
 
-  Widget Notificationtime(String pTime, BuildContext context) {
+  Widget notificationtimeWidget(String pTime, BuildContext context) {
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(bottom: 10.0, top: 20),
@@ -609,7 +668,7 @@ class DetailedViewState extends State<DetailedView> {
 
 /// Dieses Widget gibt einen Container zurück, welche in die Detailanscht eingebunden wird.
 /// Dieses Widget beinhaltet das Fach der Hausaufgabe.
-Widget Subject(String pSubject) {
+Widget subjectWidget(String pSubject) {
   return Container(
     margin: EdgeInsets.only(bottom: 10.0),
     alignment: Alignment.topLeft,
