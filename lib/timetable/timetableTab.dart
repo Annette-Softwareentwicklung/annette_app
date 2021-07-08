@@ -30,6 +30,8 @@ class _TimetableTabState extends State<TimetableTab> {
   List<Widget> displayTimetable = [];
   ScrollController scrollController = new ScrollController();
   GlobalKey globalKeyNow = new GlobalKey();
+  GlobalKey globalKeyEnd = new GlobalKey();
+
   bool isNow = false;
 
   late String htmlCode;
@@ -204,6 +206,10 @@ class _TimetableTabState extends State<TimetableTab> {
     if (isNow) {
       try {
         Future.delayed(Duration(milliseconds: 50), () {
+          RenderBox? boxEnd =
+          globalKeyEnd.currentContext!.findRenderObject() as RenderBox;
+          Offset positionEnd = boxEnd.localToGlobal(Offset.zero);
+
           RenderBox? box =
               globalKeyNow.currentContext!.findRenderObject() as RenderBox;
           Offset position = box.localToGlobal(Offset.zero);
@@ -212,6 +218,25 @@ class _TimetableTabState extends State<TimetableTab> {
               position.dy -
               MediaQueryData.fromWindow(window).padding.top -
               110.0;
+
+          double temp = MediaQueryData.fromWindow(window).size.height;
+          temp -= 110;
+          temp -= MediaQueryData.fromWindow(window).padding.top;
+          temp -= MediaQueryData.fromWindow(window).padding.bottom;
+          temp -= 110;
+
+          if(positionEnd.dy - position.dy < temp) {
+            animationHeight -= positionEnd.dy - position.dy;
+            print(MediaQueryData.fromWindow(window).size.height);
+            print(temp);
+            print(positionEnd.dy);
+            print(position.dy);
+            print(positionEnd.dy - position.dy);
+
+            animationHeight = scrollController.position.maxScrollExtent;
+          }
+
+
           scrollController.animateTo(animationHeight,
               duration: Duration(milliseconds: 500), curve: Curves.linear);
         });
@@ -248,8 +273,8 @@ class _TimetableTabState extends State<TimetableTab> {
       displayTimetable.add(displayBreak(tempDuration.inMinutes.toString()));
       displayTimetable.add(timeDivider(
           getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-          (pLessonNumber == i && isInBreak == false) ? true : false,
-          (pLessonNumber == i && isInBreak == false) ? globalKeyNow : null));
+          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == false) ? true : false,
+          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == false) ? globalKeyNow : null));
 
       if (allTimeTableUnits.indexWhere((element) =>
               (element.dayNumber! == pWeekday && element.lessonNumber! == i)) !=
@@ -266,11 +291,19 @@ class _TimetableTabState extends State<TimetableTab> {
           parseDuration(allTimes[(i - 1)].time!) + Duration(minutes: 45);
       displayTimetable.add(timeDivider(
           getTimeFromDuration(tempDuration),
-          (pLessonNumber == i && isInBreak == true) ? true : false,
-          (pLessonNumber == i && isInBreak == true) ? globalKeyNow : null));
+          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == true) ? true : false,
+          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == true) ? globalKeyNow : null));
 
       i++;
     }
+
+    displayTimetable.add(
+      Container(
+        key: globalKeyEnd,
+        height: 1,
+        width: double.infinity,
+      )
+    );
   }
 
   @override
@@ -538,22 +571,15 @@ class _TimetableTabState extends State<TimetableTab> {
           Container(
             width: 80,
             height: 20,
-            //child: Text('Jetzt',style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
             alignment: Alignment.center,
           ),
           Expanded(
               child: Container(
-            // margin: EdgeInsets.only(left: 80),
-
             padding: EdgeInsets.all(15),
-            //width: double.infinity - 80,
             decoration: BoxDecoration(
               color: Colors.black12,
               borderRadius: BorderRadius.circular(15),
             ),
-            /*constraints: BoxConstraints(
-          // minHeight: 200,
-        ),*/
             alignment: Alignment.center,
             child: Text(
               '$duration min. Pause',
@@ -564,6 +590,7 @@ class _TimetableTabState extends State<TimetableTab> {
         mainAxisSize: MainAxisSize.min,
       ),
       width: double.infinity,
+
     );
   }
 
