@@ -273,8 +273,8 @@ class _TimetableTabState extends State<TimetableTab> {
       displayTimetable.add(displayBreak(tempDuration.inMinutes.toString()));
       displayTimetable.add(timeDivider(
           getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == false) ? true : false,
-          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == false) ? globalKeyNow : null));
+          (pLessonNumber  == i && isInBreak == false) ? true : false,
+          (pLessonNumber == i && isInBreak == false) ? globalKeyNow : null));
 
       if (allTimeTableUnits.indexWhere((element) =>
               (element.dayNumber! == pWeekday && element.lessonNumber! == i)) !=
@@ -291,8 +291,8 @@ class _TimetableTabState extends State<TimetableTab> {
           parseDuration(allTimes[(i - 1)].time!) + Duration(minutes: 45);
       displayTimetable.add(timeDivider(
           getTimeFromDuration(tempDuration),
-          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == true) ? true : false,
-          (/*pLessonNumber*/ 8 == i && /*isInBreak*/ true == true) ? globalKeyNow : null));
+          (pLessonNumber == i && isInBreak == true) ? true : false,
+          (pLessonNumber == i && isInBreak == true) ? globalKeyNow : null));
 
       i++;
     }
