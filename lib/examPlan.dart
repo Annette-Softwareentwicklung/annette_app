@@ -113,19 +113,18 @@ class _ExamPlanState extends State<ExamPlan> {
       currentClass = 'ef';
     }
     selectedClass = await getCurrentClass();
-    try{
-    file = await loadFromNetwork('klausur_$currentClass');
-    setState(() {
-      finished = true;
-    });
-  } catch (e) {
+    try {
+      file = await loadFromNetwork('klausur_$currentClass');
+      setState(() {
+        finished = true;
+      });
+    } catch (e) {
       setState(() {
         finished = false;
         error = true;
       });
       showError(context);
     }
-
   }
 
   @override
@@ -172,7 +171,10 @@ class _ExamPlanState extends State<ExamPlan> {
                               slivers: <Widget>[
                                 SliverList(
                                   delegate: SliverChildListDelegate.fixed([
-                                    errorInternetContainer(context),
+                                    ErrorInternetContainer(
+                                      onRefresh: () {
+                                          changePlan(selectedClass);},
+                                    ),
                                   ]),
                                 )
                               ]),

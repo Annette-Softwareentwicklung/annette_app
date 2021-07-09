@@ -485,7 +485,12 @@ class _SetClassState extends State<SetClass> {
                         SliverList(
                           delegate: SliverChildListDelegate.fixed(
                             [
-                              errorInternetContainer(context),
+                              ErrorInternetContainer(
+                                onRefresh: () {
+                                  errorInternet = false;
+                                  load();
+                                },
+                              ),
                             ],
                           ),
                         )

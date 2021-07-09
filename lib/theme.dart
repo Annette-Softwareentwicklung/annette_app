@@ -34,11 +34,21 @@ ThemeData darkTheme(BuildContext context) {
     //buttonTheme: ButtonThemeData(buttonColor: Colors.tealAccent),
     buttonTheme: ButtonThemeData(buttonColor: Colors.lightBlueAccent),
     accentColor: Colors.lightBlueAccent,
+    snackBarTheme: SnackBarThemeData(
+        contentTextStyle: TextStyle(
+          color: Colors.white,
+        )
+    ),
   );
 }
 
 ThemeData lightTheme(BuildContext context) {
   return ThemeData(
+    snackBarTheme: SnackBarThemeData(
+      contentTextStyle: TextStyle(
+        color: Colors.white,
+      )
+    ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.black87),

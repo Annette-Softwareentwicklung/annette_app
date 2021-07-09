@@ -44,8 +44,13 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildListDelegate.fixed([
-                  errorInternetContainer(context),
-
+                  ErrorInternetContainer(
+                    onRefresh: () {
+                      setState(() {
+                        error = false;
+                      });
+                    },
+                  ),
                 ]),
               )
             ]),
@@ -68,9 +73,9 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
             Expanded(
               child: WebView(
                 initialUrl:
-                   'https://www.annettegymnasium.de/SP/vertretung/Heute_KoL/subst_001.htm',
-                javascriptMode: JavascriptMode.unrestricted,          onProgress: (progress) => CupertinoActivityIndicator(),
-
+                    'https://www.annettegymnasium.de/SP/vertretung/Heute_KoL/subst_001.htm',
+                javascriptMode: JavascriptMode.unrestricted,
+                onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {
                   setState(() {
                     showError();
@@ -83,8 +88,8 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
               child: WebView(
                 initialUrl:
                     'https://www.annettegymnasium.de/SP/vertretung/Morgen_KoL/subst_001.htm',
-                javascriptMode: JavascriptMode.unrestricted,          onProgress: (progress) => CupertinoActivityIndicator(),
-
+                javascriptMode: JavascriptMode.unrestricted,
+                onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {
                   setState(() {
                     showError();

@@ -46,8 +46,13 @@ class _ShowWebviewState extends State<ShowWebview> {
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildListDelegate.fixed([
-                  errorInternetContainer(context),
-
+                  ErrorInternetContainer(
+                    onRefresh: () {
+                      setState(() {
+                        error = false;
+                      });
+                    },
+                  ),
                 ]),
               )
             ]),

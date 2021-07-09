@@ -12,11 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
 
-/**
- * Diese Klasse gibt das Scaffold-Widget mit der Menüleiste am Boden zurück und ruft die
- * entsprechenden Tabs auf, also quasi die "Standard-Benutzeroberfläche" die erscheint,
- * wenn man die App öffnet.
- */
+/// Diese Klasse gibt das Scaffold-Widget mit der Menüleiste am Boden zurück und ruft die
+/// entsprechenden Tabs auf, also quasi die "Standard-Benutzeroberfläche" die erscheint,
+/// wenn man die App öffnet.
 class NavigationController extends StatefulWidget {
   NavigationController({Key? key}) : super(key: key);
 
@@ -29,19 +27,17 @@ class NavigationControllerState extends State<NavigationController> {
   final GlobalKey<HomeworkTabState> homeworkTabAccess =
       GlobalKey<HomeworkTabState>();
 
-  /**
-   * Diese Methode sorgt dafür, dass bei erstmaligem Starten der App
-   * ein Leitfaden angezeigt wird. In der Datei "data.txt" ist gespeichert (0 oder 1),
-   * ob der Leitfaden angezeigt werden muss.
-   * Die Textdatei wird ausgelesen und dann bei Bedarf der Leitfaden angezeigt.
-   * Wenn der Leitfaden zurückgibt, dass dieser erfolgreich beendet wurde,
-   * wird 1 in die Datei geschrieben, sodass der Leitfaden beim nächsten Starten
-   * nicht wieder angezeigt wird.
-   *
-   * Quellen zum schreiben von .txt Dateien:
-   * https://flutter.dev/docs/cookbook/persistence/reading-writing-files
-   * https://www.kindacode.com/article/flutter-how-to-read-and-write-text-files/
-   */
+  /// Diese Methode sorgt dafür, dass bei erstmaligem Starten der App
+  /// ein Leitfaden angezeigt wird. In der Datei "data.txt" ist gespeichert (0 oder 1),
+  /// ob der Leitfaden angezeigt werden muss.
+  /// Die Textdatei wird ausgelesen und dann bei Bedarf der Leitfaden angezeigt.
+  /// Wenn der Leitfaden zurückgibt, dass dieser erfolgreich beendet wurde,
+  /// wird 1 in die Datei geschrieben, sodass der Leitfaden beim nächsten Starten
+  /// nicht wieder angezeigt wird.
+  ///
+  /// Quellen zum schreiben von .txt Dateien:
+  /// https://flutter.dev/docs/cookbook/persistence/reading-writing-files
+  /// https://www.kindacode.com/article/flutter-how-to-read-and-write-text-files/
   void showTest() {
     showDialog(
       context: context,
@@ -104,7 +100,7 @@ class NavigationControllerState extends State<NavigationController> {
             'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Kath. Religion;sLanguageUS:Freistunde;diffUS:Freistunde;');
       }
 
-      if(!await _readConfiguration()) {
+      if (!await _readConfiguration()) {
         _writeConfiguration();
       }
 
@@ -123,31 +119,32 @@ class NavigationControllerState extends State<NavigationController> {
     update(context);
   }
 
-  /**
-   * Beim Initialisieren wird showGuide() aufgerufen, um bei Bedarf den Leitfaden anzuzeigen.
-   */
+  /// Initialisieren
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    /// showGuide() wird aufgerufen, um bei Bedarf den Leitfaden anzuzeigen.
     new Future.delayed(Duration.zero, () {
       showGuide();
     });
 
+    ///Homescreen Quickactions
     final QuickActions quickActions = QuickActions();
     quickActions.initialize((String shortcutType) {
       print(shortcutType);
 
-      ///Quickaction "Stundenplan"
-      if(shortcutType == 'timetable') {
+      ///Homescreen Quickaction "Stundenplan"
+      if (shortcutType == 'timetable') {
         print('timetable');
         setState(() {
           tabIndex = 2;
         });
       }
 
-      ///Quickaction "Neue newHomework"
-      if(shortcutType == 'newHomework') {
+      ///Homescreen Quickaction "Neue newHomework"
+      if (shortcutType == 'newHomework') {
         print('newHomework');
         new Future.delayed(Duration.zero, () {
           showNewHomeworkDialog();
@@ -156,16 +153,18 @@ class NavigationControllerState extends State<NavigationController> {
     });
 
     quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(type: 'newHomework', localizedTitle: 'Neue Hausaufgabe',icon: 'icon_add'),
-      const ShortcutItem(type: 'timetable', localizedTitle: 'Stundenplan',icon: 'icon_plan'),
+      const ShortcutItem(
+          type: 'newHomework',
+          localizedTitle: 'Neue Hausaufgabe',
+          icon: 'icon_add'),
+      const ShortcutItem(
+          type: 'timetable', localizedTitle: 'Stundenplan', icon: 'icon_plan'),
     ]);
   }
 
-  /**
-   * Anzeige des Scaffolds mit "bottomNavigationBar". Je nach dem welcher Tab in der Menüleiste
-   * ausgewählt ist, wird der entsprechende Tab angezeigt.
-   * Der "floatingActionButton" öffnet den Dialog zum Hinzufügen von Hausaufgaben.
-   */
+  /// Anzeige des Scaffolds mit "bottomNavigationBar". Je nach dem welcher Tab in der Menüleiste
+  /// ausgewählt ist, wird der entsprechende Tab angezeigt.
+  /// Der "floatingActionButton" öffnet den Dialog zum Hinzufügen von Hausaufgaben.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,7 +177,7 @@ class NavigationControllerState extends State<NavigationController> {
                     ? Text('Stundenplan')
                     : Text('Sonstiges'),
       ),
-      body:  (tabIndex == 0)
+      body: (tabIndex == 0)
           ? VertretungsTab()
           : (tabIndex == 1)
               ? HomeworkTab(

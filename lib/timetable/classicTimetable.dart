@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:http/http.dart' as http;
-
 import '../timetableURL.dart';
 import '../custom_widgets/errorInternetContainer.dart';
 
@@ -21,49 +19,45 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
   bool error = false;
   late String tempUrl;
 
-
   void getCurrentClassNumber() async {
     error = false;
 
-    if(await onlineFiles.initialize() == false) {
+    if (await onlineFiles.initialize() == false) {
       setState(() {
         error = true;
         finished = false;
         showError();
       });
-   } else
-
-    {
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
-
-    Future<String> _readData() async {
-      try {
-        final _path = await _getPath();
-        final _file = File('$_path/configuration.txt');
-
-        String contents = await _file.readAsString();
-        return contents.substring(
-            contents.indexOf('c:') + 2, contents.indexOf(';'));
-      } catch (e) {
-        return '5A';
+    } else {
+      Future<String> _getPath() async {
+        final _dir = await getApplicationDocumentsDirectory();
+        return _dir.path;
       }
-    }
 
-    String currentClass = await _readData();
+      Future<String> _readData() async {
+        try {
+          final _path = await _getPath();
+          final _file = File('$_path/configuration.txt');
 
+          String contents = await _file.readAsString();
+          return contents.substring(
+              contents.indexOf('c:') + 2, contents.indexOf(';'));
+        } catch (e) {
+          return '5A';
+        }
+      }
+
+      String currentClass = await _readData();
 
       int classesNumber = onlineFiles.allClasses().indexOf(currentClass) + 1;
       currentClassNumber = classesNumber.toString().padLeft(5, '0');
-      try{
-          tempUrl = (await getTimetableURL())!;
+      try {
+        tempUrl = (await getTimetableURL())!;
 
-
-          setState(() {
-        finished = true;
-      });} catch(e) {
+        setState(() {
+          finished = true;
+        });
+      } catch (e) {
         setState(() {
           showError();
           finished = false;
@@ -71,7 +65,6 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
         });
       }
     }
-
   }
 
   void showError() {
@@ -129,8 +122,9 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    errorInternetContainer(context),
-
+                    ErrorInternetContainer(
+                      onRefresh: () => getCurrentClassNumber(),
+                    ),
                   ]),
                 )
               ]),
@@ -141,7 +135,10 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
           });
     } else {
       return Center(
-        child: Column(children: [CupertinoActivityIndicator(),Text('Laden ...')],mainAxisSize: MainAxisSize.min,),
+        child: Column(
+          children: [CupertinoActivityIndicator(), Text('Laden ...')],
+          mainAxisSize: MainAxisSize.min,
+        ),
       );
     }
   }
