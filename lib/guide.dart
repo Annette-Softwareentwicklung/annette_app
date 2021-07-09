@@ -19,9 +19,7 @@ class _GuideDialogState extends State<GuideDialog> {
   final controller = PageController(initialPage: 0);
   bool page1 = true;
 
-  /**
-   * Erstellen des PageViews, welcher den Leitfanden mit dessen einzelnen Seiten anzeigt
-   */
+  /// Erstellen des PageViews, welcher den Leitfanden mit dessen einzelnen Seiten anzeigt
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -52,10 +50,8 @@ class _GuideDialogState extends State<GuideDialog> {
   }
 }
 
-/**
- * Dieses Widget beinhaltet die 1. Seite des Leitfadens.
- * Hier findet sich eine Erklärung der Funktionen der App.
- */
+/// Dieses Widget beinhaltet die 1. Seite des Leitfadens.
+/// Hier findet sich eine Erklärung der Funktionen der App.
 class WelcomeScreen extends StatelessWidget {
   final VoidCallback onCompleted;
 

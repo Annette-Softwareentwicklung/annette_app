@@ -92,27 +92,7 @@ class SettingsTab extends StatelessWidget {
                           content: ClassicVertretungsplan());
                     }),
                   )),
-          /* Divider(),
-          ListTile(
-              title: Text('Klassischer Stundenplan'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  return DefaultScaffold(
-                      title: 'Stundenplan', content: ClassicTimetable());
-                }),
-              )),*/
-          /*Divider(),ListTile(
-              title: Text('Moodle'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  return DefaultScaffold(
-                      title: 'Moodle', content: ShowWebview(url: 'https://moodle.annettegymnasium.de/',));
-                }),
-              )),*/
+
           if(Platform.isIOS)
           Divider(),
           if(Platform.isIOS)
@@ -124,16 +104,7 @@ class SettingsTab extends StatelessWidget {
                   await launch('https://www.annettegymnasium.de/');
               }
 
-              /*() => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                          title: 'Annette Homepage',
-                          content: ShowWebview(
-                            url: 'https://www.annettegymnasium.de/',
-                          ));
-                    }),
-                  ),
-            */
+
             ),
           if(Platform.isIOS)
             Divider(),
@@ -145,16 +116,7 @@ class SettingsTab extends StatelessWidget {
               onTap: () async {
               await launch('https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now');
               }
-              /*onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                          title: 'Kalender',
-                          content: ShowWebview(
-                            url:
-                                'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now',
-                          ));
-                    }),
-                  )*/),
+              ),
           Divider(),
             ListTile(),
           Divider(),
