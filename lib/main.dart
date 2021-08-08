@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'introductionScreen.dart';
 import 'navigationController.dart';
 import 'theme.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -12,8 +16,10 @@ import 'translation.dart';
 /// Die Datei main.dart mit der Methode "main()"ist der Einstiegspunkt der App.
 /// Außerdem wird hier das Plugin für die Systembenachrichtigungen initialisiert.
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 final navigationControllerAccess = GlobalKey<NavigationControllerState>();
+
+late bool guide;
 
 /// Diese Methode wird als erstes beim Starten der App ausgeführt.
 void main() async {
@@ -31,14 +37,14 @@ void main() async {
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
-        if (payload != null) {
-          helper(payload);
+    if (payload != null) {
+      helper(payload);
 
-          debugPrint('notification payload: ' + payload);
-        }
-      });
+      debugPrint('notification payload: ' + payload);
+    }
+  });
   final notificationAppLaunchDetails =
-  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     helper(notificationAppLaunchDetails!.payload);
   }
@@ -46,6 +52,34 @@ void main() async {
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+  ///leitfaden
+  Future<String> _getPath() async {
+    final _dir = await getApplicationDocumentsDirectory();
+    return _dir.path;
+  }
+
+  Future<int> _readData() async {
+    try {
+      final _path = await _getPath();
+      final _file = File('$_path/data.txt');
+
+      String contents = await _file.readAsString();
+      return int.parse(contents);
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  if (await _readData() == 0) {
+    guide = true;
+  } else {
+    guide = false;
+  }
+
+  //for debugging
+  guide = true;
+
 
   ///Starten der App
   runApp(MyApp());
@@ -79,20 +113,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        DefaultCupertinoLocalizations.delegate,
-        CupertinoLocalizationsDelegate(),
-      ],
-      supportedLocales: [
-        const Locale('de', ''), // German
-      ],
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: lightTheme(context),
-      darkTheme: darkTheme(context),
-      home: NavigationController(key: navigationControllerAccess),
-    );
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          CupertinoLocalizationsDelegate(),
+        ],
+        supportedLocales: [
+          const Locale('de', ''), // German
+        ],
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.system,
+        theme: lightTheme(context),
+        darkTheme: darkTheme(context),
+        home: Builder(
+            builder: (context) => Center(
+                  child: (guide)
+                      ? IntroductionScreen(
+                          onFinished: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacement(
+                                new MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        NavigationController(
+                                            key: navigationControllerAccess)));
+                          },
+                        )
+                      : NavigationController(key: navigationControllerAccess),
+                )));
   }
 }

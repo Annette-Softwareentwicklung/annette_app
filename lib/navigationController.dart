@@ -38,16 +38,6 @@ class NavigationControllerState extends State<NavigationController> {
   /// Quellen zum schreiben von .txt Dateien:
   /// https://flutter.dev/docs/cookbook/persistence/reading-writing-files
   /// https://www.kindacode.com/article/flutter-how-to-read-and-write-text-files/
-  void showTest() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      useSafeArea: true,
-      builder: (context) {
-        return GuideDialog();
-      },
-    );
-  }
 
   void showGuide() async {
     Future<String> _getPath() async {
@@ -127,7 +117,7 @@ class NavigationControllerState extends State<NavigationController> {
 
     /// showGuide() wird aufgerufen, um bei Bedarf den Leitfaden anzuzeigen.
     new Future.delayed(Duration.zero, () {
-      showGuide();
+      //showGuide();
     });
 
     ///Homescreen Quickactions

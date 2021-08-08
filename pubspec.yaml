@@ -62,7 +62,9 @@ flutter:
 
   assets:
     - images/icon.png
-    - images/vertretung.png
+    - images/vertretungDemo.png
+    - images/homeworkDemo.png
+    - images/timetableDemo.png
     - assets/stundenplan.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see

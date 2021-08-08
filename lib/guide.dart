@@ -1,8 +1,5 @@
+///Diese Datei beinhaltet den Leitfaden, welcher beim ersten Start der App den Benutzer durch die Einstellungen führt.
 import 'package:annette_app/setClass.dart';
-
-/**
- * Diese Datei beinhaltet den Leitfaden, welcher beim ersten Start der App den Benutzer durch die Einstellungen führt.
- */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
