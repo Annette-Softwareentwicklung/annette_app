@@ -1,8 +1,10 @@
 /// Diese Datei beinhaltet den Leitfaden, welcher beim ersten Start der App den Benutzer durch die Einstellungen führt.
 import 'dart:io';
+import 'dart:ui';
 import 'package:annette_app/setClass.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -30,7 +32,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
       image: AssetImage('images/vertretungDemo.png'),
       title: 'Vertretungsplan',
       text:
-          'Individuell nach deinen Kursen gefiltert, damit du direkt informiert bist.',
+          'Individuell nach deinen Kursen gefiltert - damit du direkt informiert bist.',
     ),
     ImageTitleTextModel(
       demoImage: true,
@@ -50,6 +52,29 @@ class IntroductionScreenState extends State<IntroductionScreen> {
   final pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
+
+  void helperOrientation () {
+    if(MediaQueryData.fromWindow(window).size.shortestSide < 500) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);}
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    helperOrientation();
+  }
+
+  @override
+  dispose(){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+    ]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -262,6 +287,7 @@ class ImageTitleTextModel extends StatelessWidget {
               ),
               constraints: BoxConstraints(
                 minHeight: (demoImage) ? 150 : 0,
+                maxWidth: 400,
               ),
             ),
             Spacer(),
