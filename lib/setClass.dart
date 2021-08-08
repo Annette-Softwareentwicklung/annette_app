@@ -71,8 +71,9 @@ class _SetClassState extends State<SetClass> {
   late List<List<String>> groupsQ1List;
   late List<List<String>> groupsQ2List;
 
-
-  List<String> lk1 = ['Freistunde',];
+  List<String> lk1 = [
+    'Freistunde',
+  ];
   List<String> lk2 = ['Freistunde'];
   List<String> gk1 = ['Freistunde'];
   List<String> gk2 = ['Freistunde'];
@@ -146,14 +147,15 @@ class _SetClassState extends State<SetClass> {
 
     bool tempLanguage6 = false;
 
-    if(classesLanguage6 != null) {
-    classesLanguage6!.forEach((element) {
-      if (selectedClass.contains(element.toString())) {
-        tempLanguage6 = true;
-      }
-      });}
+    if (classesLanguage6 != null) {
+      classesLanguage6!.forEach((element) {
+        if (selectedClass.contains(element.toString())) {
+          tempLanguage6 = true;
+        }
+      });
+    }
 
-    if(tempLanguage6) {
+    if (tempLanguage6) {
       if (selectedSecondLanguageUS == 'Französisch') {
         selectedSecondLanguageUS = 'F6';
       } else {
@@ -166,7 +168,6 @@ class _SetClassState extends State<SetClass> {
         selectedSecondLanguageUS = 'L7';
       }
     }
-
 
     if (selectedDiffUS == 'Physik-Technik') {
       selectedDiffUS = 'PHd';
@@ -200,7 +201,8 @@ class _SetClassState extends State<SetClass> {
 
   Future<void> activateTimetableCrawler(pConfigurationString) async {
     TimetableCrawler ttc1 = new TimetableCrawler();
-    await ttc1.setConfiguration(pConfigurationString, onlineFiles.difExport, newVersion);
+    await ttc1.setConfiguration(
+        pConfigurationString, onlineFiles.difExport, newVersion);
   }
 
   void setClass() async {
@@ -212,7 +214,7 @@ class _SetClassState extends State<SetClass> {
     if (selectedClass == 'Q1' ||
         selectedClass == 'Q2' ||
         selectedClass == 'EF') {
-      if(selectedClass == 'EF') {
+      if (selectedClass == 'EF') {
         lk1.addAll(groupsEfList[0]);
         lk2.addAll(groupsEfList[1]);
         gk1.addAll(groupsEfList[2]);
@@ -230,7 +232,7 @@ class _SetClassState extends State<SetClass> {
         gk13.addAll(groupsEfList[14]);
         zk1.addAll(groupsEfList[15]);
         zk2.addAll(groupsEfList[16]);
-      } else if(selectedClass == 'Q1') {
+      } else if (selectedClass == 'Q1') {
         lk1.addAll(groupsQ1List[0]);
         lk2.addAll(groupsQ1List[1]);
         gk1.addAll(groupsQ1List[2]);
@@ -270,23 +272,57 @@ class _SetClassState extends State<SetClass> {
 
       setState(() {
         if (selectedClass == configurationList[0]) {
-          selectedLk1 = (lk1.contains(configurationList[1])) ? configurationList[1] : 'Freistunde';
-          selectedLk2 = (lk2.contains(configurationList[2])) ? configurationList[2] : 'Freistunde';
-          selectedGk1 = (gk1.contains(configurationList[3])) ? configurationList[3] : 'Freistunde';
-          selectedGk2 = (gk2.contains(configurationList[4])) ? configurationList[4] : 'Freistunde';
-          selectedGk3 = (gk3.contains(configurationList[5])) ? configurationList[5] : 'Freistunde';
-          selectedGk4 = (gk4.contains(configurationList[6])) ? configurationList[6] : 'Freistunde';
-          selectedGk5 = (gk5.contains(configurationList[7])) ? configurationList[7] : 'Freistunde';
-          selectedGk6 = (gk6.contains(configurationList[8])) ? configurationList[8] : 'Freistunde';
-          selectedGk7 = (gk7.contains(configurationList[9])) ? configurationList[9] : 'Freistunde';
-          selectedGk8 = (gk8.contains(configurationList[10])) ? configurationList[10] : 'Freistunde';
-          selectedGk9 = (gk9.contains(configurationList[11])) ? configurationList[11] : 'Freistunde';
-          selectedGk10 = (gk10.contains(configurationList[12])) ? configurationList[12] : 'Freistunde';
-          selectedGk11 = (gk11.contains(configurationList[13])) ? configurationList[13] : 'Freistunde';
-          selectedGk12 = (gk12.contains(configurationList[14])) ? configurationList[14] : 'Freistunde';
-          selectedGk13 = (gk13.contains(configurationList[15])) ? configurationList[15] : 'Freistunde';
-          selectedZk1 = (zk1.contains(configurationList[16])) ? configurationList[16] : 'Freistunde';
-          selectedZk2 = (zk2.contains(configurationList[17])) ? configurationList[17] : 'Freistunde';
+          selectedLk1 = (lk1.contains(configurationList[1]))
+              ? configurationList[1]
+              : 'Freistunde';
+          selectedLk2 = (lk2.contains(configurationList[2]))
+              ? configurationList[2]
+              : 'Freistunde';
+          selectedGk1 = (gk1.contains(configurationList[3]))
+              ? configurationList[3]
+              : 'Freistunde';
+          selectedGk2 = (gk2.contains(configurationList[4]))
+              ? configurationList[4]
+              : 'Freistunde';
+          selectedGk3 = (gk3.contains(configurationList[5]))
+              ? configurationList[5]
+              : 'Freistunde';
+          selectedGk4 = (gk4.contains(configurationList[6]))
+              ? configurationList[6]
+              : 'Freistunde';
+          selectedGk5 = (gk5.contains(configurationList[7]))
+              ? configurationList[7]
+              : 'Freistunde';
+          selectedGk6 = (gk6.contains(configurationList[8]))
+              ? configurationList[8]
+              : 'Freistunde';
+          selectedGk7 = (gk7.contains(configurationList[9]))
+              ? configurationList[9]
+              : 'Freistunde';
+          selectedGk8 = (gk8.contains(configurationList[10]))
+              ? configurationList[10]
+              : 'Freistunde';
+          selectedGk9 = (gk9.contains(configurationList[11]))
+              ? configurationList[11]
+              : 'Freistunde';
+          selectedGk10 = (gk10.contains(configurationList[12]))
+              ? configurationList[12]
+              : 'Freistunde';
+          selectedGk11 = (gk11.contains(configurationList[13]))
+              ? configurationList[13]
+              : 'Freistunde';
+          selectedGk12 = (gk12.contains(configurationList[14]))
+              ? configurationList[14]
+              : 'Freistunde';
+          selectedGk13 = (gk13.contains(configurationList[15]))
+              ? configurationList[15]
+              : 'Freistunde';
+          selectedZk1 = (zk1.contains(configurationList[16]))
+              ? configurationList[16]
+              : 'Freistunde';
+          selectedZk2 = (zk2.contains(configurationList[17]))
+              ? configurationList[17]
+              : 'Freistunde';
         } else {
           selectedLk1 = 'Freistunde';
           selectedLk2 = 'Freistunde';
@@ -334,7 +370,10 @@ class _SetClassState extends State<SetClass> {
     GroupsQ1 gQ1 = new GroupsQ1();
     GroupsQ2 gQ2 = new GroupsQ2();
 
-    if (await onlineFiles.initialize() == false || await gEF.initialize() == false || await gQ1.initialize() == false ){//|| await gQ2.initialize() == false) {
+    if (await onlineFiles.initialize() == false ||
+        await gEF.initialize() == false ||
+        await gQ1.initialize() == false) {
+      //|| await gQ2.initialize() == false) {
       setState(() {
         errorInternet = true;
       });
@@ -345,11 +384,11 @@ class _SetClassState extends State<SetClass> {
 
       groupsEfList = gEF.getGroupsEf();
       groupsQ1List = gQ1.getGroupsQ1();
-      if(q2Initialize) {
-      groupsQ2List = gQ2.getGroupsQ2();
+      if (q2Initialize) {
+        groupsQ2List = gQ2.getGroupsQ2();
       }
       classes = onlineFiles.allClasses();
-      if(!q2Initialize) {
+      if (!q2Initialize) {
         classes.removeLast();
       }
       newVersion = onlineFiles.getNewVersion();
@@ -455,7 +494,9 @@ class _SetClassState extends State<SetClass> {
       }
 
       configurationList = await _readData();
-      selectedClass = (classes.contains(configurationList[0])) ? configurationList[0] : '5A';
+      selectedClass = (classes.contains(configurationList[0]))
+          ? configurationList[0]
+          : '5A';
 
       setState(() {
         finished = true;
@@ -472,45 +513,51 @@ class _SetClassState extends State<SetClass> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        alignment: Alignment.center,
-        child: Center(
-            child: (errorInternet)
-                ? RefreshIndicator(
-                    child: CustomScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: <Widget>[
-                        SliverList(
-                          delegate: SliverChildListDelegate.fixed(
-                            [
-                              ErrorInternetContainer(
-                                onRefresh: () {
-                                  errorInternet = false;
-                                  load();
-                                },
+    return Scaffold(
+        appBar: (widget.isInGuide)
+            ? null
+            : AppBar(
+                title: Text('Klasse ändern'),
+              ),
+        body: SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            alignment: Alignment.center,
+            child: Center(
+                child: (errorInternet)
+                    ? RefreshIndicator(
+                        child: CustomScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: <Widget>[
+                            SliverList(
+                              delegate: SliverChildListDelegate.fixed(
+                                [
+                                  ErrorInternetContainer(
+                                    onRefresh: () {
+                                      errorInternet = false;
+                                      load();
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    onRefresh: () async {
-                      Future.delayed(Duration.zero, () {
-                        errorInternet = false;
-                        load();
-                      });
-                    })
-                : (showFinishedConfiguration)
-                    ? FinishedConfiguration()
-                    : (showGroupsOS)
-                        ? GroupsOS()
-                        : (showGroupsUS)
-                            ? GroupsUS()
-                            : Classes()),
-      ),
-    );
+                            )
+                          ],
+                        ),
+                        onRefresh: () async {
+                          Future.delayed(Duration.zero, () {
+                            errorInternet = false;
+                            load();
+                          });
+                        })
+                    : (showFinishedConfiguration)
+                        ? FinishedConfiguration()
+                        : (showGroupsOS)
+                            ? GroupsOS()
+                            : (showGroupsUS)
+                                ? GroupsUS()
+                                : Classes()),
+          ),
+        ));
   }
 
   Widget Classes() {
@@ -588,12 +635,18 @@ class _SetClassState extends State<SetClass> {
                 ],
               )));
     } else {
-      return Center(child: Column(children: [
-        CupertinoActivityIndicator(),
-      Text('Lade Auswahlmöglichkeiten.'),
-      ],
-      mainAxisSize: MainAxisSize.min,
-      ),);
+      return Center(
+        child: Column(
+          children: [
+            CupertinoActivityIndicator(),
+            Container(
+              child: Text('Lade Auswahlmöglichkeiten.'),
+              margin: EdgeInsets.only(top: 15),
+            ),
+          ],
+          mainAxisSize: MainAxisSize.min,
+        ),
+      );
     }
   }
 
@@ -618,220 +671,228 @@ class _SetClassState extends State<SetClass> {
     return Container(
         child: Column(children: [
       Expanded(
-          child: Scrollbar(
+        child: Scrollbar(
+          child: CustomScrollView(
+            slivers: <Widget>[
+              ///Text
+              SliverList(
+                  delegate: SliverChildListDelegate.fixed([
+                Container(
+                  child: Text(
+                    infoText,
+                    style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.center,
+                  ),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey)),
+                  ),
+                ),
+              ])),
 
-            child: CustomScrollView(
-        slivers: <Widget>[
-          ///Text
-          SliverList(
-              delegate: SliverChildListDelegate.fixed([
-            Container(
-              child: Text(
-                infoText,
-                style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
-                textAlign: TextAlign.center,
-              ),
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(width: 1, color: Colors.grey)),
-              ),
-            ),
-          ])),
+              ///Leistungskurs
+              if (selectedClass == 'Q1' || selectedClass == 'Q2')
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      int j = index + 1;
+                      List<String> tempSubjects = (j == 1) ? lk1 : lk2;
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                              'LK $j:',
+                              style: TextStyle(fontSize: 17.0),
+                            ),
+                            DropdownButton<String>(
+                              items: tempSubjects.map<DropdownMenuItem<String>>(
+                                  (String? value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value!),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  if (j == 1) {
+                                    selectedLk1 = newValue!;
+                                  } else {
+                                    selectedLk2 = newValue!;
+                                  }
+                                });
+                              },
+                              value: (j == 1) ? selectedLk1 : selectedLk2,
+                              hint: Text('Fach'),
+                              icon: Icon(Icons.arrow_drop_down),
+                            ),
+                          ]);
+                    },
+                    childCount: 2,
+                  ),
+                ),
 
-          ///Leistungskurs
-          if (selectedClass == 'Q1' || selectedClass == 'Q2')
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  int j = index + 1;
-                  List<String> tempSubjects = (j == 1) ? lk1 : lk2;
-                  return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(
-                          'LK $j:',
-                          style: TextStyle(fontSize: 17.0),
-                        ),
-                        DropdownButton<String>(
-                          items: tempSubjects
-                              .map<DropdownMenuItem<String>>((String? value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value!),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              if (j == 1) {
-                                selectedLk1 = newValue!;
-                              } else {
-                                selectedLk2 = newValue!;
-                              }
-                            });
-                          },
-                          value: (j == 1) ? selectedLk1 : selectedLk2,
-                          hint: Text('Fach'),
-                          icon: Icon(Icons.arrow_drop_down),
-                        ),
-                      ]);
-                },
-                childCount: 2,
+              ///Grundkurs
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    int j = index + 1;
+                    List<String> tempSubjects = (j == 1)
+                        ? gk1
+                        : (j == 2)
+                            ? gk2
+                            : (j == 3)
+                                ? gk3
+                                : (j == 4)
+                                    ? gk4
+                                    : (j == 5)
+                                        ? gk5
+                                        : (j == 6)
+                                            ? gk6
+                                            : (j == 7)
+                                                ? gk7
+                                                : (j == 8)
+                                                    ? gk8
+                                                    : (j == 9)
+                                                        ? gk9
+                                                        : (j == 10)
+                                                            ? gk10
+                                                            : (j == 11)
+                                                                ? gk11
+                                                                : (j == 12)
+                                                                    ? gk12
+                                                                    : gk13;
+                    return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Text(
+                            ((selectedClass == 'Q1' && j == 10) ||
+                                    (selectedClass == 'EF' && j == 13))
+                                ? 'Sport:'
+                                : 'GK $j:',
+                            style: TextStyle(fontSize: 17.0),
+                          ),
+                          DropdownButton<String>(
+                            items: tempSubjects
+                                .map<DropdownMenuItem<String>>((String? value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value!),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                if (j == 1) {
+                                  selectedGk1 = newValue!;
+                                } else if (j == 2) {
+                                  selectedGk2 = newValue!;
+                                } else if (j == 3) {
+                                  selectedGk3 = newValue!;
+                                } else if (j == 4) {
+                                  selectedGk4 = newValue!;
+                                } else if (j == 5) {
+                                  selectedGk5 = newValue!;
+                                } else if (j == 6) {
+                                  selectedGk6 = newValue!;
+                                } else if (j == 7) {
+                                  selectedGk7 = newValue!;
+                                } else if (j == 8) {
+                                  selectedGk8 = newValue!;
+                                } else if (j == 9) {
+                                  selectedGk9 = newValue!;
+                                } else if (j == 10) {
+                                  selectedGk10 = newValue!;
+                                } else if (j == 11) {
+                                  selectedGk11 = newValue!;
+                                } else if (j == 12) {
+                                  selectedGk12 = newValue!;
+                                } else {
+                                  selectedGk13 = newValue!;
+                                }
+                              });
+                            },
+                            value: (j == 1)
+                                ? selectedGk1
+                                : (j == 2)
+                                    ? selectedGk2
+                                    : (j == 3)
+                                        ? selectedGk3
+                                        : (j == 4)
+                                            ? selectedGk4
+                                            : (j == 5)
+                                                ? selectedGk5
+                                                : (j == 6)
+                                                    ? selectedGk6
+                                                    : (j == 7)
+                                                        ? selectedGk7
+                                                        : (j == 8)
+                                                            ? selectedGk8
+                                                            : (j == 9)
+                                                                ? selectedGk9
+                                                                : (j == 10)
+                                                                    ? selectedGk10
+                                                                    : (j == 11)
+                                                                        ? selectedGk11
+                                                                        : (j == 12)
+                                                                            ? selectedGk12
+                                                                            : selectedGk13,
+                            hint: Text('Fach'),
+                            icon: Icon(Icons.arrow_drop_down),
+                          ),
+                        ]);
+                  },
+                  childCount: (selectedClass == 'Q2')
+                      ? 9
+                      : (selectedClass == 'Q1')
+                          ? 10
+                          : 13,
+                ),
               ),
-            ),
 
-          ///Grundkurs
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                int j = index + 1;
-                List<String> tempSubjects = (j == 1)
-                    ? gk1
-                    : (j == 2)
-                        ? gk2
-                        : (j == 3)
-                            ? gk3
-                            : (j == 4)
-                                ? gk4
-                                : (j == 5)
-                                    ? gk5
-                                    : (j == 6)
-                                        ? gk6
-                                        : (j == 7)
-                                            ? gk7
-                                            : (j == 8)
-                                                ? gk8
-                                                : (j == 9)
-                                                    ? gk9
-                                                    : (j == 10)
-                                                        ? gk10
-                                                        : (j == 11)
-                                                            ? gk11
-                                                            : (j == 12)
-                                                                ? gk12
-                                                                : gk13;
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Text(((selectedClass == 'Q1' && j == 10) || (selectedClass == 'EF' && j == 13)) ? 'Sport:' :
-                        'GK $j:',
-                        style: TextStyle(fontSize: 17.0),
-                      ),
-                      DropdownButton<String>(
-                        items: tempSubjects
-                            .map<DropdownMenuItem<String>>((String? value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value!),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            if (j == 1) {
-                              selectedGk1 = newValue!;
-                            } else if (j == 2) {
-                              selectedGk2 = newValue!;
-                            } else if (j == 3) {
-                              selectedGk3 = newValue!;
-                            } else if (j == 4) {
-                              selectedGk4 = newValue!;
-                            } else if (j == 5) {
-                              selectedGk5 = newValue!;
-                            } else if (j == 6) {
-                              selectedGk6 = newValue!;
-                            } else if (j == 7) {
-                              selectedGk7 = newValue!;
-                            } else if (j == 8) {
-                              selectedGk8 = newValue!;
-                            } else if (j == 9) {
-                              selectedGk9 = newValue!;
-                            } else if (j == 10) {
-                              selectedGk10 = newValue!;
-                            } else if (j == 11) {
-                              selectedGk11 = newValue!;
-                            } else if (j == 12) {
-                              selectedGk12 = newValue!;
-                            } else {
-                              selectedGk13 = newValue!;
-                            }
-                          });
-                        },
-                        value: (j == 1)
-                            ? selectedGk1
-                            : (j == 2)
-                                ? selectedGk2
-                                : (j == 3)
-                                    ? selectedGk3
-                                    : (j == 4)
-                                        ? selectedGk4
-                                        : (j == 5)
-                                            ? selectedGk5
-                                            : (j == 6)
-                                                ? selectedGk6
-                                                : (j == 7)
-                                                    ? selectedGk7
-                                                    : (j == 8)
-                                                        ? selectedGk8
-                                                        : (j == 9)
-                                                            ? selectedGk9
-                                                            : (j == 10)
-                                                                ? selectedGk10
-                                                                : (j == 11)
-                                                                    ? selectedGk11
-                                                                    : (j == 12)
-                                                                        ? selectedGk12
-                                                                        : selectedGk13,
-                        hint: Text('Fach'),
-                        icon: Icon(Icons.arrow_drop_down),
-                      ),
-                    ]);
-              },
-              childCount: (selectedClass == 'Q2') ? 9 : (selectedClass == 'Q1') ? 10 : 13,
-            ),
+              ///Zusatzkurs
+              if (selectedClass == 'Q2')
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      int j = index + 1;
+                      List<String> tempSubjects = (j == 1) ? zk1 : zk2;
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                              'ZK $j:',
+                              style: TextStyle(fontSize: 17.0),
+                            ),
+                            DropdownButton<String>(
+                              items: tempSubjects.map<DropdownMenuItem<String>>(
+                                  (String? value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value!),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  if (j == 1) {
+                                    selectedZk1 = newValue!;
+                                  } else {
+                                    selectedZk2 = newValue!;
+                                  }
+                                });
+                              },
+                              value: (j == 1) ? selectedZk1 : selectedZk2,
+                              hint: Text('Fach'),
+                              icon: Icon(Icons.arrow_drop_down),
+                            ),
+                          ]);
+                    },
+                    childCount: 2,
+                  ),
+                ),
+            ],
           ),
-
-          ///Zusatzkurs
-          if (selectedClass == 'Q2')
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  int j = index + 1;
-                  List<String> tempSubjects = (j == 1) ? zk1 : zk2;
-                  return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(
-                          'ZK $j:',
-                          style: TextStyle(fontSize: 17.0),
-                        ),
-                        DropdownButton<String>(
-                          items: tempSubjects
-                              .map<DropdownMenuItem<String>>((String? value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value!),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              if (j == 1) {
-                                selectedZk1 = newValue!;
-                              } else {
-                                selectedZk2 = newValue!;
-                              }
-                            });
-                          },
-                          value: (j == 1) ? selectedZk1 : selectedZk2,
-                          hint: Text('Fach'),
-                          icon: Icon(Icons.arrow_drop_down),
-                        ),
-                      ]);
-                },
-                childCount: 2,
-              ),
-            ),
-        ],
-      ),),),
+        ),
+      ),
 
       ///Button
 
@@ -932,7 +993,9 @@ class _SetClassState extends State<SetClass> {
                           ),
                     onPressed: () {
                       widget.onButtonPressed();
-                      Navigator.of(context).pop();
+                      if (!widget.isInGuide) {
+                        Navigator.of(context).pop();
+                      }
                     },
                   ),
                 ],
@@ -957,119 +1020,122 @@ class _SetClassState extends State<SetClass> {
     return Container(
         child: Column(children: [
       Expanded(
-          child: Scrollbar(child: CustomScrollView(
-        slivers: <Widget>[
-          ///Text
-          SliverList(
-              delegate: SliverChildListDelegate.fixed([
-            Container(
-              child: Text(
-                infoText,
-                style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
-                textAlign: TextAlign.center,
-              ),
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(width: 1, color: Colors.grey)),
-              ),
-            ),
-          ])),
-
-          ///Religion
-          SliverList(
-              delegate: SliverChildListDelegate.fixed([
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(
-                    'Religion:',
-                    style: TextStyle(fontSize: 17.0),
+        child: Scrollbar(
+          child: CustomScrollView(
+            slivers: <Widget>[
+              ///Text
+              SliverList(
+                  delegate: SliverChildListDelegate.fixed([
+                Container(
+                  child: Text(
+                    infoText,
+                    style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.center,
                   ),
-                  DropdownButton<String>(
-                    items: religionUS
-                        .map<DropdownMenuItem<String>>((String? value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value!),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedReligionUS = newValue!;
-                      });
-                    },
-                    value: selectedReligionUS,
-                    hint: Text('Fach'),
-                    icon: Icon(Icons.arrow_drop_down),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey)),
                   ),
-                ])
-          ])),
+                ),
+              ])),
 
-          ///2. Fremdsprache
-          if (!selectedClass.contains('5') && !selectedClass.contains('6') && !selectedClass.contains('F'))
-            SliverList(
-                delegate: SliverChildListDelegate.fixed([
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text(
-                      '2. Sprache:',
-                      style: TextStyle(fontSize: 17.0),
-                    ),
-                    DropdownButton<String>(
-                      items: secondLanguageUS
-                          .map<DropdownMenuItem<String>>((String? value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value!),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedSecondLanguageUS = newValue!;
-                        });
-                      },
-                      value: selectedSecondLanguageUS,
-                      hint: Text('Fach'),
-                      icon: Icon(Icons.arrow_drop_down),
-                    ),
-                  ])
-            ])),
+              ///Religion
+              SliverList(
+                  delegate: SliverChildListDelegate.fixed([
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Text(
+                        'Religion:',
+                        style: TextStyle(fontSize: 17.0),
+                      ),
+                      DropdownButton<String>(
+                        items: religionUS
+                            .map<DropdownMenuItem<String>>((String? value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value!),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedReligionUS = newValue!;
+                          });
+                        },
+                        value: selectedReligionUS,
+                        hint: Text('Fach'),
+                        icon: Icon(Icons.arrow_drop_down),
+                      ),
+                    ])
+              ])),
 
-          ///Diff
-          if (selectedClass.contains('9') || selectedClass.contains('10'))
-            SliverList(
-                delegate: SliverChildListDelegate.fixed([
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text(
-                      'Diff.-Fach:',
-                      style: TextStyle(fontSize: 17.0),
-                    ),
-                    DropdownButton<String>(
-                      items:
-                          diffUS.map<DropdownMenuItem<String>>((String? value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value!),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedDiffUS = newValue!;
-                        });
-                      },
-                      value: selectedDiffUS,
-                      hint: Text('Fach'),
-                      icon: Icon(Icons.arrow_drop_down),
-                    ),
-                  ])
-            ])),
-        ],
-      ),
-    ),
+              ///2. Fremdsprache
+              if (!selectedClass.contains('5') &&
+                  !selectedClass.contains('6') &&
+                  !selectedClass.contains('F'))
+                SliverList(
+                    delegate: SliverChildListDelegate.fixed([
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          '2. Sprache:',
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                        DropdownButton<String>(
+                          items: secondLanguageUS
+                              .map<DropdownMenuItem<String>>((String? value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value!),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedSecondLanguageUS = newValue!;
+                            });
+                          },
+                          value: selectedSecondLanguageUS,
+                          hint: Text('Fach'),
+                          icon: Icon(Icons.arrow_drop_down),
+                        ),
+                      ])
+                ])),
+
+              ///Diff
+              if (selectedClass.contains('9') || selectedClass.contains('10'))
+                SliverList(
+                    delegate: SliverChildListDelegate.fixed([
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          'Diff.-Fach:',
+                          style: TextStyle(fontSize: 17.0),
+                        ),
+                        DropdownButton<String>(
+                          items: diffUS
+                              .map<DropdownMenuItem<String>>((String? value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value!),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDiffUS = newValue!;
+                            });
+                          },
+                          value: selectedDiffUS,
+                          hint: Text('Fach'),
+                          icon: Icon(Icons.arrow_drop_down),
+                        ),
+                      ])
+                ])),
+            ],
+          ),
+        ),
       ),
 
       ///Button
@@ -1086,13 +1152,19 @@ class _SetClassState extends State<SetClass> {
               height: 50,
               width: 180,
               decoration: BoxDecoration(
-                color: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blue,
+                color: (Theme.of(context).brightness == Brightness.dark)
+                    ? Theme.of(context).accentColor
+                    : Colors.blue,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Text(
                 'Speichern',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white),
+                style: TextStyle(
+                    fontSize: 18,
+                    color: (Theme.of(context).brightness == Brightness.dark)
+                        ? Colors.black
+                        : Colors.white),
               )),
         ),
       ),

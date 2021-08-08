@@ -126,12 +126,13 @@ class SettingsTab extends StatelessWidget {
                   color: Theme.of(context).accentColor),
               onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
+                      return SetClass(isInGuide: false,onButtonPressed: () {},);
+                      /*DefaultScaffold(
                           title: 'Klasse ändern',
                           content: SetClass(
                             isInGuide: false,
                             onButtonPressed: () {},
-                          ));
+                          ));*/
                     }),
                   )),
           Divider(),
