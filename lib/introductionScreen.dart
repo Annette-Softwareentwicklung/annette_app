@@ -89,7 +89,8 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                 ? Positioned(
                     left: 0.0,
                     right: 0.0,
-                    bottom: 50.0,
+                    bottom:
+                        (MediaQuery.of(context).size.height < 815) ? 0 : 50.0,
                     child: Container(
                       child: TextButton(
                         child: Container(
@@ -151,7 +152,8 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                 : Positioned(
                     left: 0.0,
                     right: 0.0,
-                    bottom: 50.0,
+                    bottom:
+                        (MediaQuery.of(context).size.height < 815) ? 20 : 50.0,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CirclePageIndicator(
@@ -239,7 +241,10 @@ class ImageTitleTextModel extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
+              margin: EdgeInsets.only(
+                  top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
+                  bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
+      ),
               child: Text(
                 title,
                 textAlign: TextAlign.center,
@@ -250,16 +255,26 @@ class ImageTitleTextModel extends StatelessWidget {
               ),
             ),
             Container(
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
               constraints: BoxConstraints(
-                minHeight: (demoImage) ? 150 : 0,
+                minHeight: (!demoImage)
+                    ? 0
+                    : (MediaQuery.of(context).size.height < 700)
+                        ? 115
+                        : 150,
                 maxWidth: 400,
+                maxHeight:
+                    (MediaQuery.of(context).size.height < 700) ? 115 : 1000,
               ),
             ),
             Spacer(),
