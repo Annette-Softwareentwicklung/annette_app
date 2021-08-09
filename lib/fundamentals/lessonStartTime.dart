@@ -1,13 +1,11 @@
-/**
- * Klasse LessonStartTime. Diese Klasse dient dazu, die Anfangszeit einer Schulstunde zu speichern.
- *
- * Die Attribute einer "LessonStartTime" sind:
- *     - id             Typ int       Speichert die Id der Zeile in der Datenbank
- *     - time           Typ String    Speichert den Zeitpunkt als String
- *
- *  Die Methode "toMap()" konvertiert alle Attribute in eine Map.
- *  Diese wird benötigt, um eine neue Zeit in die Datenbank einzufügen.
- */
+/// Klasse LessonStartTime. Diese Klasse dient dazu, die Anfangszeit einer Schulstunde zu speichern.
+///
+/// Die Attribute einer "LessonStartTime" sind:
+///     - id             Typ int       Speichert die Id der Zeile in der Datenbank
+///     - time           Typ String    Speichert den Zeitpunkt als String
+///
+///  Die Methode "toMap()" konvertiert alle Attribute in eine Map.
+///  Diese wird benötigt, um eine neue Zeit in die Datenbank einzufügen.
 class LessonStartTime {
   final int? id;
   final String? time;

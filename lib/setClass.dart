@@ -525,30 +525,12 @@ class _SetClassState extends State<SetClass> {
             alignment: Alignment.center,
             child: Center(
                 child: (errorInternet)
-                    ? RefreshIndicator(
-                        child: CustomScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          slivers: <Widget>[
-                            SliverList(
-                              delegate: SliverChildListDelegate.fixed(
-                                [
-                                  ErrorInternetContainer(
+                    ? ErrorInternetContainer(
                                     onRefresh: () {
                                       errorInternet = false;
                                       load();
                                     },
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        onRefresh: () async {
-                          Future.delayed(Duration.zero, () {
-                            errorInternet = false;
-                            load();
-                          });
-                        })
+                                  )
                     : (showFinishedConfiguration)
                         ? FinishedConfiguration()
                         : (showGroupsOS)

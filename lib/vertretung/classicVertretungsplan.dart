@@ -38,30 +38,13 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
   @override
   Widget build(BuildContext context) {
     if (error) {
-      return RefreshIndicator(
-        child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: <Widget>[
-              SliverList(
-                delegate: SliverChildListDelegate.fixed([
-                  ErrorInternetContainer(
+      return ErrorInternetContainer(
                     onRefresh: () {
                       setState(() {
                         error = false;
                       });
                     },
-                  ),
-                ]),
-              )
-            ]),
-        onRefresh: () async {
-          Future.delayed(Duration.zero, () {
-            setState(() {
-              error = false;
-            });
-          });
-        },
-      );
+                  );
     } else {
       return Center(
         child: Flex(

@@ -165,24 +165,10 @@ class _ExamPlanState extends State<ExamPlan> {
                       ),
                     )
                   : (error)
-                      ? RefreshIndicator(
-                          child: CustomScrollView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              slivers: <Widget>[
-                                SliverList(
-                                  delegate: SliverChildListDelegate.fixed([
-                                    ErrorInternetContainer(
+                      ? ErrorInternetContainer(
                                       onRefresh: () {
                                           changePlan(selectedClass);},
-                                    ),
-                                  ]),
-                                )
-                              ]),
-                          onRefresh: () async {
-                            Future.delayed(Duration.zero, () {
-                              changePlan(selectedClass);
-                            });
-                          })
+                                    )
                       : Center(
                           child: Column(
                             children: [

@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 class IntroductionScreen extends StatefulWidget {
   final VoidCallback onFinished;
+
   IntroductionScreen({Key? key, required this.onFinished}) : super(key: key);
 
   @override
@@ -53,21 +54,22 @@ class IntroductionScreenState extends State<IntroductionScreen> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
 
-  void helperOrientation () {
-    if(MediaQueryData.fromWindow(window).size.shortestSide < 500) {
+  void helperOrientation() {
+    if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
-      ]);}
+      ]);
+    }
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     helperOrientation();
   }
 
   @override
-  dispose(){
+  dispose() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -142,36 +144,6 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                                   })));
                         },
                       ),
-
-                      /*CupertinoButton(
-                        color: Colors.blue,
-                        child: Text('Konfigurieren',style: TextStyle(color:
-                        (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
-                        ),),
-                        onPressed: () {
-                          Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (BuildContext context) => SetClass(
-                                  isInGuide: true,
-                                  onButtonPressed: () async {
-                                    widget.onFinished();
-
-                                    Future<String> _getPath() async {
-                                      final _dir =
-                                          await getApplicationDocumentsDirectory();
-                                      return _dir.path;
-                                    }
-
-                                    Future<void> _writeData() async {
-                                      final _path = await _getPath();
-                                      final _myFile = File('$_path/data.txt');
-                                      await _myFile.writeAsString(1.toString());
-                                    }
-
-                                    await _writeData();
-                                  })));
-                        },
-                      ),*/
-
                       alignment: Alignment.center,
                       width: double.infinity,
                     ),

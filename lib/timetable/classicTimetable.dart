@@ -116,23 +116,9 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
         ),
       );
     } else if (error) {
-      return RefreshIndicator(
-          child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    ErrorInternetContainer(
+      return ErrorInternetContainer(
                       onRefresh: () => getCurrentClassNumber(),
-                    ),
-                  ]),
-                )
-              ]),
-          onRefresh: () async {
-            Future.delayed(Duration.zero, () {
-              getCurrentClassNumber();
-            });
-          });
+                    );
     } else {
       return Center(
         child: Column(
