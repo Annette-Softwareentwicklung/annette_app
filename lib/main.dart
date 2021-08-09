@@ -77,10 +77,6 @@ void main() async {
     guide = false;
   }
 
-  //for debugging
-  guide = true;
-
-
   ///Starten der App
   runApp(MyApp());
 }

@@ -7,6 +7,7 @@ import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:annette_app/custom_widgets/errorInternetContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SetClass extends StatefulWidget {
@@ -498,6 +499,18 @@ class _SetClassState extends State<SetClass> {
         finished = true;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    if(!widget.isInGuide) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+    ]);
+    }
+    super.dispose();
   }
 
   @override

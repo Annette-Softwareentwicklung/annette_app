@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:annette_app/setClass.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/defaultScaffold.dart';
+import 'package:flutter/services.dart';
 import 'examPlan.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +32,6 @@ class SettingsTab extends StatelessWidget {
       }
 
       return await _readData();
-
     } catch (e) {
       print(e);
       return null;
@@ -92,49 +93,54 @@ class SettingsTab extends StatelessWidget {
                           content: ClassicVertretungsplan());
                     }),
                   )),
-
-          if(Platform.isIOS)
-          Divider(),
-          if(Platform.isIOS)
+          if (Platform.isIOS) Divider(),
+          if (Platform.isIOS)
             ListTile(
-              title: Text('Annette Homepage'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () async {
+                title: Text('Annette Homepage'),
+                trailing: Icon(Icons.chevron_right,
+                    color: Theme.of(context).accentColor),
+                onTap: () async {
                   await launch('https://www.annettegymnasium.de/');
-              }
-
-
-            ),
-          if(Platform.isIOS)
-            Divider(),
-          if(Platform.isIOS)
+                }),
+          if (Platform.isIOS) Divider(),
+          if (Platform.isIOS)
             ListTile(
-              title: Text('Kalender'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () async {
-              await launch('https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now');
-              }
-              ),
+                title: Text('Kalender'),
+                trailing: Icon(Icons.chevron_right,
+                    color: Theme.of(context).accentColor),
+                onTap: () async {
+                  await launch(
+                      'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now');
+                }),
           Divider(),
-            ListTile(),
+          ListTile(),
           Divider(),
           ListTile(
               title: Text('Klasse ändern'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return SetClass(isInGuide: false,onButtonPressed: () {},);
-                      /*DefaultScaffold(
-                          title: 'Klasse ändern',
-                          content: SetClass(
-                            isInGuide: false,
-                            onButtonPressed: () {},
-                          ));*/
-                    }),
-                  )),
+              onTap: () {
+                if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                  ]);
+                }
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return SetClass(
+                      isInGuide: false,
+                      onButtonPressed: () {
+                        SystemChrome.setPreferredOrientations([
+                          DeviceOrientation.landscapeRight,
+                          DeviceOrientation.landscapeLeft,
+                          DeviceOrientation.portraitUp,
+                        ]);
+                      },
+                    );
+                  }),
+                );
+              }),
           Divider(),
           ListTile(
             title: Text('Über diese App'),

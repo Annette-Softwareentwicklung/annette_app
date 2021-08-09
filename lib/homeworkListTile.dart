@@ -149,6 +149,10 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
             dismissal: SlidableDismissal(
               closeOnCanceled: true,
               dragDismissible: true,
+              dismissThresholds: <SlideActionType, double> {
+                SlideActionType.primary: 0.6,
+                SlideActionType.secondary: 0.4,
+              },
               onWillDismiss: (value) {
                 if (value == SlideActionType.secondary) {
                   return true;

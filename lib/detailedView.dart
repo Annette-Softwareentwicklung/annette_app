@@ -13,6 +13,7 @@ class DetailedView extends StatefulWidget {
   final Function(int?)? onReload;
   final Function(int?)? onRemove;
   final bool? isParallelDetail;
+
   DetailedView(
       {Key? key,
       this.task,
@@ -43,28 +44,50 @@ class DetailedViewState extends State<DetailedView> {
         barrierDismissible: true,
         builder: (context) {
           return StatefulBuilder(builder: (context, setError) {
-            return AlertDialog(
-              title: Text('Zu erledigen bis:'),
-              content: SingleChildScrollView(
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context).accentColor)),
-                          child: SizedBox(
-                              height: 150,
-                              width: 280,
-                              child: CupertinoDatePicker(
-                                use24hFormat: true,
-                                initialDateTime: updateDeadlineTime,
-                                mode: CupertinoDatePickerMode.dateAndTime,
-                                onDateTimeChanged: (value) {
-                                  updateDeadlineTime = value;
-                                  /*setError(() {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 450,
+                    ),
+                    padding: EdgeInsets.only(
+                        top: 30, left: 30, right: 30, bottom: 10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 30),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Zu erledigen bis',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25),
+                            ),
+                          ),
+                          IntrinsicHeight(
+                            child: Column(
+                              children: [
+                                Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            width: 1,
+                                            color:
+                                                Theme.of(context).accentColor)),
+                                    child: SizedBox(
+                                        height: 150,
+                                        width: 280,
+                                        child: CupertinoDatePicker(
+                                          use24hFormat: true,
+                                          initialDateTime: updateDeadlineTime,
+                                          mode: CupertinoDatePickerMode
+                                              .dateAndTime,
+                                          onDateTimeChanged: (value) {
+                                            updateDeadlineTime = value;
+                                            /*setError(() {
                                     if (updateDeadlineTime!.isBefore(
                                         DateTime.parse(
                                             task!.notificationTime!))) {
@@ -73,61 +96,76 @@ class DetailedViewState extends State<DetailedView> {
                                       errorDeadlineTime = false;
                                     }
                                   });*/
-                                },
-                              ))),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: (errorDeadlineTime)
-                            ? Text(
-                                'Fehler: Frist vor Erinnerung',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            : Text(''),
+                                          },
+                                        ))),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  child: (errorDeadlineTime)
+                                      ? Text(
+                                          'Fehler: Frist vor Erinnerung',
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      : Text(''),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: Icon(
+                                    Icons.clear_rounded,
+                                    size: 30,
+                                  )),
+                              IconButton(
+                                  onPressed: () async {
+                                    if (!errorDeadlineTime) {
+                                      Task newTask = new Task(
+                                          id: task!.id,
+                                          subject: task!.subject,
+                                          isChecked: task!.isChecked,
+                                          deadlineTime:
+                                              updateDeadlineTime.toString(),
+                                          notificationTime:
+                                              task!.notificationTime,
+                                          notes: task!.notes);
+                                      databaseUpdateTask(newTask);
+
+                                      setState(() {
+                                        task = newTask;
+                                      });
+                                      widget.onReload!(task!.id);
+                                      Navigator.pop(context);
+                                      if (DateTime.parse(
+                                              task!.notificationTime!)
+                                          .isAfter(DateTime.now())) {
+                                        cancelNotification(task!.id);
+                                        await Future.delayed(
+                                            Duration(seconds: 1), () {});
+
+                                        scheduleNotification(
+                                            newTask.id!,
+                                            newTask.subject!,
+                                            newTask.notes,
+                                            newTask.deadlineTime.toString(),
+                                            DateTime.parse(
+                                                newTask.notificationTime!));
+                                      }
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.check_rounded,
+                                    size: 30,
+                                  )),
+                            ],
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Abbrechen'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (!errorDeadlineTime) {
-                      Task newTask = new Task(
-                          id: task!.id,
-                          subject: task!.subject,
-                          isChecked: task!.isChecked,
-                          deadlineTime: updateDeadlineTime.toString(),
-                          notificationTime: task!.notificationTime,
-                          notes: task!.notes);
-                      databaseUpdateTask(newTask);
-
-                      setState(() {
-                        task = newTask;
-                      });
-                      widget.onReload!(task!.id);
-                      Navigator.pop(context);
-                      if (DateTime.parse(task!.notificationTime!)
-                          .isAfter(DateTime.now())) {
-                        cancelNotification(task!.id);
-                        await Future.delayed(Duration(seconds: 1), () {});
-
-                        scheduleNotification(
-                            newTask.id!,
-                            newTask.subject!,
-                            newTask.notes,
-                            newTask.deadlineTime.toString(),
-                            DateTime.parse(newTask.notificationTime!));
-                      }
-                    }
-                  },
-                  child: Text('Ändern'),
-                ),
-              ],
-            );
+                    )));
           });
         });
   }
@@ -138,92 +176,130 @@ class DetailedViewState extends State<DetailedView> {
         barrierDismissible: true,
         builder: (context) {
           return StatefulBuilder(builder: (context, setError) {
-            return AlertDialog(
-              title: Text('Erinnerungs-Zeit'),
-              content: SingleChildScrollView(
-                  child: IntrinsicHeight(
-                child: Column(
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                                width: 1,
-                                color: Theme.of(context).accentColor)),
-                        child: SizedBox(
-                            height: 150,
-                            width: 280,
-                            child: CupertinoDatePicker(
-                              use24hFormat: true,
-                              initialDateTime: updateNotificationTime,
-                              mode: CupertinoDatePickerMode.dateAndTime,
-                              onDateTimeChanged: (value) {
-                                updateNotificationTime = value;
-                                setError(() {
-                                  if (updateNotificationTime!
-                                      .add(Duration(minutes: 1))
-                                      .isBefore(DateTime.now())) {
-                                    errorNotificationTime = true;
-                                  } else {
-                                    errorNotificationTime = false;
-                                  }
-                                });
-                              },
-                            ))),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: (errorNotificationTime)
-                          ? Text(
-                              'Ungültige Zeit',
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Text(''),
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 450,
                     ),
-                  ],
-                ),
-              )),
-              actions: [
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Abbrechen'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (!errorNotificationTime) {
-                      Task newTask = new Task(
-                          id: task!.id,
-                          subject: task!.subject,
-                          isChecked: task!.isChecked,
-                          deadlineTime: task!.deadlineTime,
-                          notificationTime: updateNotificationTime.toString(),
-                          notes: task!.notes);
-                      databaseUpdateTask(newTask);
-                      cancelNotification(task!.id);
+                    padding: EdgeInsets.only(
+                        top: 30, left: 30, right: 30, bottom: 10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 30),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Erinnerungs-Zeit',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25),
+                            ),
+                          ),
+                          IntrinsicHeight(
+                              child: Column(
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                          width: 1,
+                                          color:
+                                              Theme.of(context).accentColor)),
+                                  child: SizedBox(
+                                      height: 150,
+                                      width: 280,
+                                      child: CupertinoDatePicker(
+                                        use24hFormat: true,
+                                        initialDateTime: updateNotificationTime,
+                                        mode:
+                                            CupertinoDatePickerMode.dateAndTime,
+                                        onDateTimeChanged: (value) {
+                                          updateNotificationTime = value;
+                                          setError(() {
+                                            if (updateNotificationTime!
+                                                .add(Duration(minutes: 1))
+                                                .isBefore(DateTime.now())) {
+                                              errorNotificationTime = true;
+                                            } else {
+                                              errorNotificationTime = false;
+                                            }
+                                          });
+                                        },
+                                      ))),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 20),
+                                child: (errorNotificationTime)
+                                    ? Text(
+                                        'Ungültige Zeit',
+                                        style: TextStyle(color: Colors.red),
+                                      )
+                                    : Text(''),
+                              ),
+                            ],
+                          )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: Icon(
+                                    Icons.clear_rounded,
+                                    size: 30,
+                                  )),
+                              IconButton(
+                                  onPressed: () {
+                                    if (!errorNotificationTime) {
+                                      Task newTask = new Task(
+                                          id: task!.id,
+                                          subject: task!.subject,
+                                          isChecked: task!.isChecked,
+                                          deadlineTime: task!.deadlineTime,
+                                          notificationTime:
+                                              updateNotificationTime.toString(),
+                                          notes: task!.notes);
+                                      databaseUpdateTask(newTask);
+                                      cancelNotification(task!.id);
 
-                      if (updateNotificationTime!.isAfter(DateTime.now())) {
-                        scheduleNotification(
-                            newTask.id!,
-                            newTask.subject!,
-                            newTask.notes,
-                            newTask.deadlineTime.toString(),
-                            updateNotificationTime!);
-                      } else if (updateNotificationTime!.isAfter(
-                          DateTime.now().subtract(Duration(minutes: 1)))) {
-                        showNotification(newTask.id!, newTask.subject!,
-                            newTask.notes, newTask.deadlineTime.toString());
-                      }
+                                      if (updateNotificationTime!
+                                          .isAfter(DateTime.now())) {
+                                        scheduleNotification(
+                                            newTask.id!,
+                                            newTask.subject!,
+                                            newTask.notes,
+                                            newTask.deadlineTime.toString(),
+                                            updateNotificationTime!);
+                                      } else if (updateNotificationTime!
+                                          .isAfter(DateTime.now().subtract(
+                                              Duration(minutes: 1)))) {
+                                        showNotification(
+                                            newTask.id!,
+                                            newTask.subject!,
+                                            newTask.notes,
+                                            newTask.deadlineTime.toString());
+                                      }
 
-                      setState(() {
-                        task = newTask;
-                      });
-                      widget.onReload!(task!.id);
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text('Ändern'),
-                ),
-              ],
-            );
+                                      setState(() {
+                                        task = newTask;
+                                      });
+                                      widget.onReload!(task!.id);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.check_rounded,
+                                    size: 30,
+                                  )),
+                            ],
+                          )
+                        ],
+                      ),
+                    )));
           });
         });
   }
@@ -234,92 +310,126 @@ class DetailedViewState extends State<DetailedView> {
         barrierDismissible: true,
         builder: (context) {
           return StatefulBuilder(builder: (context, setError) {
-            return AlertDialog(
-              title: Text('Notizen'),
-              content: SingleChildScrollView(
-                child: IntrinsicHeight(
-                  child: Column(children: [
-                    TextField(
-                      dragStartBehavior: DragStartBehavior.down,
-                      controller:
-                          _textEdetingController, //TextEditingController(text: updateNotes),
-                      decoration: InputDecoration(hintText: 'Notizen'),
-                      onChanged: (text) {
-                        updateNotes = text;
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 450,
+                  ),
+                  padding:
+                      EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Notizen',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 25),
+                          ),
+                        ),
+                        IntrinsicHeight(
+                          child: Column(children: [
+                            TextField(
+                              dragStartBehavior: DragStartBehavior.down,
+                              controller: _textEdetingController,
+                              decoration: InputDecoration(hintText: 'Notizen'),
+                              onChanged: (text) {
+                                updateNotes = text;
+                                _textEdetingController.text = updateNotes!;
+                                _textEdetingController.selection =
+                                    TextSelection.fromPosition(TextPosition(
+                                        offset: _textEdetingController
+                                            .text.length));
+                                setState(() {});
 
-                        _textEdetingController.text = updateNotes!;
-                        _textEdetingController.selection =
-                            TextSelection.fromPosition(TextPosition(
-                                offset: _textEdetingController.text.length));
-                        setState(() {});
+                                if (updateNotes == '' || updateNotes == null) {
+                                  updateNotes = null;
+                                }
+                                if (updateNotes == null &&
+                                    task!.subject == 'Sonstiges') {
+                                  setError(() {
+                                    errorNotes = true;
+                                  });
+                                } else {
+                                  setError(() {
+                                    errorNotes = false;
+                                  });
+                                }
+                              },
+                            ),
+                            (errorNotes)
+                                ? Text(
+                                    'Notiz erforderlich',
+                                    style: TextStyle(color: Colors.red),
+                                  )
+                                : Text(''),
+                          ]),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: Icon(
+                                  Icons.clear_rounded,
+                                  size: 30,
+                                )),
+                            IconButton(
+                                onPressed: () async {
+                                  if (!errorNotes) {
+                                    if (updateNotes == '' ||
+                                        updateNotes == null) {
+                                      updateNotes = null;
+                                    }
+                                    Task newTask = new Task(
+                                        id: task!.id,
+                                        subject: task!.subject,
+                                        isChecked: task!.isChecked,
+                                        deadlineTime: task!.deadlineTime,
+                                        notificationTime:
+                                            task!.notificationTime,
+                                        notes: updateNotes);
+                                    databaseUpdateTask(newTask);
+                                    setState(() {
+                                      task = newTask;
+                                    });
+                                    widget.onReload!(task!.id);
+                                    Navigator.pop(context);
 
-                        if (updateNotes == '' || updateNotes == null) {
-                          updateNotes = null;
-                        }
-                        if (updateNotes == null &&
-                            task!.subject == 'Sonstiges') {
-                          setError(() {
-                            errorNotes = true;
-                          });
-                        } else {
-                          setError(() {
-                            errorNotes = false;
-                          });
-                        }
-                      },
+                                    if (DateTime.parse(task!.notificationTime!)
+                                        .isAfter(DateTime.now())) {
+                                      cancelNotification(task!.id);
+                                      await Future.delayed(
+                                          Duration(seconds: 1), () {});
+
+                                      scheduleNotification(
+                                          newTask.id!,
+                                          newTask.subject!,
+                                          newTask.notes,
+                                          newTask.deadlineTime.toString(),
+                                          DateTime.parse(
+                                              newTask.notificationTime!));
+                                    }
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.check_rounded,
+                                  size: 30,
+                                )),
+                          ],
+                        )
+                      ],
                     ),
-                    (errorNotes)
-                        ? Text(
-                            'Notiz erforderlich',
-                            style: TextStyle(color: Colors.red),
-                          )
-                        : Text(''),
-                  ]),
-                ),
-              ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Abbrechen'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (!errorNotes) {
-                      if (updateNotes == '' || updateNotes == null) {
-                        updateNotes = null;
-                      }
-                      Task newTask = new Task(
-                          id: task!.id,
-                          subject: task!.subject,
-                          isChecked: task!.isChecked,
-                          deadlineTime: task!.deadlineTime,
-                          notificationTime: task!.notificationTime,
-                          notes: updateNotes);
-                      databaseUpdateTask(newTask);
-                      setState(() {
-                        task = newTask;
-                      });
-                      widget.onReload!(task!.id);
-                      Navigator.pop(context);
-
-                      if (DateTime.parse(task!.notificationTime!)
-                          .isAfter(DateTime.now())) {
-                        cancelNotification(task!.id);
-                        await Future.delayed(Duration(seconds: 1), () {});
-
-                        scheduleNotification(
-                            newTask.id!,
-                            newTask.subject!,
-                            newTask.notes,
-                            newTask.deadlineTime.toString(),
-                            DateTime.parse(newTask.notificationTime!));
-                      }
-                    }
-                  },
-                  child: Text('Ändern'),
-                ),
-              ],
-            );
+                  ),
+                ));
           });
         });
   }
@@ -494,16 +604,16 @@ class DetailedViewState extends State<DetailedView> {
   void remindMeLater(String time) {
     DateTime tempTime;
 
-    if(time == 'afternoon') {
-      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,16);
-    }
-    else if(time == 'evening') {
-      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,20);
-    }
-    else if(time == 'tomorrowMorning') {
-      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,(DateTime.now().day + 1),9);
-    }
-    else {
+    if (time == 'afternoon') {
+      tempTime = new DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 16);
+    } else if (time == 'evening') {
+      tempTime = new DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 20);
+    } else if (time == 'tomorrowMorning') {
+      tempTime = new DateTime(DateTime.now().year, DateTime.now().month,
+          (DateTime.now().day + 1), 9);
+    } else {
       tempTime = DateTime.now().add(Duration(hours: 1));
     }
 
@@ -526,31 +636,54 @@ class DetailedViewState extends State<DetailedView> {
             },
             child: Container(
               padding: EdgeInsets.all(10),
-              child: Row(children: [
-                Icon(CupertinoIcons.timer,color: Colors.orange,),
-              Container(
-                margin: EdgeInsets.only(left: 15),
-                child:Text('In 1 Stunde erinnern',
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),),
-              ],),
+              child: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.timer,
+                    color: Colors.orange,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 15),
+                    child: Text(
+                      'In 1 Stunde erinnern',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           OutlinedButton(
             onPressed: () {
-              remindMeLater((DateTime.now().hour < 16) ? 'afternoon' : (DateTime.now().hour < 20) ? 'evening' : 'tomorrowMorning');
+              remindMeLater((DateTime.now().hour < 16)
+                  ? 'afternoon'
+                  : (DateTime.now().hour < 20)
+                      ? 'evening'
+                      : 'tomorrowMorning');
             },
             child: Container(
               padding: EdgeInsets.all(10),
-              child: Row(children: [
-                Icon(CupertinoIcons.timer,color: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blueGrey,),
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child:Text(
-                    (DateTime.now().hour < 16) ? 'Am Nachmittag erinnern' : (DateTime.now().hour < 20) ? 'Am Abend erinnern' : 'Am Morgen erinnern',
-                style: TextStyle(fontWeight: FontWeight.w500),
-                  ), ),
-              ],),
+              child: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.timer,
+                    color: (Theme.of(context).brightness == Brightness.dark)
+                        ? Theme.of(context).accentColor
+                        : Colors.blueGrey,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 15),
+                    child: Text(
+                      (DateTime.now().hour < 16)
+                          ? 'Am Nachmittag erinnern'
+                          : (DateTime.now().hour < 20)
+                              ? 'Am Abend erinnern'
+                              : 'Am Morgen erinnern',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -624,10 +757,9 @@ class DetailedViewState extends State<DetailedView> {
                 Icon(Icons.edit_rounded, color: Theme.of(context).accentColor),
             onPressed: () {
               errorNotes = false;
-              _textEdetingController.text = updateNotes!;
+              _textEdetingController.text = task!.notes!;
               _textEdetingController.selection = TextSelection.fromPosition(
                   TextPosition(offset: _textEdetingController.text.length));
-              //setState(() {});
               editNotes();
             },
           )

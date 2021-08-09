@@ -122,10 +122,8 @@ class _AddDialogState extends State<AddDialog> {
     });
   }
 
-  /**
-   * Diese Methode sorgt dafür, dass die Werte aktuelles Fach, nächster Zeitpunkt laut Stundenplan und Zeitpunkt
-   * der Benachrichtigung automatisch ermittelt werden.
-   */
+  /// Diese Methode sorgt dafür, dass die Werte aktuelles Fach, nächster Zeitpunkt laut Stundenplan und Zeitpunkt
+  /// der Benachrichtigung automatisch ermittelt werden.
   Future<void> getAutoValues() async {
     if (currentTime.weekday > 5 ||
         currentTime.isBefore(getCV.getStartOfFirstLesson()) ||
@@ -139,12 +137,10 @@ class _AddDialogState extends State<AddDialog> {
     }
   }
 
-  /**
-   * Diese Methode berechnet anhand eines per Parameter übergebenen Zetpunkts
-   * den für diesen Zeitpunkt entsprechen Zeitpunkt für eine System-Benachrichtigung
-   * und gibt diesen ermittelten Zeitpunkt zurück.
-   * (16 Uhr am Vortag)
-   */
+  /// Diese Methode berechnet anhand eines per Parameter übergebenen Zetpunkts
+  /// den für diesen Zeitpunkt entsprechen Zeitpunkt für eine System-Benachrichtigung
+  /// und gibt diesen ermittelten Zeitpunkt zurück.
+  /// (16 Uhr am Vortag)
   DateTime getNotificationTime(DateTime pDateTime) {
     DateTime temp = pDateTime.subtract(new Duration(days: 1));
     temp = new DateTime(temp.year, temp.month, temp.day);
@@ -160,12 +156,10 @@ class _AddDialogState extends State<AddDialog> {
     });
   }
 
-  /**
-   * Diese Methode wird beim Klicken auf den "Hinzufügen"-Button ausgeführt.
-   * Zunächst werden die vom Benutzer eingestellten Werte übernommen und auf Fhler überprüft.
-   * Liegen keine Fehler vor, wird die neue Aufgabe in die Datenbank und in die Listenansicht eingefügt.
-   * Außerdem wird eine System-Benachrichtigung geplant bzw. je nach Zeitpunkt direkt ausgegeben.
-   */
+  /// Diese Methode wird beim Klicken auf den "Hinzufügen"-Button ausgeführt.
+  /// Zunächst werden die vom Benutzer eingestellten Werte übernommen und auf Fhler überprüft.
+  /// Liegen keine Fehler vor, wird die neue Aufgabe in die Datenbank und in die Listenansicht eingefügt.
+  /// Außerdem wird eine System-Benachrichtigung geplant bzw. je nach Zeitpunkt direkt ausgegeben.
   void addTask() async {
     errorNotes = false;
     String? subjectToInsert;
@@ -235,11 +229,9 @@ class _AddDialogState extends State<AddDialog> {
     }
   }
 
-  /**
-   * Diese Methode ermittelt die nächste Id, welche eine zukünftige Aufgabe erhalten muss.
-   * Dies ist notwendig, damit es zu keinen Konflikten beim löschen der Aufgaben aus der AnimatedList und
-   * beim stornieren der geplanten Benachrichtigungen gibt.
-   */
+  /// Diese Methode ermittelt die nächste Id, welche eine zukünftige Aufgabe erhalten muss.
+  /// Dies ist notwendig, damit es zu keinen Konflikten beim löschen der Aufgaben aus der AnimatedList und
+  /// beim stornieren der geplanten Benachrichtigungen gibt.
   void getNextId() async {
     List<Task> list = await databaseGetAllTasks(5);
 
@@ -261,28 +253,25 @@ class _AddDialogState extends State<AddDialog> {
     getNextId();
   }
 
-  /**
-   * Erstellen des Widget (Dialogfenster zum Hinzufügen einer neuen Hausaufgabe) mit:
-   *  - Möglichkeit zur Wahl des Fachs (mittels Dropdownbutton)
-   *  - Textfeld für Notizen
-   *  - Möglichkeit zur Wahl, ob die zeit automatisch ermittelt werden soll
-   *    (Dann je nach Auswahl DateTime-Picker zum manuellen Auswählen einer
-   *    Zeit oder Anzeige der automatisch ermittelten Werte)
-   *  - Button zum Hinzufügen einer neuen Aufagbe sowie zum Abbrechen
-   *
-   * Hinweis:
-   *  - Sollte zu dem aktuellen Tag kein Fach im Stundenplan gefunden werden, wird
-   *    standardmäßig die Option "Sonstiges" ausgewählt.
-   *  - Sollte zu dem ausgewählten Fach kein Auftauchen im Stundenplan gefunden werden, entfällt die
-   *    Option "Zeit automatisch wählen".
-   */
+  /// Erstellen des Widget (Dialogfenster zum Hinzufügen einer neuen Hausaufgabe) mit:
+  ///  - Möglichkeit zur Wahl des Fachs (mittels Dropdownbutton)
+  ///  - Textfeld für Notizen
+  ///  - Möglichkeit zur Wahl, ob die zeit automatisch ermittelt werden soll
+  ///    (Dann je nach Auswahl DateTime-Picker zum manuellen Auswählen einer
+  ///    Zeit oder Anzeige der automatisch ermittelten Werte)
+  ///  - Button zum Hinzufügen einer neuen Aufagbe sowie zum Abbrechen
+  ///
+  /// Hinweis:
+  ///  - Sollte zu dem aktuellen Tag kein Fach im Stundenplan gefunden werden, wird
+  ///    standardmäßig die Option "Sonstiges" ausgewählt.
+  ///  - Sollte zu dem ausgewählten Fach kein Auftauchen im Stundenplan gefunden werden, entfällt die
+  ///    Option "Zeit automatisch wählen".
   @override
   Widget build(BuildContext context) {
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         child: Container(
-          //height: 565,
           constraints: BoxConstraints(maxWidth: 350, maxHeight: 565),
           padding: (MediaQuery.of(context).orientation == Orientation.landscape)
               ? EdgeInsets.symmetric(vertical: 10, horizontal: 25)
