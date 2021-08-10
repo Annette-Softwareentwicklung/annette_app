@@ -242,10 +242,8 @@ class _AddDialogState extends State<AddDialog> {
     }
   }
 
-  /**
-   * beim Initialisieren werden mit der Methode load() die notwendigen Objekte aus der Datenbank geladen
-   * sowie mit der Methode getNextId() die zukünftige Id der potentiellen neuen Hausaufgabe ermittelt.
-   */
+  /// beim Initialisieren werden mit der Methode load() die notwendigen Objekte aus der Datenbank geladen
+  /// sowie mit der Methode getNextId() die zukünftige Id der potentiellen neuen Hausaufgabe ermittelt.
   @override
   void initState() {
     super.initState();
@@ -268,10 +266,7 @@ class _AddDialogState extends State<AddDialog> {
   ///    Option "Zeit automatisch wählen".
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: Container(
+    return  Container(
           constraints: BoxConstraints(maxWidth: 350, maxHeight: 565),
           padding: (MediaQuery.of(context).orientation == Orientation.landscape)
               ? EdgeInsets.symmetric(vertical: 10, horizontal: 25)
@@ -556,6 +551,6 @@ class _AddDialogState extends State<AddDialog> {
                           ),
                           onPressed: () => Navigator.pop(context)),
                     ])),
-        ));
+        );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:annette_app/timetable/timetableTab.dart';
 import 'package:annette_app/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
@@ -7,7 +9,7 @@ import 'package:annette_app/guide.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'homeworkTab.dart';
 import 'settingsTab.dart';
-import 'addDialog.dart';
+import '2addDialog.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
@@ -216,20 +218,49 @@ class NavigationControllerState extends State<NavigationController> {
 
   /// Öffnet das Dialogfenster zum Erstellen einer neuen Hausaufgabe
   void showNewHomeworkDialog() {
-    showDialog(
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height - 120,
+        decoration: new BoxDecoration(
+          color: (Theme.of(context).brightness == Brightness.dark) ? Color.fromRGBO(50, 50, 50, 1) : Color.fromRGBO(248, 248, 253, 1),
+          borderRadius: new BorderRadius.only(
+            topLeft: const Radius.circular(20.0),
+            topRight: const Radius.circular(20.0),
+          ),
+        ),
+        child: AddDialog(
+            onTaskCreated: (newTask) {
+              if (tabIndex == 1) {
+                homeworkTabAccess.currentState!.insertTask(newTask);
+              }
+            },
+          ),
+      ),
+    );
+
+
+   /* showDialog(
       context: context,
       barrierDismissible: true,
       useSafeArea: true,
       builder: (context) {
-        return AddDialog(
+        return Dialog(
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        child: AddDialog(
           onTaskCreated: (newTask) {
             if (tabIndex == 1) {
               homeworkTabAccess.currentState!.insertTask(newTask);
             }
           },
-        );
+        ),);
       },
     );
+
+    */
   }
 
   Widget bottomBar() {
