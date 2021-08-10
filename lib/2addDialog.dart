@@ -267,7 +267,6 @@ class _AddDialogState extends State<AddDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 350, maxHeight: 565),
       padding: EdgeInsets.all(25.0),
       child: (!finished)
           ? CupertinoActivityIndicator()
@@ -284,45 +283,63 @@ class _AddDialogState extends State<AddDialog> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  DropdownButton<String>(
-                    underline: Container(),
-                    items: subjectNames
-                        .map<DropdownMenuItem<String>>((String? value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value!),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedSubject = value;
-                        errorNotes = false;
-                        errorTime = false;
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: (errorNotes)
+                            ? Colors.red
+                            : (Theme.of(context).brightness == Brightness.dark) ? Colors.grey : Theme.of(context).dividerColor,
+                      ),
+                      color: (Theme.of(context).brightness == Brightness.dark)
+                          ? Color.fromRGBO(50, 50, 50, 1)
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: DropdownButton<String>(
+                      iconSize: 35,
+                      isExpanded: true,
+                      underline: Container(),
+                      items: subjectNames
+                          .map<DropdownMenuItem<String>>((String? value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value!),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedSubject = value;
+                          errorNotes = false;
+                          errorTime = false;
 
-                        if (selectedSubject != 'Sonstiges') {
-                          detectedDeadlineTime = getCV.getNextLesson(
-                              subjectCodes[
-                                  subjectNames.indexOf(selectedSubject!)]);
-                          if (detectedDeadlineTime == null) {
-                            autoTime = false;
+                          if (selectedSubject != 'Sonstiges') {
+                            detectedDeadlineTime = getCV.getNextLesson(
+                                subjectCodes[
+                                    subjectNames.indexOf(selectedSubject!)]);
+                            if (detectedDeadlineTime == null) {
+                              autoTime = false;
+                            } else {
+                              autoTime = true;
+                              detectedNotificationTime =
+                                  getNotificationTime(detectedDeadlineTime!);
+                            }
                           } else {
-                            autoTime = true;
-                            detectedNotificationTime =
-                                getNotificationTime(detectedDeadlineTime!);
+                            autoTime = false;
                           }
-                        } else {
-                          autoTime = false;
-                        }
-                      });
-                    },
-                    value: selectedSubject,
-                    hint: Text('Fach'),
-                    icon: Icon(Icons.arrow_drop_down_outlined),
+                        });
+                      },
+                      value: selectedSubject,
+                      hint: Text('Fach'),
+                      icon: Icon(Icons.arrow_drop_down_outlined),
+                    ),
                   ),
                   CupertinoTextField(
-                    autofocus: (selectedSubject == 'Sonstiges')
-                  ? true
-                      : false,
+                    autofocus: (selectedSubject == 'Sonstiges') ? true : false,
                     placeholder: (selectedSubject == 'Sonstiges')
                         ? 'Notizen (Erforderlich)'
                         : 'Notizen (Optional)',
@@ -336,7 +353,7 @@ class _AddDialogState extends State<AddDialog> {
                         width: 1,
                         color: (errorNotes)
                             ? Colors.red
-                            : Theme.of(context).dividerColor,
+                            : (Theme.of(context).brightness == Brightness.dark) ? Colors.grey : Theme.of(context).dividerColor,
                       ),
                       color: (Theme.of(context).brightness == Brightness.dark)
                           ? Color.fromRGBO(50, 50, 50, 1)
@@ -363,7 +380,7 @@ class _AddDialogState extends State<AddDialog> {
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 20),
-                   /* child: (errorNotes)
+                    /* child: (errorNotes)
                         ? Text(
                             'Bitte eine Notiz eintragen',
                             style: TextStyle(color: Colors.red),
@@ -372,13 +389,15 @@ class _AddDialogState extends State<AddDialog> {
 
                     */
                   ),
-
-
                   Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: (Theme.of(context).brightness == Brightness.dark)
+                            ? Color.fromRGBO(50, 50, 50, 1)
+                            : Colors.white,
                         border:
-                            Border.all(color: Theme.of(context).dividerColor),
+                            Border.all(
+                                color: (Theme.of(context).brightness == Brightness.dark) ? Colors.grey : Theme.of(context).dividerColor
+                            ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.all(10),
@@ -419,55 +438,52 @@ class _AddDialogState extends State<AddDialog> {
                           ),
                           if (autoTime)
                             Column(
-                                  children: [
-                                    Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text('Erinnerung:',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              Text(
-                                                  parseTimeToUserOutput(
-                                                      detectedNotificationTime
-                                                          .toString()),
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ])),
-                                    Divider(),
-                                    Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text('Zu erledigen bis:',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              Text(
-                                                  parseTimeToUserOutput(
-                                                      detectedDeadlineTime
-                                                          .toString()),
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ])),
-                                  ],
-                                ),
+                              children: [
+                                Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Erinnerung:',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400)),
+                                          Text(
+                                              parseTimeToUserOutput(
+                                                  detectedNotificationTime
+                                                      .toString()),
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500)),
+                                        ])),
+                                Divider(),
+                                Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text('Zu erledigen bis:',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400)),
+                                          Text(
+                                              parseTimeToUserOutput(
+                                                  detectedDeadlineTime
+                                                      .toString()),
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500)),
+                                        ])),
+                              ],
+                            ),
                           if (!autoTime)
                             Column(
                               children: <Widget>[
                                 Container(
-                                  padding: EdgeInsets.all(10),
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Text('Wähle eine Erinnerungs-Zeit:',
                                       style: TextStyle(
                                           fontSize: 17,
@@ -496,14 +512,13 @@ class _AddDialogState extends State<AddDialog> {
                                 Container(
                                   child: (errorTime)
                                       ? Text(
-                                    'Ungültige Zeit',
-                                    style: TextStyle(color: Colors.red),
-                                  )
+                                          'Ungültige Zeit',
+                                          style: TextStyle(color: Colors.red),
+                                        )
                                       : Text(''),
                                 ),
                               ],
                             ),
-
                         ],
                       )),
                 ],
@@ -532,22 +547,17 @@ class _AddDialogState extends State<AddDialog> {
                           onPressed: () {
                             addTask();
                           }),
-                      Container(
-                        margin: EdgeInsets.only(
-                          bottom: 20,
-                        ),
-                        child: CupertinoButton(
-                          child: Text('Abbrechen',
-                              style: TextStyle(
-                                color: (Theme.of(context).brightness ==
-                                        Brightness.dark)
-                                    ? Colors.white70
-                                    : Colors.black54,
-                                //color: Theme.of(context).accentColor
-                              )),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      )
+                      CupertinoButton(
+                        child: Text('Abbrechen',
+                            style: TextStyle(
+                              color: (Theme.of(context).brightness ==
+                                      Brightness.dark)
+                                  ? Colors.white70
+                                  : Colors.black54,
+                              //color: Theme.of(context).accentColor
+                            )),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     ],
                   ),
                 ),

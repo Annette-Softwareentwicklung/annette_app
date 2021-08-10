@@ -223,9 +223,12 @@ class NavigationControllerState extends State<NavigationController> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        height: MediaQuery.of(context).size.height - 120,
+
+        ///Grenzwert muss nochmal neu eingestellt werden
+        height: (MediaQuery.of(context).size.height < 793) ? 663 : MediaQuery.of(context).size.height - 120,
+
         decoration: new BoxDecoration(
-          color: (Theme.of(context).brightness == Brightness.dark) ? Color.fromRGBO(50, 50, 50, 1) : Color.fromRGBO(248, 248, 253, 1),
+          color: (Theme.of(context).brightness == Brightness.dark) ? /*Color.fromRGBO(50, 50, 50, 1)*/ Color.fromRGBO(40, 40, 40, 1) : Color.fromRGBO(248, 248, 253, 1),
           borderRadius: new BorderRadius.only(
             topLeft: const Radius.circular(20.0),
             topRight: const Radius.circular(20.0),
