@@ -267,7 +267,7 @@ class _AddDialogState extends State<AddDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(25.0),
+      padding: EdgeInsets.only(top: 25, left: 25, right: 25),
       child: (!finished)
           ? CupertinoActivityIndicator()
           : Column(children: <Widget>[
@@ -431,7 +431,9 @@ class _AddDialogState extends State<AddDialog> {
                                 ),
                               ],
                             ),
-                          Container(
+                          if (selectedSubject != 'Sonstiges' &&
+                              detectedDeadlineTime != null)
+                            Container(
                             margin: EdgeInsets.symmetric(vertical: 8),
                             height: 1,
                             color: Theme.of(context).dividerColor,
@@ -555,14 +557,14 @@ class _AddDialogState extends State<AddDialog> {
                                   ? Colors.white70
                                   : Colors.black54,
                               //color: Theme.of(context).accentColor
-                            )),
+                            ),),
                         onPressed: () => Navigator.pop(context),
                       ),
                     ],
                   ),
                 ),
               ),
-            ]),
+            ],),
     );
   }
 }

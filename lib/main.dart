@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -78,6 +77,11 @@ void main() async {
     guide = false;
   }
 
+
+
+
+
+
   ///Starten der App
   runApp(MyApp());
 }
@@ -110,7 +114,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DismissKeyboard(
-        child:MaterialApp(
+        child: MaterialApp(
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

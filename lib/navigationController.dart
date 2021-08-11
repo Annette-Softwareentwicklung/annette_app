@@ -1,18 +1,14 @@
 import 'dart:ui';
-
 import 'package:annette_app/timetable/timetableTab.dart';
-import 'package:annette_app/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/guide.dart';
+import 'package:flutter/services.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'homeworkTab.dart';
 import 'settingsTab.dart';
 import '2addDialog.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:async';
-import 'dart:io';
 
 /// Diese Klasse gibt das Scaffold-Widget mit der Menüleiste am Boden zurück und ruft die
 /// entsprechenden Tabs auf, also quasi die "Standard-Benutzeroberfläche" die erscheint,
@@ -29,6 +25,10 @@ class NavigationControllerState extends State<NavigationController> {
   final GlobalKey<HomeworkTabState> homeworkTabAccess =
       GlobalKey<HomeworkTabState>();
 
+
+
+
+
   /// Diese Methode sorgt dafür, dass bei erstmaligem Starten der App
   /// ein Leitfaden angezeigt wird. In der Datei "data.txt" ist gespeichert (0 oder 1),
   /// ob der Leitfaden angezeigt werden muss.
@@ -41,86 +41,10 @@ class NavigationControllerState extends State<NavigationController> {
   /// https://flutter.dev/docs/cookbook/persistence/reading-writing-files
   /// https://www.kindacode.com/article/flutter-how-to-read-and-write-text-files/
 
-  void showGuide() async {
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
-
-    Future<int> _readData() async {
-      try {
-        final _path = await _getPath();
-        final _file = File('$_path/data.txt');
-
-        String contents = await _file.readAsString();
-        return int.parse(contents);
-      } catch (e) {
-        return 0;
-      }
-    }
-
-    Future<void> _writeData() async {
-      final _path = await _getPath();
-      final _myFile = File('$_path/data.txt');
-      await _myFile.writeAsString(1.toString());
-    }
-
-    if (await _readData() == 0) {
-      Future<bool> _readConfiguration() async {
-        try {
-          final _path = await _getPath();
-          final _file = File('$_path/data.txt');
-
-          String contents = await _file.readAsString();
-          if (contents.length == 0) {
-            print('NoConfiguration');
-            return false;
-          } else {
-            print('configuration');
-            return true;
-          }
-        } catch (e) {
-          print('NoConfiguration');
-          return false;
-        }
-      }
-
-      Future<void> _writeConfiguration() async {
-        final _path = await _getPath();
-        final _myFile = File('$_path/configuration.txt');
-        await _myFile.writeAsString(
-            'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Kath. Religion;sLanguageUS:Freistunde;diffUS:Freistunde;');
-      }
-
-      if (!await _readConfiguration()) {
-        _writeConfiguration();
-      }
-
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        useSafeArea: true,
-        builder: (context) {
-          return GuideDialog(
-            onCompleted: () async => await _writeData(),
-          );
-        },
-      );
-    }
-
-    update(context);
-  }
-
   /// Initialisieren
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    /// showGuide() wird aufgerufen, um bei Bedarf den Leitfaden anzuzeigen.
-    new Future.delayed(Duration.zero, () {
-      //showGuide();
-    });
 
     ///Homescreen Quickactions
     final QuickActions quickActions = QuickActions();
@@ -186,84 +110,69 @@ class NavigationControllerState extends State<NavigationController> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      /*bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            bottomBarItem(
-              icon: CupertinoIcons.rectangle_grid_1x2,
-              text: 'Vertretung',index: 0
-            ),
-            bottomBarItem(
-              icon: CupertinoIcons.square_list,
-              text: 'Hausaufgaben',index: 1
-            ),
-            Container(height: 1,),
-            bottomBarItem(
-              icon: CupertinoIcons.calendar,
-              text: 'Stundenplan',index: 2
-            ),
-            bottomBarItem(
-              icon: CupertinoIcons.ellipsis,
-              text: 'Sonstiges',index: 3
-            ),
-          ],
-        ),
-      ),*/
       bottomNavigationBar: bottomBar(),
     );
   }
 
   /// Öffnet das Dialogfenster zum Erstellen einer neuen Hausaufgabe
   void showNewHomeworkDialog() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
+    if (MediaQuery.of(context).size.width > 5000) {
+      showDialog(
 
-        ///Grenzwert muss nochmal neu eingestellt werden
-        height: (MediaQuery.of(context).size.height < 793) ? 663 : MediaQuery.of(context).size.height - 120,
+        context: context,
+        barrierDismissible: true,
+        useSafeArea: true,
+        builder: (context) {
+          return Dialog(
 
-        decoration: new BoxDecoration(
-          color: (Theme.of(context).brightness == Brightness.dark) ? /*Color.fromRGBO(50, 50, 50, 1)*/ Color.fromRGBO(40, 40, 40, 1) : Color.fromRGBO(248, 248, 253, 1),
-          borderRadius: new BorderRadius.only(
-            topLeft: const Radius.circular(20.0),
-            topRight: const Radius.circular(20.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: 550,
+              ),
+              height: 660,
+              child: AddDialog(
+                onTaskCreated: (newTask) {
+                  if (tabIndex == 1) {
+                    homeworkTabAccess.currentState!.insertTask(newTask);
+                  }
+                },
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => Container(
+          height: (MediaQuery.of(context).size.height < 758)
+              ? 638
+              : MediaQuery.of(context).size.height - 120,
+
+          decoration: new BoxDecoration(
+            color: (Theme.of(context).brightness == Brightness.dark)
+                ? /*Color.fromRGBO(50, 50, 50, 1)*/ Color.fromRGBO(
+                    40, 40, 40, 1)
+                : Color.fromRGBO(248, 248, 253, 1),
+            borderRadius: new BorderRadius.only(
+              topLeft: const Radius.circular(20.0),
+              topRight: const Radius.circular(20.0),
+            ),
           ),
-        ),
-        child: AddDialog(
+          child: AddDialog(
             onTaskCreated: (newTask) {
               if (tabIndex == 1) {
                 homeworkTabAccess.currentState!.insertTask(newTask);
               }
             },
           ),
-      ),
-    );
-
-
-   /* showDialog(
-      context: context,
-      barrierDismissible: true,
-      useSafeArea: true,
-      builder: (context) {
-        return Dialog(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: AddDialog(
-          onTaskCreated: (newTask) {
-            if (tabIndex == 1) {
-              homeworkTabAccess.currentState!.insertTask(newTask);
-            }
-          },
-        ),);
-      },
-    );
-
-    */
+        ),
+      );
+    }
   }
 
   Widget bottomBar() {
