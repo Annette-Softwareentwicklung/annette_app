@@ -70,7 +70,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 
   @override
   dispose() {
-    SystemChrome.setPreferredOrientations([
+   SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,

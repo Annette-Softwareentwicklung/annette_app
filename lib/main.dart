@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dismissKeyboard.dart';
 import 'introductionScreen.dart';
@@ -78,10 +79,6 @@ void main() async {
   }
 
 
-
-
-
-
   ///Starten der App
   runApp(MyApp());
 }
@@ -108,6 +105,9 @@ void helper(String? payload) async {
     }
   } while (!load);
 }
+
+
+
 
 /// Einstiegspunkt der App.
 class MyApp extends StatelessWidget {

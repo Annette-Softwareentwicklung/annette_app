@@ -116,46 +116,24 @@ class NavigationControllerState extends State<NavigationController> {
 
   /// Öffnet das Dialogfenster zum Erstellen einer neuen Hausaufgabe
   void showNewHomeworkDialog() {
-    if (MediaQuery.of(context).size.width > 5000) {
-      showDialog(
-
-        context: context,
-        barrierDismissible: true,
-        useSafeArea: true,
-        builder: (context) {
-          return Dialog(
-
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: 550,
-              ),
-              height: 660,
-              child: AddDialog(
-                onTaskCreated: (newTask) {
-                  if (tabIndex == 1) {
-                    homeworkTabAccess.currentState!.insertTask(newTask);
-                  }
-                },
-              ),
-            ),
-          );
-        },
-      );
-    } else {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (context) => Container(
+          width: MediaQuery.of(context).size.width,
+          color: Colors.transparent,
+          padding: EdgeInsets.symmetric(
+            horizontal: (MediaQuery.of(context).size.width > 500) ? ((MediaQuery.of(context).size.width - 500) / 2) : 0,
+          ),
+          child: Container(
           height: (MediaQuery.of(context).size.height < 758)
               ? 638
-              : MediaQuery.of(context).size.height - 120,
+              : (MediaQuery.of(context).size.height > 1000) ? 700 : MediaQuery.of(context).size.height - 120,
 
           decoration: new BoxDecoration(
             color: (Theme.of(context).brightness == Brightness.dark)
-                ? /*Color.fromRGBO(50, 50, 50, 1)*/ Color.fromRGBO(
+                ?  Color.fromRGBO(
                     40, 40, 40, 1)
                 : Color.fromRGBO(248, 248, 253, 1),
             borderRadius: new BorderRadius.only(
@@ -170,9 +148,9 @@ class NavigationControllerState extends State<NavigationController> {
               }
             },
           ),
-        ),
+        ),),
       );
-    }
+
   }
 
   Widget bottomBar() {

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:annette_app/subjectsList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/manageNotifications.dart';
 import 'package:annette_app/currentValues.dart';
+import 'package:flutter/services.dart';
 
 import 'lessonStartTimes.dart';
 
@@ -247,8 +250,28 @@ class _AddDialogState extends State<AddDialog> {
   @override
   void initState() {
     super.initState();
+    helperOrientation();
     load();
     getNextId();
+  }
+
+  void helperOrientation() {
+    if (MediaQueryData.fromWindow(window).size.shortestSide < 640) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    }
+  }
+
+
+  @override
+  dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+    ]);
+    super.dispose();
   }
 
   /// Erstellen des Widget (Dialogfenster zum Hinzufügen einer neuen Hausaufgabe) mit:
