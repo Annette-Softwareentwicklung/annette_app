@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:annette_app/vertretung/vertretungListTile.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class VertretungsTab extends StatefulWidget {
@@ -75,9 +78,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
             return a.lesson!.compareTo(b.lesson!);
           });
         }
-        /*
-        vpc2.getAffectedClasses();
-        */
+
         load = true;
         setState(() {});
       } else {
@@ -111,11 +112,30 @@ class _VertretungsTabState extends State<VertretungsTab> {
     }
   }
 
+
+  void helperOrientation() {
+    if (MediaQueryData.fromWindow(window).size.longestSide < 700) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    }
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    helperOrientation();
     makeRequest();
+  }
+
+  @override
+  dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+    ]);
+    super.dispose();
   }
 
   @override

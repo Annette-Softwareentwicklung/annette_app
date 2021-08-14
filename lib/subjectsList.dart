@@ -1,4 +1,3 @@
-
 List<String> getSubjectsFullName() {
   List<String> classesFullName = [
     'Deutsch',

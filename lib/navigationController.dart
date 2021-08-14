@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'homeworkTab.dart';
 import 'settingsTab.dart';
-import '2addDialog.dart';
+import 'addDialog.dart';
 import 'dart:async';
 
 /// Diese Klasse gibt das Scaffold-Widget mit der Menüleiste am Boden zurück und ruft die

@@ -21,7 +21,6 @@ final snackBarTimetableUpdateFailed = SnackBar(
       ),
     ],
   ),
-  //backgroundColor: Colors.redAccent,
   margin: EdgeInsets.all(10),
   behavior: SnackBarBehavior.floating,
 );
@@ -42,7 +41,6 @@ final snackBarTimetableUpdated = SnackBar(
       ),
     ],
   ),
-  //backgroundColor: Colors.redAccent,
   margin: EdgeInsets.all(10),
   behavior: SnackBarBehavior.floating,
 );
