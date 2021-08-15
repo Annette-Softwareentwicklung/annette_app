@@ -383,6 +383,9 @@ class _TimetableTabState extends State<TimetableTab> {
         ? SingleChildScrollView(
             controller: scrollController,
             child: Container(
+                width: double.infinity,
+                alignment: Alignment.topCenter,
+                child: Container(
               constraints: BoxConstraints(
                 maxWidth: 500,
               ),
@@ -390,7 +393,7 @@ class _TimetableTabState extends State<TimetableTab> {
                 children: displayTimetable,
                 crossAxisAlignment: CrossAxisAlignment.end,
               ),
-            ))
+            )))
         : Center(
             child: Column(
             children: [

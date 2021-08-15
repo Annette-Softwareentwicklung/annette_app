@@ -313,9 +313,7 @@ class _AddDialogState extends State<AddDialog> {
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 1,
-                        color: (errorNotes)
-                            ? Colors.red
-                            : (Theme.of(context).brightness == Brightness.dark) ? Colors.grey : Theme.of(context).dividerColor,
+                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.grey : Theme.of(context).dividerColor,
                       ),
                       color: (Theme.of(context).brightness == Brightness.dark)
                           ? Color.fromRGBO(50, 50, 50, 1)
@@ -362,7 +360,6 @@ class _AddDialogState extends State<AddDialog> {
                     ),
                   ),
                   CupertinoTextField(
-                    autofocus: (selectedSubject == 'Sonstiges') ? true : false,
                     placeholder: (selectedSubject == 'Sonstiges')
                         ? 'Notizen (Erforderlich)'
                         : 'Notizen (Optional)',
