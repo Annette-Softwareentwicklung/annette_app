@@ -16,17 +16,21 @@ class VertretungListTile extends StatelessWidget {
     colors: <Color>[Colors.blue, Colors.tealAccent],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
-  /*final Shader darkGradient = LinearGradient(
-    colors: <Color>[Colors.tealAccent, Colors.blue],
-  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));*/
-
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      //constraints: BoxConstraints(minHeight: 200),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
+        /*color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 5,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],*/
         color: Colors.black12,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20),
