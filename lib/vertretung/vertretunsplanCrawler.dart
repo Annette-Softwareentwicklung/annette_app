@@ -235,6 +235,7 @@ class VertretungsplanCrawler {
         }
         if(!s.contains("Betroffene Klassen")) {
           information.add(s);
+          print(s);
           information.add('\n');
         }
       }
