@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:annette_app/vertretung/vertretungListTile.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
@@ -189,13 +188,15 @@ class _VertretungsTabState extends State<VertretungsTab> {
             child: Column(
               children: [
                 if (informationToday.length != 0)
-                  Text(
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Text(
                     'Infos zum Tag:',
                     style: TextStyle(
                         fontSize: 17,
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
-                  )
+                  ),)
                 else
                   Text(
                     'Keine weiteren Nachrichten',

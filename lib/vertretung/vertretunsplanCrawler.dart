@@ -223,6 +223,10 @@ class VertretungsplanCrawler {
 
         s = s.replaceAll('<b>', '');
         s = s.replaceAll('</b>', '');
+        s = s.replaceAll('<u>', '');
+        s = s.replaceAll('</u>', '');
+        s = s.replaceAll('<i>', '');
+        s = s.replaceAll('</i>', '');
         s = s.replaceAll('&nbsp;', '');
 
         while (s.indexOf('<br>') != -1 && !s.contains("Betroffene Klassen")) {
@@ -231,7 +235,11 @@ class VertretungsplanCrawler {
         }
         if(!s.contains("Betroffene Klassen")) {
           information.add(s);
+          information.add('\n');
         }
+      }
+      if(information.length != 0) {
+        information.removeLast();
       }
     return information;
   }
