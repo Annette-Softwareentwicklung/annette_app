@@ -61,21 +61,25 @@ class GroupsQ1 {
         if(tempIndex == -1) {
           tempIndex = tempCode.indexOf('GK Schiene $i');
         }
-        tempCode = tempCode.substring(0, tempCode.indexOf('</TABLE', tempIndex));
-        tempCode = tempCode.substring(tempCode.lastIndexOf('TABLE'));
-        tempCode = tempCode.substring(tempCode.indexOf('<TR>', tempCode.indexOf('<TR>') + 4));
+        if(tempIndex != -1) {
+          tempCode =
+              tempCode.substring(0, tempCode.indexOf('</TABLE', tempIndex));
+          tempCode = tempCode.substring(tempCode.lastIndexOf('TABLE'));
+          tempCode = tempCode.substring(
+              tempCode.indexOf('<TR>', tempCode.indexOf('<TR>') + 4));
 
-        while(tempCode.indexOf('<B>') != -1) {
-          tempCode = tempCode.substring(tempCode.indexOf('<B>') + 3);
-          String s = tempCode.substring(0, tempCode.indexOf('</B'));
-          s = s.replaceAll('.', ' ');
-          s = s.trim();
-          tempList.add(s);
-          tempCode = tempCode.substring(tempCode.indexOf('</B'));
+          while (tempCode.indexOf('<B>') != -1) {
+            tempCode = tempCode.substring(tempCode.indexOf('<B>') + 3);
+            String s = tempCode.substring(0, tempCode.indexOf('</B'));
+            s = s.replaceAll('.', ' ');
+            s = s.trim();
+            tempList.add(s);
+            tempCode = tempCode.substring(tempCode.indexOf('</B'));
+          }
+          tempList.sort((a, b) {
+            return a.compareTo(b);
+          });
         }
-        tempList.sort((a,b) {
-          return a.compareTo(b);
-        });
         groupsQ1List.add(tempList);
       }
 

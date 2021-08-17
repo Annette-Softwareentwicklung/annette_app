@@ -369,8 +369,8 @@ class _SetClassState extends State<SetClass> {
 
     if (await onlineFiles.initialize() == false ||
         await gEF.initialize() == false ||
-        await gQ1.initialize() == false) {
-      //|| await gQ2.initialize() == false) {
+        await gQ1.initialize() == false
+    ) {
       setState(() {
         errorInternet = true;
       });
