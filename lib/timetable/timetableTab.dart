@@ -453,7 +453,6 @@ class _TimetableTabState extends State<TimetableTab> {
       child: Column(
         children: [
           Row(
-            //crossAxisAlignment: () ?  CrossAxisAlignment.start : null,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
             children: [
@@ -476,6 +475,7 @@ class _TimetableTabState extends State<TimetableTab> {
               ),),),),
             ],
           ),
+          if(timeTableUnit.room! != '-')
           Row(
             children: [
               if (vertretung != null)

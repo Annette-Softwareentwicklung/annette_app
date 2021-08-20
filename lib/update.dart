@@ -88,7 +88,7 @@ Future<void> update(BuildContext context) async {
             ScaffoldMessenger.of(context)
                 .showSnackBar(snackBarTimetableUpdated);
             await _writeData(versionNew);
-          } else {
+          }else {
             ScaffoldMessenger.of(context)
                 .showSnackBar(snackBarTimetableUpdateFailed);
           }

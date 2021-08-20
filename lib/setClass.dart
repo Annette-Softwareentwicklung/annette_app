@@ -112,7 +112,7 @@ class _SetClassState extends State<SetClass> {
           'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
     } else if (selectedClass == 'Q2') {
       tempConfiguration =
-          'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:$selectedZk1;zk2:$selectedZk1;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:$selectedLk1;lk2:$selectedLk2;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:$selectedZk1;zk2:$selectedZk2;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
     } else {
       tempConfiguration =
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:$selectedGk1;gk2:$selectedGk2;gk3:$selectedGk3;gk4:$selectedGk4;gk5:$selectedGk5;gk6:$selectedGk6;gk7:$selectedGk7;gk8:$selectedGk8;gk9:$selectedGk9;gk10:$selectedGk10;gk11:$selectedGk11;gk12:$selectedGk12;gk13:$selectedGk13;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;';
@@ -320,6 +320,10 @@ class _SetClassState extends State<SetClass> {
           selectedZk2 = (zk2.contains(configurationList[17]))
               ? configurationList[17]
               : 'Freistunde';
+
+            if(selectedZk1 == selectedZk2) {
+              selectedZk2 = 'Freistunde';
+            }
         } else {
           selectedLk1 = 'Freistunde';
           selectedLk2 = 'Freistunde';
@@ -369,8 +373,7 @@ class _SetClassState extends State<SetClass> {
 
     if (await onlineFiles.initialize() == false ||
         await gEF.initialize() == false ||
-        await gQ1.initialize() == false
-    ) {
+        await gQ1.initialize() == false) {
       setState(() {
         errorInternet = true;
       });
@@ -501,14 +504,107 @@ class _SetClassState extends State<SetClass> {
     }
   }
 
+  void showHelp() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        width: MediaQuery.of(context).size.width,
+        color: Colors.transparent,
+        padding: EdgeInsets.symmetric(
+          horizontal: (MediaQuery.of(context).size.width > 500)
+              ? ((MediaQuery.of(context).size.width - 500) / 2)
+              : 0,
+        ),
+        child: Container(
+          height: (MediaQuery.of(context).size.height < 758)
+              ? 638
+              : (MediaQuery.of(context).size.height > 1000)
+                  ? 700
+                  : MediaQuery.of(context).size.height - 80,
+          decoration: new BoxDecoration(
+            color: (Theme.of(context).brightness == Brightness.dark)
+                ? Color.fromRGBO(40, 40, 40, 1)
+                : Color.fromRGBO(248, 248, 253, 1),
+            borderRadius: new BorderRadius.only(
+              topLeft: const Radius.circular(20.0),
+              topRight: const Radius.circular(20.0),
+            ),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    iconSize: 50,
+                    icon: Icon(Icons.clear_rounded),
+                      onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                       Text(
+                            'Woher weiß ich, welchen Kurs ich habe?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+
+                  Padding(
+                    padding: EdgeInsets.only(top:20, bottom: 10),
+                    child: Text(
+                          'Welchen Kurs du in welcher Schiene hast, kannst du am Besten auf zwei Arten herausfinden:',
+                          style: TextStyle(
+                              fontSize: 17),
+                        ),),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('1) ',style: TextStyle(
+                                fontSize: 17),),
+                            Expanded(child: Text('Du schaust auf den "großen" Stundenplan (möglichst auf den mit den Lehrer-Abkürzungen, den du auf Moodle findest), und sucht dort deinen Kurs für die jeweilige Schiene heraus.',style: TextStyle(
+                                fontSize: 17),))
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('2) ',style: TextStyle(
+                                fontSize: 17),),
+                            Expanded(child: Text('Du schaust auf den kleinen Zettel mit deinen individuellen Kursen, den du zu Anfang des Schuljahres bekommen haben solltest.',style: TextStyle(
+                                fontSize: 17),))
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top:10),
+                          child: Text('Aus datenschutzrechtlichen Gründen ist es nicht erlaubt, die Lehrer-Abkürzungen neben die Kursbezeichnung zu schreiben. Auch wenn dies die Kurswahl enorm erleichtern würde und technisch einfach umzusetzen wäre, so muss leider der oben beschriebene, umständlichere Weg gewählt werden.',style: TextStyle(
+                              fontSize: 17),),),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
-    if(!widget.isInGuide) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-    ]);
+    if (!widget.isInGuide) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.portraitUp,
+      ]);
     }
     super.dispose();
   }
@@ -780,7 +876,7 @@ class _SetClassState extends State<SetClass> {
       infoText = infoText + ' sowie dein Sportkurs';
     }
 
-    infoText = infoText + '.';
+    infoText = infoText + '. ';
 
     return Container(
         constraints: BoxConstraints(
@@ -799,17 +895,33 @@ class _SetClassState extends State<SetClass> {
                     ///Text
                     SliverList(
                         delegate: SliverChildListDelegate.fixed([
-                      Container(
-                        child: Text(
-                          infoText,
-                          style: TextStyle(
-                              fontSize: 17, fontStyle: FontStyle.italic),
-                          textAlign: TextAlign.center,
-                        ),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(width: 1, color: Colors.grey)),
+                      GestureDetector(
+                        onTap: () => showHelp(),
+                        child: Container(
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: infoText,
+                                  style: TextStyle(color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black,
+                                      fontSize: 17, fontStyle: FontStyle.italic),
+                                ),
+                                TextSpan(
+                                  text: 'Welche Kurse habe ich?',
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline, color: Colors.blue,
+                                      fontSize: 17, fontStyle: FontStyle.italic),
+                                ),
+                              ]
+                            ),
+                          ),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                    BorderSide(width: 1, color: Colors.grey)),
+                          ),
                         ),
                       ),
                     ])),

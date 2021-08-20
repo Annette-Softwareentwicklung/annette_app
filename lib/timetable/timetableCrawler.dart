@@ -58,86 +58,95 @@ class TimetableCrawler {
 
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
+
       if (timetableCode.indexOf(',') != 0) {
         if (timetableCode.indexOf('Kobi') == 1) {
           tempRoom = 'Kobi';
         }
 
         timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 2);
-        String tempSubject =
-            timetableCode.substring(0, timetableCode.indexOf('"'));
-        timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
+        ///if-Abfrage zur Überprüfung ob es ein Fach gibt oder ob das "Feld" leer ist.
         if (timetableCode.indexOf(',') != 0) {
-          tempRoom = timetableCode.substring(1, timetableCode.indexOf('",'));
-        }
-        timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
+          String tempSubject =
+          timetableCode.substring(0, timetableCode.indexOf('"'));
+          timetableCode =
+              timetableCode.substring(timetableCode.indexOf(',') + 1);
 
-        int tempDayNumber = int.tryParse(
-            timetableCode.substring(0, timetableCode.indexOf(',')))!;
-        timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
-
-        int tempLessonNumber = int.tryParse(
-            timetableCode.substring(0, timetableCode.indexOf(',,')))!;
-
-        TimeTableUnit tempTimetableUnit = new TimeTableUnit(
-            subject: tempSubject,
-            dayNumber: tempDayNumber,
-            lessonNumber: tempLessonNumber,
-            room: tempRoom);
-        if (currentClass == 'EF' ||
-            currentClass == 'Q1' ||
-            currentClass == 'Q2') {
-          int tempPosition =
-              configurationString.indexOf(tempTimetableUnit.subject!);
-          if (tempPosition != -1) {
-            String tempString = configurationString.substring(tempPosition - 1);
-
-            if (tempString.indexOf(':') == 0) {
-              databaseInsertTimetableUnit(tempTimetableUnit);
-            }
+          if (timetableCode.indexOf(',') != 0) {
+            tempRoom = timetableCode.substring(1, timetableCode.indexOf('",'));
           }
-        } else {
-          //Überprüfung Religion
-          if (tempTimetableUnit.subject! == 'KR' ||
-              tempTimetableUnit.subject! == 'ER' ||
-              tempTimetableUnit.subject! == 'PL' ||
-              tempTimetableUnit.subject! == 'PPL') {
-            if (configurationString.contains(tempTimetableUnit.subject!)) {
-              databaseInsertTimetableUnit(tempTimetableUnit);
-            }
-          }
-          //2. Sprache
-          else if (!currentClass.contains('5') &&
-              !currentClass.contains('6') &&
-              !currentClass.contains('F') &&
-              (tempTimetableUnit.subject! == 'L6' ||
-                  tempTimetableUnit.subject! == 'F6' ||
-                  tempTimetableUnit.subject! == 'L7' ||
-                  tempTimetableUnit.subject! == 'F7')) {
-            if (configurationString.contains(tempTimetableUnit.subject!)) {
-              databaseInsertTimetableUnit(tempTimetableUnit);
-            }
-          }
-          //Diff
-          else if ((currentClass.contains('9') || currentClass.contains('10')) &&
-              (tempTimetableUnit.subject! == 'GEd' ||
-                  tempTimetableUnit.subject! == 'IFd' ||
-                  tempTimetableUnit.subject! == 'PHd' ||
-                  tempTimetableUnit.subject! == 'S8' ||
-                  tempTimetableUnit.subject! == 'S9' ||
-                  tempTimetableUnit.subject! == 'KUd')) {
-            if (configurationString.contains(tempTimetableUnit.subject!)) {
-              databaseInsertTimetableUnit(tempTimetableUnit);
+          timetableCode =
+              timetableCode.substring(timetableCode.indexOf(',') + 1);
+
+          int tempDayNumber = int.tryParse(
+              timetableCode.substring(0, timetableCode.indexOf(',')))!;
+          timetableCode =
+              timetableCode.substring(timetableCode.indexOf(',') + 1);
+
+          int tempLessonNumber = int.tryParse(
+              timetableCode.substring(0, timetableCode.indexOf(',,')))!;
+
+          TimeTableUnit tempTimetableUnit = new TimeTableUnit(
+              subject: tempSubject,
+              dayNumber: tempDayNumber,
+              lessonNumber: tempLessonNumber,
+              room: tempRoom);
+          if (currentClass == 'EF' ||
+              currentClass == 'Q1' ||
+              currentClass == 'Q2') {
+            int tempPosition =
+            configurationString.indexOf(tempTimetableUnit.subject!);
+            if (tempPosition != -1) {
+              String tempString = configurationString.substring(
+                  tempPosition - 1);
+
+              if (tempString.indexOf(':') == 0) {
+                databaseInsertTimetableUnit(tempTimetableUnit);
+              }
             }
           } else {
-            databaseInsertTimetableUnit(tempTimetableUnit);
+            ///Überprüfung Religion
+            if (tempTimetableUnit.subject! == 'KR' ||
+                tempTimetableUnit.subject! == 'ER' ||
+                tempTimetableUnit.subject! == 'PL' ||
+                tempTimetableUnit.subject! == 'PPL') {
+              if (configurationString.contains(tempTimetableUnit.subject!)) {
+                databaseInsertTimetableUnit(tempTimetableUnit);
+              }
+            }
+            ///2. Sprache
+            else if (!currentClass.contains('5') &&
+                !currentClass.contains('6') &&
+                !currentClass.contains('F') &&
+                (tempTimetableUnit.subject! == 'L6' ||
+                    tempTimetableUnit.subject! == 'F6' ||
+                    tempTimetableUnit.subject! == 'L7' ||
+                    tempTimetableUnit.subject! == 'F7')) {
+              if (configurationString.contains(tempTimetableUnit.subject!)) {
+                databaseInsertTimetableUnit(tempTimetableUnit);
+              }
+            }
+            ///Diff
+            else
+            if ((currentClass.contains('9') || currentClass.contains('10')) &&
+                (tempTimetableUnit.subject! == 'GEd' ||
+                    tempTimetableUnit.subject! == 'IFd' ||
+                    tempTimetableUnit.subject! == 'PHd' ||
+                    tempTimetableUnit.subject! == 'S8' ||
+                    tempTimetableUnit.subject! == 'S9' ||
+                    tempTimetableUnit.subject! == 'KUd')) {
+              if (configurationString.contains(tempTimetableUnit.subject!)) {
+                databaseInsertTimetableUnit(tempTimetableUnit);
+              }
+            } else {
+              databaseInsertTimetableUnit(tempTimetableUnit);
+            }
           }
-        }
-      } else {
-        print('Fehler $timetableCode');
-      }
+    }} else {
+    print('Fehler $timetableCode');
     }
+  }
   }
 
   Future<void> setSubjects() async {
@@ -167,7 +176,7 @@ class TimetableCrawler {
       }
 
       int tempPositionInList =
-          classesAbbreviation.indexOf(tempSubjectAbbreviation);
+      classesAbbreviation.indexOf(tempSubjectAbbreviation);
       late String tempSubjectFullName;
 
       if (tempPositionInList != -1) {

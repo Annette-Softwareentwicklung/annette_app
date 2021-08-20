@@ -54,6 +54,8 @@ class IntroductionScreenState extends State<IntroductionScreen> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
 
+
+
   void helperOrientation() {
     if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
       SystemChrome.setPreferredOrientations([

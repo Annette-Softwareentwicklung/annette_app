@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:annette_app/timetable/timetableTab.dart';
+import 'package:annette_app/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,12 @@ class NavigationControllerState extends State<NavigationController> {
       const ShortcutItem(
           type: 'timetable', localizedTitle: 'Stundenplan', icon: 'icon_plan'),
     ]);
+
+    Future.delayed(Duration(seconds: 1),
+        () {
+            update(context);
+        }
+    );
   }
 
   /// Anzeige des Scaffolds mit "bottomNavigationBar". Je nach dem welcher Tab in der Menüleiste
@@ -150,7 +157,6 @@ class NavigationControllerState extends State<NavigationController> {
           ),
         ),),
       );
-
   }
 
   Widget bottomBar() {

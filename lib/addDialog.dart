@@ -68,6 +68,18 @@ class _AddDialogState extends State<AddDialog> {
     subjectNames.add('Sonstiges');
     subjectCodes.add('-');
 
+    ///Mittagspause herausfiltern
+    int temp = timetableUnits.indexWhere((element) => element.subject == 'MP');
+    while(temp != -1) {
+      timetableUnits.removeAt(temp);
+      temp = timetableUnits.indexWhere((element) => element.subject == 'MP');
+    }
+    temp = timetableUnits.indexWhere((element) => element.subject == 'MP MH');
+    while(temp != -1) {
+      timetableUnits.removeAt(temp);
+      temp = timetableUnits.indexWhere((element) => element.subject == 'MP MH');
+    }
+
     for (int i = 0; i < timetableUnits.length; i++) {
       String tempSubjectAbbreviation = timetableUnits[i].subject!;
 
@@ -360,6 +372,7 @@ class _AddDialogState extends State<AddDialog> {
                     ),
                   ),
                   CupertinoTextField(
+                    autofocus: false,
                     placeholder: (selectedSubject == 'Sonstiges')
                         ? 'Notizen (Erforderlich)'
                         : 'Notizen (Optional)',
