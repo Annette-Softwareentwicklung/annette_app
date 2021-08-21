@@ -36,6 +36,7 @@ class TimetableCrawler {
   }
 
   Future<void> setTimetable(String code, String configurationString) async {
+    List<TimeTableUnit> timetableUnitsToInsert = [];
     ///Löscht alle Stundenplan-Einträge
     WidgetsFlutterBinding.ensureInitialized();
     final Future<Database> database = openDatabase(
@@ -100,9 +101,30 @@ class TimetableCrawler {
             if (tempPosition != -1) {
               String tempString = configurationString.substring(
                   tempPosition - 1);
-
               if (tempString.indexOf(':') == 0) {
-                databaseInsertTimetableUnit(tempTimetableUnit);
+
+                ///Umgehen des Fehlers auf dem Stundenplan, dass es zwei GE Z1 gibt.
+                ///Fall: es gibt GE Z1 und ein anderes Fach soll eingetragen werden.
+                if(!tempTimetableUnit.subject!.contains('GE Z1')) {
+                  timetableUnitsToInsert.removeWhere((element) {
+                    if (element.lessonNumber ==
+                        tempTimetableUnit.lessonNumber &&
+                        element.dayNumber == tempTimetableUnit.dayNumber && element.subject!.contains('GE Z1')) {
+                      return true;
+                    }
+                    return false;
+                  });
+                  timetableUnitsToInsert.add(tempTimetableUnit);
+                }
+                ///Fall: es gibt ein anderes Fach und ein GE Z1 soll eingetragen werden.
+                else {
+                  if(timetableUnitsToInsert.indexWhere((element) => (element.dayNumber == tempTimetableUnit.dayNumber && element.lessonNumber == tempTimetableUnit.lessonNumber)) == -1) {
+                    timetableUnitsToInsert.add(tempTimetableUnit);
+                  }
+                }
+
+
+                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
           } else {
@@ -112,7 +134,8 @@ class TimetableCrawler {
                 tempTimetableUnit.subject! == 'PL' ||
                 tempTimetableUnit.subject! == 'PPL') {
               if (configurationString.contains(tempTimetableUnit.subject!)) {
-                databaseInsertTimetableUnit(tempTimetableUnit);
+                timetableUnitsToInsert.add(tempTimetableUnit);
+                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
             ///2. Sprache
@@ -124,7 +147,8 @@ class TimetableCrawler {
                     tempTimetableUnit.subject! == 'L7' ||
                     tempTimetableUnit.subject! == 'F7')) {
               if (configurationString.contains(tempTimetableUnit.subject!)) {
-                databaseInsertTimetableUnit(tempTimetableUnit);
+                timetableUnitsToInsert.add(tempTimetableUnit);
+                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
             ///Diff
@@ -137,16 +161,25 @@ class TimetableCrawler {
                     tempTimetableUnit.subject! == 'S9' ||
                     tempTimetableUnit.subject! == 'KUd')) {
               if (configurationString.contains(tempTimetableUnit.subject!)) {
-                databaseInsertTimetableUnit(tempTimetableUnit);
+                timetableUnitsToInsert.add(tempTimetableUnit);
+                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             } else {
-              databaseInsertTimetableUnit(tempTimetableUnit);
+              timetableUnitsToInsert.add(tempTimetableUnit);
+              //databaseInsertTimetableUnit(tempTimetableUnit);
             }
           }
     }} else {
     print('Fehler $timetableCode');
     }
   }
+
+  timetableUnitsToInsert.forEach((element) {
+    databaseInsertTimetableUnit(element);
+  });
+    
+    //timetableUnitsToInsert.forEach((element) {print('${element.subject}  ${element.room} ${element.dayNumber} ${element.lessonNumber} ');});
+
   }
 
   Future<void> setSubjects() async {
