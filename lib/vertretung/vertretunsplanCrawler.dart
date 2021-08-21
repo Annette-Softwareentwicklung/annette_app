@@ -71,6 +71,7 @@ class VertretungsplanCrawler {
       bool relevant = false;
 
       if (result[0] == null) {
+
         ///Klassen-unspezifische Ereignisse
         relevant = true;
       } else {
