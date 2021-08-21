@@ -66,10 +66,10 @@ class GroupsQ2 {
         String tempCode = htmlCode;
         String tempName = 'GK-Schiene';
 
-        int tempIndex = tempCode.indexOf('$tempName $i');
+        int tempIndex = tempCode.indexOf('$tempName $i<');
         if(tempIndex == -1) {
           tempName = 'GK Schiene';
-          tempIndex = tempCode.indexOf('$tempName $i');
+          tempIndex = tempCode.indexOf('$tempName $i<');
         }
 
         while(tempIndex != -1) {
@@ -95,7 +95,7 @@ class GroupsQ2 {
 
 
           tempCode = htmlCode;
-          tempIndex = tempCode.indexOf('$tempName $i', tempIndex + 10);
+          tempIndex = tempCode.indexOf('$tempName $i<', tempIndex + 10);
 
         }
         groupsQ2List.add(tempList);

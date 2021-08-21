@@ -11,15 +11,14 @@ import 'package:annette_app/database/databaseCreate.dart';
 class TimetableCrawler {
   late String currentClass;
 
-  Future<void> setConfiguration(String configurationString, String difExport,
-      DateTime newVersion) async {
+  Future<void> setConfiguration(
+      String configurationString, String difExport, DateTime newVersion) async {
     currentClass = configurationString.substring(
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
 
     await setTimetable(difExport, configurationString);
     await setSubjects();
-
 
     Future<String> _getPath() async {
       final _dir = await getApplicationDocumentsDirectory();
@@ -37,6 +36,7 @@ class TimetableCrawler {
 
   Future<void> setTimetable(String code, String configurationString) async {
     List<TimeTableUnit> timetableUnitsToInsert = [];
+
     ///Löscht alle Stundenplan-Einträge
     WidgetsFlutterBinding.ensureInitialized();
     final Future<Database> database = openDatabase(
@@ -59,7 +59,6 @@ class TimetableCrawler {
 
       timetableCode = timetableCode.substring(timetableCode.indexOf(',') + 1);
 
-
       if (timetableCode.indexOf(',') != 0) {
         if (timetableCode.indexOf('Kobi') == 1) {
           tempRoom = 'Kobi';
@@ -74,19 +73,28 @@ class TimetableCrawler {
           timetableCode =
               timetableCode.substring(timetableCode.indexOf(',') + 1);
 
+          ///if-Abfrage zur Überprüfung ob es einen Raum gibt oder ob das "Feld" leer ist. (Aktion wird nicht abgebrochen, Raum ist sonst '-' (s.o.)
           if (timetableCode.indexOf(',') != 0) {
             tempRoom = timetableCode.substring(1, timetableCode.indexOf('",'));
           }
           timetableCode =
               timetableCode.substring(timetableCode.indexOf(',') + 1);
 
+          ///if-Abfrage zur Überprüfung ob es eine Tagnummer gibt oder ob das "Feld" leer ist.
+          if(timetableCode.indexOf(',') != 0) {
           int tempDayNumber = int.tryParse(
               timetableCode.substring(0, timetableCode.indexOf(',')))!;
           timetableCode =
               timetableCode.substring(timetableCode.indexOf(',') + 1);
 
-          int tempLessonNumber = int.tryParse(
+          ///if-Abfrage zur Überprüfung ob es eine Stundennummer gibt oder ob das "Feld" leer ist.
+          if(timetableCode.indexOf(',') != 0) {
+
+            int tempLessonNumber = int.tryParse(
               timetableCode.substring(0, timetableCode.indexOf(',,')))!;
+
+          ///Lernzeit wird als normales Fach angesehen
+          tempSubject = tempSubject.replaceAll(' LZ', '');
 
           TimeTableUnit tempTimetableUnit = new TimeTableUnit(
               subject: tempSubject,
@@ -99,30 +107,34 @@ class TimetableCrawler {
             int tempPosition =
             configurationString.indexOf(tempTimetableUnit.subject!);
             if (tempPosition != -1) {
-              String tempString = configurationString.substring(
-                  tempPosition - 1);
+              String tempString =
+              configurationString.substring(tempPosition - 1);
               if (tempString.indexOf(':') == 0) {
-
                 ///Umgehen des Fehlers auf dem Stundenplan, dass es zwei GE Z1 gibt.
                 ///Fall: es gibt GE Z1 und ein anderes Fach soll eingetragen werden.
-                if(!tempTimetableUnit.subject!.contains('GE Z1')) {
+                if (!tempTimetableUnit.subject!.contains('GE Z1')) {
                   timetableUnitsToInsert.removeWhere((element) {
                     if (element.lessonNumber ==
                         tempTimetableUnit.lessonNumber &&
-                        element.dayNumber == tempTimetableUnit.dayNumber && element.subject!.contains('GE Z1')) {
+                        element.dayNumber == tempTimetableUnit.dayNumber &&
+                        element.subject!.contains('GE Z1')) {
                       return true;
                     }
                     return false;
                   });
                   timetableUnitsToInsert.add(tempTimetableUnit);
                 }
+
                 ///Fall: es gibt ein anderes Fach und ein GE Z1 soll eingetragen werden.
                 else {
-                  if(timetableUnitsToInsert.indexWhere((element) => (element.dayNumber == tempTimetableUnit.dayNumber && element.lessonNumber == tempTimetableUnit.lessonNumber)) == -1) {
+                  if (timetableUnitsToInsert.indexWhere((element) =>
+                  (element.dayNumber == tempTimetableUnit.dayNumber &&
+                      element.lessonNumber ==
+                          tempTimetableUnit.lessonNumber)) ==
+                      -1) {
                     timetableUnitsToInsert.add(tempTimetableUnit);
                   }
                 }
-
 
                 //databaseInsertTimetableUnit(tempTimetableUnit);
               }
@@ -138,6 +150,7 @@ class TimetableCrawler {
                 //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
+
             ///2. Sprache
             else if (!currentClass.contains('5') &&
                 !currentClass.contains('6') &&
@@ -151,9 +164,10 @@ class TimetableCrawler {
                 //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
+
             ///Diff
-            else
-            if ((currentClass.contains('9') || currentClass.contains('10')) &&
+            else if ((currentClass.contains('9') ||
+                currentClass.contains('10')) &&
                 (tempTimetableUnit.subject! == 'GEd' ||
                     tempTimetableUnit.subject! == 'IFd' ||
                     tempTimetableUnit.subject! == 'PHd' ||
@@ -169,17 +183,19 @@ class TimetableCrawler {
               //databaseInsertTimetableUnit(tempTimetableUnit);
             }
           }
-    }} else {
-    print('Fehler $timetableCode');
+        }
+      }
     }
-  }
+      } else {
+        print('Fehler $timetableCode');
+      }
+    }
 
-  timetableUnitsToInsert.forEach((element) {
-    databaseInsertTimetableUnit(element);
-  });
-    
+    timetableUnitsToInsert.forEach((element) {
+      databaseInsertTimetableUnit(element);
+    });
+
     //timetableUnitsToInsert.forEach((element) {print('${element.subject}  ${element.room} ${element.dayNumber} ${element.lessonNumber} ');});
-
   }
 
   Future<void> setSubjects() async {
@@ -209,7 +225,7 @@ class TimetableCrawler {
       }
 
       int tempPositionInList =
-      classesAbbreviation.indexOf(tempSubjectAbbreviation);
+          classesAbbreviation.indexOf(tempSubjectAbbreviation);
       late String tempSubjectFullName;
 
       if (tempPositionInList != -1) {

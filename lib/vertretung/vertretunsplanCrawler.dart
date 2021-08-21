@@ -72,7 +72,7 @@ class VertretungsplanCrawler {
 
       if (result[0] == null) {
         ///Klassen-unspezifische Ereignisse
-        relevant = false;
+        relevant = true;
       } else {
         if (result[0]!.contains(currentClass.substring(0, 1)) &&
             result[0]!.contains(currentClass.substring(1))) {
@@ -229,11 +229,11 @@ class VertretungsplanCrawler {
         s = s.replaceAll('</i>', '');
         s = s.replaceAll('&nbsp;', '');
 
-        while (s.indexOf('<br>') != -1 && !s.contains("Betroffene Klassen")) {
+        while (s.indexOf('<br>') != -1 && !s.contains("Betroffene Klassen") && !s.contains('Farbgebung')) {
           information.add(s.substring(0, s.indexOf('<br>')));
           s = s.substring(s.indexOf('<br') + 4);
         }
-        if(!s.contains("Betroffene Klassen")) {
+        if(!s.contains("Betroffene Klassen") && !s.contains('Farbgebung')) {
           information.add(s);
           information.add('\n');
         }

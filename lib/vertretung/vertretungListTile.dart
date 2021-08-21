@@ -226,6 +226,7 @@ class VertretungListTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!vertretung.type!.toLowerCase().contains('vertretung') &&
                   !vertretung.type!.toLowerCase().contains('raum')

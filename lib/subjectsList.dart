@@ -28,7 +28,7 @@ List<String> getSubjectsFullName() {
     'Sport',
     'Mittagspause',
     'Mittagspause',
-    'Litertur',
+    'Literatur',
     'Lernzeit',
     'Physik Diff.',
     'Geschichte Diff.',
@@ -47,6 +47,11 @@ List<String> getSubjectsFullName() {
     'Französisch',
     'Spanisch',
     'Spanisch',
+    'Mathe LZ',
+    'Englisch LZ',
+    'Deutsch LZ',
+    'Latein LZ',
+    'Französisch LZ',
   ];
 
   return classesFullName;
@@ -101,6 +106,11 @@ List<String> getSubjectsAbbreviation() {
     'F7',
     'S9',
     'S11',
+    'M LZ',
+    'E LZ',
+    'D LZ',
+    'L LZ',
+    'F LZ',
   ];
 
   return classesAbbreviation;
