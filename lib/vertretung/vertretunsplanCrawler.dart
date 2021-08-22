@@ -56,7 +56,11 @@ class VertretungsplanCrawler {
 
       if (result[0] == null) {
         ///Klassen-unspezifische Ereignisse
-        relevant = true;
+        bool? temp = GetStorage().read('unspecificOccurences');
+        if(temp == null) {
+          temp = true;
+        }
+        relevant = temp;
       } else {
         if (result[0]!.contains(currentClass.substring(0, 1)) &&
             result[0]!.contains(currentClass.substring(1))) {

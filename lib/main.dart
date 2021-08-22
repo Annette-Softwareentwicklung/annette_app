@@ -1,6 +1,8 @@
+import 'package:annette_app/fundamentals/preferredTheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:provider/provider.dart';
 import 'dismissKeyboard.dart';
 import 'introductionScreen.dart';
 import 'navigationController.dart';
@@ -65,7 +67,10 @@ void main() async {
 
 
   ///Starten der App
-  runApp(MyApp());
+  runApp(
+      MyApp()
+
+  );
 }
 
 ///Öffnet die Detailansicht, wenn auf eine Benachrichtigung geklickt wird.
@@ -96,10 +101,22 @@ void helper(String? payload) async {
 
 /// Einstiegspunkt der App.
 class MyApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
+
     return DismissKeyboard(
-        child: MaterialApp(
+        child: ChangeNotifierProvider<PreferredTheme>(
+          create: (BuildContext context) {
+            int? temp = GetStorage().read('preferredTheme');
+            if(temp == null) {
+              temp = 2;
+            }
+            return PreferredTheme(temp);
+          },
+        child: Builder(
+        builder: (context) => MaterialApp(
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -110,7 +127,7 @@ class MyApp extends StatelessWidget {
           const Locale('de', ''), // German
         ],
         debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.system,
+        themeMode: (context.watch<PreferredTheme>().value == 0) ? ThemeMode.light : (context.watch<PreferredTheme>().value == 1) ? ThemeMode.dark : ThemeMode.system,
         theme: lightTheme(context),
         darkTheme: darkTheme(context),
         home: Builder(
@@ -127,6 +144,6 @@ class MyApp extends StatelessWidget {
                           },
                         )
                       : NavigationController(key: navigationControllerAccess),
-            ),),),);
+            ),),),)));
   }
 }
