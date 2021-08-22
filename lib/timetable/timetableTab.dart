@@ -503,12 +503,12 @@ class _TimetableTabState extends State<TimetableTab> {
             mainAxisAlignment: MainAxisAlignment.end,
           ),
           if (vertretung != null &&
-              vertretung.teacher_new != null &&
-              vertretung.teacher_old != vertretung.teacher_new)
+              vertretung.teacherNew != null &&
+              vertretung.teacherOld != vertretung.teacherNew)
             Row(
               children: [
                 Text(
-                  vertretung.teacher_new!,
+                  vertretung.teacherNew!,
                   style: TextStyle(
                       fontSize: 25,
                       color: Colors.red,
@@ -516,8 +516,8 @@ class _TimetableTabState extends State<TimetableTab> {
                 ),
                 Container(
                   child: Text(
-                    (vertretung.teacher_old != null)
-                        ? vertretung.teacher_old!
+                    (vertretung.teacherOld != null)
+                        ? vertretung.teacherOld!
                         : '',
                     style: TextStyle(
                         fontSize: 25,

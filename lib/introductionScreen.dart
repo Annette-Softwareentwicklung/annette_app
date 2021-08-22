@@ -1,5 +1,3 @@
-/// Diese Datei beinhaltet den Leitfaden, welcher beim ersten Start der App den Benutzer durch die Einstellungen führt.
-import 'dart:io';
 import 'dart:ui';
 import 'package:annette_app/setClass.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
-import 'package:path_provider/path_provider.dart';
 
 class IntroductionScreen extends StatefulWidget {
   final VoidCallback onFinished;

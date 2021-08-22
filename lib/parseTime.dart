@@ -1,8 +1,6 @@
-/**
- * Diese Methode erstellt aus einem String (z.B. HH:MM:SS) ein Objekt des Tys Duration.
- * Quelle: https://stackoverflow.com/questions/54852585/how-to-convert-a-duration-like-string-to-a-real-duration-in-flutter (28.02.2021)
- *
- */
+/// Diese Methode erstellt aus einem String (z.B. HH:MM:SS) ein Objekt des Tys Duration.
+/// Quelle: https://stackoverflow.com/questions/54852585/how-to-convert-a-duration-like-string-to-a-real-duration-in-flutter (28.02.2021)
+///
 Duration parseDuration(String s) {
   int hours = 0;
   int minutes = 0;
@@ -18,13 +16,11 @@ Duration parseDuration(String s) {
   return Duration(hours: hours, minutes: minutes, microseconds: micros);
 }
 
-/**
- * Diese Methode gibt einen String mit einem Datum (z.B. YYYY-MM-DD-HH:MM:SS)
- * in einem für den Benutzer besser lesbaren Format aus.
- * Optional kann ein Zeitpunkt zum Vergleichen angegeben werden, alternativ wird die aktuelle Uhrzeit gewählt,
- * um "Heute", "Morgen" etc. bestimmen zu können.
- * Der neue String lautet "Wochentag, Tag. Monatsname, Stunden:Minuten Uhr".
- */
+/// Diese Methode gibt einen String mit einem Datum (z.B. YYYY-MM-DD-HH:MM:SS)
+/// in einem für den Benutzer besser lesbaren Format aus.
+/// Optional kann ein Zeitpunkt zum Vergleichen angegeben werden, alternativ wird die aktuelle Uhrzeit gewählt,
+/// um "Heute", "Morgen" etc. bestimmen zu können.
+/// Der neue String lautet "Wochentag, Tag. Monatsname, Stunden:Minuten Uhr".
 String parseTimeToUserOutput(String s, [DateTime? pComparisonTime]) {
   DateTime temp = DateTime.parse(s);
   String hour = temp.hour.toString();

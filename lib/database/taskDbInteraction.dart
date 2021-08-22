@@ -1,7 +1,5 @@
-/**
- * Diese Datei beinhaltet alle notwendigen Methoden um mit der Tabelle "homeworkTasks"
- * von der Datenbank interagieren zu können.
- */
+/// Diese Datei beinhaltet alle notwendigen Methoden um mit der Tabelle "homeworkTasks"
+/// von der Datenbank interagieren zu können.
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -10,10 +8,8 @@ import 'package:sqflite/sqflite.dart';
 import 'databaseCreate.dart';
 import 'package:annette_app/fundamentals/task.dart';
 
-/**
- * Diese Methode fügt eine neue Hausaufgabe in die Datenbank ein.
- * Die einzufügende Hausaufgabe wird als Parameter übergeben.
- */
+/// Diese Methode fügt eine neue Hausaufgabe in die Datenbank ein.
+/// Die einzufügende Hausaufgabe wird als Parameter übergeben.
 void databaseInsertTask(Task pTask) async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(
@@ -36,11 +32,9 @@ void databaseInsertTask(Task pTask) async {
   await insertTask(pTask);
 }
 
-/**
- * Diese Methode aktualisiert eine bestimmte Hausaufgabe in die Datenbank.
- * Die Stelle, die aktualisiert wird, entspricht der Id der übergebenen Aufgabe.
- * Die zu aktualisierende Hausaufgabe wird als Parameter übergeben.
- */
+/// Diese Methode aktualisiert eine bestimmte Hausaufgabe in die Datenbank.
+/// Die Stelle, die aktualisiert wird, entspricht der Id der übergebenen Aufgabe.
+/// Die zu aktualisierende Hausaufgabe wird als Parameter übergeben.
 void databaseUpdateTask(Task pTask) async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(
@@ -65,10 +59,8 @@ void databaseUpdateTask(Task pTask) async {
   await updateTask(pTask);
 }
 
-/**
- * Diese Methode gibt eine bestimmte Aufgabe aus der Datenbank zurück.
- * Die Id dieser gefragten Aufgabe wird als Parameter übergeben.
- */
+/// Diese Methode gibt eine bestimmte Aufgabe aus der Datenbank zurück.
+/// Die Id dieser gefragten Aufgabe wird als Parameter übergeben.
 Future<Task> databaseGetSpecificTask(int pId) async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(
@@ -108,10 +100,8 @@ Future<Task> databaseGetSpecificTask(int pId) async {
   return await getSpecificTask(pId);
 }
 
-/**
- * Diese Methode löscht eine bestimmte Hausaufgabe aus der Datenbank.
- * Die Id der zu löschenden Hausaufgabe wird als Parameter übergeben.
- */
+/// Diese Methode löscht eine bestimmte Hausaufgabe aus der Datenbank.
+/// Die Id der zu löschenden Hausaufgabe wird als Parameter übergeben.
 void databaseDeleteTask(int? pId) async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(
@@ -135,10 +125,8 @@ void databaseDeleteTask(int? pId) async {
   await deleteTask(pId);
 }
 
-/**
- * Diese Methode gibt alle sich in der Tabelle befindlichen Hausaufgaben zurück.
- * Die Rückgabe geschieht in Form einer Liste mit einzelnen Objekten der Klasse Task.
- */
+/// Diese Methode gibt alle sich in der Tabelle befindlichen Hausaufgaben zurück.
+/// Die Rückgabe geschieht in Form einer Liste mit einzelnen Objekten der Klasse Task.
 Future<List<Task>> databaseGetAllTasks(int? orderValue) async {
   String orderListBy = 'id ASC';
 

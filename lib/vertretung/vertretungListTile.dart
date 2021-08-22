@@ -55,28 +55,28 @@ class VertretungListTile extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      (vertretung.subject_new != null)
-                          ? vertretung.subject_new!
-                          : (vertretung.subject_old != null)
-                              ? vertretung.subject_old!
+                      (vertretung.subjectNew != null)
+                          ? vertretung.subjectNew!
+                          : (vertretung.subjectOld != null)
+                              ? vertretung.subjectOld!
                               : vertretung.type!,
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: (vertretung.subject_old != null &&
-                                vertretung.subject_new != null &&
-                                vertretung.subject_new !=
-                                    vertretung.subject_old)
+                        color: (vertretung.subjectOld != null &&
+                                vertretung.subjectNew != null &&
+                                vertretung.subjectNew !=
+                                    vertretung.subjectOld)
                             ? Colors.red
                             : null,
                       ),
                     ),
-                    if (vertretung.subject_old != null &&
-                        vertretung.subject_new != null &&
-                        vertretung.subject_new != vertretung.subject_old)
+                    if (vertretung.subjectOld != null &&
+                        vertretung.subjectNew != null &&
+                        vertretung.subjectNew != vertretung.subjectOld)
                       Container(
                         child: Text(
-                          vertretung.subject_old!,
+                          vertretung.subjectOld!,
                           style: TextStyle(
                               fontSize: 25,
                               decoration: TextDecoration.lineThrough,
@@ -159,9 +159,9 @@ class VertretungListTile extends StatelessWidget {
                     ///Anzeige "Lehrer neu"
 
                     if (
-                    (vertretung.teacher_new != null && vertretung.teacher_old != null &&
-                            vertretung.teacher_old! != vertretung.teacher_new) ||
-                        (vertretung.teacher_new != null &&
+                    (vertretung.teacherNew != null && vertretung.teacherOld != null &&
+                            vertretung.teacherOld! != vertretung.teacherNew) ||
+                        (vertretung.teacherNew != null &&
                             vertretung.type != null &&
                             vertretung.type!
                                 .toLowerCase()
@@ -169,8 +169,8 @@ class VertretungListTile extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(right: 5),
                         child: Text(
-                          (vertretung.teacher_new != null)
-                              ? vertretung.teacher_new!
+                          (vertretung.teacherNew != null)
+                              ? vertretung.teacherNew!
                               : 'Fehler',
                           style: TextStyle(
                               fontSize: 25,
@@ -178,12 +178,12 @@ class VertretungListTile extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                       )
-                    else if (vertretung.teacher_new != null &&
-                        vertretung.teacher_new != vertretung.teacher_old)
+                    else if (vertretung.teacherNew != null &&
+                        vertretung.teacherNew != vertretung.teacherOld)
                       Container(
                         margin: EdgeInsets.only(right: 5),
                         child: Text(
-                          vertretung.teacher_new!,
+                          vertretung.teacherNew!,
                           style: TextStyle(
                             fontSize: 25,
                             //color: Colors.red,
@@ -193,17 +193,17 @@ class VertretungListTile extends StatelessWidget {
                       ),
 
                     ///Anzeige "Lehrer alt" (ggf. durchgestrichen)
-                    if (vertretung.teacher_old != null)
+                    if (vertretung.teacherOld != null)
                       Container(
                         child: Text(
-                          (vertretung.teacher_old != null)
-                              ? vertretung.teacher_old!
+                          (vertretung.teacherOld != null)
+                              ? vertretung.teacherOld!
                               : 'Fehler',
                           style: TextStyle(
                               fontSize: 25,
-                              decoration: ((vertretung.teacher_new != null &&
-                                          vertretung.teacher_old! !=
-                                              vertretung.teacher_new) ||
+                              decoration: ((vertretung.teacherNew != null &&
+                                          vertretung.teacherOld! !=
+                                              vertretung.teacherNew) ||
                                       (vertretung.type != null &&
                                           vertretung.type!
                                               .toLowerCase()
@@ -216,8 +216,8 @@ class VertretungListTile extends StatelessWidget {
                       ),
 
                     ///Icon "Person"
-                    if (vertretung.teacher_old != null ||
-                        vertretung.teacher_new != null)
+                    if (vertretung.teacherOld != null ||
+                        vertretung.teacherNew != null)
                       Icon(CupertinoIcons.person_fill),
                   ],
                 ),
@@ -230,7 +230,7 @@ class VertretungListTile extends StatelessWidget {
             children: [
               if (!vertretung.type!.toLowerCase().contains('vertretung') &&
                   !vertretung.type!.toLowerCase().contains('raum')
-                  && vertretung.subject_old != null
+                  && vertretung.subjectOld != null
               )
                 Text(
                   (vertretung.comment != null)

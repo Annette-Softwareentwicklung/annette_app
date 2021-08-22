@@ -176,9 +176,13 @@ class SettingsTab extends StatelessWidget {
                                             )),
                                         IconButton(
                                             onPressed: () async {
+                                              var storage = GetStorage();
                                               ///Leitfaden wieder anzeigen
-                                              GetStorage()
+                                              storage
                                                   .write('introScreen', 'true');
+
+                                              ///Stundenplan-Konfiguration zurücksetzen (auf 5A)
+                                              storage.write('configuration', 'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;');
 
                                               ///Datenbank löschen
                                               WidgetsFlutterBinding
@@ -257,7 +261,7 @@ class SettingsTab extends StatelessWidget {
                                                                         vertical:
                                                                             10),
                                                                     child: Text(
-                                                                      'Die App wurde zurückgesetzt. Bitte starte die App neu.',
+                                                                      'Alles wurde zurückgesetzt. Bitte starte die App neu.',
                                                                       style:
                                                                           TextStyle(
                                                                         fontSize:

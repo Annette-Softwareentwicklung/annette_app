@@ -1,9 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
-/**
- * Diese Methode wird aufgerufen, wenn die Datenbank noch nicht existieren sollte.
- * Diese Methode erstellt alle notwendigen Tabellen.
- */
+/// Diese Methode wird aufgerufen, wenn die Datenbank noch nicht existieren sollte.
+/// Diese Methode erstellt alle notwendigen Tabellen.
 void createDb(Database db) async {
 
   //Erstellen der Tabelle für die Hausaufgaben
