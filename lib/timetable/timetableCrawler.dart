@@ -3,6 +3,7 @@ import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -20,18 +21,7 @@ class TimetableCrawler {
     await setTimetable(difExport, configurationString);
     await setSubjects();
 
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
-
-    Future<void> _writeData(DateTime newVersion) async {
-      final _path = await _getPath();
-      final _myFile = File('$_path/version.txt');
-      await _myFile.writeAsString(newVersion.toString());
-    }
-
-    await _writeData(newVersion);
+    GetStorage().write('timetableVersion', newVersion.toString());
   }
 
   Future<void> setTimetable(String code, String configurationString) async {

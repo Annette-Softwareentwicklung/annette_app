@@ -3,6 +3,7 @@ import 'package:annette_app/custom_widgets/errorInternetContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,30 +21,10 @@ class _ExamPlanState extends State<ExamPlan> {
 
   Future<int> getCurrentClass() async {
     error = false;
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
 
-    Future<String> _readData() async {
-      try {
-        final _path = await _getPath();
-        final _file = File('$_path/configuration.txt');
-
-        String contents = await _file.readAsString();
-        contents = contents.substring(
-            contents.indexOf('c:') + 2, contents.indexOf(';'));
-        if (contents == 'Q1' || contents == 'Q2') {
-          return contents;
-        } else {
-          return 'EF';
-        }
-      } catch (e) {
-        return 'EF';
-      }
-    }
-
-    String s = (await _readData()).toLowerCase();
+    String s = (GetStorage().read('configuration')).toLowerCase();
+    s = s.substring(s.indexOf('c:') + 2, s.indexOf(';', s.indexOf('c:')));
+    print(s);
     if (s == 'q1') {
       return 1;
     } else if (s == 'q2') {
