@@ -31,7 +31,7 @@ class VertretungListTile extends StatelessWidget {
             offset: Offset(0, 3), // changes position of shadow
           ),
         ],*/
-        color: Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20),
       ),

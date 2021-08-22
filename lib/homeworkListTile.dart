@@ -211,6 +211,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
             closeOnScroll: true,
             child: Card(
               child: ListTile(
+
                   leading: CustomCheckbox(
                     key: checkBoxKey,
                     task: task,

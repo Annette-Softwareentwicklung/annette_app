@@ -444,7 +444,7 @@ class _TimetableTabState extends State<TimetableTab> {
       padding: EdgeInsets.all(20),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
         borderRadius: BorderRadius.circular(20),
       ),
       constraints: BoxConstraints(
@@ -580,7 +580,7 @@ class _TimetableTabState extends State<TimetableTab> {
               child: Container(
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: Colors.black12,
+              color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
               borderRadius: BorderRadius.circular(15),
             ),
             alignment: Alignment.center,
@@ -605,7 +605,7 @@ class _TimetableTabState extends State<TimetableTab> {
             padding: EdgeInsets.all(15),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.black12,
+              color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
               borderRadius: BorderRadius.circular(15),
             ),
             constraints: BoxConstraints(
