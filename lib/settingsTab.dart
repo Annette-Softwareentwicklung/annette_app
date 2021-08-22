@@ -36,7 +36,7 @@ class SettingsTab extends StatelessWidget {
     showAboutDialog(
       context: context,
       applicationName: 'Annette App',
-      applicationVersion: 'Version 3.1.0+4',
+      applicationVersion: 'Version 3.1.0+5',
       applicationIcon: Container(
           height: 70,
           alignment: Alignment.center,

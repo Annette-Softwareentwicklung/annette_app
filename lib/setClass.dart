@@ -484,16 +484,16 @@ class _SetClassState extends State<SetClass> {
         width: MediaQuery.of(context).size.width,
         color: Colors.transparent,
         padding: EdgeInsets.symmetric(
-          horizontal: (MediaQuery.of(context).size.width > 500)
+          horizontal: /*(MediaQuery.of(context).size.width > 500)
               ? ((MediaQuery.of(context).size.width - 500) / 2)
-              : 0,
+              :*/ 0,
         ),
         child: Container(
           height: (MediaQuery.of(context).size.height < 758)
               ? 638
-              : (MediaQuery.of(context).size.height > 1000)
+              : /*(MediaQuery.of(context).size.height > 1000)
                   ? 700
-                  : MediaQuery.of(context).size.height - 80,
+                  : */MediaQuery.of(context).size.height - 80,
           decoration: new BoxDecoration(
             color: (Theme.of(context).brightness == Brightness.dark)
                 ? Color.fromRGBO(40, 40, 40, 1)
@@ -520,6 +520,7 @@ class _SetClassState extends State<SetClass> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Woher weiß ich, welchen Kurs ich habe?',

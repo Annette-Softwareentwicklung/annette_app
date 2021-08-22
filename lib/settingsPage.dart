@@ -52,8 +52,13 @@ class _SettingsPageState extends State<SettingsPage> {
         color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.white
     );
     return Container(
-      padding: EdgeInsets.all(20),
       alignment: Alignment.topCenter,
+      child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+        constraints: BoxConstraints(
+            maxWidth: 500
+        ),
+      margin: EdgeInsets.symmetric(vertical: 20),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -83,7 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(
-                  'Dir werden auf dem Vertretungsplan ${(unspecificOccurences!) ? '' : 'keine '}Ereignisse angezeit, die keiner Klasse zugeordnet sind, aber trotzdem relevant für dich sein könnten.',
+                  'Dir werden auf dem Vertretungsplan ${(unspecificOccurences!) ? '' : 'keine '}Ereignisse angezeigt, die keiner spezifischen Klasse zugeordnet sind. ${(unspecificOccurences!) ? 'Diese können trotzdem relevant für dich sein.' : 'Auch wenn diese dennoch für dich relevant sein könnten.'}',
               style: textDescription
               ),
             ),
@@ -156,13 +161,13 @@ class _SettingsPageState extends State<SettingsPage> {
                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                  alignment: Alignment.centerLeft,
                  child: Text(
-                  'Das Erscheinungsbild der App ist ${(preferredTheme == 0) ? 'immer hell' : (preferredTheme == 1) ? 'immer dunkel' : 'abhängig vom Betriebssystem'}.',
+                  'Das Erscheinungsbild der App ist ${(preferredThemeValue == 0) ? 'immer hell' : (preferredThemeValue == 1) ? 'immer dunkel' : 'abhängig vom Betriebssystem'}.',
                 style: textDescription,
               ),)
 
           ],
         ),
-      ),
+      ),),
     );
   }
 }
