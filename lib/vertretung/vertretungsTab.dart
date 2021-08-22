@@ -233,7 +233,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
       ),
       margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
         borderRadius: BorderRadius.circular(10),
         //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
       ),
@@ -257,7 +257,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
         margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.black12,
+          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
           borderRadius: BorderRadius.circular(10),
           //border: Border.all(color: Theme.of(context).accentColor, width: 1),
         ),
@@ -331,7 +331,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
       ),
       margin: EdgeInsets.only(top: (MediaQuery.of(context).orientation == Orientation.portrait) ? 25 : 10 , left: 10, right: 10, bottom: 5),
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
         borderRadius: BorderRadius.circular(10),
         //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
       ),
@@ -355,7 +355,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
         margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
         height: 50,
         decoration: BoxDecoration(
-          color: Colors.black12,
+          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
           borderRadius: BorderRadius.circular(10),
           //border: Border.all(color: Theme.of(context).accentColor, width: 1),
         ),

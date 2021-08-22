@@ -49,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
         borderRadius: BorderRadius.circular(10),
-        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white
+        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.white
     );
     return Container(
       padding: EdgeInsets.all(20),
