@@ -5,11 +5,11 @@ import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/defaultScaffold.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database/databaseCreate.dart';
 import 'examPlan.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'manageNotifications.dart';
@@ -19,24 +19,7 @@ import 'manageNotifications.dart';
 class SettingsTab extends StatelessWidget {
   Future<DateTime?> getTimetableVersion() async {
     try {
-      Future<String> _getPath() async {
-        final _dir = await getApplicationDocumentsDirectory();
-        return _dir.path;
-      }
-
-      Future<DateTime?> _readData() async {
-        try {
-          final _path = await _getPath();
-          final _file = File('$_path/version.txt');
-
-          String contents = await _file.readAsString();
-          return DateTime.parse(contents);
-        } catch (e) {
-          return null;
-        }
-      }
-
-      return await _readData();
+      return DateTime.parse(GetStorage().read('timetableVersion'));
     } catch (e) {
       print(e);
       return null;
@@ -155,12 +138,13 @@ class SettingsTab extends StatelessWidget {
                                       ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.symmetric(vertical: 10),
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 10),
                                       child: Text(
-                                          'Willst du wirklich die gesamte App auf Werkseinstellungen zurücksetzten?',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
+                                        'Willst du wirklich die gesamte App auf Werkseinstellungen zurücksetzten?',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),
                                       ),
                                     ),
                                     Row(
@@ -178,31 +162,27 @@ class SettingsTab extends StatelessWidget {
                                         IconButton(
                                             onPressed: () async {
                                               ///Leitfaden wieder anzeigen
-                                              Future<String> _getPath() async {
-                                                final _dir = await getApplicationDocumentsDirectory();
-                                                return _dir.path;
-                                              }
-
-                                              Future<void> _writeData() async {
-                                                final _path = await _getPath();
-                                                final _myFile = File('$_path/data.txt');
-                                                await _myFile.writeAsString(0.toString());
-                                              }
-                                              await _writeData();
+                                              GetStorage()
+                                                  .write('introScreen', 'true');
 
                                               ///Datenbank löschen
-                                                WidgetsFlutterBinding.ensureInitialized();
-                                                final Future<Database> database = openDatabase(
-                                                  join(await getDatabasesPath(), 'local_database.db'),
-                                                  onCreate: (db, version) {
-                                                    createDb(db);
-                                                  },
-                                                  version: 1,
-                                                );
-                                                Database db = await database;
-                                                await db.execute("DELETE FROM homeworkTasks");
-                                                await db.execute("DELETE FROM timetable");
-                                                cancelAllNotifications();
+                                              WidgetsFlutterBinding
+                                                  .ensureInitialized();
+                                              final Future<Database> database =
+                                                  openDatabase(
+                                                join(await getDatabasesPath(),
+                                                    'local_database.db'),
+                                                onCreate: (db, version) {
+                                                  createDb(db);
+                                                },
+                                                version: 1,
+                                              );
+                                              Database db = await database;
+                                              await db.execute(
+                                                  "DELETE FROM homeworkTasks");
+                                              await db.execute(
+                                                  "DELETE FROM timetable");
+                                              cancelAllNotifications();
 
                                               ///Dialogfenster schließen
                                               Navigator.of(context).pop();
@@ -212,37 +192,61 @@ class SettingsTab extends StatelessWidget {
                                                   context: context,
                                                   barrierDismissible: false,
                                                   builder: (context) {
-                                                    return StatefulBuilder(builder: (context, setError) {
+                                                    return StatefulBuilder(
+                                                        builder: (context,
+                                                            setError) {
                                                       return Dialog(
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(15.0),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15.0),
                                                           ),
                                                           child: Container(
-                                                            constraints: BoxConstraints(
+                                                            constraints:
+                                                                BoxConstraints(
                                                               maxWidth: 450,
                                                             ),
-                                                            padding: EdgeInsets.only(
-                                                                top: 30, left: 30, right: 30, bottom: 10),
-                                                            child: SingleChildScrollView(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 30,
+                                                                    left: 30,
+                                                                    right: 30,
+                                                                    bottom: 10),
+                                                            child:
+                                                                SingleChildScrollView(
                                                               child: Column(
-                                                                mainAxisSize: MainAxisSize.min,
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
                                                                 children: [
                                                                   Container(
-                                                                    margin: EdgeInsets.only(bottom: 10),
-                                                                    alignment: Alignment.centerLeft,
+                                                                    margin: EdgeInsets.only(
+                                                                        bottom:
+                                                                            10),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .centerLeft,
                                                                     child: Text(
                                                                       'Reset erfolgreich',
                                                                       style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 25),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                              25),
                                                                     ),
                                                                   ),
                                                                   Container(
-                                                                    margin: EdgeInsets.symmetric(vertical: 10),
+                                                                    margin: EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            10),
                                                                     child: Text(
                                                                       'Die App wurde zurückgesetzt. Bitte starte die App neu.',
-                                                                      style: TextStyle(
-                                                                        fontSize: 18,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            18,
                                                                       ),
                                                                     ),
                                                                   ),

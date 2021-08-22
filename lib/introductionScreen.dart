@@ -5,6 +5,7 @@ import 'package:annette_app/setClass.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -130,20 +131,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                                   isInGuide: true,
                                   onButtonPressed: () async {
                                     widget.onFinished();
-
-                                    Future<String> _getPath() async {
-                                      final _dir =
-                                          await getApplicationDocumentsDirectory();
-                                      return _dir.path;
-                                    }
-
-                                    Future<void> _writeData() async {
-                                      final _path = await _getPath();
-                                      final _myFile = File('$_path/data.txt');
-                                      await _myFile.writeAsString(1.toString());
-                                    }
-
-                                    await _writeData();
+                                    GetStorage().write('introScreen', 'false');
                                   })));
                         },
                       ),

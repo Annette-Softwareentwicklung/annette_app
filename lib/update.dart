@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
@@ -47,32 +48,10 @@ final snackBarTimetableUpdated = SnackBar(
 
 Future<void> update(BuildContext context) async {
   try {
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
+    var storage = GetStorage();
 
-    Future<void> _writeData(DateTime newVersion) async {
-      final _path = await _getPath();
-      final _myFile = File('$_path/version.txt');
-      await _myFile.writeAsString(newVersion.toString());
-    }
+    DateTime version = DateTime.parse(storage.read('timetableVersion'));
 
-    Future<DateTime?> _readData() async {
-      try {
-        final _path = await _getPath();
-        final _file = File('$_path/version.txt');
-
-        String contents = await _file.readAsString();
-        return DateTime.parse(contents);
-      } catch (e) {
-        return null;
-      }
-    }
-
-    DateTime? version = await _readData();
-
-    if (version != null) {
       DateTime versionNew;
       try {
         HttpClient client = HttpClient();
@@ -87,14 +66,14 @@ Future<void> update(BuildContext context) async {
           if (await updateTimetable(versionNew)) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(snackBarTimetableUpdated);
-            await _writeData(versionNew);
-          }else {
+            storage.write('timetableVersion', versionNew.toString());
+          } else {
             ScaffoldMessenger.of(context)
                 .showSnackBar(snackBarTimetableUpdateFailed);
           }
         }
       } catch (e) {}
-    }
+
   } catch (e) {
     print(e);
   }
@@ -108,24 +87,12 @@ Future<bool> updateTimetable(DateTime newVersion) async {
         .get(Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplan.txt'));
     if (response.statusCode == 200) {
       stundenplanDIF = response.body;
-      Future<String> _getPath() async {
-        final _dir = await getApplicationDocumentsDirectory();
-        return _dir.path;
+      String configuration;
+      try{
+        configuration = GetStorage().read('configuration');
+      } catch(e) {
+        configuration = 'c:error;';
       }
-
-      Future<String> _readData() async {
-        try {
-          final _path = await _getPath();
-          final _file = File('$_path/configuration.txt');
-
-          String contents = await _file.readAsString();
-          return contents;
-        } catch (e) {
-          return 'c:error;';
-        }
-      }
-
-      String configuration = await _readData();
       String currentClass = configuration.substring(
           configuration.indexOf('c:') + 2, configuration.indexOf(';'));
       if (stundenplanDIF.contains(currentClass)) {

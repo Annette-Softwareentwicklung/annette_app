@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:annette_app/onlineFiles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../timetableURL.dart';
@@ -29,25 +30,14 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
         showError();
       });
     } else {
-      Future<String> _getPath() async {
-        final _dir = await getApplicationDocumentsDirectory();
-        return _dir.path;
-      }
-
-      Future<String> _readData() async {
+      String currentClass;
         try {
-          final _path = await _getPath();
-          final _file = File('$_path/configuration.txt');
-
-          String contents = await _file.readAsString();
-          return contents.substring(
+          String contents = GetStorage().read('configuration');
+          currentClass = contents.substring(
               contents.indexOf('c:') + 2, contents.indexOf(';'));
         } catch (e) {
-          return '5A';
+          currentClass = '5A';
         }
-      }
-
-      String currentClass = await _readData();
 
       int classesNumber = onlineFiles.allClasses().indexOf(currentClass) + 1;
       currentClassNumber = classesNumber.toString().padLeft(5, '0');

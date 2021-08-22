@@ -8,6 +8,7 @@ import 'package:annette_app/custom_widgets/errorInternetContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SetClass extends StatefulWidget {
@@ -94,17 +95,6 @@ class _SetClassState extends State<SetClass> {
   List<String> zk2 = ['Freistunde'];
 
   void setGroupsOS() async {
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
-
-    Future<void> _writeData(String pData) async {
-      final _path = await _getPath();
-      final _myFile = File('$_path/configuration.txt');
-      await _myFile.writeAsString(pData);
-    }
-
     String tempConfiguration;
 
     if (selectedClass == 'Q1') {
@@ -119,24 +109,13 @@ class _SetClassState extends State<SetClass> {
     }
 
     await activateTimetableCrawler(tempConfiguration);
-    await _writeData(tempConfiguration);
+    GetStorage().write('configuration', tempConfiguration);
     setState(() {
       showFinishedConfiguration = true;
     });
   }
 
   void setGroupsUS() async {
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
-
-    Future<void> _writeData(String pData) async {
-      final _path = await _getPath();
-      final _myFile = File('$_path/configuration.txt');
-      await _myFile.writeAsString(pData);
-    }
-
     String tempConfiguration;
 
     if (selectedReligionUS == 'Kath. Religion') {
@@ -195,7 +174,7 @@ class _SetClassState extends State<SetClass> {
           'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
     }
     await activateTimetableCrawler(tempConfiguration);
-    await _writeData(tempConfiguration);
+    GetStorage().write('configuration', tempConfiguration);
     setState(() {
       showFinishedConfiguration = true;
     });
@@ -321,9 +300,9 @@ class _SetClassState extends State<SetClass> {
               ? configurationList[17]
               : 'Freistunde';
 
-            if(selectedZk1 == selectedZk2) {
-              selectedZk2 = 'Freistunde';
-            }
+          if (selectedZk1 == selectedZk2) {
+            selectedZk2 = 'Freistunde';
+          }
         } else {
           selectedLk1 = 'Freistunde';
           selectedLk2 = 'Freistunde';
@@ -393,18 +372,10 @@ class _SetClassState extends State<SetClass> {
       }
       newVersion = onlineFiles.getNewVersion();
 
-      Future<String> _getPath() async {
-        final _dir = await getApplicationDocumentsDirectory();
-        return _dir.path;
-      }
-
       Future<List<String>> _readData() async {
         List<String> tempContent = [];
         try {
-          final _path = await _getPath();
-          final _file = File('$_path/configuration.txt');
-
-          String contents = await _file.readAsString();
+          String contents = GetStorage().read('configuration');
 
           tempContent.add(contents.substring(contents.indexOf('c:') + 2,
               contents.indexOf(';', contents.indexOf('c:'))));
@@ -542,7 +513,7 @@ class _SetClassState extends State<SetClass> {
                   child: IconButton(
                     iconSize: 50,
                     icon: Icon(Icons.clear_rounded),
-                      onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
                 SingleChildScrollView(
@@ -550,41 +521,53 @@ class _SetClassState extends State<SetClass> {
                     padding: EdgeInsets.all(10),
                     child: Column(
                       children: [
-                       Text(
-                            'Woher weiß ich, welchen Kurs ich habe?',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-
-                  Padding(
-                    padding: EdgeInsets.only(top:20, bottom: 10),
-                    child: Text(
-                          'Welchen Kurs du in welcher Schiene hast, kannst du am Besten auf zwei Arten herausfinden:',
+                        Text(
+                          'Woher weiß ich, welchen Kurs ich habe?',
                           style: TextStyle(
-                              fontSize: 17),
-                        ),),
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20, bottom: 10),
+                          child: Text(
+                            'Welchen Kurs du in welcher Schiene hast, kannst du am Besten auf zwei Arten herausfinden:',
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('1) ',style: TextStyle(
-                                fontSize: 17),),
-                            Expanded(child: Text('Du schaust auf den "großen" Stundenplan (möglichst auf den mit den Lehrer-Abkürzungen, den du auf Moodle findest), und sucht dort deinen Kurs für die jeweilige Schiene heraus.',style: TextStyle(
-                                fontSize: 17),))
+                            Text(
+                              '1) ',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Expanded(
+                                child: Text(
+                              'Du schaust auf den "großen" Stundenplan (möglichst auf den mit den Lehrer-Abkürzungen, den du auf Moodle findest), und sucht dort deinen Kurs für die jeweilige Schiene heraus.',
+                              style: TextStyle(fontSize: 17),
+                            ))
                           ],
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('2) ',style: TextStyle(
-                                fontSize: 17),),
-                            Expanded(child: Text('Du schaust auf den kleinen Zettel mit deinen individuellen Kursen, den du zu Anfang des Schuljahres bekommen haben solltest.',style: TextStyle(
-                                fontSize: 17),))
+                            Text(
+                              '2) ',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Expanded(
+                                child: Text(
+                              'Du schaust auf den kleinen Zettel mit deinen individuellen Kursen, den du zu Anfang des Schuljahres bekommen haben solltest.',
+                              style: TextStyle(fontSize: 17),
+                            ))
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top:10),
-                          child: Text('Aus datenschutzrechtlichen Gründen ist es nicht erlaubt, die Lehrer-Abkürzungen neben die Kursbezeichnung zu schreiben. Auch wenn dies die Kurswahl enorm erleichtern würde und technisch einfach umzusetzen wäre, so muss leider der oben beschriebene, umständlichere Weg gewählt werden.',style: TextStyle(
-                              fontSize: 17),),),
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Aus datenschutzrechtlichen Gründen ist es nicht erlaubt, die Lehrer-Abkürzungen neben die Kursbezeichnung zu schreiben. Auch wenn dies die Kurswahl enorm erleichtern würde und technisch einfach umzusetzen wäre, so muss leider der oben beschriebene, umständlichere Weg gewählt werden.',
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -900,21 +883,26 @@ class _SetClassState extends State<SetClass> {
                         child: Container(
                           child: RichText(
                             textAlign: TextAlign.center,
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: infoText,
-                                  style: TextStyle(color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black,
-                                      fontSize: 17, fontStyle: FontStyle.italic),
-                                ),
-                                TextSpan(
-                                  text: 'Welche Kurse habe ich?',
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline, color: Colors.blue,
-                                      fontSize: 17, fontStyle: FontStyle.italic),
-                                ),
-                              ]
-                            ),
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: infoText,
+                                style: TextStyle(
+                                    color: (Theme.of(context).brightness ==
+                                            Brightness.dark)
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 17,
+                                    fontStyle: FontStyle.italic),
+                              ),
+                              TextSpan(
+                                text: 'Welche Kurse habe ich?',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue,
+                                    fontSize: 17,
+                                    fontStyle: FontStyle.italic),
+                              ),
+                            ]),
                           ),
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(

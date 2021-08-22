@@ -1,7 +1,6 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:get_storage/get_storage.dart';
 import 'dismissKeyboard.dart';
 import 'introductionScreen.dart';
 import 'navigationController.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'translation.dart';
+
 
 /// Die Datei main.dart mit der Methode "main()"ist der Einstiegspunkt der App.
 /// Außerdem wird hier das Plugin für die Systembenachrichtigungen initialisiert.
@@ -53,25 +53,11 @@ void main() async {
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
+  await GetStorage.init();
+
   ///leitfaden
-  Future<String> _getPath() async {
-    final _dir = await getApplicationDocumentsDirectory();
-    return _dir.path;
-  }
-
-  Future<int> _readData() async {
-    try {
-      final _path = await _getPath();
-      final _file = File('$_path/data.txt');
-
-      String contents = await _file.readAsString();
-      return int.parse(contents);
-    } catch (e) {
-      return 0;
-    }
-  }
-
-  if (await _readData() == 0) {
+  var introScreen = GetStorage().read('introScreen');
+  if (introScreen == null || introScreen == 'true') {
     guide = true;
   } else {
     guide = false;
