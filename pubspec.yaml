@@ -29,6 +29,7 @@ dependencies:
   webview_flutter: ^2.0.12
   path_provider: ^2.0.2
   http: ^0.13.3
+  get_storage: ^2.0.3
   flutter:
     sdk: flutter
 
