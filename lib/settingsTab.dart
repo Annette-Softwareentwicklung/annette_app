@@ -22,6 +22,7 @@ class SettingsTab extends StatelessWidget {
     try {
       return DateTime.parse(GetStorage().read('timetableVersion'));
     } catch (e) {
+
       print(e);
       return null;
     }
