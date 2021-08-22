@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:annette_app/setClass.dart';
+import 'package:annette_app/settingsPage.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/defaultScaffold.dart';
@@ -102,6 +103,19 @@ class SettingsTab extends StatelessWidget {
                 }),
           Divider(),
           ListTile(),
+          Divider(),
+          ListTile(
+              title: Text('Einstellungen'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                  return DefaultScaffold(
+                      title: 'Einstellungen',
+                      content: SettingsPage());
+                }),);
+              }),
+
           Divider(),
           ListTile(
               title: Text('Klasse ändern'),
