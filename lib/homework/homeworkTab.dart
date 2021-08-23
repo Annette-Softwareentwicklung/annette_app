@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:annette_app/defaultScaffold.dart';
-import 'package:annette_app/homeworkListTile.dart';
+import 'package:annette_app/homework/homeworkListTile.dart';
 import 'package:annette_app/fundamentals/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
 import 'package:annette_app/detailedView.dart';
 import 'dart:async';
-import 'dart:io';
 
 /// Diese Klasse beinhaltet den Tab mit der Hausaufgaben-Listen-Ansicht.
 /// App => Menüleiste => Hausaufgaben

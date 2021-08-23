@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:annette_app/defaultScaffold.dart';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
-import 'custom_widgets/customCheckbox.dart';
-import 'detailedView.dart';
+import '../custom_widgets/customCheckbox.dart';
+import '../detailedView.dart';
 import 'package:annette_app/fundamentals/task.dart';
-import 'manageNotifications.dart';
+import '../manageNotifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// Diese Klasse kann den Listen-Eintrag einer Hausaufgabe anzeigen. Die Aufgabe sowie die

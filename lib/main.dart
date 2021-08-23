@@ -14,16 +14,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'translation.dart';
 
-
-/// Die Datei main.dart mit der Methode "main()"ist der Einstiegspunkt der App.
-/// Außerdem wird hier das Plugin für die Systembenachrichtigungen initialisiert.
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 final navigationControllerAccess = GlobalKey<NavigationControllerState>();
 
 late bool guide;
 
-/// Diese Methode wird als erstes beim Starten der App ausgeführt.
 void main() async {
   ///Initialisierung des Plugins für die Systembenachrichtigungen
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,12 +61,7 @@ void main() async {
     guide = false;
   }
 
-
-  ///Starten der App
-  runApp(
-      MyApp()
-
-  );
+  runApp(MyApp());
 }
 
 ///Öffnet die Detailansicht, wenn auf eine Benachrichtigung geklickt wird.
@@ -96,54 +87,56 @@ void helper(String? payload) async {
   } while (!load);
 }
 
-
-
-
 /// Einstiegspunkt der App.
 class MyApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
-
     return DismissKeyboard(
         child: ChangeNotifierProvider<PreferredTheme>(
-          create: (BuildContext context) {
-            int? temp = GetStorage().read('preferredTheme');
-            if(temp == null) {
-              temp = 2;
-            }
-            return PreferredTheme(temp);
-          },
-        child: Builder(
-        builder: (context) => MaterialApp(
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-          CupertinoLocalizationsDelegate(),
-        ],
-        supportedLocales: [
-          const Locale('de', ''), // German
-        ],
-        debugShowCheckedModeBanner: false,
-        themeMode: (context.watch<PreferredTheme>().value == 0) ? ThemeMode.light : (context.watch<PreferredTheme>().value == 1) ? ThemeMode.dark : ThemeMode.system,
-        theme: lightTheme(context),
-        darkTheme: darkTheme(context),
-        home: Builder(
-            builder: (context) => Center(
-                  child: (guide)
-                      ? IntroductionScreen(
-                          onFinished: () {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pushReplacement(
-                                new MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        NavigationController(
-                                            key: navigationControllerAccess)));
-                          },
-                        )
-                      : NavigationController(key: navigationControllerAccess),
-            ),),),)));
+            create: (BuildContext context) {
+              int? temp = GetStorage().read('preferredTheme');
+              if (temp == null) {
+                temp = 2;
+              }
+              return PreferredTheme(temp);
+            },
+            child: Builder(
+              builder: (context) => MaterialApp(
+                localizationsDelegates: [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  DefaultCupertinoLocalizations.delegate,
+                  CupertinoLocalizationsDelegate(),
+                ],
+                supportedLocales: [
+                  const Locale('de', ''), // German
+                ],
+                debugShowCheckedModeBanner: false,
+                themeMode: (context.watch<PreferredTheme>().value == 0)
+                    ? ThemeMode.light
+                    : (context.watch<PreferredTheme>().value == 1)
+                        ? ThemeMode.dark
+                        : ThemeMode.system,
+                theme: lightTheme(context),
+                darkTheme: darkTheme(context),
+                home: Builder(
+                  builder: (context) => Center(
+                    child: (guide)
+                        ? IntroductionScreen(
+                            onFinished: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pushReplacement(
+                                  new MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          NavigationController(
+                                              key:
+                                                  navigationControllerAccess)));
+                            },
+                          )
+                        : NavigationController(key: navigationControllerAccess),
+                  ),
+                ),
+              ),
+            )));
   }
 }

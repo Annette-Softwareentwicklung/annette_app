@@ -8,11 +8,8 @@ import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/showWebview.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
-import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 import '../subjectsMap.dart';
 class TimetableTab extends StatefulWidget {
   @override
@@ -76,47 +73,6 @@ class _TimetableTabState extends State<TimetableTab> {
     }
 
     return subjectFullname;
-  }
-
-  Future<bool> vertretunsplan () async {
-    try {
-      var response = await http.get(Uri.https(
-          'www.annettegymnasium.de', 'SP/vertretung/Heute_KoL/subst_001.htm'));
-      if (response.statusCode == 200) {
-        htmlCode = response.body;
-        VertretungsplanCrawler vpc1 =
-        new VertretungsplanCrawler(htmlCode: htmlCode);
-        dateToday = vpc1.getCurrentDate();
-        vertretungenHeute = await vpc1.getVertretungen();
-
-        if (vertretungenHeute != null) {
-          vertretungenHeute!.sort((a, b) {
-            return a.lesson!.compareTo(b.lesson!);
-          });
-        }
-      }
-
-      response = await http.get(Uri.https(
-          'www.annettegymnasium.de', 'SP/vertretung/Morgen_KoL/subst_001.htm'));
-      if (response.statusCode == 200) {
-        htmlCode = response.body;
-        VertretungsplanCrawler vpc2 =
-        new VertretungsplanCrawler(htmlCode: htmlCode);
-        dateTomorrow = vpc2.getCurrentDate();
-        vertretungenMorgen = await vpc2.getVertretungen();
-        if (vertretungenMorgen != null) {
-          vertretungenMorgen!.sort((a, b) {
-            return a.lesson!.compareTo(b.lesson!);
-          });
-        }
-
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      return false;
-    }
   }
 
   void load() async {
@@ -240,11 +196,12 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
+
     Duration tempDuration;
     displayTimetable.add(timeDivider(
         getTimeFromDuration(parseDuration(allTimes[0].time!)),
-        (pLessonNumber == 0 && isInBreak == false) ? true : false,
-        (pLessonNumber == 0 && isInBreak == false) ? globalKeyNow : null));
+        (pLessonNumber == 1 && isInBreak == false) ? true : false,
+        (pLessonNumber == 1 && isInBreak == false) ? globalKeyNow : null));
     int temp = allTimeTableUnits.indexWhere((element) =>
         (element.dayNumber == pWeekday && element.lessonNumber == 1));
     if (temp != -1) {
@@ -255,8 +212,8 @@ class _TimetableTabState extends State<TimetableTab> {
     tempDuration = parseDuration(allTimes[0].time!) + Duration(minutes: 45);
     displayTimetable.add(timeDivider(
         getTimeFromDuration(tempDuration),
-        (pLessonNumber == 0 && isInBreak == true) ? true : false,
-        (pLessonNumber == 0 && isInBreak == true) ? globalKeyNow : null));
+        (pLessonNumber == 1 && isInBreak == true) ? true : false,
+        (pLessonNumber == 1 && isInBreak == true) ? globalKeyNow : null));
 
     int i = 2;
     while (allTimeTableUnits.indexWhere((element) =>
@@ -303,7 +260,6 @@ class _TimetableTabState extends State<TimetableTab> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     load();
   }

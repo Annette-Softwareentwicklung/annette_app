@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'homeworkTab.dart';
+import 'homework/homeworkTab.dart';
 import 'settingsTab.dart';
 import 'addDialog.dart';
 import 'dart:async';

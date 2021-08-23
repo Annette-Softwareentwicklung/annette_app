@@ -16,12 +16,9 @@ class _SettingsPageState extends State<SettingsPage> {
    late bool? unspecificOccurences;
 
    late PreferredTheme preferredTheme;
-   late int preferredThemeValue;
-
 
    @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     unspecificOccurences = storage.read('unspecificOccurences');
     if(unspecificOccurences == null) {
@@ -32,7 +29,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     preferredTheme = context.watch<PreferredTheme>();
-    preferredThemeValue = preferredTheme.value;
 
     var textDescription = TextStyle(
         fontSize: 14,
@@ -114,12 +110,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: Text("Hell"),
                     leading: Radio(
                       value: 0,
-                      groupValue: preferredThemeValue,
+                      groupValue: context.watch<PreferredTheme>().value,
                       onChanged: (value) {
                         preferredTheme.setValue(value as int);
-                        setState(() {
-                          preferredThemeValue = value;
-                        });
                       },
                       activeColor: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blue,
 
@@ -129,12 +122,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: Text("Dunkel"),
                     leading: Radio(
                       value: 1,
-                      groupValue: preferredThemeValue,
+                      groupValue: context.watch<PreferredTheme>().value,
                       onChanged: (value) {
                         preferredTheme.setValue(value as int);
-                        setState(() {
-                          preferredThemeValue = value;
-                        });
                       },
                       activeColor: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blue,
                     ),
@@ -143,12 +133,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: Text("System"),
                     leading: Radio(
                       value: 2,
-                      groupValue: preferredThemeValue,
+                      groupValue: context.watch<PreferredTheme>().value,
                       onChanged: (value) {
                         preferredTheme.setValue(value as int);
-                        setState(() {
-                          preferredThemeValue = value;
-                        });
                       },
                       activeColor: (Theme.of(context).brightness == Brightness.dark) ? Theme.of(context).accentColor : Colors.blue,
                     ),
@@ -160,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                  alignment: Alignment.centerLeft,
                  child: Text(
-                  'Das Erscheinungsbild der App ist ${(preferredThemeValue == 0) ? 'immer hell' : (preferredThemeValue == 1) ? 'immer dunkel' : 'abhängig vom Betriebssystem'}.',
+                  'Das Erscheinungsbild der App ist ${(context.watch<PreferredTheme>().value == 0) ? 'immer hell' : (context.watch<PreferredTheme>().value == 1) ? 'immer dunkel' : 'abhängig vom Betriebssystem'}.',
                 style: textDescription,
               ),)
 
