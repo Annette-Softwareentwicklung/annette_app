@@ -1,6 +1,5 @@
 import 'dart:ui';
-
-import 'package:annette_app/subjectsList.dart';
+import 'package:annette_app/subjectsMap.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/fundamentals/task.dart';
@@ -12,7 +11,6 @@ import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/manageNotifications.dart';
 import 'package:annette_app/currentValues.dart';
 import 'package:flutter/services.dart';
-
 import 'lessonStartTimes.dart';
 
 ///Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
@@ -58,8 +56,7 @@ class _AddDialogState extends State<AddDialog> {
 
   void getSubjectsAndTimes() async {
     ///Zuordnung: Abkürzung => Fachname
-    List<String> classesAbbreviation = getSubjectsAbbreviation();
-    List<String> classesFullName = getSubjectsFullName();
+     Map<String, String> allSubjects = getSubjects();
     timetableUnits = await databaseGetAllTimeTableUnit();
     timetableUnits.sort((a, b) {
       return a.subject!.compareTo(b.subject!);
@@ -103,12 +100,10 @@ class _AddDialogState extends State<AddDialog> {
             0, tempSubjectAbbreviation.indexOf('VT') + 2);
       }
 
-      int tempPositionInList =
-          classesAbbreviation.indexOf(tempSubjectAbbreviation);
       late String tempSubjectFullName;
 
-      if (tempPositionInList != -1) {
-        tempSubjectFullName = classesFullName[tempPositionInList];
+      if (allSubjects.containsKey(tempSubjectAbbreviation)) {
+        tempSubjectFullName = allSubjects[tempSubjectAbbreviation]!;
       } else {
         tempSubjectFullName = tempSubjectAbbreviation;
       }

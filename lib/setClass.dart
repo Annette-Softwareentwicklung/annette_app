@@ -1086,7 +1086,7 @@ class _SetClassState extends State<SetClass> {
                                     MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   Text(
-                                    'ZK $j:',
+                                    'ZK:',
                                     style: TextStyle(fontSize: 17.0),
                                   ),
                                   DropdownButton<String>(

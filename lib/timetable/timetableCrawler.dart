@@ -1,4 +1,4 @@
-import 'package:annette_app/subjectsList.dart';
+import 'package:annette_app/subjectsMap.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';
@@ -190,8 +190,7 @@ class TimetableCrawler {
     List<String> tempSubjects = [];
 
     ///Zuordnung: Abkürzung => Fachname
-    List<String> classesAbbreviation = getSubjectsAbbreviation();
-    List<String> classesFullName = getSubjectsFullName();
+    Map<String, String> allSubjects = getSubjects();
 
     List<TimeTableUnit> timetableUnits = await databaseGetAllTimeTableUnit();
 
@@ -212,12 +211,10 @@ class TimetableCrawler {
             0, tempSubjectAbbreviation.indexOf('Z2') - 1);
       }
 
-      int tempPositionInList =
-          classesAbbreviation.indexOf(tempSubjectAbbreviation);
       late String tempSubjectFullName;
 
-      if (tempPositionInList != -1) {
-        tempSubjectFullName = classesFullName[tempPositionInList];
+      if (allSubjects.containsKey(tempSubjectAbbreviation)) {
+        tempSubjectFullName = allSubjects[tempSubjectAbbreviation]!;
       } else {
         tempSubjectFullName = tempSubjectAbbreviation;
       }

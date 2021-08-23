@@ -128,7 +128,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                                   isInGuide: true,
                                   onButtonPressed: () async {
                                     widget.onFinished();
-                                    GetStorage().write('introScreen', 'false');
+                                    GetStorage().write('introScreen', false);
                                   })));
                         },
                       ),

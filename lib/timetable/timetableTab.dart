@@ -6,13 +6,14 @@ import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/lessonStartTimes.dart';
 import 'package:annette_app/parseTime.dart';
 import 'package:annette_app/showWebview.dart';
-import 'package:annette_app/subjectsList.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../subjectsMap.dart';
 class TimetableTab extends StatefulWidget {
   @override
   _TimetableTabState createState() => _TimetableTabState();
@@ -23,7 +24,6 @@ class _TimetableTabState extends State<TimetableTab> {
   int tabIndex = 0;
   bool finishedZeitraster = false;
   late List<TimeTableUnit> allTimeTableUnits;
-  late List<String> subjectAbbreviation;
   late List<String> subjectFullnames;
   late List<LessonStartTime> allTimes;
   late String displayDayString;
@@ -51,10 +51,8 @@ class _TimetableTabState extends State<TimetableTab> {
 
   String getSubjectFullname(String pSubject) {
     String subjectFullname;
+    Map<String, String> allSubjects = getSubjects();
 
-    if (!subjectAbbreviation.contains(pSubject)) {
-      subjectFullname = pSubject;
-    }
     if (pSubject.contains('LK')) {
       pSubject = pSubject.substring(0, pSubject.indexOf('LK') - 1);
     } else if (pSubject.contains('GK')) {
@@ -65,10 +63,9 @@ class _TimetableTabState extends State<TimetableTab> {
       pSubject = pSubject.substring(0, pSubject.indexOf('Z2') - 1);
     }
 
-    int tempPositionInList = subjectAbbreviation.indexOf(pSubject);
 
-    if (tempPositionInList != -1) {
-      subjectFullname = subjectFullnames[tempPositionInList];
+    if (allSubjects.containsKey(pSubject)) {
+      subjectFullname = allSubjects[pSubject]!;
     } else {
       subjectFullname = pSubject;
     }
@@ -123,8 +120,6 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   void load() async {
-    subjectAbbreviation = getSubjectsAbbreviation();
-    subjectFullnames = getSubjectsFullName();
     allTimes = getAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
 

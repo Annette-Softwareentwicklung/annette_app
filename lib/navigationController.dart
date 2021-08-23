@@ -26,22 +26,6 @@ class NavigationControllerState extends State<NavigationController> {
   final GlobalKey<HomeworkTabState> homeworkTabAccess =
       GlobalKey<HomeworkTabState>();
 
-
-
-
-
-  /// Diese Methode sorgt dafür, dass bei erstmaligem Starten der App
-  /// ein Leitfaden angezeigt wird. In der Datei "data.txt" ist gespeichert (0 oder 1),
-  /// ob der Leitfaden angezeigt werden muss.
-  /// Die Textdatei wird ausgelesen und dann bei Bedarf der Leitfaden angezeigt.
-  /// Wenn der Leitfaden zurückgibt, dass dieser erfolgreich beendet wurde,
-  /// wird 1 in die Datei geschrieben, sodass der Leitfaden beim nächsten Starten
-  /// nicht wieder angezeigt wird.
-  ///
-  /// Quellen zum schreiben von .txt Dateien:
-  /// https://flutter.dev/docs/cookbook/persistence/reading-writing-files
-  /// https://www.kindacode.com/article/flutter-how-to-read-and-write-text-files/
-
   /// Initialisieren
   @override
   void initState() {

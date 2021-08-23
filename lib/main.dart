@@ -57,9 +57,9 @@ void main() async {
 
   await GetStorage.init();
 
-  ///leitfaden
+  ///Leitfaden beim ersten Öffnen der App
   var introScreen = GetStorage().read('introScreen');
-  if (introScreen == null || introScreen == 'true') {
+  if (introScreen == null || introScreen == true) {
     guide = true;
   } else {
     guide = false;

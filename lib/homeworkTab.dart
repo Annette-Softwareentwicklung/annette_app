@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:annette_app/defaultScaffold.dart';
 import 'package:annette_app/homeworkListTile.dart';
@@ -28,6 +29,7 @@ class HomeworkTabState extends State<HomeworkTab> {
   String? selectedOrder;
   int? orderValue;
   Task? defaultToShowOnDetailedSplitView;
+  late GetStorage storage;
 
   /// Wenn eine neue Hausaufgabe über den "AddDialog" eingetragen wurde, wird diese als
   /// Parameter an diese Methode übergeben, welche die Aufgabe dann mit einer
@@ -298,7 +300,11 @@ class HomeworkTabState extends State<HomeworkTab> {
   ///Hilfsmethode zum Laden der Aufgaben.
   void load() async {
     Future.delayed(Duration(seconds: 0), () async {
-      orderValue = await getOrder();
+      orderValue = storage.read('order');
+      if (orderValue == null) {
+        orderValue = 3;
+      }
+
       switch (orderValue) {
         case 1:
           selectedOrder = 'Fach aufsteigend';
@@ -369,53 +375,6 @@ class HomeworkTabState extends State<HomeworkTab> {
       }
       finished = true;
     });
-
-    /*if(reloadID != null && detailedViewAccess.currentState == null) {
-      print('rID $reloadID');
-      Task tempTask = tasks[tasks.indexWhere((element) => element.id == reloadID)];
-
-      detailedViewAccess.currentState!.update(tempTask);
-
-    }*/
-  }
-
-  Future<void> writeOrderValue() async {
-    return Future.delayed(Duration.zero, () async {
-      Future<String> _getPath() async {
-        final _dir = await getApplicationDocumentsDirectory();
-        return _dir.path;
-      }
-
-      Future<void> _writeData() async {
-        final _path = await _getPath();
-        final _myFile = File('$_path/order.txt');
-        await _myFile.writeAsString(orderValue.toString());
-      }
-
-      print('Write $orderValue');
-      await _writeData();
-    });
-  }
-
-  Future<int> getOrder() async {
-    Future<String> _getPath() async {
-      final _dir = await getApplicationDocumentsDirectory();
-      return _dir.path;
-    }
-
-    Future<int> _readData() async {
-      try {
-        final _path = await _getPath();
-        final _file = File('$_path/order.txt');
-
-        String contents = await _file.readAsString();
-        return int.parse(contents);
-      } catch (e) {
-        return 3;
-      }
-    }
-
-    return await _readData();
   }
 
   /// Beim Initialisieren dieses Tabs werden mit der Methode load()
@@ -424,6 +383,7 @@ class HomeworkTabState extends State<HomeworkTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    storage = GetStorage();
     load();
   }
 
@@ -487,7 +447,8 @@ class HomeworkTabState extends State<HomeworkTab> {
                         } else if (value == 'Als letztes') {
                           orderValue = 4;
                         }
-                        await writeOrderValue();
+                        storage.write('order', orderValue);
+
                         reload(null);
                       },
                       value: selectedOrder,
