@@ -52,7 +52,9 @@ class GroupsQ2 {
           String s = tempCode.substring(0, tempCode.indexOf('</B'));
           s = s.replaceAll('.', ' ');
           s = s.trim();
+if(!tempList.contains(s)) {
           tempList.add(s);
+        }
           tempCode = tempCode.substring(tempCode.indexOf('</B'));
         }
         tempList.sort((a,b) {

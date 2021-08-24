@@ -98,6 +98,9 @@ class TimetableCrawler {
               String tempString =
               configurationString.substring(tempPosition - 1);
               if (tempString.indexOf(':') == 0) {
+
+
+
                 ///Umgehen des Fehlers auf dem Stundenplan, dass es zwei GE Z1 gibt.
                 ///Fall: es gibt GE Z1 und ein anderes Fach soll eingetragen werden.
                 if (!tempTimetableUnit.subject!.contains('GE Z1')) {
@@ -124,7 +127,6 @@ class TimetableCrawler {
                   }
                 }
 
-                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
           } else {
@@ -135,7 +137,6 @@ class TimetableCrawler {
                 tempTimetableUnit.subject! == 'PPL') {
               if (configurationString.contains(tempTimetableUnit.subject!)) {
                 timetableUnitsToInsert.add(tempTimetableUnit);
-                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
 
@@ -149,7 +150,6 @@ class TimetableCrawler {
                     tempTimetableUnit.subject! == 'F7')) {
               if (configurationString.contains(tempTimetableUnit.subject!)) {
                 timetableUnitsToInsert.add(tempTimetableUnit);
-                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             }
 
@@ -164,11 +164,9 @@ class TimetableCrawler {
                     tempTimetableUnit.subject! == 'KUd')) {
               if (configurationString.contains(tempTimetableUnit.subject!)) {
                 timetableUnitsToInsert.add(tempTimetableUnit);
-                //databaseInsertTimetableUnit(tempTimetableUnit);
               }
             } else {
               timetableUnitsToInsert.add(tempTimetableUnit);
-              //databaseInsertTimetableUnit(tempTimetableUnit);
             }
           }
         }
@@ -179,11 +177,37 @@ class TimetableCrawler {
       }
     }
 
+    ///Fehler bei der Benennung der LKs im Stundenplan umgehen. Wenn zwei LKs in unterschiedlichen Schienen gleich heißen.
+    if (currentClass == 'Q1' || currentClass == 'Q2') {
+      Iterable<TimeTableUnit> listAllLk = timetableUnitsToInsert.where((element) => element.subject!.contains('LK'));
+      List<TimeTableUnit> conflictsFound = [];
+      List<TimeTableUnit> noConflictsFound = [];
+      listAllLk.forEach((element1) {
+        if(listAllLk.where((element2) =>
+          element1.lessonNumber == element2.lessonNumber && element1.dayNumber == element2.dayNumber && element1.subject != element2.subject
+        ).length != 0) {
+          conflictsFound.add(element1);
+        } else {
+          noConflictsFound.add(element1);
+        }
+      });
+
+      noConflictsFound.forEach((element) {print('${element.subject} ${element.room}');});
+      print('äää');
+      conflictsFound.forEach((element) {print('${element.subject} ${element.room}');});
+
+      conflictsFound.forEach((element1) {
+        if(noConflictsFound.indexWhere((element2) => element1.subject == element2.subject && element1.room != element2.room) != -1) {
+          timetableUnitsToInsert.remove(element1);
+        }
+      });
+      print('aa');
+      timetableUnitsToInsert.forEach((element) {print('${element.subject} ${element.room}');});
+    }
+
     timetableUnitsToInsert.forEach((element) {
       databaseInsertTimetableUnit(element);
     });
-
-    //timetableUnitsToInsert.forEach((element) {print('${element.subject}  ${element.room} ${element.dayNumber} ${element.lessonNumber} ');});
   }
 
   Future<void> setSubjects() async {
