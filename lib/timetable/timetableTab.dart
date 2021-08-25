@@ -11,6 +11,7 @@ import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../subjectsMap.dart';
+
 class TimetableTab extends StatefulWidget {
   @override
   _TimetableTabState createState() => _TimetableTabState();
@@ -36,7 +37,7 @@ class _TimetableTabState extends State<TimetableTab> {
   List<VertretungsEinheit>? vertretungenHeute = [];
   List<VertretungsEinheit>? vertretungenMorgen = [];
   String? dateTomorrow;
-  String?  dateToday;
+  String? dateToday;
 
   final Shader lightGradient = LinearGradient(
     colors: <Color>[Colors.blue, Colors.tealAccent],
@@ -59,7 +60,6 @@ class _TimetableTabState extends State<TimetableTab> {
     } else if (pSubject.contains('Z2')) {
       pSubject = pSubject.substring(0, pSubject.indexOf('Z2') - 1);
     }
-
 
     if (allSubjects.containsKey(pSubject)) {
       subjectFullname = allSubjects[pSubject]!;
@@ -109,7 +109,6 @@ class _TimetableTabState extends State<TimetableTab> {
         }
       }
 
-
       if (currentLessonNumber == 0) {
         await setDay(DateTime.now().weekday, null, null);
         displayDayString = 'Heute';
@@ -145,7 +144,6 @@ class _TimetableTabState extends State<TimetableTab> {
       ),
     );
 
-
     displayTimetable.add(Container(
       margin: EdgeInsets.only(bottom: 40),
     ));
@@ -158,7 +156,7 @@ class _TimetableTabState extends State<TimetableTab> {
       try {
         Future.delayed(Duration(milliseconds: 50), () {
           RenderBox? boxEnd =
-          globalKeyEnd.currentContext!.findRenderObject() as RenderBox;
+              globalKeyEnd.currentContext!.findRenderObject() as RenderBox;
           Offset positionEnd = boxEnd.localToGlobal(Offset.zero);
 
           RenderBox? box =
@@ -176,7 +174,7 @@ class _TimetableTabState extends State<TimetableTab> {
           temp -= MediaQueryData.fromWindow(window).padding.bottom;
           temp -= 110;
 
-          if(positionEnd.dy - position.dy < temp) {
+          if (positionEnd.dy - position.dy < temp) {
             animationHeight -= positionEnd.dy - position.dy;
             print(MediaQueryData.fromWindow(window).size.height);
             print(temp);
@@ -187,7 +185,6 @@ class _TimetableTabState extends State<TimetableTab> {
             animationHeight = scrollController.position.maxScrollExtent;
           }
 
-
           scrollController.animateTo(animationHeight,
               duration: Duration(milliseconds: 500), curve: Curves.linear);
         });
@@ -196,7 +193,6 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
-
     Duration tempDuration;
     displayTimetable.add(timeDivider(
         getTimeFromDuration(parseDuration(allTimes[0].time!)),
@@ -207,7 +203,7 @@ class _TimetableTabState extends State<TimetableTab> {
     if (temp != -1) {
       displayTimetable.add(displayTimetableUnit(allTimeTableUnits[temp], null));
     } else {
-      displayTimetable.add(displayFree(1));
+      displayTimetable.add(displayFree(1.toString()));
     }
     tempDuration = parseDuration(allTimes[0].time!) + Duration(minutes: 45);
     displayTimetable.add(timeDivider(
@@ -217,17 +213,28 @@ class _TimetableTabState extends State<TimetableTab> {
 
     int i = 2;
     while (allTimeTableUnits.indexWhere((element) =>
-            (element.dayNumber! == pWeekday && element.lessonNumber! >= i )) !=
+            (element.dayNumber! == pWeekday && element.lessonNumber! >= i)) !=
         -1) {
+      int? tempEnd;
       tempDuration = parseDuration(allTimes[(i - 1)].time!) -
           parseDuration(allTimes[(i - 2)].time!) -
           Duration(minutes: 45);
-      displayTimetable.add(displayBreak(tempDuration.inMinutes.toString()));
-      displayTimetable.add(timeDivider(
-          getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-          (pLessonNumber  == i && isInBreak == false) ? true : false,
-          (pLessonNumber == i && isInBreak == false) ? globalKeyNow : null));
 
+      if (allTimeTableUnits.indexWhere((element) =>
+              (element.dayNumber! == pWeekday && element.lessonNumber! == i)) !=
+          -1) {
+        if (allTimeTableUnits.indexWhere((element) =>
+                (element.dayNumber! == pWeekday &&
+                    element.lessonNumber! == i - 1)) !=
+            -1) {
+          displayTimetable.add(displayBreak(tempDuration.inMinutes.toString()));
+        }
+
+        displayTimetable.add(timeDivider(
+            getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
+            (pLessonNumber == i && isInBreak == false) ? true : false,
+            (pLessonNumber == i && isInBreak == false) ? globalKeyNow : null));
+      }
       if (allTimeTableUnits.indexWhere((element) =>
               (element.dayNumber! == pWeekday && element.lessonNumber! == i)) !=
           -1) {
@@ -236,26 +243,39 @@ class _TimetableTabState extends State<TimetableTab> {
                 (element.dayNumber! == pWeekday && element.lessonNumber! == i)),
             null));
       } else {
-        displayTimetable.add(displayFree(i));
+        int j = i + 1;
+        while (allTimeTableUnits.indexWhere((element) =>
+                element.dayNumber == pWeekday && element.lessonNumber == j) ==
+            -1) {
+          tempEnd = j;
+          j++;
+        }
+
+        displayTimetable.add(displayFree(
+            '${i.toString()}${(tempEnd != null) ? ' - ${tempEnd.toString()}' : ''}'));
+        if (tempEnd != null) {
+          i = tempEnd;
+        }
       }
 
       tempDuration =
           parseDuration(allTimes[(i - 1)].time!) + Duration(minutes: 45);
-      displayTimetable.add(timeDivider(
-          getTimeFromDuration(tempDuration),
-          (pLessonNumber == i && isInBreak == true) ? true : false,
-          (pLessonNumber == i && isInBreak == true) ? globalKeyNow : null));
+
+      if (tempEnd == null) {
+        displayTimetable.add(timeDivider(
+            getTimeFromDuration(tempDuration),
+            (pLessonNumber == i && isInBreak == true) ? true : false,
+            (pLessonNumber == i && isInBreak == true) ? globalKeyNow : null));
+      }
 
       i++;
     }
 
-    displayTimetable.add(
-      Container(
-        key: globalKeyEnd,
-        height: 1,
-        width: double.infinity,
-      )
-    );
+    displayTimetable.add(Container(
+      key: globalKeyEnd,
+      height: 1,
+      width: double.infinity,
+    ));
   }
 
   @override
@@ -337,14 +357,14 @@ class _TimetableTabState extends State<TimetableTab> {
                 width: double.infinity,
                 alignment: Alignment.topCenter,
                 child: Container(
-              constraints: BoxConstraints(
-                maxWidth: 500,
-              ),
-              child: Column(
-                children: displayTimetable,
-                crossAxisAlignment: CrossAxisAlignment.end,
-              ),
-            )))
+                  constraints: BoxConstraints(
+                    maxWidth: 500,
+                  ),
+                  child: Column(
+                    children: displayTimetable,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                  ),
+                )))
         : Center(
             child: Column(
             children: [
@@ -378,8 +398,14 @@ class _TimetableTabState extends State<TimetableTab> {
               height: (isNow) ? 5 : 1,
               margin: EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
-                color: (isNow) ? Colors.red : (Theme.of(context).brightness == Brightness.dark) ? Colors.white54 : Colors.black,
-                borderRadius: (isNow) ? BorderRadius.circular(2) : BorderRadius.circular(0),
+                color: (isNow)
+                    ? Colors.red
+                    : (Theme.of(context).brightness == Brightness.dark)
+                        ? Colors.white54
+                        : Colors.black,
+                borderRadius: (isNow)
+                    ? BorderRadius.circular(2)
+                    : BorderRadius.circular(0),
               ),
             ),
           ),
@@ -395,7 +421,9 @@ class _TimetableTabState extends State<TimetableTab> {
       padding: EdgeInsets.all(20),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark)
+            ? Colors.black26
+            : Colors.black12,
         borderRadius: BorderRadius.circular(20),
       ),
       constraints: BoxConstraints(
@@ -405,7 +433,6 @@ class _TimetableTabState extends State<TimetableTab> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
             children: [
               Text(
                 timeTableUnit.lessonNumber!.toString(),
@@ -419,40 +446,47 @@ class _TimetableTabState extends State<TimetableTab> {
                         : lightGradient,*/
                 ),
               ),
-              Expanded(child: IntrinsicWidth(child: Container(child: Text(
-                getSubjectFullname(timeTableUnit.subject!),
-                textAlign: TextAlign.end,
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),),),),
-            ],
-          ),
-          if(timeTableUnit.room! != '-')
-          Row(
-            children: [
-              if (vertretung != null)
-                Container(
-                  child: Text(
-                    vertretung.room!,
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold),
+              Expanded(
+                child: IntrinsicWidth(
+                  child: Container(
+                    child: Text(
+                      getSubjectFullname(timeTableUnit.subject!),
+                      textAlign: TextAlign.end,
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  margin: EdgeInsets.only(right: 5),
                 ),
-              Text(
-                timeTableUnit.room!,
-                style: TextStyle(
-                    fontSize: 25,
-                    decoration: (vertretung != null)
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                    fontWeight: FontWeight.normal),
               ),
-              Icon(CupertinoIcons.location_solid),
             ],
-            mainAxisAlignment: MainAxisAlignment.end,
           ),
+          if (timeTableUnit.room! != '-')
+            Row(
+              children: [
+                if (vertretung != null)
+                  Container(
+                    child: Text(
+                      vertretung.room!,
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    margin: EdgeInsets.only(right: 5),
+                  ),
+                Text(
+                  timeTableUnit.room!,
+                  style: TextStyle(
+                      fontSize: 25,
+                      decoration: (vertretung != null)
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      fontWeight: FontWeight.normal),
+                ),
+                Icon(CupertinoIcons.location_solid),
+              ],
+              mainAxisAlignment: MainAxisAlignment.end,
+            ),
           if (vertretung != null &&
               vertretung.teacherNew != null &&
               vertretung.teacherOld != vertretung.teacherNew)
@@ -531,7 +565,9 @@ class _TimetableTabState extends State<TimetableTab> {
               child: Container(
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+              color: (Theme.of(context).brightness == Brightness.dark)
+                  ? Colors.black26
+                  : Colors.black12,
               borderRadius: BorderRadius.circular(15),
             ),
             alignment: Alignment.center,
@@ -544,11 +580,10 @@ class _TimetableTabState extends State<TimetableTab> {
         mainAxisSize: MainAxisSize.min,
       ),
       width: double.infinity,
-
     );
   }
 
-  Widget displayFree(int pHour) {
+  Widget displayFree(String pHour) {
     return Container(
         margin: EdgeInsets.only(left: 80),
         child: Column(children: [
@@ -556,7 +591,9 @@ class _TimetableTabState extends State<TimetableTab> {
             padding: EdgeInsets.all(15),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+              color: (Theme.of(context).brightness == Brightness.dark)
+                  ? Colors.black26
+                  : Colors.black12,
               borderRadius: BorderRadius.circular(15),
             ),
             constraints: BoxConstraints(
@@ -566,7 +603,7 @@ class _TimetableTabState extends State<TimetableTab> {
             child: Row(
               children: [
                 Text(
-                  pHour.toString(),
+                  pHour,
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -591,8 +628,12 @@ class _TimetableTabState extends State<TimetableTab> {
 
   Container zeitraster() {
     return Container(
-      child: (Platform.isIOS) ? ShowWebview(url: 'https://www.annettegymnasium.de/SP/Pausenregelung.jpg',) :
-      Image.network('https://www.annettegymnasium.de/SP/Pausenregelung.jpg'),
+      child: (Platform.isIOS)
+          ? ShowWebview(
+              url: 'https://www.annettegymnasium.de/SP/Pausenregelung.jpg',
+            )
+          : Image.network(
+              'https://www.annettegymnasium.de/SP/Pausenregelung.jpg'),
     );
   }
 
