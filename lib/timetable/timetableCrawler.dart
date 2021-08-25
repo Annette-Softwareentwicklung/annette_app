@@ -57,7 +57,7 @@ class TimetableCrawler {
         ///if-Abfrage zur Überprüfung ob es ein Fach gibt oder ob das "Feld" leer ist.
         if (timetableCode.indexOf(',') != 0) {
           String tempSubject =
-          timetableCode.substring(0, timetableCode.indexOf('"'));
+              timetableCode.substring(0, timetableCode.indexOf('"'));
           timetableCode =
               timetableCode.substring(timetableCode.indexOf(',') + 1);
 
@@ -69,109 +69,120 @@ class TimetableCrawler {
               timetableCode.substring(timetableCode.indexOf(',') + 1);
 
           ///if-Abfrage zur Überprüfung ob es eine Tagnummer gibt oder ob das "Feld" leer ist.
-          if(timetableCode.indexOf(',') != 0) {
-          int tempDayNumber = int.tryParse(
-              timetableCode.substring(0, timetableCode.indexOf(',')))!;
-          timetableCode =
-              timetableCode.substring(timetableCode.indexOf(',') + 1);
+          if (timetableCode.indexOf(',') != 0) {
+            int tempDayNumber = int.tryParse(
+                timetableCode.substring(0, timetableCode.indexOf(',')))!;
+            timetableCode =
+                timetableCode.substring(timetableCode.indexOf(',') + 1);
 
-          ///if-Abfrage zur Überprüfung ob es eine Stundennummer gibt oder ob das "Feld" leer ist.
-          if(timetableCode.indexOf(',') != 0) {
+            ///if-Abfrage zur Überprüfung ob es eine Stundennummer gibt oder ob das "Feld" leer ist.
+            if (timetableCode.indexOf(',') != 0) {
+              int tempLessonNumber = int.tryParse(
+                  timetableCode.substring(0, timetableCode.indexOf(',,')))!;
 
-            int tempLessonNumber = int.tryParse(
-              timetableCode.substring(0, timetableCode.indexOf(',,')))!;
+              ///Lernzeit wird als normales Fach angesehen
+              tempSubject = tempSubject.replaceAll(' LZ', '');
 
-          ///Lernzeit wird als normales Fach angesehen
-          tempSubject = tempSubject.replaceAll(' LZ', '');
+              TimeTableUnit tempTimetableUnit = new TimeTableUnit(
+                  subject: tempSubject,
+                  dayNumber: tempDayNumber,
+                  lessonNumber: tempLessonNumber,
+                  room: tempRoom);
+              if (currentClass == 'EF' ||
+                  currentClass == 'Q1' ||
+                  currentClass == 'Q2') {
+                int tempPosition =
+                    configurationString.indexOf(tempTimetableUnit.subject!);
 
-          TimeTableUnit tempTimetableUnit = new TimeTableUnit(
-              subject: tempSubject,
-              dayNumber: tempDayNumber,
-              lessonNumber: tempLessonNumber,
-              room: tempRoom);
-          if (currentClass == 'EF' ||
-              currentClass == 'Q1' ||
-              currentClass == 'Q2') {
-            int tempPosition =
-            configurationString.indexOf(tempTimetableUnit.subject!);
-            if (tempPosition != -1) {
-              String tempString =
-              configurationString.substring(tempPosition - 1);
-              if (tempString.indexOf(':') == 0) {
-
-
-
-                ///Umgehen des Fehlers auf dem Stundenplan, dass es zwei GE Z1 gibt.
-                ///Fall: es gibt GE Z1 und ein anderes Fach soll eingetragen werden.
-                if (!tempTimetableUnit.subject!.contains('GE Z1')) {
-                  timetableUnitsToInsert.removeWhere((element) {
-                    if (element.lessonNumber ==
-                        tempTimetableUnit.lessonNumber &&
-                        element.dayNumber == tempTimetableUnit.dayNumber &&
-                        element.subject!.contains('GE Z1')) {
-                      return true;
+                if (tempPosition != -1) {
+                  String tempString =
+                      configurationString.substring(tempPosition - 1);
+                  ///Wenn Fach nicht gefunden wurde, zweite Überprüfung an späterer Stelle im configuration String,
+                  ///falls zB Fach = E (auch gewählt) aber Fach GE als erstes im configuration String gefunden und Fach E erst an späterer Stelle.
+                  ///Sonst würde E fälschlicherweise bei nur einer Überprüfung aussortiert werden.
+                  if (tempString.indexOf(':') != 0) {
+                    tempPosition =
+                        tempString.indexOf(tempTimetableUnit.subject!, 2);
+                    if (tempPosition != -1) {
+                      tempString = tempString.substring(tempPosition - 1);
                     }
-                    return false;
-                  });
-                  timetableUnitsToInsert.add(tempTimetableUnit);
-                }
+                  }
 
-                ///Fall: es gibt ein anderes Fach und ein GE Z1 soll eingetragen werden.
-                else {
-                  if (timetableUnitsToInsert.indexWhere((element) =>
-                  (element.dayNumber == tempTimetableUnit.dayNumber &&
-                      element.lessonNumber ==
-                          tempTimetableUnit.lessonNumber)) ==
-                      -1) {
+                  if (tempString.indexOf(':') == 0) {
+                    ///Umgehen des Fehlers auf dem Stundenplan, dass es zwei GE Z1 gibt.
+                    ///Fall: es gibt GE Z1 und ein anderes Fach soll eingetragen werden.
+                    if (!tempTimetableUnit.subject!.contains('GE Z1')) {
+                      timetableUnitsToInsert.removeWhere((element) {
+                        if (element.lessonNumber ==
+                                tempTimetableUnit.lessonNumber &&
+                            element.dayNumber == tempTimetableUnit.dayNumber &&
+                            element.subject!.contains('GE Z1')) {
+                          return true;
+                        }
+                        return false;
+                      });
+                      timetableUnitsToInsert.add(tempTimetableUnit);
+                    }
+
+                    ///Fall: es gibt ein anderes Fach und ein GE Z1 soll eingetragen werden.
+                    else {
+                      if (timetableUnitsToInsert.indexWhere((element) =>
+                              (element.dayNumber ==
+                                      tempTimetableUnit.dayNumber &&
+                                  element.lessonNumber ==
+                                      tempTimetableUnit.lessonNumber)) ==
+                          -1) {
+                        timetableUnitsToInsert.add(tempTimetableUnit);
+                      }
+                    }
+                  }
+                }
+              } else {
+                ///Überprüfung Religion
+                if (tempTimetableUnit.subject! == 'KR' ||
+                    tempTimetableUnit.subject! == 'ER' ||
+                    tempTimetableUnit.subject! == 'PL' ||
+                    tempTimetableUnit.subject! == 'PPL') {
+                  if (configurationString
+                      .contains(tempTimetableUnit.subject!)) {
                     timetableUnitsToInsert.add(tempTimetableUnit);
                   }
                 }
 
-              }
-            }
-          } else {
-            ///Überprüfung Religion
-            if (tempTimetableUnit.subject! == 'KR' ||
-                tempTimetableUnit.subject! == 'ER' ||
-                tempTimetableUnit.subject! == 'PL' ||
-                tempTimetableUnit.subject! == 'PPL') {
-              if (configurationString.contains(tempTimetableUnit.subject!)) {
-                timetableUnitsToInsert.add(tempTimetableUnit);
-              }
-            }
+                ///2. Sprache
+                else if (!currentClass.contains('5') &&
+                    !currentClass.contains('6') &&
+                    !currentClass.contains('F') &&
+                    (tempTimetableUnit.subject! == 'L6' ||
+                        tempTimetableUnit.subject! == 'F6' ||
+                        tempTimetableUnit.subject! == 'L7' ||
+                        tempTimetableUnit.subject! == 'F7')) {
+                  if (configurationString
+                      .contains(tempTimetableUnit.subject!)) {
+                    timetableUnitsToInsert.add(tempTimetableUnit);
+                  }
+                }
 
-            ///2. Sprache
-            else if (!currentClass.contains('5') &&
-                !currentClass.contains('6') &&
-                !currentClass.contains('F') &&
-                (tempTimetableUnit.subject! == 'L6' ||
-                    tempTimetableUnit.subject! == 'F6' ||
-                    tempTimetableUnit.subject! == 'L7' ||
-                    tempTimetableUnit.subject! == 'F7')) {
-              if (configurationString.contains(tempTimetableUnit.subject!)) {
-                timetableUnitsToInsert.add(tempTimetableUnit);
+                ///Diff
+                else if ((currentClass.contains('9') ||
+                        currentClass.contains('10')) &&
+                    (tempTimetableUnit.subject! == 'GEd' ||
+                        tempTimetableUnit.subject! == 'IFd' ||
+                        tempTimetableUnit.subject! == 'PHd' ||
+                        tempTimetableUnit.subject! == 'S8' ||
+                        tempTimetableUnit.subject! == 'S9' ||
+                        tempTimetableUnit.subject! == 'KUd')) {
+                  if (configurationString
+                      .contains(tempTimetableUnit.subject!)) {
+                    timetableUnitsToInsert.add(tempTimetableUnit);
+                  }
+                } else {
+                  timetableUnitsToInsert.add(tempTimetableUnit);
+                }
               }
-            }
-
-            ///Diff
-            else if ((currentClass.contains('9') ||
-                currentClass.contains('10')) &&
-                (tempTimetableUnit.subject! == 'GEd' ||
-                    tempTimetableUnit.subject! == 'IFd' ||
-                    tempTimetableUnit.subject! == 'PHd' ||
-                    tempTimetableUnit.subject! == 'S8' ||
-                    tempTimetableUnit.subject! == 'S9' ||
-                    tempTimetableUnit.subject! == 'KUd')) {
-              if (configurationString.contains(tempTimetableUnit.subject!)) {
-                timetableUnitsToInsert.add(tempTimetableUnit);
-              }
-            } else {
-              timetableUnitsToInsert.add(tempTimetableUnit);
             }
           }
         }
-      }
-    }
       } else {
         print('Fehler $timetableCode');
       }
@@ -179,30 +190,37 @@ class TimetableCrawler {
 
     ///Fehler bei der Benennung der LKs im Stundenplan umgehen. Wenn zwei LKs in unterschiedlichen Schienen gleich heißen.
     if (currentClass == 'Q1' || currentClass == 'Q2') {
-      Iterable<TimeTableUnit> listAllLk = timetableUnitsToInsert.where((element) => element.subject!.contains('LK'));
+      Iterable<TimeTableUnit> listAllLk = timetableUnitsToInsert
+          .where((element) => element.subject!.contains('LK'));
       List<TimeTableUnit> conflictsFound = [];
       List<TimeTableUnit> noConflictsFound = [];
       listAllLk.forEach((element1) {
-        if(listAllLk.where((element2) =>
-          element1.lessonNumber == element2.lessonNumber && element1.dayNumber == element2.dayNumber && element1.subject != element2.subject
-        ).length != 0) {
+        if (listAllLk
+                .where((element2) =>
+                    element1.lessonNumber == element2.lessonNumber &&
+                    element1.dayNumber == element2.dayNumber &&
+                    element1.subject != element2.subject)
+                .length !=
+            0) {
           conflictsFound.add(element1);
         } else {
           noConflictsFound.add(element1);
         }
       });
 
-      noConflictsFound.forEach((element) {print('${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');});
-      print('----');
-      conflictsFound.forEach((element) {print('${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');});
-
       conflictsFound.forEach((element1) {
-        if(noConflictsFound.indexWhere((element2) => element1.subject == element2.subject && element1.room != element2.room) != -1) {
+        if (noConflictsFound.indexWhere((element2) =>
+                element1.subject == element2.subject &&
+                element1.room != element2.room) !=
+            -1) {
           timetableUnitsToInsert.remove(element1);
         }
       });
-      print('----');
-      timetableUnitsToInsert.forEach((element) {print('${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');});
+
+      timetableUnitsToInsert.forEach((element) {
+        print(
+            '${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');
+      });
     }
 
     timetableUnitsToInsert.forEach((element) {
