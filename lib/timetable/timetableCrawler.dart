@@ -192,17 +192,17 @@ class TimetableCrawler {
         }
       });
 
-      noConflictsFound.forEach((element) {print('${element.subject} ${element.room}');});
-      print('äää');
-      conflictsFound.forEach((element) {print('${element.subject} ${element.room}');});
+      noConflictsFound.forEach((element) {print('${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');});
+      print('----');
+      conflictsFound.forEach((element) {print('${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');});
 
       conflictsFound.forEach((element1) {
         if(noConflictsFound.indexWhere((element2) => element1.subject == element2.subject && element1.room != element2.room) != -1) {
           timetableUnitsToInsert.remove(element1);
         }
       });
-      print('aa');
-      timetableUnitsToInsert.forEach((element) {print('${element.subject} ${element.room}');});
+      print('----');
+      timetableUnitsToInsert.forEach((element) {print('${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');});
     }
 
     timetableUnitsToInsert.forEach((element) {
