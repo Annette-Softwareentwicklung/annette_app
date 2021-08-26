@@ -3,14 +3,14 @@ import 'dart:ui';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
-import 'package:annette_app/lessonStartTimes.dart';
-import 'package:annette_app/parseTime.dart';
-import 'package:annette_app/showWebview.dart';
+import 'package:annette_app/data/lessonStartTimes.dart';
+import 'package:annette_app/miscellaneous-files/parseTime.dart';
+import 'package:annette_app/miscellaneous-files/showWebview.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../subjectsMap.dart';
+import '../data/subjectsMap.dart';
 class TimetableTab extends StatefulWidget {
   @override
   _TimetableTabState createState() => _TimetableTabState();

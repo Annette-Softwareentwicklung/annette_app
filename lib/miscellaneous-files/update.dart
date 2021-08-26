@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:annette_app/parseTime.dart';
+import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';

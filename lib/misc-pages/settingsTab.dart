@@ -1,22 +1,24 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:annette_app/setClass.dart';
-import 'package:annette_app/settingsPage.dart';
+import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:annette_app/misc-pages/settingsPage.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/defaultScaffold.dart';
+import 'package:annette_app/custom_widgets/defaultScaffold.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'database/databaseCreate.dart';
+import '../database/databaseCreate.dart';
 import 'examPlan.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:annette_app/data/assets.dart';
 
-import 'manageNotifications.dart';
+import '../miscellaneous-files/manageNotifications.dart';
 
 /// Diese Klasse beinhaltet den Einstellungsbereich.
 /// App => Menüleiste => Einstellungen
+
 class SettingsTab extends StatelessWidget {
   Future<DateTime?> getTimetableVersion() async {
     try {
@@ -45,7 +47,7 @@ class SettingsTab extends StatelessWidget {
               child: Image(
                   height: 36,
                   width: 36,
-                  image: AssetImage('images/icon.png'),
+                  image: AssetImage(assetPaths.iconImagePath),
                   fit: BoxFit.fill))),
       applicationLegalese:
           'Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.\n\nDer aktuell verwendete Stundenplan ist von Stand:\n${(version != null) ? version.toString() : "Fehler"}\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',

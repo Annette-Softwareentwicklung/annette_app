@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:annette_app/subjectsMap.dart';
+import 'package:annette_app/data/subjectsMap.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/fundamentals/task.dart';
@@ -7,11 +7,11 @@ import 'package:annette_app/database/taskDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
-import 'package:annette_app/parseTime.dart';
-import 'package:annette_app/manageNotifications.dart';
-import 'package:annette_app/currentValues.dart';
+import 'package:annette_app/miscellaneous-files/parseTime.dart';
+import 'package:annette_app/miscellaneous-files/manageNotifications.dart';
+import 'package:annette_app/miscellaneous-files/currentValues.dart';
 import 'package:flutter/services.dart';
-import 'lessonStartTimes.dart';
+import '../data/lessonStartTimes.dart';
 
 ///Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
 class AddDialog extends StatefulWidget {
@@ -174,6 +174,7 @@ class _AddDialogState extends State<AddDialog> {
     errorNotes = false;
     String? subjectToInsert;
     String? notesToInsert = notes;
+    print(notesToInsert);
     DateTime? notificationTimeToInsert;
     DateTime? deadlineTimeToInsert;
 
@@ -391,9 +392,6 @@ class _AddDialogState extends State<AddDialog> {
                     clearButtonMode: OverlayVisibilityMode.editing,
                     maxLines: 3,
                     enableInteractiveSelection: true,
-
-                    ///Tastatur mit "Done"-Button statt Return
-                    keyboardType: TextInputType.text,
 
                     onChanged: (text) {
                       setState(() {

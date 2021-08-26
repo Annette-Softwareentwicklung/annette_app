@@ -3,16 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
-import 'dismissKeyboard.dart';
-import 'introductionScreen.dart';
-import 'navigationController.dart';
-import 'theme.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'miscellaneous-files/dismissKeyboard.dart';
+import 'misc-pages/introductionScreen.dart';
+import 'miscellaneous-files/navigationController.dart';
+import 'data/theme.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'translation.dart';
+import 'miscellaneous-files/translation.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -48,8 +48,18 @@ void main() async {
   }
 
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+
   tz.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+  ///
+  /// Da die Annette-App sich mit dem Annette-Gymnasium beschäftigt, muss
+  /// eigentlich nur die Zeitzone Europe/Berlin betrachtet werden oder?
+  ///
+  /// Der Grund wieso ich das geändert habe ist weil der vorherige Code einen
+  /// Fehler geworfen hat
+  ///
+
+  tz.setLocalLocation(tz.getLocation("Europe/Berlin"));
 
   await GetStorage.init();
 

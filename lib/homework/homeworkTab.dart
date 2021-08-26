@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:annette_app/defaultScaffold.dart';
+import 'package:annette_app/custom_widgets/defaultScaffold.dart';
 import 'package:annette_app/homework/homeworkListTile.dart';
 import 'package:annette_app/fundamentals/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
-import 'package:annette_app/detailedView.dart';
+import 'package:annette_app/homework/detailedView.dart';
 import 'dart:async';
 
 /// Diese Klasse beinhaltet den Tab mit der Hausaufgaben-Listen-Ansicht.
@@ -379,7 +379,6 @@ class HomeworkTabState extends State<HomeworkTab> {
   /// alle Hausaufgaben aus der Datenbank geladen.
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     storage = GetStorage();
     load();

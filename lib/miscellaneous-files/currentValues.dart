@@ -1,6 +1,6 @@
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
-import 'package:annette_app/lessonStartTimes.dart';
-import 'package:annette_app/parseTime.dart';
+import 'package:annette_app/data/lessonStartTimes.dart';
+import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 

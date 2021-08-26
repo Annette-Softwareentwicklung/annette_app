@@ -1,4 +1,4 @@
-import 'package:annette_app/onlineFiles.dart';
+import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
 import 'package:annette_app/timetable/groupsEF.dart';
 import 'package:annette_app/timetable/groupsQ1.dart';
 import 'package:annette_app/timetable/groupsQ2.dart';

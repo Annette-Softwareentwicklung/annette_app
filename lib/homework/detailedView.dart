@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
-import 'manageNotifications.dart';
+import '../miscellaneous-files/manageNotifications.dart';
 import 'package:annette_app/fundamentals/task.dart';
-import 'parseTime.dart';
+import '../miscellaneous-files/parseTime.dart';
 
 /// Diese Datei beinhaltet die Detailansicht einer Hausaufgabe,
 /// bei der alle Informationen bezüglich der Aufgabe angezeigt werden können.
@@ -27,6 +27,7 @@ class DetailedView extends StatefulWidget {
 }
 
 class DetailedViewState extends State<DetailedView> {
+
   Task? task;
   String? updateNotes;
   DateTime? updateNotificationTime;
@@ -36,7 +37,142 @@ class DetailedViewState extends State<DetailedView> {
   late bool errorNotes;
   bool? checked = false;
 
-  final TextEditingController _textEdetingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
+
+  void editDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setError) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 450,
+                    ),
+                    padding: EdgeInsets.only(
+                        top: 30, left: 30, right: 30, bottom: 10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 30),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Zu erledigen bis',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25),
+                            ),
+                          ),
+                          IntrinsicHeight(
+                            child: Column(
+                              children: [
+                                Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            width: 1,
+                                            color:
+                                            Theme
+                                                .of(context)
+                                                .accentColor)),
+                                    child: SizedBox(
+                                        height: 150,
+                                        width: 280,
+                                        child: CupertinoDatePicker(
+                                          use24hFormat: true,
+                                          initialDateTime: updateDeadlineTime,
+                                          mode: CupertinoDatePickerMode
+                                              .dateAndTime,
+                                          onDateTimeChanged: (value) {
+                                            updateDeadlineTime = value;
+                                            /*setError(() {
+                                    if (updateDeadlineTime!.isBefore(
+                                        DateTime.parse(
+                                            task!.notificationTime!))) {
+                                      errorDeadlineTime = true;
+                                    } else {
+                                      errorDeadlineTime = false;
+                                    }
+                                  });*/
+                                          },
+                                        ))),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  child: (errorDeadlineTime)
+                                      ? Text(
+                                    'Fehler: Frist vor Erinnerung',
+                                    style: TextStyle(color: Colors.red),
+                                  )
+                                      : Text(''),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  icon: Icon(
+                                    Icons.clear_rounded,
+                                    size: 30,
+                                  )),
+                              IconButton(
+                                  onPressed: () async {
+                                    if (!errorDeadlineTime) {
+                                      Task newTask = new Task(
+                                          id: task!.id,
+                                          subject: task!.subject,
+                                          isChecked: task!.isChecked,
+                                          deadlineTime:
+                                          updateDeadlineTime.toString(),
+                                          notificationTime:
+                                          task!.notificationTime,
+                                          notes: task!.notes);
+                                      databaseUpdateTask(newTask);
+
+                                      setState(() {
+                                        task = newTask;
+                                      });
+                                      widget.onReload!(task!.id);
+                                      Navigator.pop(context);
+                                      if (DateTime.parse(
+                                          task!.notificationTime!)
+                                          .isAfter(DateTime.now())) {
+                                        cancelNotification(task!.id);
+                                        await Future.delayed(
+                                            Duration(seconds: 1), () {});
+
+                                        scheduleNotification(
+                                            newTask.id!,
+                                            newTask.subject!,
+                                            newTask.notes,
+                                            newTask.deadlineTime.toString(),
+                                            DateTime.parse(
+                                                newTask.notificationTime!));
+                                      }
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.check_rounded,
+                                    size: 30,
+                                  )),
+                            ],
+                          )
+                        ],
+                      ),
+                    )));
+          });
+        });
+  }
+
 
   void editDeadlineTime() {
     showDialog(
@@ -337,14 +473,14 @@ class DetailedViewState extends State<DetailedView> {
                           child: Column(children: [
                             TextField(
                               dragStartBehavior: DragStartBehavior.down,
-                              controller: _textEdetingController,
+                              controller: _textEditingController,
                               decoration: InputDecoration(hintText: 'Notizen'),
                               onChanged: (text) {
                                 updateNotes = text;
-                                _textEdetingController.text = updateNotes!;
-                                _textEdetingController.selection =
+                                _textEditingController.text = updateNotes!;
+                                _textEditingController.selection =
                                     TextSelection.fromPosition(TextPosition(
-                                        offset: _textEdetingController
+                                        offset: _textEditingController
                                             .text.length));
                                 setState(() {});
 
@@ -463,7 +599,6 @@ class DetailedViewState extends State<DetailedView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     task = widget.task;
     if (task != null) {
@@ -757,9 +892,9 @@ class DetailedViewState extends State<DetailedView> {
                 Icon(Icons.edit_rounded, color: Theme.of(context).accentColor),
             onPressed: () {
               errorNotes = false;
-              _textEdetingController.text = task!.notes!;
-              _textEdetingController.selection = TextSelection.fromPosition(
-                  TextPosition(offset: _textEdetingController.text.length));
+              _textEditingController.text = task!.notes!;
+              _textEditingController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _textEditingController.text.length));
               editNotes();
             },
           )
