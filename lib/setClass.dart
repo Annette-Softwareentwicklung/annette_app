@@ -93,6 +93,9 @@ class _SetClassState extends State<SetClass> {
   List<String> zk2 = ['Freistunde'];
 
   void setGroupsOS() async {
+    final storage = GetStorage();
+    storage.write('changingLkSubject', selectedLk1);
+    storage.write('changingLkWeekNumber', 2);
     String tempConfiguration;
 
     if (selectedClass == 'Q1') {
@@ -639,6 +642,7 @@ class _SetClassState extends State<SetClass> {
                           padding: EdgeInsets.only(bottom: 15),
                           margin: EdgeInsets.only(left: 5),
                         ),
+                        if(!showFinishedConfiguration)
                         Row(
                           children: [
                             if (!finished)
