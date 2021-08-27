@@ -12,6 +12,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../subjectsMap.dart';
 
+BoxDecoration decorationTimetable(BuildContext context) {
+  return BoxDecoration(
+    /*  boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
+  BoxShadow(
+  color: Colors.grey.withOpacity(0.15),
+  spreadRadius: 2,
+  blurRadius: 5,
+  offset: Offset(0, 3), // changes position of shadow
+  ),
+  ],*/
+    //border: Border.all(color: Colors.blue, width: 1),
+    color: (Theme.of(context).brightness == Brightness.dark)
+        ? Colors.black26
+        : Colors.black12,
+    borderRadius: BorderRadius.circular(20),
+  );
+}
+
 class TimetableTab extends StatefulWidget {
   @override
   _TimetableTabState createState() => _TimetableTabState();
@@ -46,34 +64,6 @@ class _TimetableTabState extends State<TimetableTab> {
   final Shader darkGradient = LinearGradient(
     colors: <Color>[Colors.tealAccent, Colors.blue],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
-
-  String getSubjectFullname(String pSubject) {
-    String subjectFullname;
-    Map<String, String> allSubjects = getSubjects();
-
-    if (pSubject.contains('LK')) {
-      pSubject = pSubject.substring(0, pSubject.indexOf('LK') - 1);
-    } else if (pSubject.contains('GK')) {
-      pSubject = pSubject.substring(0, pSubject.indexOf('GK') - 1);
-    } else if (pSubject.contains('Z1')) {
-      pSubject = pSubject.substring(0, pSubject.indexOf('Z1') - 1);
-    } else if (pSubject.contains('Z2')) {
-      pSubject = pSubject.substring(0, pSubject.indexOf('Z2') - 1);
-    }
-
-    if (allSubjects.containsKey(pSubject)) {
-      subjectFullname = allSubjects[pSubject]!;
-    } else {
-      subjectFullname = pSubject;
-    }
-
-    if (subjectFullname == 'Kath. Religion' ||
-        subjectFullname == 'Ev. Religion') {
-      subjectFullname = 'Religion';
-    }
-
-    return subjectFullname;
-  }
 
   void load() async {
     allTimes = getAllTimes();
@@ -193,79 +183,91 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
-    Duration tempDuration;
-    displayTimetable.add(timeDivider(
-        getTimeFromDuration(parseDuration(allTimes[0].time!)),
-        (pLessonNumber == 1 && isInBreak == false) ? true : false,
-        (pLessonNumber == 1 && isInBreak == false) ? globalKeyNow : null));
-    int temp = allTimeTableUnits.indexWhere((element) =>
-        (element.dayNumber == pWeekday && element.lessonNumber == 1));
-    if (temp != -1) {
-      displayTimetable.add(displayTimetableUnit(allTimeTableUnits[temp], null));
-    } else {
-      displayTimetable.add(displayFree(1.toString()));
-    }
-    tempDuration = parseDuration(allTimes[0].time!) + Duration(minutes: 45);
-    displayTimetable.add(timeDivider(
-        getTimeFromDuration(tempDuration),
-        (pLessonNumber == 1 && isInBreak == true) ? true : false,
-        (pLessonNumber == 1 && isInBreak == true) ? globalKeyNow : null));
+    pWeekday = 1;
+    pLessonNumber = 4;
+    isInBreak = false;
+    Duration tempDuration = Duration(days: 1);
 
-    int i = 2;
+    int i = 1;
     while (allTimeTableUnits.indexWhere((element) =>
             (element.dayNumber! == pWeekday && element.lessonNumber! >= i)) !=
         -1) {
       int? tempEnd;
-      tempDuration = parseDuration(allTimes[(i - 1)].time!) -
-          parseDuration(allTimes[(i - 2)].time!) -
-          Duration(minutes: 45);
-
-      if (allTimeTableUnits.indexWhere((element) =>
-              (element.dayNumber! == pWeekday && element.lessonNumber! == i)) !=
-          -1) {
-        if (allTimeTableUnits.indexWhere((element) =>
-                (element.dayNumber! == pWeekday &&
-                    element.lessonNumber! == i - 1)) !=
-            -1) {
-          displayTimetable.add(displayBreak(tempDuration.inMinutes.toString()));
-        }
-
-        displayTimetable.add(timeDivider(
-            getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-            (pLessonNumber == i && isInBreak == false) ? true : false,
-            (pLessonNumber == i && isInBreak == false) ? globalKeyNow : null));
+      bool isFree = false;
+      int j = i + 1;
+      if (i != 1) {
+        tempDuration = parseDuration(allTimes[(i - 1)].time!) -
+            parseDuration(allTimes[(i - 2)].time!) -
+            Duration(minutes: 45);
       }
+
+      if (i != 1 &&
+          allTimeTableUnits.indexWhere((element) =>
+                  element.dayNumber == pWeekday &&
+                  element.lessonNumber == i - 1) !=
+              -1) {
+        displayTimetable
+            .add(DisplayBreak(duration: tempDuration.inMinutes.toString()));
+      }
+
       if (allTimeTableUnits.indexWhere((element) =>
-              (element.dayNumber! == pWeekday && element.lessonNumber! == i)) !=
+              (element.dayNumber! == pWeekday && element.lessonNumber! == i)) ==
           -1) {
-        displayTimetable.add(displayTimetableUnit(
-            allTimeTableUnits.firstWhere((element) =>
-                (element.dayNumber! == pWeekday && element.lessonNumber! == i)),
-            null));
-      } else {
-        int j = i + 1;
+        isFree = true;
+        j = i + 1;
         while (allTimeTableUnits.indexWhere((element) =>
                 element.dayNumber == pWeekday && element.lessonNumber == j) ==
             -1) {
           tempEnd = j;
           j++;
         }
+      }
 
-        displayTimetable.add(displayFree(
-            '${i.toString()}${(tempEnd != null) ? ' - ${tempEnd.toString()}' : ''}'));
-        if (tempEnd != null) {
-          i = tempEnd;
-        }
+      print(j);
+      displayTimetable.add(TimeDivider(
+          time: getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
+          isNow: (pLessonNumber >= i && pLessonNumber < j && ((isInBreak == false && !isFree) || (isFree))) ? true : false,
+          key: (pLessonNumber == i && isInBreak == false)
+              ? globalKeyNow
+              : null));
+      if (isFree) {
+        displayTimetable.add(DisplayFree(
+            pHour:
+                '${i.toString()}${(tempEnd != null) ? ' - ${tempEnd.toString()}' : ''}'));
+      }
+
+      if (tempEnd != null) {
+        i = tempEnd;
+      }
+      if (!isFree) {
+        displayTimetable.add(DisplayTimetableUnit(
+            timeTableUnit: allTimeTableUnits.firstWhere((element) =>
+                (element.dayNumber! == pWeekday && element.lessonNumber! == i)),
+            vertretung: null));
       }
 
       tempDuration =
           parseDuration(allTimes[(i - 1)].time!) + Duration(minutes: 45);
 
       if (tempEnd == null) {
-        displayTimetable.add(timeDivider(
-            getTimeFromDuration(tempDuration),
-            (pLessonNumber == i && isInBreak == true) ? true : false,
-            (pLessonNumber == i && isInBreak == true) ? globalKeyNow : null));
+        displayTimetable.add(TimeDivider(
+            time: getTimeFromDuration(tempDuration),
+            isNow: (pLessonNumber == i &&
+                    isInBreak == true &&
+                    (allTimeTableUnits.indexWhere((element) =>
+                            (element.dayNumber! == pWeekday &&
+                                element.lessonNumber! > i)) !=
+                        -1))
+                ? true
+                : false,
+            key: (pLessonNumber == i &&
+                    isInBreak == true &&
+                    (allTimeTableUnits.indexWhere((element) =>
+                            (element.dayNumber! == pWeekday &&
+                                element.lessonNumber! > i)) !=
+                        -1))
+                ? globalKeyNow
+                : null));
       }
 
       i++;
@@ -313,6 +315,11 @@ class _TimetableTabState extends State<TimetableTab> {
                     if (value == 0 && isNow == true) {
                       try {
                         Future.delayed(Duration(milliseconds: 50), () {
+                          RenderBox? boxEnd = globalKeyEnd.currentContext!
+                              .findRenderObject() as RenderBox;
+                          Offset positionEnd =
+                              boxEnd.localToGlobal(Offset.zero);
+
                           RenderBox? box = globalKeyNow.currentContext!
                               .findRenderObject() as RenderBox;
                           Offset position = box.localToGlobal(Offset.zero);
@@ -321,6 +328,28 @@ class _TimetableTabState extends State<TimetableTab> {
                               position.dy -
                               MediaQueryData.fromWindow(window).padding.top -
                               110.0;
+
+                          double temp =
+                              MediaQueryData.fromWindow(window).size.height;
+                          temp -= 110;
+                          temp -= MediaQueryData.fromWindow(window).padding.top;
+                          temp -=
+                              MediaQueryData.fromWindow(window).padding.bottom;
+                          temp -= 110;
+
+                          if (positionEnd.dy - position.dy < temp) {
+                            animationHeight -= positionEnd.dy - position.dy;
+                            print(
+                                MediaQueryData.fromWindow(window).size.height);
+                            print(temp);
+                            print(positionEnd.dy);
+                            print(position.dy);
+                            print(positionEnd.dy - position.dy);
+
+                            animationHeight =
+                                scrollController.position.maxScrollExtent;
+                          }
+
                           scrollController.animateTo(animationHeight,
                               duration: Duration(milliseconds: 500),
                               curve: Curves.linear);
@@ -376,56 +405,145 @@ class _TimetableTabState extends State<TimetableTab> {
           ));
   }
 
-  Widget timeDivider(String time, bool isNow, Key? key) {
+  Container zeitraster() {
     return Container(
-      key: key,
-      width: double.infinity,
-      child: Row(
-        children: [
-          Container(
-            child: Text(
-              time,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                  color: (isNow) ? Colors.red : null,
-                  fontWeight: (isNow) ? FontWeight.w600 : null),
-            ),
-            width: 70,
-            alignment: Alignment.centerRight,
-          ),
-          Expanded(
-            child: Container(
-              height: (isNow) ? 5 : 1,
-              margin: EdgeInsets.only(left: 10),
-              decoration: BoxDecoration(
-                color: (isNow)
-                    ? Colors.red
-                    : (Theme.of(context).brightness == Brightness.dark)
-                        ? Colors.white54
-                        : Colors.black,
-                borderRadius: (isNow)
-                    ? BorderRadius.circular(2)
-                    : BorderRadius.circular(0),
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: (Platform.isIOS)
+          ? ShowWebview(
+              url: 'https://www.annettegymnasium.de/SP/Pausenregelung.jpg',
+            )
+          : Image.network(
+              'https://www.annettegymnasium.de/SP/Pausenregelung.jpg'),
     );
   }
 
-  Widget displayTimetableUnit(
-      TimeTableUnit timeTableUnit, VertretungsEinheit? vertretung) {
+  Container wholeTimetable() {
+    return Container(
+      child: ClassicTimetable(),
+    );
+  }
+}
+
+class DisplayFree extends StatelessWidget {
+  final String pHour;
+
+  const DisplayFree({Key? key, required this.pHour}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(left: 80),
+        child: Column(children: [
+          Container(
+            padding: EdgeInsets.all(15),
+            width: double.infinity,
+            decoration: decorationTimetable(context),
+            constraints: BoxConstraints(
+                // minHeight: 200,
+                ),
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                Text(
+                  pHour,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                    /*foreground: Paint()
+                    ..shader = (Theme.of(context).brightness == Brightness.dark)
+                        ? darkGradient
+                        : lightGradient,*/
+                  ),
+                ),
+                Text(
+                  'Freistunde',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+                Text(''),
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+          )
+        ]));
+  }
+}
+
+class DisplayBreak extends StatelessWidget {
+  final String duration;
+
+  const DisplayBreak({Key? key, required this.duration}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            width: 80,
+            height: 20,
+            alignment: Alignment.center,
+          ),
+          Expanded(
+              child: Container(
+            padding: EdgeInsets.all(15),
+            decoration: decorationTimetable(context),
+            alignment: Alignment.center,
+            child: Text(
+              '$duration min. Pause',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            ),
+          ))
+        ],
+        mainAxisSize: MainAxisSize.min,
+      ),
+      width: double.infinity,
+    );
+  }
+}
+
+class DisplayTimetableUnit extends StatelessWidget {
+  final TimeTableUnit timeTableUnit;
+  final VertretungsEinheit? vertretung;
+
+  const DisplayTimetableUnit(
+      {Key? key, required this.timeTableUnit, this.vertretung})
+      : super(key: key);
+
+  String getSubjectFullname(String pSubject) {
+    String subjectFullname;
+    Map<String, String> allSubjects = getSubjects();
+
+    if (pSubject.contains('LK')) {
+      pSubject = pSubject.substring(0, pSubject.indexOf('LK') - 1);
+    } else if (pSubject.contains('GK')) {
+      pSubject = pSubject.substring(0, pSubject.indexOf('GK') - 1);
+    } else if (pSubject.contains('Z1')) {
+      pSubject = pSubject.substring(0, pSubject.indexOf('Z1') - 1);
+    } else if (pSubject.contains('Z2')) {
+      pSubject = pSubject.substring(0, pSubject.indexOf('Z2') - 1);
+    }
+
+    if (allSubjects.containsKey(pSubject)) {
+      subjectFullname = allSubjects[pSubject]!;
+    } else {
+      subjectFullname = pSubject;
+    }
+
+    if (subjectFullname == 'Kath. Religion' ||
+        subjectFullname == 'Ev. Religion') {
+      subjectFullname = 'Religion';
+    }
+
+    return subjectFullname;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 80),
       padding: EdgeInsets.all(20),
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: (Theme.of(context).brightness == Brightness.dark)
-            ? Colors.black26
-            : Colors.black12,
-        borderRadius: BorderRadius.circular(20),
-      ),
+      decoration: decorationTimetable(context),
       constraints: BoxConstraints(
           // minHeight: 200,
           ),
@@ -466,7 +584,7 @@ class _TimetableTabState extends State<TimetableTab> {
                 if (vertretung != null)
                   Container(
                     child: Text(
-                      vertretung.room!,
+                      vertretung!.room!,
                       style: TextStyle(
                           fontSize: 25,
                           color: Colors.red,
@@ -488,12 +606,12 @@ class _TimetableTabState extends State<TimetableTab> {
               mainAxisAlignment: MainAxisAlignment.end,
             ),
           if (vertretung != null &&
-              vertretung.teacherNew != null &&
-              vertretung.teacherOld != vertretung.teacherNew)
+              vertretung!.teacherNew != null &&
+              vertretung!.teacherOld != vertretung!.teacherNew)
             Row(
               children: [
                 Text(
-                  vertretung.teacherNew!,
+                  vertretung!.teacherNew!,
                   style: TextStyle(
                       fontSize: 25,
                       color: Colors.red,
@@ -501,8 +619,8 @@ class _TimetableTabState extends State<TimetableTab> {
                 ),
                 Container(
                   child: Text(
-                    (vertretung.teacherOld != null)
-                        ? vertretung.teacherOld!
+                    (vertretung!.teacherOld != null)
+                        ? vertretung!.teacherOld!
                         : '',
                     style: TextStyle(
                         fontSize: 25,
@@ -521,9 +639,9 @@ class _TimetableTabState extends State<TimetableTab> {
                 children: [
                   Container(
                     child: Text(
-                      (vertretung.comment != null)
-                          ? vertretung.type! + ':'
-                          : vertretung.type!,
+                      (vertretung!.comment != null)
+                          ? vertretung!.type! + ':'
+                          : vertretung!.type!,
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.red,
@@ -533,9 +651,9 @@ class _TimetableTabState extends State<TimetableTab> {
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.only(right: 5),
                   ),
-                  if (vertretung.comment != null)
+                  if (vertretung!.comment != null)
                     Text(
-                      vertretung.comment!,
+                      vertretung!.comment!,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -551,95 +669,51 @@ class _TimetableTabState extends State<TimetableTab> {
       ),
     );
   }
+}
 
-  Widget displayBreak(String duration) {
+class TimeDivider extends StatelessWidget {
+  final String time;
+  final bool isNow;
+
+  const TimeDivider({Key? key, required this.time, required this.isNow})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
+      key: key,
+      width: double.infinity,
       child: Row(
         children: [
           Container(
-            width: 80,
-            height: 20,
-            alignment: Alignment.center,
+            child: Text(
+              time,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                  color: (isNow) ? Colors.red : null,
+                  fontWeight: (isNow) ? FontWeight.w600 : null),
+            ),
+            width: 70,
+            alignment: Alignment.centerRight,
           ),
           Expanded(
-              child: Container(
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: (Theme.of(context).brightness == Brightness.dark)
-                  ? Colors.black26
-                  : Colors.black12,
-              borderRadius: BorderRadius.circular(15),
+            child: Container(
+              height: (isNow) ? 5 : 1,
+              margin: EdgeInsets.only(left: 10),
+              decoration: BoxDecoration(
+                color: (isNow)
+                    ? Colors.red
+                    : (Theme.of(context).brightness == Brightness.dark)
+                        ? Colors.white54
+                        : Colors.black,
+                borderRadius: (isNow)
+                    ? BorderRadius.circular(2)
+                    : BorderRadius.circular(0),
+              ),
             ),
-            alignment: Alignment.center,
-            child: Text(
-              '$duration min. Pause',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-            ),
-          ))
+          ),
         ],
-        mainAxisSize: MainAxisSize.min,
       ),
-      width: double.infinity,
-    );
-  }
-
-  Widget displayFree(String pHour) {
-    return Container(
-        margin: EdgeInsets.only(left: 80),
-        child: Column(children: [
-          Container(
-            padding: EdgeInsets.all(15),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: (Theme.of(context).brightness == Brightness.dark)
-                  ? Colors.black26
-                  : Colors.black12,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            constraints: BoxConstraints(
-                // minHeight: 200,
-                ),
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                Text(
-                  pHour,
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                    /*foreground: Paint()
-                    ..shader = (Theme.of(context).brightness == Brightness.dark)
-                        ? darkGradient
-                        : lightGradient,*/
-                  ),
-                ),
-                Text(
-                  'Freistunde',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                ),
-                Text(''),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-          )
-        ]));
-  }
-
-  Container zeitraster() {
-    return Container(
-      child: (Platform.isIOS)
-          ? ShowWebview(
-              url: 'https://www.annettegymnasium.de/SP/Pausenregelung.jpg',
-            )
-          : Image.network(
-              'https://www.annettegymnasium.de/SP/Pausenregelung.jpg'),
-    );
-  }
-
-  Container wholeTimetable() {
-    return Container(
-      child: ClassicTimetable(),
     );
   }
 }
