@@ -15,6 +15,9 @@ import '../data/lessonStartTimes.dart';
 
 ///Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
 class AddDialog extends StatefulWidget {
+
+  static int notesLines = 3;
+
   final Function(Task)? onTaskCreated;
 
   AddDialog({this.onTaskCreated});
@@ -24,6 +27,7 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
+
   CurrentValues getCV = new CurrentValues();
   bool finished = false;
   int? nextId;
@@ -390,7 +394,7 @@ class _AddDialogState extends State<AddDialog> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     clearButtonMode: OverlayVisibilityMode.editing,
-                    maxLines: 3,
+                    maxLines: AddDialog.notesLines,
                     enableInteractiveSelection: true,
 
                     onChanged: (text) {

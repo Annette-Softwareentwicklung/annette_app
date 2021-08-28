@@ -5,6 +5,9 @@ import 'package:annette_app/database/taskDbInteraction.dart';
 import '../miscellaneous-files/manageNotifications.dart';
 import 'package:annette_app/fundamentals/task.dart';
 import '../miscellaneous-files/parseTime.dart';
+import 'addDialog.dart';
+
+// TODO: implement subject-changing
 
 /// Diese Datei beinhaltet die Detailansicht einer Hausaufgabe,
 /// bei der alle Informationen bezüglich der Aufgabe angezeigt werden können.
@@ -39,12 +42,22 @@ class DetailedViewState extends State<DetailedView> {
 
   final TextEditingController _textEditingController = TextEditingController();
 
-  void editDialog() {
+  static double timePickerHeight = 150;
+  static double timePickerWidth = 280;
+  static BoxDecoration timePickerBorder = BoxDecoration(
+      borderRadius: BorderRadius.circular(5),
+      border: Border.all(
+          width: 1
+      )
+  );
+
+
+  void editDialog(String title, StatefulBuilder childWidgets, Function confirmFunction) {
     showDialog(
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return StatefulBuilder(builder: (context, setError) {
+          return Builder(builder: (context) {
             return Dialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -63,55 +76,13 @@ class DetailedViewState extends State<DetailedView> {
                             margin: EdgeInsets.only(bottom: 30),
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Zu erledigen bis',
+                              title,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 25),
                             ),
                           ),
                           IntrinsicHeight(
-                            child: Column(
-                              children: [
-                                Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                            width: 1,
-                                            color:
-                                            Theme
-                                                .of(context)
-                                                .accentColor)),
-                                    child: SizedBox(
-                                        height: 150,
-                                        width: 280,
-                                        child: CupertinoDatePicker(
-                                          use24hFormat: true,
-                                          initialDateTime: updateDeadlineTime,
-                                          mode: CupertinoDatePickerMode
-                                              .dateAndTime,
-                                          onDateTimeChanged: (value) {
-                                            updateDeadlineTime = value;
-                                            /*setError(() {
-                                    if (updateDeadlineTime!.isBefore(
-                                        DateTime.parse(
-                                            task!.notificationTime!))) {
-                                      errorDeadlineTime = true;
-                                    } else {
-                                      errorDeadlineTime = false;
-                                    }
-                                  });*/
-                                          },
-                                        ))),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  child: (errorDeadlineTime)
-                                      ? Text(
-                                    'Fehler: Frist vor Erinnerung',
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                      : Text(''),
-                                ),
-                              ],
-                            ),
+                            child: childWidgets
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -125,41 +96,7 @@ class DetailedViewState extends State<DetailedView> {
                                     size: 30,
                                   )),
                               IconButton(
-                                  onPressed: () async {
-                                    if (!errorDeadlineTime) {
-                                      Task newTask = new Task(
-                                          id: task!.id,
-                                          subject: task!.subject,
-                                          isChecked: task!.isChecked,
-                                          deadlineTime:
-                                          updateDeadlineTime.toString(),
-                                          notificationTime:
-                                          task!.notificationTime,
-                                          notes: task!.notes);
-                                      databaseUpdateTask(newTask);
-
-                                      setState(() {
-                                        task = newTask;
-                                      });
-                                      widget.onReload!(task!.id);
-                                      Navigator.pop(context);
-                                      if (DateTime.parse(
-                                          task!.notificationTime!)
-                                          .isAfter(DateTime.now())) {
-                                        cancelNotification(task!.id);
-                                        await Future.delayed(
-                                            Duration(seconds: 1), () {});
-
-                                        scheduleNotification(
-                                            newTask.id!,
-                                            newTask.subject!,
-                                            newTask.notes,
-                                            newTask.deadlineTime.toString(),
-                                            DateTime.parse(
-                                                newTask.notificationTime!));
-                                      }
-                                    }
-                                  },
+                                  onPressed: confirmFunction(),
                                   icon: Icon(
                                     Icons.check_rounded,
                                     size: 30,
@@ -174,400 +111,208 @@ class DetailedViewState extends State<DetailedView> {
   }
 
 
+  confirmDeadlineTime() async {
+    if (!errorDeadlineTime) {
+      Task newTask = new Task(
+          id: task!.id,
+          subject: task!.subject,
+          isChecked: task!.isChecked,
+          deadlineTime:
+          updateDeadlineTime.toString(),
+          notificationTime:
+          task!.notificationTime,
+          notes: task!.notes);
+      databaseUpdateTask(newTask);
+
+      setState(() {
+        task = newTask;
+      });
+      widget.onReload!(task!.id);
+      Navigator.pop(context);
+      if (DateTime.parse(
+          task!.notificationTime!)
+          .isAfter(DateTime.now())) {
+        cancelNotification(task!.id);
+        await Future.delayed(Duration(seconds: 1), () {});
+
+        scheduleNotification(
+            newTask.id!,
+            newTask.subject!,
+            newTask.notes,
+            newTask.deadlineTime.toString(),
+            DateTime.parse(
+                newTask.notificationTime!));
+      }
+    }
+  }
+
   void editDeadlineTime() {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setError) {
-            return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+
+    editDialog(
+      "Zu erledigen bis",
+      StatefulBuilder(builder: (context, setState) {
+        return Column(
+          children: [
+            Container(
+              decoration: timePickerBorder,
+              child: SizedBox(
+                height: timePickerHeight,
+                width: timePickerWidth,
+                child: CupertinoDatePicker(
+                  use24hFormat: true,
+                  initialDateTime: updateDeadlineTime,
+                  mode: CupertinoDatePickerMode
+                      .dateAndTime,
+                  onDateTimeChanged: (value) {
+                    updateDeadlineTime = value;
+                  },
                 ),
-                child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 450,
-                    ),
-                    padding: EdgeInsets.only(
-                        top: 30, left: 30, right: 30, bottom: 10),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Zu erledigen bis',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 25),
-                            ),
-                          ),
-                          IntrinsicHeight(
-                            child: Column(
-                              children: [
-                                Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                            width: 1,
-                                            color:
-                                                Theme.of(context).accentColor)),
-                                    child: SizedBox(
-                                        height: 150,
-                                        width: 280,
-                                        child: CupertinoDatePicker(
-                                          use24hFormat: true,
-                                          initialDateTime: updateDeadlineTime,
-                                          mode: CupertinoDatePickerMode
-                                              .dateAndTime,
-                                          onDateTimeChanged: (value) {
-                                            updateDeadlineTime = value;
-                                            /*setError(() {
-                                    if (updateDeadlineTime!.isBefore(
-                                        DateTime.parse(
-                                            task!.notificationTime!))) {
-                                      errorDeadlineTime = true;
-                                    } else {
-                                      errorDeadlineTime = false;
-                                    }
-                                  });*/
-                                          },
-                                        ))),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  child: (errorDeadlineTime)
-                                      ? Text(
-                                          'Fehler: Frist vor Erinnerung',
-                                          style: TextStyle(color: Colors.red),
-                                        )
-                                      : Text(''),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  icon: Icon(
-                                    Icons.clear_rounded,
-                                    size: 30,
-                                  )),
-                              IconButton(
-                                  onPressed: () async {
-                                    if (!errorDeadlineTime) {
-                                      Task newTask = new Task(
-                                          id: task!.id,
-                                          subject: task!.subject,
-                                          isChecked: task!.isChecked,
-                                          deadlineTime:
-                                              updateDeadlineTime.toString(),
-                                          notificationTime:
-                                              task!.notificationTime,
-                                          notes: task!.notes);
-                                      databaseUpdateTask(newTask);
-
-                                      setState(() {
-                                        task = newTask;
-                                      });
-                                      widget.onReload!(task!.id);
-                                      Navigator.pop(context);
-                                      if (DateTime.parse(
-                                              task!.notificationTime!)
-                                          .isAfter(DateTime.now())) {
-                                        cancelNotification(task!.id);
-                                        await Future.delayed(
-                                            Duration(seconds: 1), () {});
-
-                                        scheduleNotification(
-                                            newTask.id!,
-                                            newTask.subject!,
-                                            newTask.notes,
-                                            newTask.deadlineTime.toString(),
-                                            DateTime.parse(
-                                                newTask.notificationTime!));
-                                      }
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.check_rounded,
-                                    size: 30,
-                                  )),
-                            ],
-                          )
-                        ],
-                      ),
-                    )));
-          });
-        });
+              )
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: (errorDeadlineTime) ?
+                  Text('Fehler: Frist vor Erinnerung', style: TextStyle(color: Colors.red)) : Text(''),
+            )
+          ]
+        );
+      }),
+      () => confirmDeadlineTime
+    );
   }
 
   void editNotificationTime() {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setError) {
-            return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 450,
-                    ),
-                    padding: EdgeInsets.only(
-                        top: 30, left: 30, right: 30, bottom: 10),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Erinnerungs-Zeit',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 25),
-                            ),
-                          ),
-                          IntrinsicHeight(
-                              child: Column(
-                            children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          width: 1,
-                                          color:
-                                              Theme.of(context).accentColor)),
-                                  child: SizedBox(
-                                      height: 150,
-                                      width: 280,
-                                      child: CupertinoDatePicker(
-                                        use24hFormat: true,
-                                        initialDateTime: updateNotificationTime,
-                                        mode:
-                                            CupertinoDatePickerMode.dateAndTime,
-                                        onDateTimeChanged: (value) {
-                                          updateNotificationTime = value;
-                                          setError(() {
-                                            if (updateNotificationTime!
-                                                .add(Duration(minutes: 1))
-                                                .isBefore(DateTime.now())) {
-                                              errorNotificationTime = true;
-                                            } else {
-                                              errorNotificationTime = false;
-                                            }
-                                          });
-                                        },
-                                      ))),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 20),
-                                child: (errorNotificationTime)
-                                    ? Text(
-                                        'Ungültige Zeit',
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    : Text(''),
-                              ),
-                            ],
-                          )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  icon: Icon(
-                                    Icons.clear_rounded,
-                                    size: 30,
-                                  )),
-                              IconButton(
-                                  onPressed: () {
-                                    if (!errorNotificationTime) {
-                                      Task newTask = new Task(
-                                          id: task!.id,
-                                          subject: task!.subject,
-                                          isChecked: task!.isChecked,
-                                          deadlineTime: task!.deadlineTime,
-                                          notificationTime:
-                                              updateNotificationTime.toString(),
-                                          notes: task!.notes);
-                                      databaseUpdateTask(newTask);
-                                      cancelNotification(task!.id);
 
-                                      if (updateNotificationTime!
-                                          .isAfter(DateTime.now())) {
-                                        scheduleNotification(
-                                            newTask.id!,
-                                            newTask.subject!,
-                                            newTask.notes,
-                                            newTask.deadlineTime.toString(),
-                                            updateNotificationTime!);
-                                      } else if (updateNotificationTime!
-                                          .isAfter(DateTime.now().subtract(
-                                              Duration(minutes: 1)))) {
-                                        showNotification(
-                                            newTask.id!,
-                                            newTask.subject!,
-                                            newTask.notes,
-                                            newTask.deadlineTime.toString());
-                                      }
-
-                                      setState(() {
-                                        task = newTask;
-                                      });
-                                      widget.onReload!(task!.id);
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.check_rounded,
-                                    size: 30,
-                                  )),
-                            ],
-                          )
-                        ],
+    editDialog(
+        "Erinnerungs-Zeit",
+        StatefulBuilder(builder: (context, setState) {
+          return Column(
+              children: [
+                Container(
+                  decoration: timePickerBorder,
+                  child: SizedBox(
+                      height: timePickerHeight,
+                      width: timePickerWidth,
+                      child: CupertinoDatePicker(
+                        use24hFormat: true,
+                        initialDateTime: updateNotificationTime,
+                        mode:
+                        CupertinoDatePickerMode.dateAndTime,
+                        onDateTimeChanged: (value) {
+                          updateNotificationTime = value;
+                          setState(() {
+                            if (updateNotificationTime!
+                                .add(Duration(minutes: 1))
+                                .isBefore(DateTime.now())) {
+                              errorNotificationTime = true;
+                            } else {
+                              errorNotificationTime = false;
+                            }
+                          });
+                        },
                       ),
-                    )));
-          });
-        });
+                    )
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: (errorNotificationTime) ?
+                    Text('Ungültige Zeit', style: TextStyle(color: Colors.red),) : Text('')
+                )
+              ]
+          );
+        }),
+        () => confirmDeadlineTime
+    );
+
   }
 
+  void confirmNotes() async {
+    if (!errorNotes) {
+      if (updateNotes == '' ||
+          updateNotes == null) {
+        updateNotes = null;
+      }
+      Task newTask = new Task(
+          id: task!.id,
+          subject: task!.subject,
+          isChecked: task!.isChecked,
+          deadlineTime: task!.deadlineTime,
+          notificationTime:
+          task!.notificationTime,
+          notes: updateNotes);
+      databaseUpdateTask(newTask);
+      setState(() {
+        task = newTask;
+      });
+      widget.onReload!(task!.id);
+      Navigator.pop(context);
+
+      if (DateTime.parse(task!.notificationTime!)
+          .isAfter(DateTime.now())) {
+        cancelNotification(task!.id);
+        await Future.delayed(
+            Duration(seconds: 1), () {});
+
+        scheduleNotification(
+            newTask.id!,
+            newTask.subject!,
+            newTask.notes,
+            newTask.deadlineTime.toString(),
+            DateTime.parse(
+                newTask.notificationTime!));
+      }
+    }
+  }
+
+  void onNotesChanged(String text, Function setError) {
+    updateNotes = text;
+    _textEditingController.text = updateNotes!;
+    _textEditingController.selection =
+        TextSelection.fromPosition(TextPosition(
+            offset: _textEditingController
+                .text.length));
+    setState(() {});
+
+    if (updateNotes == '' || updateNotes == null) {
+      updateNotes = null;
+    }
+    if (updateNotes == null &&
+        task!.subject == 'Sonstiges') {
+      setError(() {
+        errorNotes = true;
+      });
+    } else {
+      setError(() {
+        errorNotes = false;
+      });
+    }
+  }
+
+
   void editNotes() {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setError) {
-            return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: 450,
-                  ),
-                  padding:
-                      EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 10),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Notizen',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 25),
-                          ),
-                        ),
-                        IntrinsicHeight(
-                          child: Column(children: [
-                            TextField(
-                              dragStartBehavior: DragStartBehavior.down,
-                              controller: _textEditingController,
-                              decoration: InputDecoration(hintText: 'Notizen'),
-                              onChanged: (text) {
-                                updateNotes = text;
-                                _textEditingController.text = updateNotes!;
-                                _textEditingController.selection =
-                                    TextSelection.fromPosition(TextPosition(
-                                        offset: _textEditingController
-                                            .text.length));
-                                setState(() {});
 
-                                if (updateNotes == '' || updateNotes == null) {
-                                  updateNotes = null;
-                                }
-                                if (updateNotes == null &&
-                                    task!.subject == 'Sonstiges') {
-                                  setError(() {
-                                    errorNotes = true;
-                                  });
-                                } else {
-                                  setError(() {
-                                    errorNotes = false;
-                                  });
-                                }
-                              },
-                            ),
-                            (errorNotes)
-                                ? Text(
-                                    'Notiz erforderlich',
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                : Text(''),
-                          ]),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                icon: Icon(
-                                  Icons.clear_rounded,
-                                  size: 30,
-                                )),
-                            IconButton(
-                                onPressed: () async {
-                                  if (!errorNotes) {
-                                    if (updateNotes == '' ||
-                                        updateNotes == null) {
-                                      updateNotes = null;
-                                    }
-                                    Task newTask = new Task(
-                                        id: task!.id,
-                                        subject: task!.subject,
-                                        isChecked: task!.isChecked,
-                                        deadlineTime: task!.deadlineTime,
-                                        notificationTime:
-                                            task!.notificationTime,
-                                        notes: updateNotes);
-                                    databaseUpdateTask(newTask);
-                                    setState(() {
-                                      task = newTask;
-                                    });
-                                    widget.onReload!(task!.id);
-                                    Navigator.pop(context);
+    editDialog(
+      "Notizen",
+      StatefulBuilder(builder: (context, setError) {
+        return Column(children: [
+          TextField(
+            maxLines: AddDialog.notesLines,
+            dragStartBehavior: DragStartBehavior.down,
+            controller: _textEditingController,
+            decoration: InputDecoration(hintText: 'Notizen'),
+            onChanged: (text) => onNotesChanged(text, setError),
+          ),
+          (errorNotes)
+              ? Text(
+            'Notiz erforderlich',
+            style: TextStyle(color: Colors.red),
+          )
+              : Text(''),
+        ]);
+      }),
+        () => confirmNotes
+    );
 
-                                    if (DateTime.parse(task!.notificationTime!)
-                                        .isAfter(DateTime.now())) {
-                                      cancelNotification(task!.id);
-                                      await Future.delayed(
-                                          Duration(seconds: 1), () {});
-
-                                      scheduleNotification(
-                                          newTask.id!,
-                                          newTask.subject!,
-                                          newTask.notes,
-                                          newTask.deadlineTime.toString(),
-                                          DateTime.parse(
-                                              newTask.notificationTime!));
-                                    }
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.check_rounded,
-                                  size: 30,
-                                )),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ));
-          });
-        });
   }
 
   /// Diese Methode dient dazu, im Querformat eine andere Aufgabe in der Detailansicht anzuzeigen
