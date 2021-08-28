@@ -36,31 +36,31 @@ class _SettingsPageState extends State<SettingsPage> {
    }
 
    void setChangingLK() async {
-      allTimetableUnits = await databaseGetAllTimeTableUnit();
-      try {
-        lk1 = allTimetableUnits
-            .firstWhere((element) => element.subject!.contains('LK'))
-            .subject!;
-        lk2 = allTimetableUnits
-            .firstWhere((element) => element.subject!.contains('LK') && !element.subject!.contains(lk1))
-            .subject!;
+    allTimetableUnits = await databaseGetAllTimeTableUnit();
+    try {
+      lk1 = allTimetableUnits
+          .firstWhere((element) => element.subject!.contains('LK'))
+          .subject!;
+      lk2 = allTimetableUnits
+          .firstWhere((element) =>
+              element.subject!.contains('LK') &&
+              !element.subject!.contains(lk1))
+          .subject!;
 
-        if(DateTime.now().weekOfYear.isEven && storage.read('changingLkWeekNumber').isEven) {
-          if(storage.read('changingLkSubject') == lk2) {
-            selectedLK = 1;
-          }
-        } else {
-          if(storage.read('changingLkSubject') == lk1) {
-            selectedLK = 1;
-          }
+      if (DateTime.now().weekOfYear.isEven &&
+          storage.read('changingLkWeekNumber').isEven) {
+        if (storage.read('changingLkSubject') == lk2) {
+          selectedLK = 1;
         }
+      } else {
+        if (storage.read('changingLkSubject') == lk1) {
+          selectedLK = 1;
+        }
+      }
 
-
-
-
-        setState(() {});
-      } catch (e) {}
-   }
+      setState(() {});
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {

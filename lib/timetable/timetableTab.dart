@@ -144,9 +144,10 @@ class _TimetableTabState extends State<TimetableTab> {
       finishedNow = true;
     });
 
+    isNow = true;
     if (isNow) {
-      try {
-        Future.delayed(Duration(milliseconds: 50), () {
+      Future.delayed(Duration(milliseconds: 50), () {
+        try {
           RenderBox? boxEnd =
               globalKeyEnd.currentContext!.findRenderObject() as RenderBox;
           Offset positionEnd = boxEnd.localToGlobal(Offset.zero);
@@ -179,15 +180,15 @@ class _TimetableTabState extends State<TimetableTab> {
 
           scrollController.animateTo(animationHeight,
               duration: Duration(milliseconds: 500), curve: Curves.linear);
-        });
-      } catch (e) {}
+        } catch (e) {}
+      });
     }
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
     pWeekday = 3;
-    //pLessonNumber = 6;
-    //isInBreak = false;
+    pLessonNumber = 7;
+    isInBreak = true;
     Duration tempDuration = Duration(days: 1);
     if (allTimeTableUnits
             .indexWhere((element) => (element.dayNumber! == pWeekday)) ==
@@ -243,15 +244,10 @@ class _TimetableTabState extends State<TimetableTab> {
           }
         }
 
-        if (i == 1 ||
-            allTimeTableUnits.indexWhere((element) =>
-                    element.dayNumber == pWeekday &&
-                    element.lessonNumber == i) !=
-                -1)
+        if (i == 1 || !isFree)
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-              isNow: (pLessonNumber != null &&
-                      pLessonNumber >= i &&
+              isNow: (pLessonNumber >= i &&
                       pLessonNumber < j &&
                       ((isInBreak == false && !isFree) || (isFree)))
                   ? true
@@ -275,7 +271,13 @@ class _TimetableTabState extends State<TimetableTab> {
                   element.lessonNumber! == i));
 
           bool isChangingLK = false;
-          if (tempTimetableUnit.subject!.contains('LK')) {
+          if (tempTimetableUnit.subject!.contains('LK') &&
+              allTimeTableUnits.indexWhere((element) =>
+                      element.lessonNumber == i &&
+                      element.dayNumber == pWeekday &&
+                      element.subject != tempTimetableUnit.subject) !=
+                  -1) {
+            isChangingLK = true;
             GetStorage storage = GetStorage();
             if (DateTime.now().weekOfYear.isEven &&
                 storage.read('changingLkWeekNumber').isEven) {
@@ -285,7 +287,6 @@ class _TimetableTabState extends State<TimetableTab> {
                     (element.dayNumber! == pWeekday &&
                         element.lessonNumber! == i &&
                         element.subject == storage.read('changingLkSubject')));
-                isChangingLK = true;
               }
             } else {
               if (storage.read('changingLkSubject') ==
@@ -301,29 +302,44 @@ class _TimetableTabState extends State<TimetableTab> {
           displayTimetable.add(DisplayTimetableUnit(
               timeTableUnit: tempTimetableUnit,
               isChangingLK: isChangingLK,
+              allTimetableUnits: allTimeTableUnits,
               vertretung: null));
         }
 
         tempDuration =
             parseDuration(allTimes[(i - 1)].time!) + Duration(minutes: 45);
 
+        ///wird noch nicht rot...
         if (!isFree) {
+          bool nextFree = false;
+          if (allTimeTableUnits.indexWhere((element) =>
+                  (element.dayNumber! == pWeekday &&
+                      element.lessonNumber! > i)) !=
+              -1) {
+            j = i + 1;
+            while (allTimeTableUnits.indexWhere((element) =>
+                    element.dayNumber == pWeekday &&
+                    element.lessonNumber == j) ==
+                -1) {
+              nextFree = true;
+              j++;
+            }
+          }
+
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(tempDuration),
-              isNow: (pLessonNumber == i &&
-                      isInBreak == true &&
-                      (allTimeTableUnits.indexWhere((element) =>
-                              (element.dayNumber! == pWeekday &&
-                                  element.lessonNumber! > i)) !=
-                          -1))
+              isNow: (((isInBreak == true && pLessonNumber == i && (allTimeTableUnits.indexWhere((element) =>
+              (element.dayNumber! == pWeekday &&
+                  element.lessonNumber! > i)) !=
+                  -1)) ||
+                      (pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? true
                   : false,
-              key: (pLessonNumber == i &&
-                      isInBreak == true &&
-                      (allTimeTableUnits.indexWhere((element) =>
-                              (element.dayNumber! == pWeekday &&
-                                  element.lessonNumber! > i)) !=
-                          -1))
+              key: (((isInBreak == true && pLessonNumber == i && (allTimeTableUnits.indexWhere((element) =>
+              (element.dayNumber! == pWeekday &&
+                  element.lessonNumber! > i)) !=
+                  -1)) ||
+                  (pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? globalKeyNow
                   : null));
         }
@@ -515,8 +531,8 @@ class DisplayFree extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Freistunde',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  'Frei',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 Text(''),
               ],
@@ -564,11 +580,13 @@ class DisplayTimetableUnit extends StatelessWidget {
   final TimeTableUnit timeTableUnit;
   final VertretungsEinheit? vertretung;
   final bool isChangingLK;
+  final List<TimeTableUnit> allTimetableUnits;
 
   const DisplayTimetableUnit(
       {Key? key,
       required this.timeTableUnit,
       this.vertretung,
+      required this.allTimetableUnits,
       required this.isChangingLK})
       : super(key: key);
 
@@ -598,6 +616,112 @@ class DisplayTimetableUnit extends StatelessWidget {
     }
 
     return subjectFullname;
+  }
+
+  void changeLK(BuildContext context) {
+    String lk1 = '---';
+    String lk2 = '---';
+    int selectedLK = 0;
+    var storage = GetStorage();
+    try {
+      lk1 = allTimetableUnits
+          .firstWhere((element) => element.subject!.contains('LK'))
+          .subject!;
+      lk2 = allTimetableUnits
+          .firstWhere((element) =>
+              element.subject!.contains('LK') &&
+              !element.subject!.contains(lk1))
+          .subject!;
+
+      if (DateTime.now().weekOfYear.isEven &&
+          storage.read('changingLkWeekNumber').isEven) {
+        if (storage.read('changingLkSubject') == lk2) {
+          selectedLK = 1;
+        }
+      } else {
+        if (storage.read('changingLkSubject') == lk1) {
+          selectedLK = 1;
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 450,
+                    ),
+                    padding: EdgeInsets.only(
+                        top: 30, left: 30, right: 30, bottom: 10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Wechselnder LK',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25),
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(lk1),
+                            leading: Radio(
+                              value: 0,
+                              groupValue: selectedLK,
+                              onChanged: (value) {
+                                storage.write('changingLkSubject', lk1);
+                                storage.write('changingLkWeekNumber',
+                                    DateTime.now().weekOfYear);
+                                setState(() {
+                                  selectedLK = value as int;
+                                });
+                                Future.delayed(Duration(seconds: 1),
+                                    () => Navigator.of(context).pop());
+                              },
+                              activeColor: (Theme.of(context).brightness ==
+                                      Brightness.dark)
+                                  ? Theme.of(context).accentColor
+                                  : Colors.blue,
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(lk2),
+                            leading: Radio(
+                              value: 1,
+                              groupValue: selectedLK,
+                              onChanged: (value) {
+                                storage.write('changingLkSubject', lk2);
+                                storage.write('changingLkWeekNumber',
+                                    DateTime.now().weekOfYear);
+                                setState(() {
+                                  selectedLK = value as int;
+                                });
+                                Future.delayed(Duration(seconds: 1),
+                                    () => Navigator.of(context).pop());
+                              },
+                              activeColor: (Theme.of(context).brightness ==
+                                      Brightness.dark)
+                                  ? Theme.of(context).accentColor
+                                  : Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )));
+          });
+        });
   }
 
   @override
@@ -727,27 +851,37 @@ class DisplayTimetableUnit extends StatelessWidget {
               ),
               margin: EdgeInsets.only(top: 15),
             ),
-
-          GestureDetector(
-            onTap: () {
-              print('changeLK');
-            },
-            child: Container(child: Row(
-            children: [
-              Text(
-                'Wechselnder LK',
-                style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.normal),
+          if (isChangingLK)
+            GestureDetector(
+              onTap: () {
+                print('changeLK');
+                changeLK(context);
+              },
+              child: Container(
+                child: Row(
+                  children: [
+                    Text(
+                      'Wechselnder LK',
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 3),
+                      child: Icon(
+                        Icons.warning_rounded,
+                        color: Colors.blue,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.end,
+                ),
+                margin: EdgeInsets.only(top: 15),
               ),
-              Padding(padding: EdgeInsets.only(left: 3), child:Icon(Icons.warning_rounded, color: Colors.blue,size: 30,),),
-            ],
-            mainAxisAlignment: MainAxisAlignment.end,
-          ),
-            margin: EdgeInsets.only(top: 15),
-          ),),
+            ),
         ],
         mainAxisSize: MainAxisSize.min,
       ),
