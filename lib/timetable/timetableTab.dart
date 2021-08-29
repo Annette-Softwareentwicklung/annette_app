@@ -49,6 +49,8 @@ class _TimetableTabState extends State<TimetableTab> {
   ScrollController scrollController = new ScrollController();
   GlobalKey globalKeyNow = new GlobalKey();
   GlobalKey globalKeyEnd = new GlobalKey();
+  GlobalKey changingLk1Key = new GlobalKey<_DisplayTimetableUnitState>();
+  GlobalKey changingLk2Key = new GlobalKey<_DisplayTimetableUnitState>();
 
   bool isNow = false;
 
@@ -144,6 +146,7 @@ class _TimetableTabState extends State<TimetableTab> {
       finishedNow = true;
     });
 
+    ///debugging
     isNow = true;
     if (isNow) {
       Future.delayed(Duration(milliseconds: 50), () {
@@ -186,6 +189,7 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
+    ///debugging
     pWeekday = 3;
     pLessonNumber = 7;
     isInBreak = true;
@@ -300,6 +304,12 @@ class _TimetableTabState extends State<TimetableTab> {
           }
 
           displayTimetable.add(DisplayTimetableUnit(
+              onChangeLk: () {},
+              key: (isChangingLK && tempTimetableUnit.lessonNumber == 1)
+                  ? changingLk1Key
+                  : (isChangingLK && tempTimetableUnit.lessonNumber == 2)
+                      ? changingLk2Key
+                      : null,
               timeTableUnit: tempTimetableUnit,
               isChangingLK: isChangingLK,
               allTimetableUnits: allTimeTableUnits,
@@ -328,18 +338,22 @@ class _TimetableTabState extends State<TimetableTab> {
 
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(tempDuration),
-              isNow: (((isInBreak == true && pLessonNumber == i && (allTimeTableUnits.indexWhere((element) =>
-              (element.dayNumber! == pWeekday &&
-                  element.lessonNumber! > i)) !=
-                  -1)) ||
+              isNow: (((isInBreak == true &&
+                          pLessonNumber == i &&
+                          (allTimeTableUnits.indexWhere((element) =>
+                                  (element.dayNumber! == pWeekday &&
+                                      element.lessonNumber! > i)) !=
+                              -1)) ||
                       (pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? true
                   : false,
-              key: (((isInBreak == true && pLessonNumber == i && (allTimeTableUnits.indexWhere((element) =>
-              (element.dayNumber! == pWeekday &&
-                  element.lessonNumber! > i)) !=
-                  -1)) ||
-                  (pLessonNumber > i && pLessonNumber < j && nextFree)))
+              key: (((isInBreak == true &&
+                          pLessonNumber == i &&
+                          (allTimeTableUnits.indexWhere((element) =>
+                                  (element.dayNumber! == pWeekday &&
+                                      element.lessonNumber! > i)) !=
+                              -1)) ||
+                      (pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? globalKeyNow
                   : null));
         }
@@ -442,7 +456,27 @@ class _TimetableTabState extends State<TimetableTab> {
                         ? Expanded(child: wholeTimetable())
                         : Expanded(
                             child: Container(
-                              child: containerNow(),
+                              child: (finishedNow)
+                                  ? Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: 500,
+                                      ),
+                                          alignment: Alignment.topCenter,
+                                          child: ListView(
+                                            controller: scrollController,
+                                            children:  displayTimetable,
+                                            ),
+                                          )
+                                  : Center(
+                                      child: Column(
+                                      children: [
+                                        CupertinoActivityIndicator(),
+                                        Text('Laden ...'),
+                                      ],
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                    )),
                               padding:
                                   EdgeInsets.only(top: 10, left: 10, right: 10),
                             ),
@@ -451,33 +485,6 @@ class _TimetableTabState extends State<TimetableTab> {
               crossAxisAlignment: CrossAxisAlignment.center,
             )),
             padding: EdgeInsets.only(top: 15, left: 15, right: 15)));
-  }
-
-  Widget containerNow() {
-    return (finishedNow)
-        ? SingleChildScrollView(
-            controller: scrollController,
-            child: Container(
-                width: double.infinity,
-                alignment: Alignment.topCenter,
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: 500,
-                  ),
-                  child: Column(
-                    children: displayTimetable,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                  ),
-                )))
-        : Center(
-            child: Column(
-            children: [
-              CupertinoActivityIndicator(),
-              Text('Laden ...'),
-            ],
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-          ));
   }
 
   Container zeitraster() {
@@ -576,19 +583,28 @@ class DisplayBreak extends StatelessWidget {
   }
 }
 
-class DisplayTimetableUnit extends StatelessWidget {
+class DisplayTimetableUnit extends StatefulWidget {
   final TimeTableUnit timeTableUnit;
   final VertretungsEinheit? vertretung;
   final bool isChangingLK;
   final List<TimeTableUnit> allTimetableUnits;
+  final VoidCallback onChangeLk;
 
-  const DisplayTimetableUnit(
+  DisplayTimetableUnit(
       {Key? key,
+      required this.onChangeLk,
       required this.timeTableUnit,
       this.vertretung,
       required this.allTimetableUnits,
       required this.isChangingLK})
       : super(key: key);
+
+  @override
+  _DisplayTimetableUnitState createState() => _DisplayTimetableUnitState();
+}
+
+class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
+  late TimeTableUnit timeTableUnit;
 
   String getSubjectFullname(String pSubject) {
     String subjectFullname;
@@ -624,10 +640,10 @@ class DisplayTimetableUnit extends StatelessWidget {
     int selectedLK = 0;
     var storage = GetStorage();
     try {
-      lk1 = allTimetableUnits
+      lk1 = widget.allTimetableUnits
           .firstWhere((element) => element.subject!.contains('LK'))
           .subject!;
-      lk2 = allTimetableUnits
+      lk2 = widget.allTimetableUnits
           .firstWhere((element) =>
               element.subject!.contains('LK') &&
               !element.subject!.contains(lk1))
@@ -687,8 +703,10 @@ class DisplayTimetableUnit extends StatelessWidget {
                                 setState(() {
                                   selectedLK = value as int;
                                 });
-                                Future.delayed(Duration(seconds: 1),
-                                    () => Navigator.of(context).pop());
+                                Future.delayed(Duration(milliseconds: 400), () {
+                                  Navigator.of(context).pop();
+                                  widget.onChangeLk();
+                                });
                               },
                               activeColor: (Theme.of(context).brightness ==
                                       Brightness.dark)
@@ -708,8 +726,10 @@ class DisplayTimetableUnit extends StatelessWidget {
                                 setState(() {
                                   selectedLK = value as int;
                                 });
-                                Future.delayed(Duration(seconds: 1),
-                                    () => Navigator.of(context).pop());
+                                Future.delayed(Duration(milliseconds: 400), () {
+                                  Navigator.of(context).pop();
+                                  widget.onChangeLk();
+                                });
                               },
                               activeColor: (Theme.of(context).brightness ==
                                       Brightness.dark)
@@ -722,6 +742,26 @@ class DisplayTimetableUnit extends StatelessWidget {
                     )));
           });
         });
+  }
+
+  void changeLkSubject() {
+    setState(() {
+      timeTableUnit = widget.allTimetableUnits.firstWhere((element) =>
+          element.lessonNumber == timeTableUnit.lessonNumber &&
+          element.dayNumber == timeTableUnit.dayNumber &&
+          element.subject != timeTableUnit.subject);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    timeTableUnit = widget.timeTableUnit;
+  }
+
+  void test() {
+    print('äää');
   }
 
   @override
@@ -768,10 +808,10 @@ class DisplayTimetableUnit extends StatelessWidget {
           if (timeTableUnit.room! != '-')
             Row(
               children: [
-                if (vertretung != null)
+                if (widget.vertretung != null)
                   Container(
                     child: Text(
-                      vertretung!.room!,
+                      widget.vertretung!.room!,
                       style: TextStyle(
                           fontSize: 25,
                           color: Colors.red,
@@ -783,7 +823,7 @@ class DisplayTimetableUnit extends StatelessWidget {
                   timeTableUnit.room!,
                   style: TextStyle(
                       fontSize: 25,
-                      decoration: (vertretung != null)
+                      decoration: (widget.vertretung != null)
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
                       fontWeight: FontWeight.normal),
@@ -792,13 +832,13 @@ class DisplayTimetableUnit extends StatelessWidget {
               ],
               mainAxisAlignment: MainAxisAlignment.end,
             ),
-          if (vertretung != null &&
-              vertretung!.teacherNew != null &&
-              vertretung!.teacherOld != vertretung!.teacherNew)
+          if (widget.vertretung != null &&
+              widget.vertretung!.teacherNew != null &&
+              widget.vertretung!.teacherOld != widget.vertretung!.teacherNew)
             Row(
               children: [
                 Text(
-                  vertretung!.teacherNew!,
+                  widget.vertretung!.teacherNew!,
                   style: TextStyle(
                       fontSize: 25,
                       color: Colors.red,
@@ -806,8 +846,8 @@ class DisplayTimetableUnit extends StatelessWidget {
                 ),
                 Container(
                   child: Text(
-                    (vertretung!.teacherOld != null)
-                        ? vertretung!.teacherOld!
+                    (widget.vertretung!.teacherOld != null)
+                        ? widget.vertretung!.teacherOld!
                         : '',
                     style: TextStyle(
                         fontSize: 25,
@@ -820,15 +860,15 @@ class DisplayTimetableUnit extends StatelessWidget {
               ],
               mainAxisAlignment: MainAxisAlignment.end,
             ),
-          if (vertretung != null)
+          if (widget.vertretung != null)
             Container(
               child: Row(
                 children: [
                   Container(
                     child: Text(
-                      (vertretung!.comment != null)
-                          ? vertretung!.type! + ':'
-                          : vertretung!.type!,
+                      (widget.vertretung!.comment != null)
+                          ? widget.vertretung!.type! + ':'
+                          : widget.vertretung!.type!,
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.red,
@@ -838,9 +878,9 @@ class DisplayTimetableUnit extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.only(right: 5),
                   ),
-                  if (vertretung!.comment != null)
+                  if (widget.vertretung!.comment != null)
                     Text(
-                      vertretung!.comment!,
+                      widget.vertretung!.comment!,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -851,7 +891,7 @@ class DisplayTimetableUnit extends StatelessWidget {
               ),
               margin: EdgeInsets.only(top: 15),
             ),
-          if (isChangingLK)
+          if (widget.isChangingLK)
             GestureDetector(
               onTap: () {
                 print('changeLK');
