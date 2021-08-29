@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:annette_app/data/design.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:annette_app/misc-pages/settingsPage.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
@@ -10,30 +11,31 @@ import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../database/databaseCreate.dart';
+import 'aboutPage.dart';
 import 'examPlan.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:annette_app/data/assets.dart';
 
 import '../miscellaneous-files/manageNotifications.dart';
 
+// TODO: IOS Spezifität weg
+
 /// Diese Klasse beinhaltet den Einstellungsbereich.
 /// App => Menüleiste => Einstellungen
 
 class SettingsTab extends StatelessWidget {
-  Future<DateTime?> getTimetableVersion() async {
-    try {
-      return DateTime.parse(GetStorage().read('timetableVersion'));
-    } catch (e) {
-
-      print(e);
-      return null;
-    }
-  }
 
   /// AboutDialog.
   /// Dialog, der Informationen über diese App, wie zB Versionsnummer, bereit hält.
   /// Zusätzlich besitzt er ein von Flutter automatisch generiertes Verzeichnis der lizenzen der Packages.
   void aboutDialog(context) async {
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) {
+          return AboutPage();
+    }));
+
+    /*
     DateTime? version = await getTimetableVersion();
     showAboutDialog(
       context: context,
@@ -51,7 +53,9 @@ class SettingsTab extends StatelessWidget {
                   fit: BoxFit.fill))),
       applicationLegalese:
           'Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.\n\nDer aktuell verwendete Stundenplan ist von Stand:\n${(version != null) ? version.toString() : "Fehler"}\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
+
     );
+     */
   }
 
   /// Ausgabe eines Widgets (Container) mit einer Liste mit folgenden Auswahlmöglichkeiten:
@@ -60,7 +64,7 @@ class SettingsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(Design.standardPagePadding),
       child: ListView(
         children: <Widget>[
           ListTile(

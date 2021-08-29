@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'data/design.dart';
 import 'miscellaneous-files/dismissKeyboard.dart';
 import 'misc-pages/introductionScreen.dart';
 import 'miscellaneous-files/navigationController.dart';
-import 'data/theme.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -127,8 +127,8 @@ class MyApp extends StatelessWidget {
                     : (context.watch<PreferredTheme>().value == 1)
                         ? ThemeMode.dark
                         : ThemeMode.system,
-                theme: lightTheme(context),
-                darkTheme: darkTheme(context),
+                theme: Design.lightTheme,
+                darkTheme: Design.darkTheme,
                 home: Builder(
                   builder: (context) => Center(
                     child: (guide)

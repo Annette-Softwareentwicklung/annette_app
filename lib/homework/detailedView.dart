@@ -1,3 +1,4 @@
+import 'package:annette_app/data/design.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -371,8 +372,8 @@ class DetailedViewState extends State<DetailedView> {
                     : Colors.grey[800],
                 border: Border.all(color: Colors.black45, width: 1.0),
                 borderRadius: BorderRadius.circular(5)),
-            padding: EdgeInsets.all(10.0),
-            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(Design.standardPagePadding),
+            margin: EdgeInsets.all(Design.standardPagePadding),
             child: Center(
                 child: Column(
               children: <Widget>[
@@ -571,7 +572,7 @@ class DetailedViewState extends State<DetailedView> {
     );
   }
 
-  Widget deadlinetimeWidget(String pTime, BuildContext context) {
+  Widget detailedViewEditableTile(String title, List<Widget> furtherWidgets, Function editFunction) {
     return Container(
         margin: EdgeInsets.only(bottom: 10.0, top: 20),
         alignment: Alignment.topLeft,
@@ -583,124 +584,105 @@ class DetailedViewState extends State<DetailedView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Zu erledigen bis:', style: TextStyle(fontSize: 17)),
-                  Text(
-                    parseTimeToUserOutput(pTime),
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: (!DateTime.parse(pTime).isAfter(DateTime.now()))
-                            ? Colors.red
-                            : null),
-                  ),
+                  Text(title, style: TextStyle(fontSize: 17)),
+                  ...furtherWidgets
                 ],
               ),
             ),
             IconButton(
               icon: Icon(Icons.edit_rounded,
                   color: Theme.of(context).accentColor),
-              onPressed: () {
-                errorDeadlineTime = false;
-                updateDeadlineTime = DateTime.parse(task!.deadlineTime!);
-                editDeadlineTime();
-              },
+              onPressed: editFunction(),
             )
           ],
         ));
   }
 
+  Widget deadlinetimeWidget(String pTime, BuildContext context) {
+
+    return detailedViewEditableTile(
+        'Zu erledigen bis:',
+        [
+          Text(
+            parseTimeToUserOutput(pTime),
+            style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: (!DateTime.parse(pTime).isAfter(DateTime.now()))
+                    ? Colors.red
+                    : null),
+          )
+        ],
+        () => () {
+            errorDeadlineTime = false;
+            updateDeadlineTime = DateTime.parse(task!.deadlineTime!);
+            editDeadlineTime();
+        }
+    );
+  }
+
   Widget notesWidget(String pNotes, BuildContext context) {
-    return Container(
-      alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(bottom: 10.0, top: 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('Notizen:', style: TextStyle(fontSize: 17)),
-                SelectableText(
-                  pNotes,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            icon:
-                Icon(Icons.edit_rounded, color: Theme.of(context).accentColor),
-            onPressed: () {
-              errorNotes = false;
-              _textEditingController.text = task!.notes!;
-              _textEditingController.selection = TextSelection.fromPosition(
-                  TextPosition(offset: _textEditingController.text.length));
-              editNotes();
-            },
-          )
-        ],
-      ),
-    );
-  }
 
-  Widget notificationtimeWidget(String pTime, BuildContext context) {
-    return Container(
-      alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(bottom: 10.0, top: 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('Zeitpunkt der Erinnerung:',
-                    style: TextStyle(fontSize: 17)),
-                Text(parseTimeToUserOutput(pTime),
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    )),
-              ],
-            ),
-          ),
-          IconButton(
-            icon:
-                Icon(Icons.edit_rounded, color: Theme.of(context).accentColor),
-            onPressed: () {
-              errorNotificationTime = false;
-              updateNotificationTime = DateTime.parse(task!.notificationTime!);
-              editNotificationTime();
-            },
-          )
-        ],
-      ),
-    );
-  }
-}
-
-/// Dieses Widget gibt einen Container zurück, welche in die Detailanscht eingebunden wird.
-/// Dieses Widget beinhaltet das Fach der Hausaufgabe.
-Widget subjectWidget(String pSubject) {
-  return Container(
-    margin: EdgeInsets.only(bottom: 10.0),
-    alignment: Alignment.topLeft,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('Fach:', style: TextStyle(fontSize: 17)),
-        Text(pSubject,
+    return detailedViewEditableTile(
+        'Notizen:',
+        [
+          SelectableText(
+            pNotes,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
-            )),
-      ],
-    ),
-  );
+            ),
+          )
+        ],
+        () => () {
+          errorNotes = false;
+          _textEditingController.text = task!.notes!;
+          _textEditingController.selection = TextSelection.fromPosition(
+              TextPosition(offset: _textEditingController.text.length));
+          editNotes();
+        }
+    );
+
+  }
+
+  Widget notificationtimeWidget(String pTime, BuildContext context) {
+
+    return detailedViewEditableTile(
+        'Zeitpunkt der Erinnerung:',
+        [
+          Text(parseTimeToUserOutput(pTime),
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+          ))
+        ],
+        () => () {
+          errorNotificationTime = false;
+          updateNotificationTime = DateTime.parse(task!.notificationTime!);
+          editNotificationTime();
+        }
+    );
+
+
+  }
+
+  /// Dieses Widget gibt einen Container zurück, welche in die Detailanscht eingebunden wird.
+  /// Dieses Widget beinhaltet das Fach der Hausaufgabe.
+  Widget subjectWidget(String pSubject) {
+
+    return detailedViewEditableTile(
+        "Fach",
+        [
+          Text(pSubject,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+              ))
+        ],
+        () => () {
+
+        }
+    );
+
+  }
 }

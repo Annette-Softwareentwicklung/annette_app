@@ -12,6 +12,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 /// Diese Klasse kann den Listen-Eintrag einer Hausaufgabe anzeigen. Die Aufgabe sowie die
 /// Id der position in der Liste werden neben den Funktionen, welche bei weiteren Aktionen wie
 /// dem Löschen aufgerufen werden sollen, als Parameter übergeben.
+///
 class HomeworkListTile extends StatefulWidget {
   final Task task;
   final int? index;
@@ -104,7 +105,6 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
   /// Sollten die Notizen zu lang sein, werden diese mit Punkten abgekürzt.
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     task = widget.task;
     isChecked = task!.isChecked;

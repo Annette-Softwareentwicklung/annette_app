@@ -3,6 +3,11 @@ description: Annette App 3.0
 
 publish_to: 'none'
 
+authors:
+  - "Jan Wermeckes"
+
+  - "Rui Zhang"
+
 version: 3.1.0+5
 
 environment:
@@ -49,6 +54,7 @@ flutter:
     - assets/images/vertretungDemo.png
     - assets/images/homeworkDemo.png
     - assets/images/timetableDemo.png
+    - pubspec.yaml
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
