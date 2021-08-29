@@ -89,8 +89,7 @@ class SettingsTab extends StatelessWidget {
                           content: ClassicVertretungsplan());
                     }),
                   )),
-          if (Platform.isIOS) Divider(),
-          if (Platform.isIOS)
+            Divider(),
             ListTile(
                 title: Text('Annette Homepage'),
                 trailing: Icon(Icons.chevron_right,
@@ -98,8 +97,7 @@ class SettingsTab extends StatelessWidget {
                 onTap: () async {
                   await launch('https://www.annettegymnasium.de/');
                 }),
-          if (Platform.isIOS) Divider(),
-          if (Platform.isIOS)
+            Divider(),
             ListTile(
                 title: Text('Kalender'),
                 trailing: Icon(Icons.chevron_right,
