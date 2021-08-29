@@ -80,7 +80,6 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentClassNumber();
   }

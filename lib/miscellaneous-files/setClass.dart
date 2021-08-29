@@ -593,7 +593,6 @@ class _SetClassState extends State<SetClass> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     load();
   }

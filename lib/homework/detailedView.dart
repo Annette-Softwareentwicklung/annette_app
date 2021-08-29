@@ -8,8 +8,6 @@ import 'package:annette_app/fundamentals/task.dart';
 import '../miscellaneous-files/parseTime.dart';
 import 'addDialog.dart';
 
-// TODO: implement subject-changing
-
 /// Diese Datei beinhaltet die Detailansicht einer Hausaufgabe,
 /// bei der alle Informationen bezüglich der Aufgabe angezeigt werden können.
 class DetailedView extends StatefulWidget {

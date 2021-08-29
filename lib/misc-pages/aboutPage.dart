@@ -8,8 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:yaml/yaml.dart';
 
-// TODO: finish this
-
 class AboutPage extends StatelessWidget {
 
   static double sectionMargin = 20;
