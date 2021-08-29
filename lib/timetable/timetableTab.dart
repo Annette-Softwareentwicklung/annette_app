@@ -16,7 +16,7 @@ import 'package:week_of_year/week_of_year.dart';
 
 BoxDecoration decorationTimetable(BuildContext context) {
   return BoxDecoration(
-    /*  boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
+      /*boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
   BoxShadow(
   color: Colors.grey.withOpacity(0.15),
   spreadRadius: 2,
@@ -49,8 +49,6 @@ class _TimetableTabState extends State<TimetableTab> {
   ScrollController scrollController = new ScrollController();
   GlobalKey globalKeyNow = new GlobalKey();
   GlobalKey globalKeyEnd = new GlobalKey();
-  GlobalKey changingLk1Key = new GlobalKey<_DisplayTimetableUnitState>();
-  GlobalKey changingLk2Key = new GlobalKey<_DisplayTimetableUnitState>();
 
   bool isNow = false;
 
@@ -135,6 +133,7 @@ class _TimetableTabState extends State<TimetableTab> {
           ),
         ),
         margin: EdgeInsets.only(bottom: 15),
+        padding: EdgeInsets.symmetric(horizontal: 15),
       ),
     );
 
@@ -190,9 +189,10 @@ class _TimetableTabState extends State<TimetableTab> {
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
     ///debugging
-    pWeekday = 3;
-    pLessonNumber = 7;
-    isInBreak = true;
+    pWeekday = 1;
+    pLessonNumber = 2;
+    isInBreak = false;
+
     Duration tempDuration = Duration(days: 1);
     if (allTimeTableUnits
             .indexWhere((element) => (element.dayNumber! == pWeekday)) ==
@@ -251,12 +251,14 @@ class _TimetableTabState extends State<TimetableTab> {
         if (i == 1 || !isFree)
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-              isNow: (pLessonNumber >= i &&
+              isNow: (pLessonNumber != null && pLessonNumber >= i &&
                       pLessonNumber < j &&
                       ((isInBreak == false && !isFree) || (isFree)))
                   ? true
                   : false,
-              key: (pLessonNumber == i && isInBreak == false)
+              key: (pLessonNumber != null && pLessonNumber >= i &&
+                  pLessonNumber < j &&
+                  ((isInBreak == false && !isFree) || (isFree)))
                   ? globalKeyNow
                   : null));
 
@@ -304,12 +306,6 @@ class _TimetableTabState extends State<TimetableTab> {
           }
 
           displayTimetable.add(DisplayTimetableUnit(
-              onChangeLk: () {},
-              key: (isChangingLK && tempTimetableUnit.lessonNumber == 1)
-                  ? changingLk1Key
-                  : (isChangingLK && tempTimetableUnit.lessonNumber == 2)
-                      ? changingLk2Key
-                      : null,
               timeTableUnit: tempTimetableUnit,
               isChangingLK: isChangingLK,
               allTimetableUnits: allTimeTableUnits,
@@ -319,7 +315,6 @@ class _TimetableTabState extends State<TimetableTab> {
         tempDuration =
             parseDuration(allTimes[(i - 1)].time!) + Duration(minutes: 45);
 
-        ///wird noch nicht rot...
         if (!isFree) {
           bool nextFree = false;
           if (allTimeTableUnits.indexWhere((element) =>
@@ -344,16 +339,16 @@ class _TimetableTabState extends State<TimetableTab> {
                                   (element.dayNumber! == pWeekday &&
                                       element.lessonNumber! > i)) !=
                               -1)) ||
-                      (pLessonNumber > i && pLessonNumber < j && nextFree)))
+                      (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? true
                   : false,
               key: (((isInBreak == true &&
-                          pLessonNumber == i &&
-                          (allTimeTableUnits.indexWhere((element) =>
-                                  (element.dayNumber! == pWeekday &&
-                                      element.lessonNumber! > i)) !=
-                              -1)) ||
-                      (pLessonNumber > i && pLessonNumber < j && nextFree)))
+                  pLessonNumber == i &&
+                  (allTimeTableUnits.indexWhere((element) =>
+                  (element.dayNumber! == pWeekday &&
+                      element.lessonNumber! > i)) !=
+                      -1)) ||
+                  (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? globalKeyNow
                   : null));
         }
@@ -484,7 +479,8 @@ class _TimetableTabState extends State<TimetableTab> {
               ],
               crossAxisAlignment: CrossAxisAlignment.center,
             )),
-            padding: EdgeInsets.only(top: 15, left: 15, right: 15)));
+            padding: EdgeInsets.only(top: 15)
+    ));
   }
 
   Container zeitraster() {
@@ -513,7 +509,7 @@ class DisplayFree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(left: 80),
+        margin: EdgeInsets.only(left: 95,right: 15),
         child: Column(children: [
           Container(
             padding: EdgeInsets.all(15),
@@ -558,6 +554,7 @@ class DisplayBreak extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         children: [
           Container(
@@ -588,11 +585,9 @@ class DisplayTimetableUnit extends StatefulWidget {
   final VertretungsEinheit? vertretung;
   final bool isChangingLK;
   final List<TimeTableUnit> allTimetableUnits;
-  final VoidCallback onChangeLk;
 
   DisplayTimetableUnit(
       {Key? key,
-      required this.onChangeLk,
       required this.timeTableUnit,
       this.vertretung,
       required this.allTimetableUnits,
@@ -691,66 +686,28 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                                   fontWeight: FontWeight.bold, fontSize: 25),
                             ),
                           ),
-                          ListTile(
-                            title: Text(lk1),
-                            leading: Radio(
-                              value: 0,
-                              groupValue: selectedLK,
-                              onChanged: (value) {
-                                storage.write('changingLkSubject', lk1);
-                                storage.write('changingLkWeekNumber',
-                                    DateTime.now().weekOfYear);
-                                setState(() {
-                                  selectedLK = value as int;
-                                });
-                                Future.delayed(Duration(milliseconds: 400), () {
-                                  Navigator.of(context).pop();
-                                  widget.onChangeLk();
-                                });
-                              },
-                              activeColor: (Theme.of(context).brightness ==
-                                      Brightness.dark)
-                                  ? Theme.of(context).accentColor
-                                  : Colors.blue,
+
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Diese Woche:     ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
+                              style: TextStyle(fontSize: 17),
                             ),
                           ),
-                          ListTile(
-                            title: Text(lk2),
-                            leading: Radio(
-                              value: 1,
-                              groupValue: selectedLK,
-                              onChanged: (value) {
-                                storage.write('changingLkSubject', lk2);
-                                storage.write('changingLkWeekNumber',
-                                    DateTime.now().weekOfYear);
-                                setState(() {
-                                  selectedLK = value as int;
-                                });
-                                Future.delayed(Duration(milliseconds: 400), () {
-                                  Navigator.of(context).pop();
-                                  widget.onChangeLk();
-                                });
+                          IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
                               },
-                              activeColor: (Theme.of(context).brightness ==
-                                      Brightness.dark)
-                                  ? Theme.of(context).accentColor
-                                  : Colors.blue,
-                            ),
-                          ),
+                              icon: Icon(
+                                Icons.check_rounded,
+                                size: 30,
+                              )),
                         ],
                       ),
                     )));
           });
         });
-  }
-
-  void changeLkSubject() {
-    setState(() {
-      timeTableUnit = widget.allTimetableUnits.firstWhere((element) =>
-          element.lessonNumber == timeTableUnit.lessonNumber &&
-          element.dayNumber == timeTableUnit.dayNumber &&
-          element.subject != timeTableUnit.subject);
-    });
   }
 
   @override
@@ -767,7 +724,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 80),
+      margin: EdgeInsets.only(left: 95,right: 15),
       padding: EdgeInsets.all(20),
       width: double.infinity,
       decoration: decorationTimetable(context),
@@ -939,6 +896,7 @@ class TimeDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15),
       key: key,
       width: double.infinity,
       child: Row(
