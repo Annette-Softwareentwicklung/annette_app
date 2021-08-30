@@ -145,8 +145,6 @@ class _TimetableTabState extends State<TimetableTab> {
       finishedNow = true;
     });
 
-    ///debugging
-    isNow = true;
     if (isNow) {
       Future.delayed(Duration(milliseconds: 50), () {
         try {
@@ -171,28 +169,20 @@ class _TimetableTabState extends State<TimetableTab> {
 
           if (positionEnd.dy - position.dy < temp) {
             animationHeight -= positionEnd.dy - position.dy;
-            print(MediaQueryData.fromWindow(window).size.height);
-            print(temp);
-            print(positionEnd.dy);
-            print(position.dy);
-            print(positionEnd.dy - position.dy);
 
             animationHeight = scrollController.position.maxScrollExtent;
           }
 
           scrollController.animateTo(animationHeight,
               duration: Duration(milliseconds: 500), curve: Curves.linear);
-        } catch (e) {}
+        } catch (e) {
+          print(e);
+        }
       });
     }
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
-    ///debugging
-    pWeekday = 1;
-    pLessonNumber = 2;
-    isInBreak = false;
-
     Duration tempDuration = Duration(days: 1);
     if (allTimeTableUnits
             .indexWhere((element) => (element.dayNumber! == pWeekday)) ==
@@ -285,8 +275,11 @@ class _TimetableTabState extends State<TimetableTab> {
                   -1) {
             isChangingLK = true;
             GetStorage storage = GetStorage();
-            if (DateTime.now().weekOfYear.isEven &&
-                storage.read('changingLkWeekNumber').isEven) {
+            print(storage.read('changingLkSubject'));
+            print(storage.read('changingLkWeekNumber'));
+            if ((DateTime.now().weekOfYear.isEven &&
+                storage.read('changingLkWeekNumber').isEven) || (!DateTime.now().weekOfYear.isEven &&
+                !storage.read('changingLkWeekNumber').isEven)) {
               if (storage.read('changingLkSubject') !=
                   tempTimetableUnit.subject!) {
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
@@ -423,12 +416,6 @@ class _TimetableTabState extends State<TimetableTab> {
 
                           if (positionEnd.dy - position.dy < temp) {
                             animationHeight -= positionEnd.dy - position.dy;
-                            print(
-                                MediaQueryData.fromWindow(window).size.height);
-                            print(temp);
-                            print(positionEnd.dy);
-                            print(position.dy);
-                            print(positionEnd.dy - position.dy);
 
                             animationHeight =
                                 scrollController.position.maxScrollExtent;
@@ -457,11 +444,12 @@ class _TimetableTabState extends State<TimetableTab> {
                                         maxWidth: 500,
                                       ),
                                           alignment: Alignment.topCenter,
-                                          child: ListView(
+                                          child: SingleChildScrollView(
                                             controller: scrollController,
+                                            child: Column(
                                             children:  displayTimetable,
                                             ),
-                                          )
+                                          ),)
                                   : Center(
                                       child: Column(
                                       children: [
@@ -644,8 +632,9 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
               !element.subject!.contains(lk1))
           .subject!;
 
-      if (DateTime.now().weekOfYear.isEven &&
-          storage.read('changingLkWeekNumber').isEven) {
+      if ((DateTime.now().weekOfYear.isEven &&
+          storage.read('changingLkWeekNumber').isEven) || (!DateTime.now().weekOfYear.isEven &&
+          !storage.read('changingLkWeekNumber').isEven)) {
         if (storage.read('changingLkSubject') == lk2) {
           selectedLK = 1;
         }
@@ -717,9 +706,6 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     timeTableUnit = widget.timeTableUnit;
   }
 
-  void test() {
-    print('äää');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -851,7 +837,6 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
           if (widget.isChangingLK)
             GestureDetector(
               onTap: () {
-                print('changeLK');
                 changeLK(context);
               },
               child: Container(
@@ -897,7 +882,7 @@ class TimeDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15),
-      key: key,
+      //key: passedKey,
       width: double.infinity,
       child: Row(
         children: [

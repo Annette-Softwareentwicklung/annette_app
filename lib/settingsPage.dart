@@ -47,8 +47,10 @@ class _SettingsPageState extends State<SettingsPage> {
               !element.subject!.contains(lk1))
           .subject!;
 
-      if (DateTime.now().weekOfYear.isEven &&
-          storage.read('changingLkWeekNumber').isEven) {
+      print('load: ${storage.read('changingLkSubject')} ${storage.read('changingLkWeekNumber')}');
+      if ((DateTime.now().weekOfYear.isEven &&
+          storage.read('changingLkWeekNumber').isEven) || (!DateTime.now().weekOfYear.isEven &&
+          !storage.read('changingLkWeekNumber').isEven)) {
         if (storage.read('changingLkSubject') == lk2) {
           selectedLK = 1;
         }
@@ -212,6 +214,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       onChanged: (value) {
                         storage.write('changingLkSubject', lk1);
                         storage.write('changingLkWeekNumber', DateTime.now().weekOfYear);
+                        print(storage.read('changingLkSubject'));
+                        print(storage.read('changingLkWeekNumber'));
                         setState(() {
                           selectedLK = value as int;
                         });
@@ -228,6 +232,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       onChanged: (value) {
                         storage.write('changingLkSubject', lk2);
                         storage.write('changingLkWeekNumber', DateTime.now().weekOfYear);
+                        print(storage.read('changingLkSubject'));
+                        print(storage.read('changingLkWeekNumber'));
                         setState(() {
                           selectedLK = value as int;
                         });
