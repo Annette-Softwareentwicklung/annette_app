@@ -221,9 +221,15 @@ class TimetableCrawler {
       ///Fehlende wechsel LKs auffüllen
       ///Q1: Mo. 1 + 2
       ///Q2: Mi 1 + 2
-      String? subjectLk1 = timetableUnitsToInsert
-          .firstWhere((element) => element.subject!.contains('LK'))
-          .subject;
+      String? subjectLk1;
+      if(timetableUnitsToInsert
+          .indexWhere((element) =>
+      element.subject!.contains('LK')) != -1) {
+        subjectLk1 = timetableUnitsToInsert
+            .firstWhere((element) =>
+        element.subject!.contains('LK'))
+            .subject;
+      }
       if (subjectLk1 != null) {
         if (currentClass == 'Q1') {
           if (timetableUnitsToInsert.indexWhere((element) =>
@@ -261,15 +267,15 @@ class TimetableCrawler {
           }
         }
 
-        String? subjectLk2 = null;
+        String? subjectLk2;
         if(timetableUnitsToInsert
             .indexWhere((element) =>
         element.subject!.contains('LK') &&
-            !element.subject!.contains(subjectLk1)) != -1) {
+            !element.subject!.contains(subjectLk1!)) != -1) {
           subjectLk2 = timetableUnitsToInsert
             .firstWhere((element) =>
                 element.subject!.contains('LK') &&
-                !element.subject!.contains(subjectLk1))
+                !element.subject!.contains(subjectLk1!))
             .subject;
         }
         if (currentClass == 'Q1' && subjectLk2 != null) {
