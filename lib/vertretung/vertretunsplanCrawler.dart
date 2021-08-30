@@ -66,7 +66,13 @@ class VertretungsplanCrawler {
               currentClass == 'Q1' ||
               currentClass == 'Q2') {
             if (result[5] == null) {
-              relevant = true;
+              if (result[4] != null) {
+                if (configurationString.contains(result[4]!)) {
+                  relevant = true;
+                }
+              } else {
+                relevant = true;
+              }
             } else {
               ///Möglicher Fehler hier? Bsp: Fach E GK1 gewählt, werden auch GE GK1 angezeigt?
               if (configurationString.contains(result[5]!)) {
