@@ -13,6 +13,10 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'translation.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -52,6 +56,56 @@ void main() async {
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
   await GetStorage.init();
+
+  ///Migration zu neuem Speichersystem "GetStorage"
+  try {
+    Future<String> _getPath() async {
+      final _dir = await getApplicationDocumentsDirectory();
+      return _dir.path;
+    }
+
+    Future<void> _deleteData(String s) async {
+      final _path = await _getPath();
+      final _myFile = File('$_path/$s');
+      await _myFile.delete();
+    }
+
+    Future<String?> _readData(String s) async {
+      try {
+        final _path = await _getPath();
+        final _file = File('$_path/$s');
+        String contents = await _file.readAsString();
+        return contents;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    final storage = GetStorage();
+    if (await _readData('configuration.txt') != null &&
+        storage.read('configuration') == null) {
+      storage.write('configuration', await _readData('configuration.txt'));
+    }
+    if (await _readData('data.txt') != null &&
+        storage.read('introScreen') == null) {
+      storage.write('introScreen', false);
+      _deleteData('data.txt');
+    }
+    if (await _readData('configuration.txt') != null) {
+      _deleteData('configuration.txt');
+    }
+    if (await _readData('data.txt') != null) {
+      _deleteData('data.txt');
+    }
+    if (await _readData('version.txt') != null) {
+      _deleteData('version.txt');
+    }
+    if (await _readData('order.txt') != null) {
+      _deleteData('order.txt');
+    }
+  } catch (e) {
+    print(e);
+  }
 
   ///Leitfaden beim ersten Öffnen der App
   var introScreen = GetStorage().read('introScreen');
