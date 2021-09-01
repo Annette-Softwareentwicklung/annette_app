@@ -25,7 +25,8 @@ Duration parseDuration(String s) {
 
 String parseTimeToUserOutput(String s, [DateTime? pComparisonTime]) {
 
-  DateTime temp = DateTime.parse(s);
+  DateTime temp = new DateTime.now();
+  temp = DateTime.parse(s);
   String hour = temp.hour.toString();
   String minute = temp.minute.toString();
   if (minute.length == 1) {

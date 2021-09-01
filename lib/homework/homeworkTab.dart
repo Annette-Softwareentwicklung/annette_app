@@ -486,7 +486,7 @@ class HomeworkTabState extends State<HomeworkTab> {
                                     index: index,
                                     animation: animation,
                                   );
-                                })))
+                              })))
               ]),
             ),
             if (MediaQuery.of(context).orientation == Orientation.landscape)

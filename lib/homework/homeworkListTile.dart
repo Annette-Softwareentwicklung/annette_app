@@ -128,7 +128,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
     Widget listTilesubtitle =
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       if (task!.notes != null && task!.subject != 'Sonstiges')
-        Text('Notiz: ' + notes!),
+        Text('Notiz: \n' + notes!),
       Text(
         'Bis: ' + parseTimeToUserOutput(task!.deadlineTime!),
         style: (!DateTime.parse(task!.deadlineTime!).isAfter(DateTime.now()))

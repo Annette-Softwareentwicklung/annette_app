@@ -1,4 +1,4 @@
-import 'package:annette_app/data/subjectsMap.dart';
+import 'package:annette_app/data/subjects.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:flutter/material.dart';

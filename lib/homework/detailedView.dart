@@ -1,4 +1,5 @@
 import 'package:annette_app/data/design.dart';
+import 'package:annette_app/data/subjects.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,11 @@ class DetailedViewState extends State<DetailedView> {
   late bool errorNotes;
   bool? checked = false;
 
+  // attribtues concerning subject changing
+  List<String> subjectNames = [];
+  String selectedSubject = "none";
+
+
   final TextEditingController _textEditingController = TextEditingController();
 
   static double timePickerHeight = 150;
@@ -50,6 +56,12 @@ class DetailedViewState extends State<DetailedView> {
       )
   );
 
+
+
+  void initSubjects() async {
+    Map<String, dynamic> subjectResult = await getUserSubjects([], []);
+    this.subjectNames = subjectResult["subjectNames"];
+  }
 
   void editDialog(String title, StatefulBuilder childWidgets, Function confirmFunction) {
     showDialog(
@@ -109,40 +121,53 @@ class DetailedViewState extends State<DetailedView> {
         });
   }
 
+  /// use this function to update any changes in tasks
+  confirmTaskChange(bool error, Task newTask) async {
 
-  confirmDeadlineTime() async {
-    if (!errorDeadlineTime) {
-      Task newTask = new Task(
-          id: task!.id,
-          subject: task!.subject,
-          isChecked: task!.isChecked,
-          deadlineTime:
-          updateDeadlineTime.toString(),
-          notificationTime:
-          task!.notificationTime,
-          notes: task!.notes);
+    if (!error) {
       databaseUpdateTask(newTask);
 
       setState(() {
         task = newTask;
       });
+
       widget.onReload!(task!.id);
       Navigator.pop(context);
-      if (DateTime.parse(
-          task!.notificationTime!)
-          .isAfter(DateTime.now())) {
+
+      if (DateTime.parse(task!.notificationTime!).isAfter(DateTime.now())) {
+
         cancelNotification(task!.id);
         await Future.delayed(Duration(seconds: 1), () {});
+
+
 
         scheduleNotification(
             newTask.id!,
             newTask.subject!,
             newTask.notes,
             newTask.deadlineTime.toString(),
-            DateTime.parse(
-                newTask.notificationTime!));
+            DateTime.parse(newTask.notificationTime!));
       }
     }
+
+  }
+
+  confirmDeadlineTime() async {
+
+    confirmTaskChange(
+        errorDeadlineTime,
+        new Task(
+            id: task!.id,
+            subject: task!.subject,
+            isChecked: task!.isChecked,
+            deadlineTime:
+            updateDeadlineTime.toString(),
+            notificationTime:
+            task!.notificationTime,
+            notes: task!.notes
+        )
+    );
+
   }
 
   void editDeadlineTime() {
@@ -178,6 +203,22 @@ class DetailedViewState extends State<DetailedView> {
       }),
       () => confirmDeadlineTime
     );
+  }
+
+  confirmNotificationTime() {
+
+    confirmTaskChange(
+        errorNotificationTime,
+        new Task(
+            id: task!.id,
+            subject: task!.subject,
+            isChecked: task!.isChecked,
+            deadlineTime: task!.deadlineTime,
+            notificationTime: updateNotificationTime.toString(),
+            notes: task!.notes
+        )
+    );
+
   }
 
   void editNotificationTime() {
@@ -220,47 +261,29 @@ class DetailedViewState extends State<DetailedView> {
               ]
           );
         }),
-        () => confirmDeadlineTime
+        () => confirmNotificationTime
     );
 
   }
 
   void confirmNotes() async {
-    if (!errorNotes) {
-      if (updateNotes == '' ||
-          updateNotes == null) {
-        updateNotes = null;
-      }
-      Task newTask = new Task(
+
+    if (!errorNotes && updateNotes == "") {
+      updateNotes = null;
+    }
+
+    confirmTaskChange(
+      errorNotes,
+      new Task(
           id: task!.id,
           subject: task!.subject,
           isChecked: task!.isChecked,
           deadlineTime: task!.deadlineTime,
-          notificationTime:
-          task!.notificationTime,
-          notes: updateNotes);
-      databaseUpdateTask(newTask);
-      setState(() {
-        task = newTask;
-      });
-      widget.onReload!(task!.id);
-      Navigator.pop(context);
+          notificationTime: task!.notificationTime,
+          notes: updateNotes
+      )
+    );
 
-      if (DateTime.parse(task!.notificationTime!)
-          .isAfter(DateTime.now())) {
-        cancelNotification(task!.id);
-        await Future.delayed(
-            Duration(seconds: 1), () {});
-
-        scheduleNotification(
-            newTask.id!,
-            newTask.subject!,
-            newTask.notes,
-            newTask.deadlineTime.toString(),
-            DateTime.parse(
-                newTask.notificationTime!));
-      }
-    }
   }
 
   void onNotesChanged(String text, Function setError) {
@@ -344,6 +367,9 @@ class DetailedViewState extends State<DetailedView> {
   @override
   void initState() {
     super.initState();
+
+    initSubjects();
+
     task = widget.task;
     if (task != null) {
       updateNotes = task!.notes;
@@ -354,6 +380,7 @@ class DetailedViewState extends State<DetailedView> {
         checked = false;
       }
     }
+
   }
 
   /// Rückgabe eines Containers mit der gesamten Detailansicht.
@@ -374,13 +401,13 @@ class DetailedViewState extends State<DetailedView> {
             margin: EdgeInsets.all(Design.standardPagePadding),
             child: Center(
                 child: Column(
-              children: <Widget>[
-                subjectWidget(task!.subject!),
-                if (task!.notes != null) notesWidget(task!.notes!, context),
-                deadlinetimeWidget(task!.deadlineTime!, context),
-                notificationtimeWidget(task!.notificationTime!, context),
-                quickNotifications(),
-              ],
+                children: <Widget>[
+                  subjectWidget(task!.subject!),
+                  if (task!.notes != null) notesWidget(task!.notes!, context),
+                    deadlinetimeWidget(task!.deadlineTime!, context),
+                    notificationtimeWidget(task!.notificationTime!, context),
+                    quickNotifications(),
+                ],
             ))),
         Center(
           child: Flex(
@@ -570,7 +597,7 @@ class DetailedViewState extends State<DetailedView> {
     );
   }
 
-  Widget detailedViewEditableTile(String title, List<Widget> furtherWidgets, Function editFunction) {
+  Widget detailedViewEditableTile(String title, List<Widget> furtherWidgets, Function editFunction, [bool editable=true]) {
     return Container(
         margin: EdgeInsets.only(bottom: 10.0, top: 20),
         alignment: Alignment.topLeft,
@@ -587,11 +614,12 @@ class DetailedViewState extends State<DetailedView> {
                 ],
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.edit_rounded,
-                  color: Theme.of(context).accentColor),
-              onPressed: editFunction(),
-            )
+            if (editable)
+              IconButton(
+                icon: Icon(Icons.edit_rounded,
+                    color: Theme.of(context).accentColor),
+                onPressed: editFunction(),
+              )
           ],
         ));
   }
@@ -637,6 +665,8 @@ class DetailedViewState extends State<DetailedView> {
           _textEditingController.text = task!.notes!;
           _textEditingController.selection = TextSelection.fromPosition(
               TextPosition(offset: _textEditingController.text.length));
+
+
           editNotes();
         }
     );
@@ -661,6 +691,23 @@ class DetailedViewState extends State<DetailedView> {
         }
     );
 
+  }
+
+
+
+  confirmSubject() {
+
+    confirmTaskChange(
+        false,
+        new Task(
+            id: task!.id,
+            subject: selectedSubject,
+            isChecked: task!.isChecked,
+            deadlineTime: task!.deadlineTime.toString(),
+            notificationTime: task!.notificationTime,
+            notes: task!.notes
+        )
+    );
 
   }
 
@@ -679,7 +726,36 @@ class DetailedViewState extends State<DetailedView> {
         ],
         () => () {
 
-        }
+          selectedSubject = task!.subject!;
+
+          editDialog(
+              "Fach",
+              StatefulBuilder(builder: (context, setState) {
+                return DropdownButton(
+                  iconSize: 35,
+                  isExpanded: true,
+                  underline: Container(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedSubject = value!;
+                    });
+                  },
+                  value: selectedSubject,
+                  hint: Text('Fach'),
+                  icon: Icon(Icons.arrow_drop_down_outlined),
+                  items: this.subjectNames.map<DropdownMenuItem<String>>((String? value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value!),
+                    );
+                  }).toList(),
+                );
+              }),
+              () => confirmSubject
+          );
+
+        },
+        task!.subject! != "Sonstiges" // editieren soll nicht erlaubt werden wenn Sonstiges ausgewählt wurde
     );
 
   }
