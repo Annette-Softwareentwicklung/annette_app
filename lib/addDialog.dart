@@ -243,7 +243,7 @@ class _AddDialogState extends State<AddDialog> {
   /// Dies ist notwendig, damit es zu keinen Konflikten beim löschen der Aufgaben aus der AnimatedList und
   /// beim stornieren der geplanten Benachrichtigungen gibt.
   void getNextId() async {
-    List<Task> list = await databaseGetAllTasks(5);
+    List<Task> list = await databaseGetAllTasks(5, true);
 
     if (list.length == 0) {
       nextId = 1;

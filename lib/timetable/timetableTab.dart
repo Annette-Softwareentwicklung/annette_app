@@ -19,9 +19,9 @@ BoxDecoration decorationTimetable(BuildContext context) {
       /*boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
   BoxShadow(
   color: Colors.grey.withOpacity(0.15),
-  spreadRadius: 2,
+  spreadRadius: 3,
   blurRadius: 5,
-  offset: Offset(0, 3), // changes position of shadow
+  offset: Offset(1, 3), // changes position of shadow
   ),
   ],*/
     //border: Border.all(color: Colors.blue, width: 1),
@@ -183,6 +183,7 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
+    pWeekday = 3;
     Duration tempDuration = Duration(days: 1);
     if (allTimeTableUnits
             .indexWhere((element) => (element.dayNumber! == pWeekday)) ==
@@ -357,9 +358,12 @@ class _TimetableTabState extends State<TimetableTab> {
     ));
   }
 
+
+
   @override
   void initState() {
     super.initState();
+    print('initState');
     load();
   }
 
@@ -845,7 +849,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                     Text(
                       'Wechselnder LK',
                       style: TextStyle(
-                          fontSize: 25,
+                          fontSize: 17,
                           color: Colors.blue,
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.normal),
@@ -853,15 +857,16 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                     Padding(
                       padding: EdgeInsets.only(left: 3),
                       child: Icon(
-                        Icons.warning_rounded,
+                        CupertinoIcons.info_circle,
                         color: Colors.blue,
-                        size: 30,
+                        size: 23,
                       ),
                     ),
                   ],
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                 ),
-                margin: EdgeInsets.only(top: 15),
+                margin: EdgeInsets.only(top: 20),
               ),
             ),
         ],
