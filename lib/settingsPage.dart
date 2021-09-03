@@ -9,7 +9,6 @@ import 'package:sqflite/sqflite.dart';
 import 'database/databaseCreate.dart';
 import 'fundamentals/preferredTheme.dart';
 import 'package:week_of_year/week_of_year.dart';
-
 import 'manageNotifications.dart';
 
 class SettingsPage extends StatefulWidget {
