@@ -485,9 +485,9 @@ class _SetClassState extends State<SetClass> {
         width: MediaQuery.of(context).size.width,
         color: Colors.transparent,
         padding: EdgeInsets.symmetric(
-          horizontal: /*(MediaQuery.of(context).size.width > 500)
+          horizontal: (MediaQuery.of(context).size.width > 500)
               ? ((MediaQuery.of(context).size.width - 500) / 2)
-              :*/ 0,
+              : 0,
         ),
         child: Container(
           height: (MediaQuery.of(context).size.height < 758)

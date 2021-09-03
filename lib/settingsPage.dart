@@ -95,10 +95,10 @@ class _SettingsPageState extends State<SettingsPage> {
         color: (Theme.of(context).brightness == Brightness.dark)
             ? Colors.black26
             : Colors.white);
-    return Container(
+    return Scrollbar(
+      child: Container(
       alignment: Alignment.topCenter,
-      child: Scrollbar(
-        child: SingleChildScrollView(
+      child:  SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             constraints: BoxConstraints(maxWidth: 500),

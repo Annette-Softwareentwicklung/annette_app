@@ -183,7 +183,6 @@ class _TimetableTabState extends State<TimetableTab> {
   }
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
-    pWeekday = 3;
     Duration tempDuration = Duration(days: 1);
     if (allTimeTableUnits
             .indexWhere((element) => (element.dayNumber! == pWeekday)) ==

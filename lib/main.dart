@@ -84,7 +84,8 @@ void main() async {
     final storage = GetStorage();
     if (await _readData('configuration.txt') != null &&
         storage.read('configuration') == null) {
-      storage.write('configuration', await _readData('configuration.txt'));
+        storage.write('configuration', await _readData('configuration.txt'));
+        storage.write('timetableVersion', DateTime(0,0).toString());
     }
     if (await _readData('data.txt') != null &&
         storage.read('introScreen') == null) {
