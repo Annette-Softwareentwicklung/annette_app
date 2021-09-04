@@ -101,6 +101,7 @@ class TimetableCrawler {
                   ///Wenn Fach nicht gefunden wurde, zweite Überprüfung an späterer Stelle im configuration String,
                   ///falls zB Fach = E (auch gewählt) aber Fach GE als erstes im configuration String gefunden und Fach E erst an späterer Stelle.
                   ///Sonst würde E fälschlicherweise bei nur einer Überprüfung aussortiert werden.
+
                   if (tempString.indexOf(':') != 0) {
                     tempPosition =
                         tempString.indexOf(tempTimetableUnit.subject!, 2);
@@ -314,6 +315,7 @@ class TimetableCrawler {
           }
         }
       }
+
     }
 
     timetableUnitsToInsert.forEach((element) {
