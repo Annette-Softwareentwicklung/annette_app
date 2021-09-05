@@ -13,7 +13,7 @@
 class Task {
   final int? id;
   final String? subject;
-  final String? notes;
+  String? notes;
   String? notificationTime;
   final String? deadlineTime;
   int? isChecked;
@@ -24,7 +24,11 @@ class Task {
       this.notes,
       this.notificationTime,
       this.deadlineTime,
-      this.isChecked});
+      this.isChecked}) {
+    if (this.notes != null) {
+      this.notes = this.notes!.trim();
+    }
+  }
 
   Map<String, dynamic> toMap() {
     return {

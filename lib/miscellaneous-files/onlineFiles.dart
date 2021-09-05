@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:annette_app/parseTime.dart';
+import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:http/http.dart' as http;
 
 class OnlineFiles {

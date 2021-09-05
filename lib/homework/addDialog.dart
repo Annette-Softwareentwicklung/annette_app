@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:annette_app/subjectsMap.dart';
+import 'package:annette_app/data/subjects.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/fundamentals/task.dart';
@@ -7,14 +7,17 @@ import 'package:annette_app/database/taskDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
-import 'package:annette_app/parseTime.dart';
-import 'package:annette_app/manageNotifications.dart';
-import 'package:annette_app/currentValues.dart';
+import 'package:annette_app/miscellaneous-files/parseTime.dart';
+import 'package:annette_app/miscellaneous-files/manageNotifications.dart';
+import 'package:annette_app/miscellaneous-files/currentValues.dart';
 import 'package:flutter/services.dart';
-import 'lessonStartTimes.dart';
+import '../data/lessonStartTimes.dart';
 
 ///Diese Klasse beinhaltet das Dialogfenster und alle notwendigen Funktionen zum hinzufügen einer neuen Hausaufgabe.
 class AddDialog extends StatefulWidget {
+
+  static int notesLines = 3;
+
   final Function(Task)? onTaskCreated;
 
   AddDialog({this.onTaskCreated});
@@ -24,6 +27,7 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
+
   CurrentValues getCV = new CurrentValues();
   bool finished = false;
   int? nextId;
@@ -56,76 +60,26 @@ class _AddDialogState extends State<AddDialog> {
 
   void getSubjectsAndTimes() async {
     ///Zuordnung: Abkürzung => Fachname
-     Map<String, String> allSubjects = getSubjects();
-    timetableUnits = await databaseGetAllTimeTableUnit();
-    timetableUnits.sort((a, b) {
-      return a.subject!.compareTo(b.subject!);
-    });
 
     subjectNames.add('Sonstiges');
     subjectCodes.add('-');
 
-    ///Mittagspause herausfiltern
-    int temp = timetableUnits.indexWhere((element) => element.subject == 'MP');
-    while(temp != -1) {
-      timetableUnits.removeAt(temp);
-      temp = timetableUnits.indexWhere((element) => element.subject == 'MP');
-    }
-    temp = timetableUnits.indexWhere((element) => element.subject == 'MP MH');
-    while(temp != -1) {
-      timetableUnits.removeAt(temp);
-      temp = timetableUnits.indexWhere((element) => element.subject == 'MP MH');
-    }
-
-    for (int i = 0; i < timetableUnits.length; i++) {
-      String tempSubjectAbbreviation = timetableUnits[i].subject!;
-
-      if (!subjectCodes.contains(tempSubjectAbbreviation)) {
-        subjectCodes.add(tempSubjectAbbreviation);
-      }
-      if (tempSubjectAbbreviation.contains('LK')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('LK') - 1);
-      } else if (tempSubjectAbbreviation.contains('GK')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('GK') - 1);
-      } else if (tempSubjectAbbreviation.contains('Z1')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('Z1') - 1);
-      } else if (tempSubjectAbbreviation.contains('Z2')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('Z2') - 1);
-      } else if (tempSubjectAbbreviation.contains('VT')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('VT') + 2);
-      }
-
-      late String tempSubjectFullName;
-
-      if (allSubjects.containsKey(tempSubjectAbbreviation)) {
-        tempSubjectFullName = allSubjects[tempSubjectAbbreviation]!;
-      } else {
-        tempSubjectFullName = tempSubjectAbbreviation;
-      }
-
-      if (tempSubjectFullName == 'Kath. Religion' ||
-          tempSubjectFullName == 'Ev. Religion') {
-        tempSubjectFullName = 'Religion';
-      }
-
-      if (!subjectNames.contains(tempSubjectFullName)) {
-        subjectNames.add(tempSubjectFullName);
-      }
-    }
-
-    times = getAllTimes();
+    Map<String, dynamic> subjectResults = await getUserSubjects(subjectCodes, subjectNames);
+    timetableUnits = subjectResults["timetableUnits"];
+    subjectCodes = subjectResults["subjectCodes"];
+    subjectNames = subjectResults["subjectNames"];
 
     await getAutoValues();
+
     if (detectedSubject == null) {
       selectedSubject = 'Sonstiges';
     } else {
+      // TODO: hier könnte ein Fehler auftauchen: Wenn der Nutzer einfach random Fächer in der Konfiguration
+      // TODO: eingibt, dann kann es dazu kommen, dass ein Error auftaucht
       selectedSubject = subjectNames[subjectCodes.indexOf(detectedSubject!)];
     }
+
+    times = getAllTimes();
 
     setState(() {
       finished = true;
@@ -174,6 +128,7 @@ class _AddDialogState extends State<AddDialog> {
     errorNotes = false;
     String? subjectToInsert;
     String? notesToInsert = notes;
+    print(notesToInsert);
     DateTime? notificationTimeToInsert;
     DateTime? deadlineTimeToInsert;
 
@@ -332,8 +287,7 @@ class _AddDialogState extends State<AddDialog> {
                       iconSize: 35,
                       isExpanded: true,
                       underline: Container(),
-                      items: subjectNames
-                          .map<DropdownMenuItem<String>>((String? value) {
+                      items: subjectNames.map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value!),
@@ -389,11 +343,8 @@ class _AddDialogState extends State<AddDialog> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     clearButtonMode: OverlayVisibilityMode.editing,
-                    maxLines: 3,
+                    maxLines: AddDialog.notesLines,
                     enableInteractiveSelection: true,
-
-                    ///Tastatur mit "Done"-Button statt Return
-                    keyboardType: TextInputType.text,
 
                     onChanged: (text) {
                       setState(() {

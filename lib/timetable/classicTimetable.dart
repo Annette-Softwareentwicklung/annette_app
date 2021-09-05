@@ -1,9 +1,9 @@
-import 'package:annette_app/onlineFiles.dart';
+import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../timetableURL.dart';
+import '../miscellaneous-files/timetableURL.dart';
 import '../custom_widgets/errorInternetContainer.dart';
 
 class ClassicTimetable extends StatefulWidget {
@@ -80,7 +80,6 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentClassNumber();
   }

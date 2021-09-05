@@ -22,15 +22,6 @@ class VertretungListTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        /*color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 5,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],*/
         color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20),
@@ -47,7 +38,6 @@ class VertretungListTile extends StatelessWidget {
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
-                        //foreground: Paint()..shader = lightGradient,
                       ),
                     )
                   : Text(''),
@@ -84,12 +74,6 @@ class VertretungListTile extends StatelessWidget {
                         ),
                         margin: EdgeInsets.only(left: 5),
                       ),
-                    /*Container(margin: EdgeInsets.only(left: 5,),child: Text(
-                      '(' + vertretung.affectedClass! + ')',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.normal),
-                    ),),*/
                   ],
                 ),
               ),

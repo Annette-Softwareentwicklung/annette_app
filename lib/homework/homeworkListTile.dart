@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:annette_app/defaultScaffold.dart';
-import 'package:annette_app/parseTime.dart';
+import 'package:annette_app/custom_widgets/defaultScaffold.dart';
+import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
 import '../custom_widgets/customCheckbox.dart';
-import '../detailedView.dart';
+import 'detailedView.dart';
 import 'package:annette_app/fundamentals/task.dart';
-import '../manageNotifications.dart';
+import '../miscellaneous-files/manageNotifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// Diese Klasse kann den Listen-Eintrag einer Hausaufgabe anzeigen. Die Aufgabe sowie die
 /// Id der position in der Liste werden neben den Funktionen, welche bei weiteren Aktionen wie
 /// dem Löschen aufgerufen werden sollen, als Parameter übergeben.
+///
 class HomeworkListTile extends StatefulWidget {
   final Task task;
   final int? index;
@@ -104,7 +105,6 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
   /// Sollten die Notizen zu lang sein, werden diese mit Punkten abgekürzt.
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     task = widget.task;
     isChecked = task!.isChecked;
@@ -128,7 +128,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
     Widget listTilesubtitle =
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       if (task!.notes != null && task!.subject != 'Sonstiges')
-        Text('Notiz: ' + notes!),
+        Text('Notiz: \n' + notes!),
       Text(
         'Bis: ' + parseTimeToUserOutput(task!.deadlineTime!),
         style: (!DateTime.parse(task!.deadlineTime!).isAfter(DateTime.now()))

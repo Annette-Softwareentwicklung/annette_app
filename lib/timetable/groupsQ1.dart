@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 
-import '../timetableURL.dart';
+import '../miscellaneous-files/timetableURL.dart';
 class GroupsQ1 {
   List<List<String>> groupsQ1List = [];
   Future<bool> initialize () async{

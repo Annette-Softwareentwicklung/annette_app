@@ -79,7 +79,6 @@ class GermanCupertinoLocalizations implements CupertinoLocalizations {
   String datePickerMonth(int monthIndex) => _months[monthIndex - 1];
 
   @override
-  // TODO: implement todayLabel
   String get todayLabel => 'Heute';
 
   @override
