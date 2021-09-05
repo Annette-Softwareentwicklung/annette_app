@@ -26,7 +26,6 @@ class CustomCheckboxState extends State<CustomCheckbox> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     task = widget.task;
 

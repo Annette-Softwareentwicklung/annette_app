@@ -1,6 +1,6 @@
 /// Diese Methode erstellt aus einem String (z.B. HH:MM:SS) ein Objekt des Tys Duration.
 /// Quelle: https://stackoverflow.com/questions/54852585/how-to-convert-a-duration-like-string-to-a-real-duration-in-flutter (28.02.2021)
-///
+
 Duration parseDuration(String s) {
   int hours = 0;
   int minutes = 0;
@@ -21,8 +21,12 @@ Duration parseDuration(String s) {
 /// Optional kann ein Zeitpunkt zum Vergleichen angegeben werden, alternativ wird die aktuelle Uhrzeit gewählt,
 /// um "Heute", "Morgen" etc. bestimmen zu können.
 /// Der neue String lautet "Wochentag, Tag. Monatsname, Stunden:Minuten Uhr".
+
+
 String parseTimeToUserOutput(String s, [DateTime? pComparisonTime]) {
-  DateTime temp = DateTime.parse(s);
+
+  DateTime temp = new DateTime.now();
+  temp = DateTime.parse(s);
   String hour = temp.hour.toString();
   String minute = temp.minute.toString();
   if (minute.length == 1) {
@@ -97,6 +101,8 @@ String parseTimeToUserOutput(String s, [DateTime? pComparisonTime]) {
 
   DateTime comparisonTime =
       (pComparisonTime != null) ? pComparisonTime : DateTime.now();
+
+  temp == comparisonTime;
 
   if (temp.year == comparisonTime.year &&
       temp.month == comparisonTime.month &&

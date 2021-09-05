@@ -1,5 +1,6 @@
 import 'dart:ui';
-import 'package:annette_app/setClass.dart';
+import 'package:annette_app/data/assets.dart';
+import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,7 @@ class IntroductionScreen extends StatefulWidget {
 class IntroductionScreenState extends State<IntroductionScreen> {
   List<Widget> _pages = [
     ImageTitleTextModel(
-      image: AssetImage('images/icon.png'),
+      image: AssetImage(assetPaths.iconImagePath),
       title: 'Annette App',
       demoImage: false,
       text:
@@ -28,21 +29,21 @@ class IntroductionScreenState extends State<IntroductionScreen> {
     ),
     ImageTitleTextModel(
       demoImage: true,
-      image: AssetImage('images/vertretungDemo.png'),
+      image: AssetImage(assetPaths.vertretungsDemoPath),
       title: 'Vertretungsplan',
       text:
           'Individuell nach deinen Kursen gefiltert - damit du direkt informiert bist.',
     ),
     ImageTitleTextModel(
       demoImage: true,
-      image: AssetImage('images/homeworkDemo.png'),
+      image: AssetImage(assetPaths.homeworkDemoPath),
       title: 'Hausaufgaben',
       text:
           'Es war noch nie so leicht, Hausaufgaben zu erstellen und zu verwalten. Automatische Facherkennung anhand deines Stundenplans und Push-Benachrichtigungen zur Erinnerung sind nur zwei von vielen nützlichen Features.',
     ),
     ImageTitleTextModel(
       demoImage: true,
-      image: AssetImage('images/timetableDemo.png'),
+      image: AssetImage(assetPaths.timetableDemoPath),
       title: 'Stundenplan',
       text:
           'Dein individueller Stundenplan inklusive Pausenzeiten. Dank automatischer Erkennung der aktuellen Stunde lässt sich der Stundenplan schnell ablesen, und du musst nicht erst deinen Kurs in der großen Übersicht suchen.',

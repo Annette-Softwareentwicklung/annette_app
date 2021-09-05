@@ -1,19 +1,20 @@
 import 'dart:ui';
 import 'package:annette_app/timetable/timetableTab.dart';
-import 'package:annette_app/update.dart';
+import 'package:annette_app/miscellaneous-files/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'homework/homeworkTab.dart';
-import 'settingsTab.dart';
-import 'addDialog.dart';
+import '../homework/homeworkTab.dart';
+import '../misc-pages/settingsTab.dart';
+import '../homework/addDialog.dart';
 import 'dart:async';
 
 /// Diese Klasse gibt das Scaffold-Widget mit der Menüleiste am Boden zurück und ruft die
 /// entsprechenden Tabs auf, also quasi die "Standard-Benutzeroberfläche" die erscheint,
 /// wenn man die App öffnet.
+///
 class NavigationController extends StatefulWidget {
   NavigationController({Key? key}) : super(key: key);
 

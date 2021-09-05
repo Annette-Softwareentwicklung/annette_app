@@ -5,6 +5,10 @@ publish_to: 'none'
 
 version: 3.2.0+7
 
+authors:
+  - "Jan Wermeckes"
+
+  - "Rui Zhang"
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -39,17 +43,18 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "images/icon.png"
+  image_path: "assets/images/icon.png"
 
 flutter:
 
   uses-material-design: true
 
   assets:
-    - images/icon.png
-    - images/vertretungDemo.png
-    - images/homeworkDemo.png
-    - images/timetableDemo.png
+    - assets/images/icon.png
+    - assets/images/vertretungDemo.png
+    - assets/images/homeworkDemo.png
+    - assets/images/timetableDemo.png
+    - pubspec.yaml
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

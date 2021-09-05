@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import '../timetableURL.dart';
+import '../miscellaneous-files/timetableURL.dart';
 
 class GroupsEF {
   List<List<String>> groupsEfList = [];
