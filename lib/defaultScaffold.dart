@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 class DefaultScaffold extends StatelessWidget {
 
   final String? title;
+  final bool? isBottom;
   final Widget? content;
 
   ///Für einen optionalen FloatingActionButton
@@ -19,7 +20,7 @@ class DefaultScaffold extends StatelessWidget {
 
   DefaultScaffold(
       {this.title,
-      this.content,
+      this.content, this.isBottom,
       this.fabLabel,
       this.fabIcon,
         this.onFabPressed
@@ -33,7 +34,9 @@ class DefaultScaffold extends StatelessWidget {
         appBar: AppBar(
           title: Text(title!),
         ),
-        body: SafeArea(child: content!),//SafeArea(child: content),
+        body: SafeArea(child: content!,
+        bottom: (isBottom == null || isBottom == true) ? true : false,
+        ),//SafeArea(child: content),
       );
     } else {
       /// Falls FloatingActionButton gefordert:
@@ -47,7 +50,9 @@ class DefaultScaffold extends StatelessWidget {
           icon: Icon(Icons.add_circle),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: SafeArea(child: content!),
+        body: SafeArea(child: content!,
+          bottom: (isBottom == null || isBottom == true) ? true : false,
+        ),
       );
     }
   }

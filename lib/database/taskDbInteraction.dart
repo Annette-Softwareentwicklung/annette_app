@@ -125,30 +125,54 @@ void databaseDeleteTask(int? pId) async {
   await deleteTask(pId);
 }
 
+void databaseDeleteDoneTasks() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final Future<Database> database = openDatabase(
+    join(await getDatabasesPath(), 'local_database.db'),
+    onCreate: (db, version) {
+      createDb(db);
+    },
+    version: 1,
+  );
+
+  Future<void> deleteTasks() async {
+    final db = await database;
+
+    await db.delete(
+      'homeworkTasks',
+      where: "isChecked = ?",
+      whereArgs: [1],
+    );
+  }
+
+  await deleteTasks();
+}
+
 /// Diese Methode gibt alle sich in der Tabelle befindlichen Hausaufgaben zurück.
 /// Die Rückgabe geschieht in Form einer Liste mit einzelnen Objekten der Klasse Task.
-Future<List<Task>> databaseGetAllTasks(int? orderValue) async {
+Future<List<Task>> databaseGetAllTasks(
+    int? orderValue, bool withDoneTasks) async {
   String orderListBy = 'id ASC';
 
-    switch (orderValue) {
-      case 1:
-        orderListBy = 'subject ASC';
-        break;
-      case 2:
-        orderListBy = 'subject DESC';
-        break;
-      case 3:
-        orderListBy = 'deadlineTime ASC';
-        break;
-      case 4:
-        orderListBy = 'deadlineTime DESC';
-        break;
-      case 5:
-        orderListBy = 'id ASC';
-        break;
-      case 6:
-        orderListBy = 'id DESC';
-        break;
+  switch (orderValue) {
+    case 1:
+      orderListBy = 'subject ASC';
+      break;
+    case 2:
+      orderListBy = 'subject DESC';
+      break;
+    case 3:
+      orderListBy = 'deadlineTime ASC';
+      break;
+    case 4:
+      orderListBy = 'deadlineTime DESC';
+      break;
+    case 5:
+      orderListBy = 'id ASC';
+      break;
+    case 6:
+      orderListBy = 'id DESC';
+      break;
   }
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -165,6 +189,8 @@ Future<List<Task>> databaseGetAllTasks(int? orderValue) async {
     final List<Map<String, dynamic>> maps = await db.query(
       'homeworkTasks',
       orderBy: orderListBy,
+      where: "isChecked <= ?",
+      whereArgs: [(withDoneTasks) ? 1 : 0],
     );
 
     return List.generate(maps.length, (i) {

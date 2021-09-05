@@ -332,7 +332,7 @@ class HomeworkTabState extends State<HomeworkTab> {
   /// Diese Methode fragt alle Hausaufgaben aus der Datenbank ab und
   /// speichert diese als Liste in der Variable "tasks".
   void getTasks() async {
-    tasks = await databaseGetAllTasks(orderValue);
+    tasks = await databaseGetAllTasks(orderValue, false);
     setState(() {
       if (tasks.length > 0) {
         defaultToShowOnDetailedSplitView = tasks[0];
@@ -357,7 +357,7 @@ class HomeworkTabState extends State<HomeworkTab> {
       finished = false;
     });
     tasks.clear();
-    tasks = await databaseGetAllTasks(orderValue);
+    tasks = await databaseGetAllTasks(orderValue, false);
 
     if (reloadID != null) {
       print('rID $reloadID');
