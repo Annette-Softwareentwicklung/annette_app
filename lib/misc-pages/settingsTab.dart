@@ -22,8 +22,16 @@ import '../miscellaneous-files/manageNotifications.dart';
 
 /// Diese Klasse beinhaltet den Einstellungsbereich.
 /// App => Menüleiste => Einstellungen
-
 class SettingsTab extends StatelessWidget {
+  Future<DateTime?> getTimetableVersion() async {
+    try {
+      return DateTime.parse(GetStorage().read('timetableVersion'));
+    } catch (e) {
+
+      print(e);
+      return null;
+    }
+  }
 
   /// AboutDialog.
   /// Dialog, der Informationen über diese App, wie zB Versionsnummer, bereit hält.
@@ -40,7 +48,7 @@ class SettingsTab extends StatelessWidget {
     showAboutDialog(
       context: context,
       applicationName: 'Annette App',
-      applicationVersion: 'Version 3.1.0+5',
+      applicationVersion: 'Version 3.2.0+7',
       applicationIcon: Container(
           height: 70,
           alignment: Alignment.center,
@@ -89,7 +97,8 @@ class SettingsTab extends StatelessWidget {
                           content: ClassicVertretungsplan());
                     }),
                   )),
-            Divider(),
+          if (Platform.isIOS) Divider(),
+          if (Platform.isIOS)
             ListTile(
                 title: Text('Annette Homepage'),
                 trailing: Icon(Icons.chevron_right,
@@ -97,7 +106,8 @@ class SettingsTab extends StatelessWidget {
                 onTap: () async {
                   await launch('https://www.annettegymnasium.de/');
                 }),
-            Divider(),
+          if (Platform.isIOS) Divider(),
+          if (Platform.isIOS)
             ListTile(
                 title: Text('Kalender'),
                 trailing: Icon(Icons.chevron_right,
@@ -116,6 +126,7 @@ class SettingsTab extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                   return DefaultScaffold(
+                    isBottom: false,
                       title: 'Einstellungen',
                       content: SettingsPage());
                 }),);
@@ -126,173 +137,7 @@ class SettingsTab extends StatelessWidget {
               title: Text('Klasse ändern'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
-              onLongPress: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (context) {
-                      return StatefulBuilder(builder: (context, setError) {
-                        return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: Container(
-                              constraints: BoxConstraints(
-                                maxWidth: 450,
-                              ),
-                              padding: EdgeInsets.only(
-                                  top: 30, left: 30, right: 30, bottom: 10),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(bottom: 10),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Reset',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: Text(
-                                        'Willst du wirklich die gesamte App auf Werkseinstellungen zurücksetzten?',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        IconButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            icon: Icon(
-                                              Icons.clear_rounded,
-                                              size: 30,
-                                            )),
-                                        IconButton(
-                                            onPressed: () async {
-                                              var storage = GetStorage();
-                                              ///Leitfaden wieder anzeigen
-                                              storage
-                                                  .write('introScreen', true);
 
-                                              ///Stundenplan-Konfiguration zurücksetzen (auf 5A)
-                                              storage.write('configuration', 'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;');
-
-                                              ///Datenbank löschen
-                                              WidgetsFlutterBinding
-                                                  .ensureInitialized();
-                                              final Future<Database> database =
-                                                  openDatabase(
-                                                join(await getDatabasesPath(),
-                                                    'local_database.db'),
-                                                onCreate: (db, version) {
-                                                  createDb(db);
-                                                },
-                                                version: 1,
-                                              );
-                                              Database db = await database;
-                                              await db.execute(
-                                                  "DELETE FROM homeworkTasks");
-                                              await db.execute(
-                                                  "DELETE FROM timetable");
-                                              cancelAllNotifications();
-
-                                              ///Dialogfenster schließen
-                                              Navigator.of(context).pop();
-
-                                              ///Dialog zur Information des Benutzers
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false,
-                                                  builder: (context) {
-                                                    return StatefulBuilder(
-                                                        builder: (context,
-                                                            setError) {
-                                                      return Dialog(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15.0),
-                                                          ),
-                                                          child: Container(
-                                                            constraints:
-                                                                BoxConstraints(
-                                                              maxWidth: 450,
-                                                            ),
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    top: 30,
-                                                                    left: 30,
-                                                                    right: 30,
-                                                                    bottom: 10),
-                                                            child:
-                                                                SingleChildScrollView(
-                                                              child: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  Container(
-                                                                    margin: EdgeInsets.only(
-                                                                        bottom:
-                                                                            10),
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerLeft,
-                                                                    child: Text(
-                                                                      'Reset erfolgreich',
-                                                                      style: TextStyle(
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontSize:
-                                                                              25),
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    margin: EdgeInsets.symmetric(
-                                                                        vertical:
-                                                                            10),
-                                                                    child: Text(
-                                                                      'Alles wurde zurückgesetzt. Bitte starte die App neu.',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            18,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ));
-                                                    });
-                                                  });
-                                            },
-                                            icon: Icon(
-                                              Icons.check_rounded,
-                                              size: 30,
-                                            )),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ));
-                      });
-                    });
-              },
               onTap: () {
                 if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
                   SystemChrome.setPreferredOrientations([

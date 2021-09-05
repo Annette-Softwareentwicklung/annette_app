@@ -49,8 +49,13 @@ final snackBarTimetableUpdated = SnackBar(
 );
 
 Future<void> update(BuildContext context) async {
+  ///Update Vertretungsplan
   try {
     var storage = GetStorage();
+
+    if(storage.read('timetableVersion') == null) {
+      storage.write('timetableVersion', DateTime(0,0).toString());
+    }
 
     DateTime version = DateTime.parse(storage.read('timetableVersion'));
 
