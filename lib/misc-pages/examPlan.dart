@@ -58,32 +58,9 @@ class _ExamPlanState extends State<ExamPlan> {
         finished = false;
         error = true;
       });
-      showError(context);
     }
   }
 
-  void showError(BuildContext context) {
-    final snackBar = SnackBar(
-      duration: Duration(seconds: 3),
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.warning_rounded,
-            color: Colors.white,
-          ),
-          Container(
-            child: Text('Laden fehlgeschlagen', style: TextStyle(fontSize: 17)),
-            margin: EdgeInsets.only(left: 15),
-          ),
-        ],
-      ),
-      backgroundColor: Colors.redAccent,
-      margin: EdgeInsets.all(10),
-      behavior: SnackBarBehavior.floating,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   void load() async {
     if (await getCurrentClass() == 1) {
@@ -104,7 +81,6 @@ class _ExamPlanState extends State<ExamPlan> {
         finished = false;
         error = true;
       });
-      showError(context);
     }
   }
 

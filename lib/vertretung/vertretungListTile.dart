@@ -214,11 +214,11 @@ class VertretungListTile extends StatelessWidget {
             children: [
               if (!vertretung.type!.toLowerCase().contains('vertretung') &&
                   !vertretung.type!.toLowerCase().contains('raum')
-                  && vertretung.subjectOld != null
+                  //&& vertretung.subjectOld != null
               )
                 Text(
                   (vertretung.comment != null)
-                      ? vertretung.type! + ':'
+                      ? (vertretung.type! + ':').replaceAll('.:', '.')
                       : vertretung.type!,
                   style: TextStyle(
                       fontSize: 25,

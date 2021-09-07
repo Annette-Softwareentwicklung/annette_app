@@ -318,6 +318,7 @@ class DetailedViewState extends State<DetailedView> {
       StatefulBuilder(builder: (context, setError) {
         return Column(children: [
           TextField(
+            minLines: 1,
             maxLines: AddDialog.notesLines,
             dragStartBehavior: DragStartBehavior.down,
             controller: _textEditingController,
