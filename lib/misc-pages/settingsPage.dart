@@ -97,8 +97,8 @@ class _SettingsPageState extends State<SettingsPage> {
             : Colors.white);
     return Scrollbar(
       child: Container(
-      alignment: Alignment.topCenter,
-      child:  SingleChildScrollView(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             constraints: BoxConstraints(maxWidth: 500),
@@ -271,6 +271,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       style: textDescription,
                     ),
                   ),
+
                 ///TODO: Erledigte Aufgaben im Hintergrund behalten mit der Option zum Anzeigen im homeworkTab noch nicht implementiert.
                 /*GestureDetector(
                   child: Container(
@@ -303,13 +304,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: textDescription,
                   ),
                 ),*/
-                GestureDetector(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 30),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                    decoration: boxDecoration,
-                    alignment: Alignment.center,
-                    width: double.infinity,
+                Container(
+                  margin: EdgeInsets.only(top: 30),
+                  //padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  decoration: boxDecoration,
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  child: CupertinoButton(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
                     child: Text(
                       'App zurücksetzen',
                       style: TextStyle(
@@ -317,184 +319,187 @@ class _SettingsPageState extends State<SettingsPage> {
                         color: Colors.red,
                       ),
                     ),
-                  ),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return StatefulBuilder(builder: (context, setError) {
-                            return Dialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth: 450,
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return StatefulBuilder(
+                                builder: (context, setError) {
+                              return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
                                   ),
-                                  padding: EdgeInsets.only(
-                                      top: 30, left: 30, right: 30, bottom: 10),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(bottom: 10),
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Reset',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 25),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          child: Text(
-                                            'Willst du wirklich die gesamte App auf Werkseinstellungen zurücksetzten?',
-                                            style: TextStyle(
-                                              fontSize: 18,
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: 450,
+                                    ),
+                                    padding: EdgeInsets.only(
+                                        top: 30,
+                                        left: 30,
+                                        right: 30,
+                                        bottom: 10),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              'Reset',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25),
                                             ),
                                           ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                icon: Icon(
-                                                  Icons.clear_rounded,
-                                                  size: 30,
-                                                )),
-                                            IconButton(
-                                                onPressed: () async {
-                                                  var storage = GetStorage();
+                                          Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: Text(
+                                              'Willst du wirklich die gesamte App auf Werkseinstellungen zurücksetzen?',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              IconButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.clear_rounded,
+                                                    size: 30,
+                                                  )),
+                                              IconButton(
+                                                  onPressed: () async {
+                                                    var storage = GetStorage();
 
-                                                  storage.write(
-                                                      'introScreen', true);
-                                                  storage.write(
-                                                      'prefferedTheme', 2);
-                                                  storage.write('configuration',
-                                                      'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;');
-                                                  storage.write(
-                                                      'unspecificOccurences', true);
-                                                  storage.write(
-                                                      'order', 3);
+                                                    storage.write(
+                                                        'introScreen', true);
+                                                    storage.write(
+                                                        'prefferedTheme', 2);
+                                                    storage.write(
+                                                        'configuration',
+                                                        'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;');
+                                                    storage.write(
+                                                        'unspecificOccurences',
+                                                        true);
+                                                    storage.write('order', 3);
 
+                                                    ///Datenbank löschen
+                                                    WidgetsFlutterBinding
+                                                        .ensureInitialized();
+                                                    final Future<Database>
+                                                        database = openDatabase(
+                                                      join(
+                                                          await getDatabasesPath(),
+                                                          'local_database.db'),
+                                                      onCreate: (db, version) {
+                                                        createDb(db);
+                                                      },
+                                                      version: 1,
+                                                    );
+                                                    Database db =
+                                                        await database;
+                                                    await db.execute(
+                                                        "DELETE FROM homeworkTasks");
+                                                    await db.execute(
+                                                        "DELETE FROM timetable");
+                                                    cancelAllNotifications();
 
-                                                  ///Datenbank löschen
-                                                  WidgetsFlutterBinding
-                                                      .ensureInitialized();
-                                                  final Future<Database>
-                                                      database = openDatabase(
-                                                    join(
-                                                        await getDatabasesPath(),
-                                                        'local_database.db'),
-                                                    onCreate: (db, version) {
-                                                      createDb(db);
-                                                    },
-                                                    version: 1,
-                                                  );
-                                                  Database db = await database;
-                                                  await db.execute(
-                                                      "DELETE FROM homeworkTasks");
-                                                  await db.execute(
-                                                      "DELETE FROM timetable");
-                                                  cancelAllNotifications();
+                                                    ///Dialogfenster schließen
+                                                    Navigator.of(context).pop();
 
-                                                  ///Dialogfenster schließen
-                                                  Navigator.of(context).pop();
-
-                                                  ///Dialog zur Information des Benutzers
-                                                  showDialog(
-                                                      context: context,
-                                                      barrierDismissible: false,
-                                                      builder: (context) {
-                                                        return StatefulBuilder(
-                                                            builder: (context,
-                                                                setError) {
-                                                          return Dialog(
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15.0),
-                                                              ),
-                                                              child: Container(
-                                                                constraints:
-                                                                    BoxConstraints(
-                                                                  maxWidth: 450,
+                                                    ///Dialog zur Information des Benutzers
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            false,
+                                                        builder: (context) {
+                                                          return StatefulBuilder(
+                                                              builder: (context,
+                                                                  setError) {
+                                                            return Dialog(
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15.0),
                                                                 ),
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        top: 30,
-                                                                        left:
-                                                                            30,
-                                                                        right:
-                                                                            30,
-                                                                        bottom:
-                                                                            10),
                                                                 child:
-                                                                    SingleChildScrollView(
-                                                                  child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: [
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(
-                                                                            bottom:
-                                                                                10),
-                                                                        alignment:
-                                                                            Alignment.centerLeft,
-                                                                        child:
-                                                                            Text(
-                                                                          'Reset erfolgreich',
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: 25),
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            vertical:
-                                                                                10),
-                                                                        child:
-                                                                            Text(
-                                                                          'Alles wurde zurückgesetzt. Bitte starte die App neu.',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                18,
+                                                                    Container(
+                                                                  constraints:
+                                                                      BoxConstraints(
+                                                                    maxWidth:
+                                                                        450,
+                                                                  ),
+                                                                  padding: EdgeInsets.only(
+                                                                      top: 30,
+                                                                      left: 30,
+                                                                      right: 30,
+                                                                      bottom:
+                                                                          10),
+                                                                  child:
+                                                                      SingleChildScrollView(
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      children: [
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.only(bottom: 10),
+                                                                          alignment:
+                                                                              Alignment.centerLeft,
+                                                                          child:
+                                                                              Text(
+                                                                            'Reset erfolgreich',
+                                                                            style:
+                                                                                TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                    ],
+                                                                        Container(
+                                                                          margin:
+                                                                              EdgeInsets.symmetric(vertical: 10),
+                                                                          child:
+                                                                              Text(
+                                                                            'Alles wurde zurückgesetzt. Bitte starte die App neu.',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 18,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              ));
+                                                                ));
+                                                          });
                                                         });
-                                                      });
-                                                },
-                                                icon: Icon(
-                                                  Icons.check_rounded,
-                                                  size: 30,
-                                                )),
-                                          ],
-                                        )
-                                      ],
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.check_rounded,
+                                                    size: 30,
+                                                  )),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ));
+                                  ));
+                            });
                           });
-                        });
-                  },
+                    },
+                  ),
                 ),
+
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   alignment: Alignment.centerLeft,
