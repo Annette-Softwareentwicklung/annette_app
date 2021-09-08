@@ -132,7 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Text(
-                      'Dir werden auf dem Vertretungsplan ${(unspecificOccurences!) ? '' : 'keine '}Ereignisse angezeigt, die nicht einer spezifischen Klasse zugeordnet sind. ${(unspecificOccurences!) ? 'Diese können trotzdem relevant für dich sein.' : 'Auch wenn diese dennoch für dich relevant sein könnten.'}',
+                      'Dir werden auf dem Vertretungsplan ${(unspecificOccurences!) ? '' : 'keine '}Ereignisse angezeigt, die ${(unspecificOccurences!) ? 'keiner' : 'nicht einer'} spezifischen Klasse zugeordnet sind. ${(unspecificOccurences!) ? 'Diese können trotzdem relevant für dich sein.' : 'Auch wenn diese dennoch für dich relevant sein könnten.'}',
                       style: textDescription),
                 ),
                 Container(
@@ -271,54 +271,22 @@ class _SettingsPageState extends State<SettingsPage> {
                       style: textDescription,
                     ),
                   ),
-
-                ///TODO: Erledigte Aufgaben im Hintergrund behalten mit der Option zum Anzeigen im homeworkTab noch nicht implementiert.
-                /*GestureDetector(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 30),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                    decoration: boxDecoration,
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    child: Text(
-                      'Erledigte Hausaufgaben löschen',
-                      style: TextStyle(
-                        fontSize: 17,
-                        color:
-                            (hasDeletedDoneTasks) ? Colors.grey : Colors.blue,
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    setState(() {
-                      hasDeletedDoneTasks = true;
-                    });
-                    databaseDeleteDoneTasks();
-                  },
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Deine erledigten Hausaufgaben werden im Hintergrund noch gespeichert. Unter "Sortierung > Erledigte einblenden" kannst du sie einsehen.',
-                    style: textDescription,
-                  ),
-                ),*/
-                Container(
-                  margin: EdgeInsets.only(top: 30),
-                  //padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  decoration: boxDecoration,
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  child: CupertinoButton(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                    child: Text(
+                CupertinoButton(
+                    padding: EdgeInsets.all(0),
+                    child: Container(
+                      margin: EdgeInsets.only(top: 30),
+                      //padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                      decoration: boxDecoration,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: 45,
+                      child: Text(
                       'App zurücksetzen',
                       style: TextStyle(
                         fontSize: 17,
                         color: Colors.red,
                       ),
-                    ),
+                    ),),
                     onPressed: () {
                       showDialog(
                           context: context,
@@ -498,7 +466,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           });
                     },
                   ),
-                ),
+
 
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
