@@ -22,9 +22,7 @@ Duration parseDuration(String s) {
 /// um "Heute", "Morgen" etc. bestimmen zu können.
 /// Der neue String lautet "Wochentag, Tag. Monatsname, Stunden:Minuten Uhr".
 
-
 String parseTimeToUserOutput(String s, [DateTime? pComparisonTime]) {
-
   DateTime temp = new DateTime.now();
   temp = DateTime.parse(s);
   String hour = temp.hour.toString();
@@ -138,6 +136,7 @@ String getTimeFromDuration(Duration pDuration) {
 }
 
 DateTime? getLastModifiedTime(String s) {
+  print(s);
   try {
     List<String> tempList = s.split(' ');
     int month = 0;
@@ -169,6 +168,9 @@ DateTime? getLastModifiedTime(String s) {
       case 'Sept':
         month = 9;
         break;
+      case 'Sep':
+        month = 9;
+        break;
       case 'Oct':
         month = 10;
         break;
@@ -181,7 +183,11 @@ DateTime? getLastModifiedTime(String s) {
     }
     List<String> time = tempList[4].split(':');
     DateTime temp = new DateTime(
-        int.tryParse(tempList[3])!, month, int.tryParse(tempList[1])!,int.tryParse(time[0])!,int.tryParse(time[1])!);
+        int.tryParse(tempList[3])!,
+        month,
+        int.tryParse(tempList[1])!,
+        int.tryParse(time[0])!,
+        int.tryParse(time[1])!);
     return temp;
   } catch (e) {
     print(e);
