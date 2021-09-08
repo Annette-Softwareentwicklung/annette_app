@@ -8,17 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:annette_app/custom_widgets/defaultScaffold.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-import '../database/databaseCreate.dart';
 import 'aboutPage.dart';
 import 'examPlan.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:annette_app/data/assets.dart';
-
-import '../miscellaneous-files/manageNotifications.dart';
 
 // TODO: IOS Spezifität weg
+// => Funktioniert bei im Simulator auf Android aber nicht.
 
 /// Diese Klasse beinhaltet den Einstellungsbereich.
 /// App => Menüleiste => Einstellungen
@@ -42,28 +37,6 @@ class SettingsTab extends StatelessWidget {
         .push(MaterialPageRoute(builder: (context) {
           return AboutPage();
     }));
-
-    /*
-    DateTime? version = await getTimetableVersion();
-    showAboutDialog(
-      context: context,
-      applicationName: 'Annette App',
-      applicationVersion: 'Version 3.2.0+7',
-      applicationIcon: Container(
-          height: 70,
-          alignment: Alignment.center,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image(
-                  height: 36,
-                  width: 36,
-                  image: AssetImage(assetPaths.iconImagePath),
-                  fit: BoxFit.fill))),
-      applicationLegalese:
-          'Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.\n\nDer aktuell verwendete Stundenplan ist von Stand:\n${(version != null) ? version.toString() : "Fehler"}\n\nAlle Angaben ohne Gewähr!\n\nwww.annettegymnasium.de\n\nKontakt / Feedback: appentwicklung.jan@gmx.de\n\n©2021 Jan Wermeckes',
-
-    );
-     */
   }
 
   /// Ausgabe eines Widgets (Container) mit einer Liste mit folgenden Auswahlmöglichkeiten:
