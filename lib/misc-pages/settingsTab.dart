@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:ui';
+import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/design.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:annette_app/misc-pages/settingsPage.dart';
@@ -12,9 +12,6 @@ import 'aboutPage.dart';
 import 'examPlan.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// TODO: IOS Spezifität weg
-// => Funktioniert bei im Simulator auf Android aber nicht.
-
 /// Diese Klasse beinhaltet den Einstellungsbereich.
 /// App => Menüleiste => Einstellungen
 class SettingsTab extends StatelessWidget {
@@ -22,21 +19,9 @@ class SettingsTab extends StatelessWidget {
     try {
       return DateTime.parse(GetStorage().read('timetableVersion'));
     } catch (e) {
-
       print(e);
       return null;
     }
-  }
-
-  /// AboutDialog.
-  /// Dialog, der Informationen über diese App, wie zB Versionsnummer, bereit hält.
-  /// Zusätzlich besitzt er ein von Flutter automatisch generiertes Verzeichnis der lizenzen der Packages.
-  void aboutDialog(context) async {
-
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) {
-          return AboutPage();
-    }));
   }
 
   /// Ausgabe eines Widgets (Container) mit einer Liste mit folgenden Auswahlmöglichkeiten:
@@ -70,25 +55,45 @@ class SettingsTab extends StatelessWidget {
                           content: ClassicVertretungsplan());
                     }),
                   )),
-          if (Platform.isIOS) Divider(),
-          if (Platform.isIOS)
-            ListTile(
-                title: Text('Annette Homepage'),
-                trailing: Icon(Icons.chevron_right,
-                    color: Theme.of(context).accentColor),
-                onTap: () async {
+          Divider(),
+          ListTile(
+              title: Text('Annette Homepage'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () async {
+                try {
                   await launch('https://www.annettegymnasium.de/');
-                }),
-          if (Platform.isIOS) Divider(),
-          if (Platform.isIOS)
-            ListTile(
-                title: Text('Kalender'),
-                trailing: Icon(Icons.chevron_right,
-                    color: Theme.of(context).accentColor),
-                onTap: () async {
+                } catch (e) {
+                  print(e);
+                  await showCustomInformationDialog(
+                      context,
+                      'Fehler',
+                      'Diese Funktion scheint mit deinem Gerät nicht zu funktionieren.',
+                      true,
+                      false,
+                      true);
+                }
+              }),
+          Divider(),
+          ListTile(
+              title: Text('Kalender'),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).accentColor),
+              onTap: () async {
+                try {
                   await launch(
                       'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now');
-                }),
+                } catch (e) {
+                  print(e);
+                  await showCustomInformationDialog(
+                      context,
+                      'Fehler',
+                      'Diese Funktion scheint mit deinem Gerät nicht zu funktionieren.',
+                      true,
+                      false,
+                      true);
+                }
+              }),
           Divider(),
           ListTile(),
           Divider(),
@@ -97,20 +102,20 @@ class SettingsTab extends StatelessWidget {
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return DefaultScaffold(
-                    isBottom: false,
-                      title: 'Einstellungen',
-                      content: SettingsPage());
-                }),);
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return DefaultScaffold(
+                        isBottom: false,
+                        title: 'Einstellungen',
+                        content: SettingsPage());
+                  }),
+                );
               }),
-
           Divider(),
           ListTile(
               title: Text('Klasse ändern'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).accentColor),
-
               onTap: () {
                 if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
                   SystemChrome.setPreferredOrientations([
@@ -138,7 +143,11 @@ class SettingsTab extends StatelessWidget {
             title: Text('Über diese App'),
             trailing:
                 Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
-            onTap: () => aboutDialog(context),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return AboutPage();
+              }));
+            },
           ),
           Divider(),
         ],
