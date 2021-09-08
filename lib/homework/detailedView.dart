@@ -735,7 +735,7 @@ class DetailedViewState extends State<DetailedView> {
                 return DropdownButton(
                   iconSize: 35,
                   isExpanded: true,
-                  underline: Container(),
+                  //underline: Container(),
                   onChanged: (String? value) {
                     setState(() {
                       selectedSubject = value!;
