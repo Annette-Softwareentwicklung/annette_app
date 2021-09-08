@@ -55,7 +55,7 @@ class VertretungsplanCrawler {
       if (result[0] == null) {
         ///Klassen-unspezifische Ereignisse
         bool? temp = GetStorage().read('unspecificOccurences');
-        if(temp == null) {
+        if (temp == null) {
           temp = true;
         }
         relevant = temp;
@@ -74,10 +74,28 @@ class VertretungsplanCrawler {
                 relevant = true;
               }
             } else {
+              int tempPosition = configurationString.indexOf(result[5]!);
+              if (tempPosition != -1) {
+                String tempString =
+                    configurationString.substring(tempPosition - 1);
+                if (tempString.indexOf(':') != 0) {
+                  tempPosition = tempString.indexOf(result[5]!, 2);
+                  if (tempPosition != -1) {
+                    tempString = tempString.substring(tempPosition - 1);
+                  }
+                }
+
+                if (tempString.indexOf(':') == 0) {
+                  relevant = true;
+                }
+              }
+
               ///Möglicher Fehler hier? Bsp: Fach E GK1 gewählt, werden auch GE GK1 angezeigt?
-              if (configurationString.contains(result[5]!)) {
+              /// (Behebung siehe Code oben)
+              /*if (configurationString.contains(result[5]!)) {
                 relevant = true;
               }
+               */
             }
           } else {
             ///Unterstufe Religion, Fremdsprache, Diff hier filtern.
