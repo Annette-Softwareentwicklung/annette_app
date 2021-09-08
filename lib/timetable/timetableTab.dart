@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
@@ -617,7 +618,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     return subjectFullname;
   }
 
-  void changeLK(BuildContext context) {
+  void changeLK(BuildContext context) async {
     String lk1 = '---';
     String lk2 = '---';
     int selectedLK = 0;
@@ -647,56 +648,14 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
       print(e);
     }
 
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 450,
-                    ),
-                    padding: EdgeInsets.only(
-                        top: 30, left: 30, right: 30, bottom: 10),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Wechselnder LK',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 25),
-                            ),
-                          ),
-
-                          Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Diese Woche:     ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
-                              style: TextStyle(fontSize: 17),
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              icon: Icon(
-                                Icons.check_rounded,
-                                size: 30,
-                              )),
-                        ],
-                      ),
-                    )));
-          });
-        });
+    await showCustomInformationDialog(
+      context,
+      'Wechselnder LK',
+      'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
+      true,
+      false,
+      true,
+    );
   }
 
   @override
