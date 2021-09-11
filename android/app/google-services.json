@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "633595171682",
+    "project_id": "annette-app-5efdc",
+    "storage_bucket": "annette-app-5efdc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633595171682:android:5b212de744fc6a7b4f523b",
+        "android_client_info": {
+          "package_name": "eu.devstudios.annetteapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633595171682-uh56oqb9eveptllfc575giq4akje6i0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.devstudios.annetteapp",
+            "certificate_hash": "43829563db9cb559771b0ee03658d35b81f7142f"
+          }
+        },
+        {
+          "client_id": "633595171682-6ek7866nib6kfsu83ecs6olrdt2q2h7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4zR8eokd2-1in73vtvgolw_HtGLnTXRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633595171682-6ek7866nib6kfsu83ecs6olrdt2q2h7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

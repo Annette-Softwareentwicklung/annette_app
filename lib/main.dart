@@ -1,4 +1,6 @@
+import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,7 +11,6 @@ import 'misc-pages/introductionScreen.dart';
 import 'miscellaneous-files/navigationController.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'miscellaneous-files/translation.dart';
@@ -17,6 +18,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -25,9 +27,11 @@ final navigationControllerAccess = GlobalKey<NavigationControllerState>();
 late bool guide;
 
 void main() async {
-  ///Initialisierung des Plugins für die Systembenachrichtigungen
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
+  ///Initialisierung des Plugins für die Systembenachrichtigungen
   var initializationSettingsAndroid = AndroidInitializationSettings('icon');
   var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: true,
@@ -51,18 +55,7 @@ void main() async {
     helper(notificationAppLaunchDetails!.payload);
   }
 
-  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-
   tz.initializeTimeZones();
-
-  ///
-  /// Da die Annette-App sich mit dem Annette-Gymnasium beschäftigt, muss
-  /// eigentlich nur die Zeitzone Europe/Berlin betrachtet werden oder?
-  ///
-  /// Der Grund wieso ich das geändert habe ist weil der vorherige Code einen
-  /// Fehler geworfen hat
-  ///
-
   tz.setLocalLocation(tz.getLocation("Europe/Berlin"));
 
   await GetStorage.init();
@@ -94,8 +87,8 @@ void main() async {
     final storage = GetStorage();
     if (await _readData('configuration.txt') != null &&
         storage.read('configuration') == null) {
-        storage.write('configuration', await _readData('configuration.txt'));
-        storage.write('timetableVersion', DateTime(0,0).toString());
+      storage.write('configuration', await _readData('configuration.txt'));
+      storage.write('timetableVersion', DateTime(0, 0).toString());
     }
     if (await _readData('data.txt') != null &&
         storage.read('introScreen') == null) {
@@ -186,20 +179,31 @@ class MyApp extends StatelessWidget {
                 darkTheme: Design.darkTheme,
                 home: Builder(
                   builder: (context) => Center(
-                    child: (guide)
-                        ? IntroductionScreen(
-                            onFinished: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pushReplacement(
-                                  new MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          NavigationController(
-                                              key:
-                                                  navigationControllerAccess)));
-                            },
-                          )
-                        : NavigationController(key: navigationControllerAccess),
-                  ),
+                      child: AuthenticationUI(), /*StreamBuilder<User?>(
+                          stream: FirebaseAuth.instance.userChanges(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<User?> snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data != null) {
+                                return NavigationController(
+                                    key: navigationControllerAccess);
+                              } else {
+                                return AuthenticationUI();
+                                /*return IntroductionScreen(
+                                  onFinished: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pushReplacement(
+                                        new MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                NavigationController(
+                                                    key:
+                                                        navigationControllerAccess)));
+                                  },
+                                );*/
+                              }
+                            }
+                            return CupertinoActivityIndicator();
+                          })*/),
                 ),
               ),
             )));

@@ -1,6 +1,9 @@
+import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
+import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -276,6 +279,53 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: EdgeInsets.all(0),
                     child: Container(
                       margin: EdgeInsets.only(top: 30),
+                      decoration: boxDecoration,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: 45,
+                      child: Text(
+                        'Klasse ändern',
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (MediaQueryData.fromWindow(window).size.shortestSide <
+                          500) {
+                        SystemChrome.setPreferredOrientations([
+                          DeviceOrientation.portraitUp,
+                        ]);
+                      }
+
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return SetClass(
+                          isInGuide: false,
+                          onButtonPressed: () {
+                            SystemChrome.setPreferredOrientations([
+                              DeviceOrientation.landscapeRight,
+                              DeviceOrientation.landscapeLeft,
+                              DeviceOrientation.portraitUp,
+                            ]);
+                            setState(() {});
+                          },
+                        );
+                      }));
+                    }),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Deine aktuellen Kurse bleiben voreingestellt.',
+                    style: textDescription,
+                  ),
+                ),
+                CupertinoButton(
+                    padding: EdgeInsets.all(0),
+                    child: Container(
+                      margin: EdgeInsets.only(top: 30),
                       //padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                       decoration: boxDecoration,
                       alignment: Alignment.center,
@@ -333,7 +383,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Die gesamte App und alle Einstellungen werden zurückgesetzt',
+                    'Die gesamte App und alle Einstellungen werden zurückgesetzt.',
                     style: textDescription,
                   ),
                 ),

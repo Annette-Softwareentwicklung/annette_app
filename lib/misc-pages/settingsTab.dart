@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/design.dart';
+import 'package:annette_app/misc-pages/reportIssue.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:annette_app/misc-pages/settingsPage.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
@@ -113,36 +114,24 @@ class SettingsTab extends StatelessWidget {
               }),
           Divider(),
           ListTile(
-              title: Text('Klasse ändern'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () {
-                if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
-                  SystemChrome.setPreferredOrientations([
-                    DeviceOrientation.portraitUp,
-                  ]);
-                }
-
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) {
-                    return SetClass(
-                      isInGuide: false,
-                      onButtonPressed: () {
-                        SystemChrome.setPreferredOrientations([
-                          DeviceOrientation.landscapeRight,
-                          DeviceOrientation.landscapeLeft,
-                          DeviceOrientation.portraitUp,
-                        ]);
-                      },
-                    );
-                  }),
+            title: Text('Feedback / Fehler melden'),
+            trailing:
+            Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return DefaultScaffold(
+                  isBottom: false,
+                  content: ReportIssue(),
+                  title: 'Fehler melden',
                 );
-              }),
+              }));
+            },
+          ),
           Divider(),
           ListTile(
             title: Text('Über diese App'),
             trailing:
-                Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
+            Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return AboutPage();
