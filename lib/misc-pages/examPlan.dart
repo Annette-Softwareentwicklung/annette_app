@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:annette_app/custom_widgets/errorInternetContainer.dart';
+import 'package:annette_app/custom_widgets/errorContainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';

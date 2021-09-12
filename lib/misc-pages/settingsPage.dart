@@ -3,6 +3,7 @@ import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -370,13 +371,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         await db.execute("DELETE FROM homeworkTasks");
                         await db.execute("DELETE FROM timetable");
                         cancelAllNotifications();
-                        await showCustomInformationDialog(
-                            context,
-                            'Reset erfolgreich',
-                            'Alles wurde zurückgesetzt. Bitte starte die App neu.',
-                            false,
-                            false,
-                            false);
+                        await FirebaseAuth.instance.signOut();
                       }
                     }),
                 Container(

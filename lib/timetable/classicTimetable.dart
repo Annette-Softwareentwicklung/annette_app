@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../miscellaneous-files/timetableURL.dart';
-import '../custom_widgets/errorInternetContainer.dart';
+import '../custom_widgets/errorContainer.dart';
 
 class ClassicTimetable extends StatefulWidget {
   @override

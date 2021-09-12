@@ -121,7 +121,7 @@ class SettingsTab extends StatelessWidget {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return DefaultScaffold(
                   isBottom: false,
-                  content: ReportIssue(),
+                  content: SetClass(isInGuide: false,onButtonPressed: () {},),//ReportIssue(),
                   title: 'Fehler melden',
                 );
               }));

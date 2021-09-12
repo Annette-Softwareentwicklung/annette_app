@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../custom_widgets/errorInternetContainer.dart';
+import '../../custom_widgets/errorContainer.dart';
 
 class ShowWebview extends StatefulWidget {
   final String url;

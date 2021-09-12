@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/custom_widgets/signInUI.dart';
 import 'package:annette_app/firebase/authentication.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationUI extends StatefulWidget {
@@ -12,62 +14,178 @@ class AuthenticationUI extends StatefulWidget {
 }
 
 class _AuthenticationUIState extends State<AuthenticationUI> {
+  bool loading = false;
+  bool anonymousLogin = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                child: TextButton(
-                  onPressed: () {},
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 20.0,
+                  right: 0.0,
+                  top: 70.0,
                   child: Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.center,
-                      height: 60,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        color: (Theme.of(context).brightness == Brightness.dark)
-                            ? Theme.of(context).accentColor
-                            : Colors.blue,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: Text(
+                      'Geräteübergreifende Synchronisierung',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
                       ),
-                      child: Text(
-                        'Ohne Anmeldung fortfahren',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color:
-                              (Theme.of(context).brightness == Brightness.dark)
-                                  ? Colors.black
-                                  : Colors.white,
-                        ),
-                      )),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(bottom: 15),
+                    margin: EdgeInsets.only(left: 5),
+                  ),
                 ),
-              ),
-              Divider(indent: 30,endIndent: 30),
-              SignInWithGoogle(onPressed: () async {
-                await AuthenticationService().signInWithGoogle();
-              },),
-              if(Platform.isIOS)
-              SignInWithApple(onPressed: () async {
-                await showCustomInformationDialog(
-                    context,
-                    'Fehler',
-                    'Diese Funktion wird dir in Kürze zur Verfügung stehen.',
-                    true,
-                    false,
-                    true);
-              },),
-            ],
+                Container(
+                  margin: EdgeInsets.only(
+                      top: 200, bottom: 100, left: 10, right: 10),
+                  width: double.infinity,
+                  height: double.infinity,
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            boxShadow: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.15),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                            borderRadius: BorderRadius.circular(10),
+                            color: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? Colors.black26
+                                : Colors.white),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Wenn du die Annette App auf mehreren Geräten nutzen möchtest, kannst du deine Einstellungen synchronisieren.\n\n' +
+                                  '${(!anonymousLogin) ? 'Damit niemand anderes Zugriff auf deine Daten bekommt, ist es wichtig, dass du dich einloggst.' : 'Du kannst diese Funktion jedoch auch später noch jederzeit konfigurieren.'}',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: Divider(),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Synchronisierung',
+                                  style: TextStyle(fontSize: 17,
+                                  ),
+                                ),
+                                CupertinoSwitch(
+                                    value: !anonymousLogin,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        print(value);
+                                        anonymousLogin = !value;
+                                      });
+                                    })
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                      if (anonymousLogin)
+                        Container(
+                          child: TextButton(
+                            onPressed: () async {
+                              setState(() {
+                                loading = true;
+                              });
+                              UserCredential? userCredential =
+                                  await FirebaseAuth.instance
+                                      .signInAnonymously();
+                            },
+                            child: Container(
+                                padding: EdgeInsets.all(10),
+                                alignment: Alignment.center,
+                                height: 60,
+                                width: 260,
+                                decoration: BoxDecoration(
+                                  color: (Theme.of(context).brightness ==
+                                          Brightness.dark)
+                                      ? Theme.of(context).accentColor
+                                      : Colors.blue,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                                child: Text(
+                                  'Weiter',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: (Theme.of(context).brightness ==
+                                            Brightness.dark)
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                )),
+                          ),
+                        ),
+                      if (Platform.isIOS && !anonymousLogin)
+                        SignInWithApple(
+                          onPressed: () async {
+                            await showCustomInformationDialog(
+                                context,
+                                'Fehler',
+                                'Diese Funktion wird dir in Kürze zur Verfügung stehen.',
+                                true,
+                                false,
+                                true);
+                          },
+                        ),
+                      if (!anonymousLogin)
+                        SignInWithGoogle(
+                          onPressed: () async {
+                            try {
+                              setState(() {
+                                loading = true;
+                              });
+                              UserCredential userCredential =
+                                  await AuthenticationService()
+                                      .signInWithGoogle();
+                            } catch (e) {
+                              setState(() {
+                                loading = false;
+                              });
+                            }
+                          },
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          if (loading)
+            Container(
+              color: (loading) ? Colors.black26 : null,
+              width: double.infinity,
+              height: double.infinity,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }

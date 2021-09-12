@@ -1,3 +1,4 @@
+import 'package:annette_app/custom_widgets/errorContainer.dart';
 import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +20,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'data/assets.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -26,7 +28,7 @@ final navigationControllerAccess = GlobalKey<NavigationControllerState>();
 
 late bool guide;
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -179,31 +181,39 @@ class MyApp extends StatelessWidget {
                 darkTheme: Design.darkTheme,
                 home: Builder(
                   builder: (context) => Center(
-                      child: AuthenticationUI(), /*StreamBuilder<User?>(
+                      child: StreamBuilder<User?>(
                           stream: FirebaseAuth.instance.userChanges(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<User?> snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data != null) {
-                                return NavigationController(
-                                    key: navigationControllerAccess);
-                              } else {
-                                return AuthenticationUI();
-                                /*return IntroductionScreen(
-                                  onFinished: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pushReplacement(
-                                        new MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                NavigationController(
-                                                    key:
-                                                        navigationControllerAccess)));
-                                  },
-                                );*/
-                              }
+                          builder: (context, snapshot) {
+
+    if (snapshot.hasError) {
+                              return Scaffold(
+                                  body: FatalErrorContainer());
                             }
-                            return CupertinoActivityIndicator();
-                          })*/),
+                            if (snapshot.data != null) {
+                              print('3');
+                              Future.delayed(Duration.zero, () =>Navigator.of(context).popUntil((route) => route.isFirst));
+                              return NavigationController(
+                                  key: navigationControllerAccess);
+                            } else {
+                              print('4');
+                              Future.delayed(Duration.zero, () =>Navigator.of(context).popUntil((route) => route.isFirst));
+                              return IntroductionScreen();
+                              //SetClass(
+                              //                                   isInGuide: true,
+                              //                                   onButtonPressed: () async {
+                              //                                     widget.onFinished();
+                              //                                     GetStorage().write('introScreen', false);
+                              //                                   })
+
+                              //Navigator.of(context).pop();
+                              //                                   Navigator.of(context).pushReplacement(
+                              //                                       new MaterialPageRoute(
+                              //                                           builder: (BuildContext context) =>
+                              //                                               NavigationController(
+                              //                                                   key:
+                              //                                                   navigationControllerAccess)));
+                            }
+                          })),
                 ),
               ),
             )));

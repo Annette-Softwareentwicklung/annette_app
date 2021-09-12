@@ -1,16 +1,13 @@
 import 'dart:ui';
 import 'package:annette_app/data/assets.dart';
-import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class IntroductionScreen extends StatefulWidget {
-  final VoidCallback onFinished;
-
-  IntroductionScreen({Key? key, required this.onFinished}) : super(key: key);
+  IntroductionScreen({Key? key}) : super(key: key);
 
   @override
   IntroductionScreenState createState() {
@@ -125,12 +122,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                             )),
                         onPressed: () {
                           Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (BuildContext context) => SetClass(
-                                  isInGuide: true,
-                                  onButtonPressed: () async {
-                                    widget.onFinished();
-                                    GetStorage().write('introScreen', false);
-                                  })));
+                              builder: (BuildContext context) => AuthenticationUI()));
                         },
                       ),
                       alignment: Alignment.center,
