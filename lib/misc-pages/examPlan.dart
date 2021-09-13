@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:annette_app/custom_widgets/errorContainer.dart';
+import 'package:annette_app/fundamentals/progressPercentage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:provider/provider.dart';
 
 class ExamPlan extends StatefulWidget {
   @override
@@ -13,18 +15,13 @@ class ExamPlan extends StatefulWidget {
 }
 
 class _ExamPlanState extends State<ExamPlan> {
-  late File file;
-  late String currentClass;
   int selectedClass = 0;
-  bool finished = false;
   bool error = false;
+  late firebase_storage.FirebaseStorage firebaseStorage;
 
-  Future<int> getCurrentClass() async {
-    error = false;
-
+  int getCurrentClass() {
     String s = (GetStorage().read('configuration')).toLowerCase();
     s = s.substring(s.indexOf('c:') + 2, s.indexOf(';', s.indexOf('c:')));
-    print(s);
     if (s == 'q1') {
       return 1;
     } else if (s == 'q2') {
@@ -34,60 +31,11 @@ class _ExamPlanState extends State<ExamPlan> {
     }
   }
 
-  void changePlan(int pClass) async {
-    setState(() {
-      finished = false;
-      error = false;
-    });
-
-    if (pClass == 1) {
-      currentClass = 'q1';
-    } else if (pClass == 2) {
-      currentClass = 'q2';
-    } else {
-      currentClass = 'ef';
-    }
-    selectedClass = pClass;
-    try {
-      file = await loadFromNetwork('klausur_$currentClass');
-      setState(() {
-        finished = true;
-      });
-    } catch (e) {
-      setState(() {
-        finished = false;
-        error = true;
-      });
-    }
-  }
-
-
-  void load() async {
-    if (await getCurrentClass() == 1) {
-      currentClass = 'q1';
-    } else if (await getCurrentClass() == 2) {
-      currentClass = 'q2';
-    } else {
-      currentClass = 'ef';
-    }
-    selectedClass = await getCurrentClass();
-    try {
-      file = await loadFromNetwork('klausur_$currentClass');
-      setState(() {
-        finished = true;
-      });
-    } catch (e) {
-      setState(() {
-        finished = false;
-        error = true;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    load();
+    firebaseStorage = firebase_storage.FirebaseStorage.instance;
+    selectedClass = getCurrentClass();
   }
 
   @override
@@ -107,52 +55,104 @@ class _ExamPlanState extends State<ExamPlan> {
                 2: Text('Q2'),
               },
               onValueChanged: (int? value) {
-                changePlan(value!);
+                setState(() {
+                  selectedClass = value!;
+                });
               },
               groupValue: selectedClass,
             ),
             margin: EdgeInsets.only(bottom: 15),
           ),
           Expanded(
-              child: (finished)
-                  ? Center(
-                      child: PDFView(
-                        filePath: file.path,
-                      ),
+              child: (!error)
+                  ? ChangeNotifierProvider<ProgressPercentage>(
+                      create: (BuildContext context) {
+                        ProgressPercentage percentage = ProgressPercentage(0);
+                        return percentage;
+                      },
+                      child: new ShowExamPlan(
+                          plan:
+                              'klausur_${(selectedClass == 1) ? 'q1' : (selectedClass == 2) ? 'q2' : 'ef'}'),
                     )
-                  : (error)
-                      ? ErrorInternetContainer(
-                                      onRefresh: () {
-                                          changePlan(selectedClass);},
-                                    )
-                      : Center(
-                          child: Column(
-                            children: [
-                              CupertinoActivityIndicator(),
-                              Text('Lade Klausurplan ...'),
-                            ],
-                            mainAxisSize: MainAxisSize.min,
-                          ),
-                        )),
+                  : ErrorInternetContainer(
+                      onRefresh: () {
+                        //changePlan(selectedClass);
+                      },
+                    )),
         ],
         crossAxisAlignment: CrossAxisAlignment.center,
       )),
       padding: EdgeInsets.all(15),
     );
   }
+}
 
-  Future<File> loadFromNetwork(String plan) async {
-    final response = await http
-        .get(Uri.http('janw.bplaced.net', 'annetteapp/data/$plan.pdf'));
-    final bytes = response.bodyBytes;
-    return _storeFile(plan, bytes);
+
+class ShowExamPlan extends StatefulWidget {
+  final String plan;
+  const ShowExamPlan({Key? key, required this.plan}) : super(key: key);
+
+  @override
+  _ShowExamPlanState createState() => _ShowExamPlanState();
+}
+
+class _ShowExamPlanState extends State<ShowExamPlan> {
+  Future<File> downloadFile(String plan) async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    File downloadToFile = File('${appDocDir.path}/$plan.pdf');
+    firebase_storage.DownloadTask _task = firebase_storage
+        .FirebaseStorage.instance
+        .ref('$plan.pdf')
+        .writeToFile(downloadToFile);
+
+    _task.snapshotEvents.listen((firebase_storage.TaskSnapshot snapshot) {
+      Provider.of<ProgressPercentage>(context, listen: false).setValue(
+         ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).round());
+    });
+    return downloadToFile;
   }
 
-  Future<File> _storeFile(plan, bytes) async {
-    final filename = '$plan.pdf';
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/$filename');
-    await file.writeAsBytes(bytes, flush: true);
-    return file;
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: downloadFile(widget.plan),
+      builder: (context, AsyncSnapshot<File?> snapshot) {
+        if (snapshot.hasData) {
+          return Center(
+            child: /*Container(
+              width: 100,
+              height: 100,
+              color: (snapshot.data!.path.contains('klausur_q1')) ? Colors.blue : (snapshot.data!.path.contains('klausur_q2')) ? Colors.green : Colors.red,
+            )*/ new PDFView(filePath: snapshot.data!.path),
+          );
+        }
+        return Container(
+          height: double.infinity,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                child: LinearProgressIndicator(
+                  value:
+                  (context.watch<ProgressPercentage>().value).toDouble() /
+                      100,
+                ),
+                width: 300,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                    'Lade Klausurplan: ${(context.watch<ProgressPercentage>().value)}%'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
+
+
