@@ -7,7 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationUI extends StatefulWidget {
-  const AuthenticationUI({Key? key}) : super(key: key);
+  final bool isInGuide;
+  const AuthenticationUI({Key? key, required this.isInGuide}) : super(key: key);
 
   @override
   _AuthenticationUIState createState() => _AuthenticationUIState();
@@ -15,7 +16,17 @@ class AuthenticationUI extends StatefulWidget {
 
 class _AuthenticationUIState extends State<AuthenticationUI> {
   bool loading = false;
-  bool anonymousLogin = true;
+  late bool anonymousLogin;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(!widget.isInGuide)
+      anonymousLogin = false;
+    else anonymousLogin = true;
+    print(anonymousLogin);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +90,12 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                                   '${(!anonymousLogin) ? 'Damit niemand anderes Zugriff auf deine Daten bekommt, ist es wichtig, dass du dich einloggst.' : 'Du kannst diese Funktion jedoch auch später noch jederzeit konfigurieren.'}',
                               style: TextStyle(fontSize: 17),
                             ),
+                            if(widget.isInGuide)
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 10),
                               child: Divider(),
                             ),
+                            if(widget.isInGuide)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -95,7 +108,6 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                                     value: !anonymousLogin,
                                     onChanged: (value) {
                                       setState(() {
-                                        print(value);
                                         anonymousLogin = !value;
                                       });
                                     })
@@ -113,8 +125,7 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                                 loading = true;
                               });
                               UserCredential? userCredential =
-                                  await FirebaseAuth.instance
-                                      .signInAnonymously();
+                                  await AuthenticationService().signInAnonymously();
                             },
                             child: Container(
                                 padding: EdgeInsets.all(10),
@@ -161,9 +172,8 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                               setState(() {
                                 loading = true;
                               });
-                              UserCredential userCredential =
                                   await AuthenticationService()
-                                      .signInWithGoogle();
+                                      .signInWithGoogle(!widget.isInGuide);
                             } catch (e) {
                               setState(() {
                                 loading = false;
@@ -171,6 +181,15 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                             }
                           },
                         ),
+                      if(!widget.isInGuide)
+                      TextButton(onPressed: () => Navigator.of(context).pop(),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Text('Zurück', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,
+                            fontSize: 17
+                            ),),
+                          )
+                      ),
                     ],
                   ),
                 ),

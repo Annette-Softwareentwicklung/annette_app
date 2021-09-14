@@ -122,7 +122,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                             )),
                         onPressed: () {
                           Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (BuildContext context) => AuthenticationUI()));
+                              builder: (BuildContext context) => AuthenticationUI(isInGuide: true,)));
                         },
                       ),
                       alignment: Alignment.center,

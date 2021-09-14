@@ -1,6 +1,8 @@
 import 'package:annette_app/custom_widgets/errorContainer.dart';
+import 'package:annette_app/firebase/authentication.dart';
 import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'miscellaneous-files/setClass.dart';
 import 'miscellaneous-files/translation.dart';
 import 'dart:async';
 import 'dart:io';
@@ -184,19 +187,51 @@ class MyApp extends StatelessWidget {
                       child: StreamBuilder<User?>(
                           stream: FirebaseAuth.instance.userChanges(),
                           builder: (context, snapshot) {
-
-    if (snapshot.hasError) {
-                              return Scaffold(
-                                  body: FatalErrorContainer());
+                            if (snapshot.hasError) {
+                              return Scaffold(body: FatalErrorContainer());
                             }
                             if (snapshot.data != null) {
-                              print('3');
-                              Future.delayed(Duration.zero, () =>Navigator.of(context).popUntil((route) => route.isFirst));
+                              Future.delayed(
+                                  Duration.zero,
+                                  () => Navigator.of(context)
+                                      .popUntil((route) => route.isFirst));
+
+                              CollectionReference users = FirebaseFirestore
+                                  .instance
+                                  .collection('users');
+
                               return NavigationController(
                                   key: navigationControllerAccess);
+                              /*return FutureBuilder<DocumentSnapshot>(
+                                future: users.doc(snapshot.data!.uid).get(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<DocumentSnapshot>
+                                        documentSnapshot) {
+                                  if (documentSnapshot.hasError) {
+                                    return FatalErrorContainer();
+                                  }
+                                  if (documentSnapshot.hasData &&
+                                      !documentSnapshot.data!.exists) {
+                                    return SetClass(
+                                        isInGuide: true,
+                                        onButtonPressed: () async {
+                                          GetStorage()
+                                              .write('introScreen', false);
+                                        });
+                                  }
+                                  if (documentSnapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return NavigationController(
+                                        key: navigationControllerAccess);
+                                  }
+                                  return Scaffold();
+                                  },
+                              );*/
                             } else {
-                              print('4');
-                              Future.delayed(Duration.zero, () =>Navigator.of(context).popUntil((route) => route.isFirst));
+                              Future.delayed(
+                                  Duration.zero,
+                                  () => Navigator.of(context)
+                                      .popUntil((route) => route.isFirst));
                               return IntroductionScreen();
                               //SetClass(
                               //                                   isInGuide: true,

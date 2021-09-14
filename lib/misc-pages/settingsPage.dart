@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
@@ -320,6 +322,44 @@ class _SettingsPageState extends State<SettingsPage> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Deine aktuellen Kurse bleiben voreingestellt.',
+                    style: textDescription,
+                  ),
+                ),
+                if(FirebaseAuth.instance.currentUser!.isAnonymous)
+                CupertinoButton(
+                    padding: EdgeInsets.all(0),
+                    child: Container(
+                      margin: EdgeInsets.only(top: 30),
+                      decoration: boxDecoration,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: 45,
+                      child: Text(
+                        'Geräteübergreifende Synchronisierung',
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (MediaQueryData.fromWindow(window).size.shortestSide <
+                          500) {
+                        SystemChrome.setPreferredOrientations([
+                          DeviceOrientation.portraitUp,
+                        ]);
+                      }
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return AuthenticationUI(isInGuide: false);
+                      }));
+                    }),
+                if(FirebaseAuth.instance.currentUser!.isAnonymous)
+                  Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Die Einstellungen auf diesem Gerät werden übernommen.',
                     style: textDescription,
                   ),
                 ),

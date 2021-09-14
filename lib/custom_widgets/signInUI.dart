@@ -3,7 +3,11 @@ import 'package:annette_app/data/assets.dart';
 
 class SignInWithGoogle extends StatelessWidget {
   final VoidCallback onPressed;
-  const SignInWithGoogle({Key? key, required this.onPressed}) : super(key: key);
+
+  const SignInWithGoogle({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,7 @@ class SignInWithGoogle extends StatelessWidget {
 
 class SignInWithApple extends StatelessWidget {
   final VoidCallback onPressed;
+
   const SignInWithApple({Key? key, required this.onPressed}) : super(key: key);
 
   @override
