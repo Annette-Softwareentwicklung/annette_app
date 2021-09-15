@@ -72,7 +72,7 @@ class _ExamPlanState extends State<ExamPlan> {
     } else {
       try {
         await firebase_storage.FirebaseStorage.instance
-            .ref('$plan.pdf')
+            .ref('examplan/$plan.pdf')
             .writeToFile(downloadToFile);
       } on firebase_core.FirebaseException catch (e) {
         if (e.code == 'object-not-found')
