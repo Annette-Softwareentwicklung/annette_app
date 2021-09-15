@@ -335,6 +335,54 @@ class _SettingsPageState extends State<SettingsPage> {
                       style: textDescription,
                     ),
                   ),
+                if (!FirebaseAuth.instance.currentUser!.isAnonymous)
+                  CupertinoButton(
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 30),
+                        padding: EdgeInsets.only(left: 20),
+                        decoration: boxDecoration,
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        height: 45,
+                        child:
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Email:',
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: (Theme.of(context).brightness ==
+                                          Brightness.dark)
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                                   Text(
+                                    FirebaseAuth.instance.currentUser!.providerData.first.email.toString(),
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        color: (Theme.of(context).brightness ==
+                                            Brightness.dark)
+                                            ? Colors.white
+                                            : Colors.black),
+
+                                ),
+                                Text(''),
+                              ],
+                            ),
+                      ),
+                      onPressed: () {}),
+                if (!FirebaseAuth.instance.currentUser!.isAnonymous)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Du bist mit einem ${(FirebaseAuth.instance.currentUser!.providerData.first.providerId.toString() == 'google.com') ? 'Google' : '-'
+                      }-Konto eingeloggt.',
+                      style: textDescription,
+                    ),
+                  ),
                 CupertinoButton(
                     padding: EdgeInsets.all(0),
                     child: Container(

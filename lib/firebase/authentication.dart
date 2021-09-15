@@ -40,7 +40,7 @@ class AuthenticationService {
           bool? checkOutWithThisAcc = await showCustomInformationDialog(
               context,
               'Account existiert bereits',
-              'Möchtest du dich mit dem Account "${googleUser.displayName}" einloggen und dessen Einstellungen sychronisieren? Deine lokalen Einstellungen gehen verloren.',
+              'Möchtest du dich mit dem Google-Konto "${googleUser.email}" einloggen und dessen Einstellungen sychronisieren? Deine lokalen Einstellungen gehen verloren.',
               true,
               true,
               false);
