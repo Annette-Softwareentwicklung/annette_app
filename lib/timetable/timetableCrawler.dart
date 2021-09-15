@@ -1,28 +1,52 @@
 import 'package:annette_app/data/subjects.dart';
+import 'package:annette_app/database/databaseCreate.dart';
+import 'package:annette_app/firebase/firestoreService.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:annette_app/database/databaseCreate.dart';
+import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
 
 class TimetableCrawler {
   late String currentClass;
+  late FirestoreService firestoreService;
+  late User currentUser;
 
   Future<void> setConfiguration(
       String configurationString, String difExport, DateTime newVersion) async {
+    currentUser = FirebaseAuth.instance.currentUser!;
+    firestoreService = new FirestoreService(currentUser: currentUser);
+    if (!(await firestoreService.checkIfUserDocumentExists())) {
+      firestoreService.addUserDocument();
+    }
+
     currentClass = configurationString.substring(
         configurationString.indexOf('c:') + 2,
         configurationString.indexOf(';'));
 
     await setTimetable(difExport, configurationString);
-    await setSubjects();
+
+    if (currentClass.toLowerCase().contains('q')) {
+      await firestoreService.updateDocument(
+          'changingLkSubject',
+          configurationString.substring(
+              configurationString.indexOf('lk1:') + 4,
+              configurationString.indexOf(
+                  ';', configurationString.indexOf('lk1:'))));
+    }
+
+    await firestoreService.updateDocument(
+        'timetableVersion', newVersion.toString());
+    await firestoreService.updateDocument('configuration', configurationString);
 
     GetStorage().write('timetableVersion', newVersion.toString());
   }
 
   Future<void> setTimetable(String code, String configurationString) async {
+    await firestoreService.deleteUserCollection('timetable');
     List<TimeTableUnit> timetableUnitsToInsert = [];
 
     ///Löscht alle Stundenplan-Einträge
@@ -223,12 +247,11 @@ class TimetableCrawler {
       ///Q1: Mo. 1 + 2
       ///Q2: Mi 1 + 2
       String? subjectLk1;
-      if(timetableUnitsToInsert
-          .indexWhere((element) =>
-      element.subject!.contains('LK')) != -1) {
+      if (timetableUnitsToInsert
+              .indexWhere((element) => element.subject!.contains('LK')) !=
+          -1) {
         subjectLk1 = timetableUnitsToInsert
-            .firstWhere((element) =>
-        element.subject!.contains('LK'))
+            .firstWhere((element) => element.subject!.contains('LK'))
             .subject;
       }
       if (subjectLk1 != null) {
@@ -239,7 +262,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 1, subject: subjectLk1, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 1,
+                subject: subjectLk1,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk1 &&
@@ -247,7 +273,10 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 2, subject: subjectLk1, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 2,
+                subject: subjectLk1,
+                room: '???'));
           }
         } else if (currentClass == 'Q2') {
           if (timetableUnitsToInsert.indexWhere((element) =>
@@ -256,7 +285,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 1, subject: subjectLk1, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 1,
+                subject: subjectLk1,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk1 &&
@@ -264,20 +296,23 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 2, subject: subjectLk1, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 2,
+                subject: subjectLk1,
+                room: '???'));
           }
         }
 
         String? subjectLk2;
-        if(timetableUnitsToInsert
-            .indexWhere((element) =>
-        element.subject!.contains('LK') &&
-            !element.subject!.contains(subjectLk1!)) != -1) {
-          subjectLk2 = timetableUnitsToInsert
-            .firstWhere((element) =>
+        if (timetableUnitsToInsert.indexWhere((element) =>
                 element.subject!.contains('LK') &&
-                !element.subject!.contains(subjectLk1!))
-            .subject;
+                !element.subject!.contains(subjectLk1!)) !=
+            -1) {
+          subjectLk2 = timetableUnitsToInsert
+              .firstWhere((element) =>
+                  element.subject!.contains('LK') &&
+                  !element.subject!.contains(subjectLk1!))
+              .subject;
         }
         if (currentClass == 'Q1' && subjectLk2 != null) {
           if (timetableUnitsToInsert.indexWhere((element) =>
@@ -286,7 +321,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 1, subject: subjectLk2, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 1,
+                subject: subjectLk2,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk2 &&
@@ -294,7 +332,10 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 2, subject: subjectLk2, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 2,
+                subject: subjectLk2,
+                room: '???'));
           }
         } else if (currentClass == 'Q2' && subjectLk2 != null) {
           if (timetableUnitsToInsert.indexWhere((element) =>
@@ -303,7 +344,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 1, subject: subjectLk2, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 1,
+                subject: subjectLk2,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk2 &&
@@ -311,61 +355,20 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 2, subject: subjectLk2, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 2,
+                subject: subjectLk2,
+                room: '???'));
           }
         }
       }
-
     }
 
     timetableUnitsToInsert.forEach((element) {
+      firestoreService.insertTimetableUnit(element);
       databaseInsertTimetableUnit(element);
       print(
           '${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');
     });
-  }
-
-  Future<void> setSubjects() async {
-    List<String> tempSubjects = [];
-
-    ///Zuordnung: Abkürzung => Fachname
-    Map<String, String> allSubjects = getSubjects();
-
-    List<TimeTableUnit> timetableUnits = await databaseGetAllTimeTableUnit();
-
-    for (int i = 0; i < timetableUnits.length; i++) {
-      String tempSubjectAbbreviation = timetableUnits[i].subject!;
-
-      if (tempSubjectAbbreviation.contains('LK')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('LK') - 1);
-      } else if (tempSubjectAbbreviation.contains('GK')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('GK') - 1);
-      } else if (tempSubjectAbbreviation.contains('Z1')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('Z1') - 1);
-      } else if (tempSubjectAbbreviation.contains('Z2')) {
-        tempSubjectAbbreviation = tempSubjectAbbreviation.substring(
-            0, tempSubjectAbbreviation.indexOf('Z2') - 1);
-      }
-
-      late String tempSubjectFullName;
-
-      if (allSubjects.containsKey(tempSubjectAbbreviation)) {
-        tempSubjectFullName = allSubjects[tempSubjectAbbreviation]!;
-      } else {
-        tempSubjectFullName = tempSubjectAbbreviation;
-      }
-
-      if (tempSubjectFullName == 'Kath. Religion' ||
-          tempSubjectFullName == 'Ev. Religion') {
-        tempSubjectFullName = 'Religion';
-      }
-
-      if (!tempSubjects.contains(tempSubjectFullName)) {
-        tempSubjects.add(tempSubjectFullName);
-      }
-    }
   }
 }

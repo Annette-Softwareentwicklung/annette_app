@@ -8,7 +8,7 @@ class AuthenticationService {
   Future<UserCredential> signInAnonymously() async {
     UserCredential _userCredential =
         await FirebaseAuth.instance.signInAnonymously();
-    addUserDocument(_userCredential);
+    //await FirebaseFirestore.instance.disableNetwork();
     return _userCredential;
   }
 
@@ -26,7 +26,6 @@ class AuthenticationService {
       try {
         _userCredential = await FirebaseAuth.instance.currentUser!
             .linkWithCredential(credential);
-        print('q');
         await showCustomInformationDialog(
             context,
             'Login erfolgreich',
@@ -54,8 +53,6 @@ class AuthenticationService {
     } else {
       _userCredential = await googleSignInOAuthCredential(credential, context);
     }
-
-    //addUserDocument(_userCredential);
     return _userCredential;
   }
 
@@ -63,20 +60,7 @@ class AuthenticationService {
       OAuthCredential _credential, BuildContext context) async {
     UserCredential _userCredential =
         await FirebaseAuth.instance.signInWithCredential(_credential);
+    //await FirebaseFirestore.instance.enableNetwork();
     return _userCredential;
-  }
-
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-  Future<void> addUserDocument(UserCredential userCredential) {
-    return users
-        .doc(userCredential.user!.uid)
-        .set({'full_name': "Mary Jane", 'age': 18})
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
-  Future<bool> checkIfUserDocumentExists(UserCredential _user) {
-    return users.doc(_user.user!.uid).get().then((value) => value.exists);
   }
 }

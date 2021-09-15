@@ -32,6 +32,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   ///Initialisierung des Plugins für die Systembenachrichtigungen
   var initializationSettingsAndroid = AndroidInitializationSettings('icon');
@@ -202,53 +203,37 @@ class MyApp extends StatelessWidget {
                                 navigationControllerAccess
                                     .currentState!.tabIndex = 0;
                               } catch (e) {}
-                              return NavigationController(
-                                  key: navigationControllerAccess);
-                              /*return FutureBuilder<DocumentSnapshot>(
+                              return FutureBuilder<DocumentSnapshot>(
                                 future: users.doc(snapshot.data!.uid).get(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<DocumentSnapshot>
                                         documentSnapshot) {
+
                                   if (documentSnapshot.hasError) {
-                                    return FatalErrorContainer();
+                                    return Scaffold(body: FatalErrorContainer());
                                   }
                                   if (documentSnapshot.hasData &&
                                       !documentSnapshot.data!.exists) {
                                     return SetClass(
                                         isInGuide: true,
-                                        onButtonPressed: () async {
-                                          GetStorage()
-                                              .write('introScreen', false);
+                                        onButtonPressed: () {
+                                          Navigator.pushReplacement(context, new MaterialPageRoute(builder:
+                                          (context) => NavigationController(
+                                              key: navigationControllerAccess),
+                                          ));
                                         });
                                   }
-                                  if (documentSnapshot.connectionState ==
-                                      ConnectionState.done) {
                                     return NavigationController(
                                         key: navigationControllerAccess);
                                   }
-                                  return Scaffold();
-                                  },
-                              );*/
+
+                              );
                             } else {
                               Future.delayed(
                                   Duration.zero,
                                   () => Navigator.of(context)
                                       .popUntil((route) => route.isFirst));
                               return IntroductionScreen();
-                              //SetClass(
-                              //                                   isInGuide: true,
-                              //                                   onButtonPressed: () async {
-                              //                                     widget.onFinished();
-                              //                                     GetStorage().write('introScreen', false);
-                              //                                   })
-
-                              //Navigator.of(context).pop();
-                              //                                   Navigator.of(context).pushReplacement(
-                              //                                       new MaterialPageRoute(
-                              //                                           builder: (BuildContext context) =>
-                              //                                               NavigationController(
-                              //                                                   key:
-                              //                                                   navigationControllerAccess)));
                             }
                           })),
                 ),

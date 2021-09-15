@@ -30,6 +30,7 @@ class _SetClassState extends State<SetClass> {
   bool errorInternet = false;
   OnlineFiles onlineFiles = new OnlineFiles();
   late DateTime newVersion;
+  bool loading = false;
 
   late bool q2Initialize;
 
@@ -112,6 +113,7 @@ class _SetClassState extends State<SetClass> {
     await activateTimetableCrawler(tempConfiguration);
     GetStorage().write('configuration', tempConfiguration);
     setState(() {
+      loading = false;
       showFinishedConfiguration = true;
     });
   }
@@ -177,6 +179,7 @@ class _SetClassState extends State<SetClass> {
     await activateTimetableCrawler(tempConfiguration);
     GetStorage().write('configuration', tempConfiguration);
     setState(() {
+      //loading = false;
       showFinishedConfiguration = true;
     });
   }
@@ -603,152 +606,164 @@ class _SetClassState extends State<SetClass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: (errorInternet)
-            ? ErrorInternetContainer(
-                onRefresh: () {
-                  errorInternet = false;
-                  load();
-                },
-              )
-            : Container(
-                height: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Stack(children: [
-                  Center(
-                    child: (showFinishedConfiguration)
-                        ? finishedConfigurationWidget()
-                        : (showGroupsOS)
-                            ? groupsOsWidget()
-                            : (showGroupsUS)
-                                ? groupsUsWidget()
-                                : classesWidget(),
-                  ),
-                  Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      top: 70.0,
-                      child: Column(children: [
-                        Container(
-                          child: Text(
-                            'App konfigurieren',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: (errorInternet)
+                ? ErrorInternetContainer(
+                    onRefresh: () {
+                      errorInternet = false;
+                      load();
+                    },
+                  )
+                : Container(
+                    height: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Stack(children: [
+                      Center(
+                        child: (showFinishedConfiguration)
+                            ? finishedConfigurationWidget()
+                            : (showGroupsOS)
+                                ? groupsOsWidget()
+                                : (showGroupsUS)
+                                    ? groupsUsWidget()
+                                    : classesWidget(),
+                      ),
+                      Positioned(
+                          left: 0.0,
+                          right: 0.0,
+                          top: 70.0,
+                          child: Column(children: [
+                            Container(
+                              child: Text(
+                                'App konfigurieren',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 28,
+                                ),
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(bottom: 15),
+                              margin: EdgeInsets.only(left: 5),
                             ),
-                          ),
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(bottom: 15),
-                          margin: EdgeInsets.only(left: 5),
-                        ),
-                        if(!showFinishedConfiguration)
-                        Row(
-                          children: [
-                            if (!finished)
-                              Expanded(
-                                  flex: 2,
-                                  child: LinearProgressIndicator(
-                                    minHeight: 2,
-                                    backgroundColor:
-                                        (Theme.of(context).brightness ==
+                            if(!showFinishedConfiguration)
+                            Row(
+                              children: [
+                                if (!finished)
+                                  Expanded(
+                                      flex: 2,
+                                      child: LinearProgressIndicator(
+                                        minHeight: 2,
+                                        backgroundColor:
+                                            (Theme.of(context).brightness ==
+                                                    Brightness.dark)
+                                                ? Colors.grey
+                                                : null,
+                                        color: (Theme.of(context).brightness ==
                                                 Brightness.dark)
-                                            ? Colors.grey
-                                            : null,
-                                    color: (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                        ? Theme.of(context).accentColor
-                                        : Colors.blue,
-                                  )),
-                            if (finished)
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  height: 2,
-                                  color: (Theme.of(context).brightness ==
-                                          Brightness.dark)
-                                      ? Theme.of(context).accentColor
-                                      : Colors.blue,
-                                ),
-                              ),
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: (!finished)
-                                          ? Colors.grey
-                                          : (Theme.of(context).brightness ==
-                                                  Brightness.dark)
-                                              ? Theme.of(context).accentColor
-                                              : Colors.blue,
-                                      width: 2),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '1',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                            ? Theme.of(context).accentColor
+                                            : Colors.blue,
+                                      )),
+                                if (finished)
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 2,
+                                      color: (Theme.of(context).brightness ==
+                                              Brightness.dark)
+                                          ? Theme.of(context).accentColor
+                                          : Colors.blue,
+                                    ),
+                                  ),
+                                SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: (!finished)
+                                              ? Colors.grey
+                                              : (Theme.of(context).brightness ==
+                                                      Brightness.dark)
+                                                  ? Theme.of(context).accentColor
+                                                  : Colors.blue,
+                                          width: 2),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '1',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                height: 2,
-                                color: (!showGroupsOS && !showGroupsUS)
-                                    ? Colors.grey
-                                    : (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                        ? Theme.of(context).accentColor
-                                        : Colors.blue,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: (!showGroupsOS && !showGroupsUS)
-                                          ? Colors.grey
-                                          : (Theme.of(context).brightness ==
-                                                  Brightness.dark)
-                                              ? Theme.of(context).accentColor
-                                              : Colors.blue,
-                                      width: 2),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '2',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    height: 2,
+                                    color: (!showGroupsOS && !showGroupsUS)
+                                        ? Colors.grey
+                                        : (Theme.of(context).brightness ==
+                                                Brightness.dark)
+                                            ? Theme.of(context).accentColor
+                                            : Colors.blue,
                                   ),
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                height: 2,
-                                color: (!showFinishedConfiguration)
-                                    ? Colors.grey
-                                    : (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                        ? Theme.of(context).accentColor
-                                        : Colors.blue,
-                              ),
-                            ),
-                          ],
-                        )
-                      ]))
-                ]),
-              ),
+                                SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: (!showGroupsOS && !showGroupsUS)
+                                              ? Colors.grey
+                                              : (Theme.of(context).brightness ==
+                                                      Brightness.dark)
+                                                  ? Theme.of(context).accentColor
+                                                  : Colors.blue,
+                                          width: 2),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '2',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 2,
+                                    color: (!showFinishedConfiguration)
+                                        ? Colors.grey
+                                        : (Theme.of(context).brightness ==
+                                                Brightness.dark)
+                                            ? Theme.of(context).accentColor
+                                            : Colors.blue,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ]))
+                    ]),
+                  ),
+          ),
+          if (loading)
+            Container(
+              color: (loading) ? Colors.black26 : null,
+              width: double.infinity,
+              height: double.infinity,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }
@@ -1131,6 +1146,10 @@ class _SetClassState extends State<SetClass> {
             margin: EdgeInsets.all(15),
             child: TextButton(
               onPressed: () {
+                /*setState(() {
+                  loading = true;
+                });
+                 */
                 setGroupsOS();
               },
               child: Container(
@@ -1387,6 +1406,10 @@ class _SetClassState extends State<SetClass> {
             margin: EdgeInsets.all(15),
             child: TextButton(
               onPressed: () {
+                /*setState(() {
+                  loading = true;
+                });
+                 */
                 setGroupsUS();
               },
               child: Container(

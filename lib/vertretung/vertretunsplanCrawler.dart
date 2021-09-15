@@ -1,8 +1,10 @@
-import 'package:get_storage/get_storage.dart';
+import 'package:annette_app/firebase/firestoreService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 
 class VertretungsplanCrawler {
   final String? htmlCode;
+  FirestoreService firestoreService = new FirestoreService(currentUser: FirebaseAuth.instance.currentUser!);
 
   VertretungsplanCrawler({this.htmlCode});
 
@@ -45,7 +47,8 @@ class VertretungsplanCrawler {
         tempColumn = tempColumn.substring(tempColumn.indexOf('/td>') + 4);
       }
 
-      String configurationString = GetStorage().read('configuration');
+      String configurationString =  await firestoreService.readValue('configuration') as String;
+
       String currentClass = configurationString.substring(
           configurationString.indexOf('c:') + 2,
           configurationString.indexOf(';', configurationString.indexOf('c:')));
@@ -54,10 +57,8 @@ class VertretungsplanCrawler {
 
       if (result[0] == null) {
         ///Klassen-unspezifische Ereignisse
-        bool? temp = GetStorage().read('unspecificOccurences');
-        if (temp == null) {
-          temp = true;
-        }
+        bool temp = await firestoreService.readValue('unspecificOccurences') as bool;
+
         relevant = temp;
       } else {
         if (result[0]!.contains(currentClass.substring(0, 1)) &&
