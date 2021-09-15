@@ -1,6 +1,4 @@
 import 'package:annette_app/custom_widgets/errorContainer.dart';
-import 'package:annette_app/firebase/authentication.dart';
-import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +21,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'data/assets.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -185,8 +182,9 @@ class MyApp extends StatelessWidget {
                 home: Builder(
                   builder: (context) => Center(
                       child: StreamBuilder<User?>(
-                          stream: FirebaseAuth.instance.userChanges(),
+                          stream: FirebaseAuth.instance.authStateChanges(),
                           builder: (context, snapshot) {
+                            print('fire');
                             if (snapshot.hasError) {
                               return Scaffold(body: FatalErrorContainer());
                             }
@@ -200,6 +198,10 @@ class MyApp extends StatelessWidget {
                                   .instance
                                   .collection('users');
 
+                              try {
+                                navigationControllerAccess
+                                    .currentState!.tabIndex = 0;
+                              } catch (e) {}
                               return NavigationController(
                                   key: navigationControllerAccess);
                               /*return FutureBuilder<DocumentSnapshot>(

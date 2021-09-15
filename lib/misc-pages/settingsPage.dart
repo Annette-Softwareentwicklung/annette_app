@@ -4,7 +4,6 @@ import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
@@ -278,6 +277,64 @@ class _SettingsPageState extends State<SettingsPage> {
                       style: textDescription,
                     ),
                   ),
+                if (FirebaseAuth.instance.currentUser!.isAnonymous)
+                  CupertinoButton(
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        margin: EdgeInsets.only(top: 30),
+                        decoration: boxDecoration,
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        height: 45,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Geräteübergreifende Synchronisierung',
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: (Theme.of(context).brightness ==
+                                          Brightness.dark)
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            Icon(
+                              Icons.chevron_right_outlined,
+                              color: (Theme.of(context).brightness ==
+                                      Brightness.dark)
+                                  ? Colors.white70
+                                  : Colors.black54,
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () {
+                        if (MediaQueryData.fromWindow(window)
+                                .size
+                                .shortestSide <
+                            500) {
+                          SystemChrome.setPreferredOrientations([
+                            DeviceOrientation.portraitUp,
+                          ]);
+                        }
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return AuthenticationUI(
+                            isInGuide: false,
+                            onUpdatedAccount: () => setState(() {}),
+                          );
+                        }));
+                      }),
+                if (FirebaseAuth.instance.currentUser!.isAnonymous)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Die Einstellungen auf diesem Gerät werden übernommen.',
+                      style: textDescription,
+                    ),
+                  ),
                 CupertinoButton(
                     padding: EdgeInsets.all(0),
                     child: Container(
@@ -325,44 +382,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: textDescription,
                   ),
                 ),
-                if(FirebaseAuth.instance.currentUser!.isAnonymous)
-                CupertinoButton(
-                    padding: EdgeInsets.all(0),
-                    child: Container(
-                      margin: EdgeInsets.only(top: 30),
-                      decoration: boxDecoration,
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 45,
-                      child: Text(
-                        'Geräteübergreifende Synchronisierung',
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (MediaQueryData.fromWindow(window).size.shortestSide <
-                          500) {
-                        SystemChrome.setPreferredOrientations([
-                          DeviceOrientation.portraitUp,
-                        ]);
-                      }
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return AuthenticationUI(isInGuide: false);
-                      }));
-                    }),
-                if(FirebaseAuth.instance.currentUser!.isAnonymous)
-                  Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Die Einstellungen auf diesem Gerät werden übernommen.',
-                    style: textDescription,
-                  ),
-                ),
                 CupertinoButton(
                     padding: EdgeInsets.all(0),
                     child: Container(
@@ -384,7 +403,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       if (await showCustomInformationDialog(
                               context,
                               'Reset',
-                              'Willst du wirklich die gesamte App auf Werkseinstellungen zurücksetzen?',
+                              'Willst du wirklich die gesamte App auf Werkseinstellungen zurücksetzen?\n${(FirebaseAuth.instance.currentUser!.isAnonymous) ? 'Da du nicht eingeloggt bist, gehen alle Einstellungen verloren.' : 'Da du eingeloggt bist, kannst du deine Einstellungen wiederherstellen.'}',
                               true,
                               true,
                               true) ==

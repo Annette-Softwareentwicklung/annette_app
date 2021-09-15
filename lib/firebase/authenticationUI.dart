@@ -2,13 +2,16 @@ import 'dart:io';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/custom_widgets/signInUI.dart';
 import 'package:annette_app/firebase/authentication.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationUI extends StatefulWidget {
   final bool isInGuide;
-  const AuthenticationUI({Key? key, required this.isInGuide}) : super(key: key);
+  final VoidCallback onUpdatedAccount;
+
+  const AuthenticationUI(
+      {Key? key, required this.isInGuide, required this.onUpdatedAccount})
+      : super(key: key);
 
   @override
   _AuthenticationUIState createState() => _AuthenticationUIState();
@@ -22,10 +25,10 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(!widget.isInGuide)
+    if (!widget.isInGuide)
       anonymousLogin = false;
-    else anonymousLogin = true;
-    print(anonymousLogin);
+    else
+      anonymousLogin = true;
   }
 
   @override
@@ -90,29 +93,31 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                                   '${(!anonymousLogin) ? 'Damit niemand anderes Zugriff auf deine Daten bekommt, ist es wichtig, dass du dich einloggst.' : 'Du kannst diese Funktion jedoch auch später noch jederzeit konfigurieren.'}',
                               style: TextStyle(fontSize: 17),
                             ),
-                            if(widget.isInGuide)
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              child: Divider(),
-                            ),
-                            if(widget.isInGuide)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Synchronisierung',
-                                  style: TextStyle(fontSize: 17,
+                            if (widget.isInGuide)
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: Divider(),
+                              ),
+                            if (widget.isInGuide)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Synchronisierung',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                    ),
                                   ),
-                                ),
-                                CupertinoSwitch(
-                                    value: !anonymousLogin,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        anonymousLogin = !value;
-                                      });
-                                    })
-                              ],
-                            ),
+                                  CupertinoSwitch(
+                                      value: !anonymousLogin,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          anonymousLogin = !value;
+                                        });
+                                      })
+                                ],
+                              ),
                           ],
                         ),
                       ),
@@ -124,8 +129,7 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                               setState(() {
                                 loading = true;
                               });
-                              UserCredential? userCredential =
-                                  await AuthenticationService().signInAnonymously();
+                              await AuthenticationService().signInAnonymously();
                             },
                             child: Container(
                                 padding: EdgeInsets.all(10),
@@ -172,8 +176,12 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                               setState(() {
                                 loading = true;
                               });
-                                  await AuthenticationService()
-                                      .signInWithGoogle(!widget.isInGuide);
+                              await AuthenticationService()
+                                  .signInWithGoogle(!widget.isInGuide, context);
+                              if (!widget.isInGuide) {
+                                Navigator.of(context).pop();
+                                widget.onUpdatedAccount();
+                              }
                             } catch (e) {
                               setState(() {
                                 loading = false;
@@ -181,15 +189,19 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                             }
                           },
                         ),
-                      if(!widget.isInGuide)
-                      TextButton(onPressed: () => Navigator.of(context).pop(),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Text('Zurück', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline,
-                            fontSize: 17
-                            ),),
-                          )
-                      ),
+                      if (!widget.isInGuide)
+                        TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                'Zurück',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 17),
+                              ),
+                            )),
                     ],
                   ),
                 ),
