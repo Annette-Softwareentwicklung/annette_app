@@ -187,7 +187,10 @@ class MyApp extends StatelessWidget {
                           builder: (context, snapshot) {
                             print('fire');
                             if (snapshot.hasError) {
-                              return Scaffold(body: FatalErrorContainer());
+                              return Scaffold(
+                                  body: FatalErrorContainer(
+                                errorCode: 1,
+                              ));
                             }
                             if (snapshot.data != null) {
                               Future.delayed(
@@ -204,30 +207,34 @@ class MyApp extends StatelessWidget {
                                     .currentState!.tabIndex = 0;
                               } catch (e) {}
                               return FutureBuilder<DocumentSnapshot>(
-                                future: users.doc(snapshot.data!.uid).get(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<DocumentSnapshot>
-                                        documentSnapshot) {
-
-                                  if (documentSnapshot.hasError) {
-                                    return Scaffold(body: FatalErrorContainer());
-                                  }
-                                  if (documentSnapshot.hasData &&
-                                      !documentSnapshot.data!.exists) {
-                                    return SetClass(
-                                        isInGuide: true,
-                                        onButtonPressed: () {
-                                          Navigator.pushReplacement(context, new MaterialPageRoute(builder:
-                                          (context) => NavigationController(
-                                              key: navigationControllerAccess),
-                                          ));
-                                        });
-                                  }
+                                  future: users.doc(snapshot.data!.uid).get(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<DocumentSnapshot>
+                                          documentSnapshot) {
+                                    if (documentSnapshot.hasError) {
+                                      return Scaffold(
+                                          body: FatalErrorContainer(
+                                        errorCode: 2,
+                                      ));
+                                    }
+                                    if (documentSnapshot.hasData &&
+                                        !documentSnapshot.data!.exists) {
+                                      return SetClass(
+                                          isInGuide: true,
+                                          onButtonPressed: () {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                new MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NavigationController(
+                                                          key:
+                                                              navigationControllerAccess),
+                                                ));
+                                          });
+                                    }
                                     return NavigationController(
                                         key: navigationControllerAccess);
-                                  }
-
-                              );
+                                  });
                             } else {
                               Future.delayed(
                                   Duration.zero,

@@ -54,9 +54,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
             return a.lesson!.compareTo(b.lesson!);
           });
         }
-        /*
-        vpc1.getAffectedClasses();
-        */
         load = true;
         setState(() {});
       } else {
@@ -124,7 +121,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
   void initState() {
     super.initState();
     helperOrientation();
-      makeRequest();
+    makeRequest();
   }
 
   @override

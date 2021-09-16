@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
 import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
@@ -331,7 +331,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Die Einstellungen auf diesem Gerät werden übernommen.',
+                      'Aktiviere die Synchronisierung, wenn du mehrere Geräte benutzt.',
                       style: textDescription,
                     ),
                   ),

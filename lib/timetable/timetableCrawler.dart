@@ -1,11 +1,6 @@
-import 'package:annette_app/database/databaseCreate.dart';
 import 'package:annette_app/firebase/firestoreService.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
 
 class TimetableCrawler {
   late String currentClass;
@@ -27,7 +22,7 @@ class TimetableCrawler {
     await setTimetable(difExport, configurationString);
 
     if (currentClass.toLowerCase().contains('q') && !isAutoUpdate) {
-      await firestoreService.updateDocument(
+      firestoreService.updateDocument(
           'changingLkSubject',
           configurationString.substring(
               configurationString.indexOf('lk1:') + 4,
@@ -35,27 +30,14 @@ class TimetableCrawler {
                   ';', configurationString.indexOf('lk1:'))));
     }
 
-    await firestoreService.updateDocument(
+    firestoreService.updateDocument(
         'timetableVersion', newVersion.toString());
-    await firestoreService.updateDocument('configuration', configurationString);
+    firestoreService.updateDocument('configuration', configurationString);
   }
 
   Future<void> setTimetable(String code, String configurationString) async {
-    await firestoreService.deleteUserCollection('timetable');
+    firestoreService.deleteUserCollection('timetable');
     List<TimeTableUnit> timetableUnitsToInsert = [];
-
-    ///Löscht alle Stundenplan-Einträge
-    WidgetsFlutterBinding.ensureInitialized();
-    final Future<Database> database = openDatabase(
-      join(await getDatabasesPath(), 'local_database.db'),
-      onCreate: (db, version) {
-        createDb(db);
-      },
-      version: 1,
-    );
-    Database db = await database;
-    await db.execute("DELETE FROM timetable");
-
     String timetableCode = code;
 
     while (timetableCode.indexOf(currentClass) != -1) {
@@ -361,7 +343,6 @@ class TimetableCrawler {
 
     timetableUnitsToInsert.forEach((element) {
       firestoreService.insertTimetableUnit(element);
-      databaseInsertTimetableUnit(element);
       print(
           '${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');
     });

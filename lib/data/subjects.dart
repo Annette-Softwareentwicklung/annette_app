@@ -1,4 +1,4 @@
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 
 Map<String, String> getSubjects() {

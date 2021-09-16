@@ -47,7 +47,8 @@ class ErrorInternetContainer extends StatelessWidget {
 }
 
 class FatalErrorContainer extends StatelessWidget {
-  const FatalErrorContainer({Key? key}) : super(key: key);
+  final int errorCode;
+  const FatalErrorContainer({Key? key, required this.errorCode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class FatalErrorContainer extends StatelessWidget {
             ),
             Padding(
                 padding: EdgeInsets.only(top: 50, bottom: 100),
-                child: Text('Ein unerwarteter Fehler ist aufgetreten. Versuche die App neu zu starten, ansonsten kontaktiere bitte den Support: appentwicklung.jan@gmx.de',
+                child: Text('Ein unerwarteter Fehler ist aufgetreten. Versuche die App neu zu starten, ansonsten kontaktiere bitte den Support: appentwicklung.jan@gmx.de\nFehlercode: #${errorCode.toString()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 15

@@ -1,7 +1,8 @@
+import 'package:annette_app/firebase/firestoreService.dart';
 import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../miscellaneous-files/timetableURL.dart';
 import '../custom_widgets/errorContainer.dart';
@@ -30,7 +31,7 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
     } else {
       String currentClass;
         try {
-          String contents = GetStorage().read('configuration');
+          String contents =  (await FirestoreService(currentUser: FirebaseAuth.instance.currentUser!).readValue('configuration')).toString();
           currentClass = contents.substring(
               contents.indexOf('c:') + 2, contents.indexOf(';'));
         } catch (e) {

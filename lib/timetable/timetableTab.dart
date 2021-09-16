@@ -1,23 +1,24 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
+import 'package:annette_app/firebase/firestoreService.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
 import 'package:annette_app/data/lessonStartTimes.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/miscellaneous-files/showWebview.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../data/subjects.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:week_of_year/week_of_year.dart';
 
 BoxDecoration decorationTimetable(BuildContext context) {
   return BoxDecoration(
-      /*boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
+    /*boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
   BoxShadow(
   color: Colors.grey.withOpacity(0.15),
   spreadRadius: 3,
@@ -50,6 +51,7 @@ class _TimetableTabState extends State<TimetableTab> {
   ScrollController scrollController = new ScrollController();
   GlobalKey globalKeyNow = new GlobalKey();
   GlobalKey globalKeyEnd = new GlobalKey();
+  late FirestoreService firestoreService;
 
   bool isNow = false;
 
@@ -242,14 +244,16 @@ class _TimetableTabState extends State<TimetableTab> {
         if (i == 1 || !isFree)
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-              isNow: (pLessonNumber != null && pLessonNumber >= i &&
+              isNow: (pLessonNumber != null &&
+                      pLessonNumber >= i &&
                       pLessonNumber < j &&
                       ((isInBreak == false && !isFree) || (isFree)))
                   ? true
                   : false,
-              key: (pLessonNumber != null && pLessonNumber >= i &&
-                  pLessonNumber < j &&
-                  ((isInBreak == false && !isFree) || (isFree)))
+              key: (pLessonNumber != null &&
+                      pLessonNumber >= i &&
+                      pLessonNumber < j &&
+                      ((isInBreak == false && !isFree) || (isFree)))
                   ? globalKeyNow
                   : null));
 
@@ -275,26 +279,29 @@ class _TimetableTabState extends State<TimetableTab> {
                       element.subject != tempTimetableUnit.subject) !=
                   -1) {
             isChangingLK = true;
-            GetStorage storage = GetStorage();
-            print(storage.read('changingLkSubject'));
-            print(storage.read('changingLkWeekNumber'));
+
+            int changingLkWeekNumber =
+                (await firestoreService.readValue('changingLkWeekNumber'))
+                    .toString() as int;
+            String changingLkSubject =
+                (await firestoreService.readValue('changingLkSubject'))
+                    .toString();
             if ((DateTime.now().weekOfYear.isEven &&
-                storage.read('changingLkWeekNumber').isEven) || (!DateTime.now().weekOfYear.isEven &&
-                !storage.read('changingLkWeekNumber').isEven)) {
-              if (storage.read('changingLkSubject') !=
-                  tempTimetableUnit.subject!) {
+                    changingLkWeekNumber.isEven) ||
+                (!DateTime.now().weekOfYear.isEven &&
+                    !changingLkWeekNumber.isEven)) {
+              if (changingLkSubject != tempTimetableUnit.subject!) {
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
                     (element.dayNumber! == pWeekday &&
                         element.lessonNumber! == i &&
-                        element.subject == storage.read('changingLkSubject')));
+                        element.subject == changingLkSubject));
               }
             } else {
-              if (storage.read('changingLkSubject') ==
-                  tempTimetableUnit.subject!) {
+              if (changingLkSubject == tempTimetableUnit.subject!) {
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
                     (element.dayNumber! == pWeekday &&
                         element.lessonNumber! == i &&
-                        element.subject != storage.read('changingLkSubject')));
+                        element.subject != changingLkSubject));
               }
             }
           }
@@ -333,16 +340,19 @@ class _TimetableTabState extends State<TimetableTab> {
                                   (element.dayNumber! == pWeekday &&
                                       element.lessonNumber! > i)) !=
                               -1)) ||
-                      (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
+                      (pLessonNumber != null &&
+                          pLessonNumber > i &&
+                          pLessonNumber < j &&
+                          nextFree)))
                   ? true
                   : false,
               key: (((isInBreak == true &&
-                  pLessonNumber == i &&
-                  (allTimeTableUnits.indexWhere((element) =>
-                  (element.dayNumber! == pWeekday &&
-                      element.lessonNumber! > i)) !=
-                      -1)) ||
-                  (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
+                          pLessonNumber == i &&
+                          (allTimeTableUnits.indexWhere((element) =>
+                                  (element.dayNumber! == pWeekday &&
+                                      element.lessonNumber! > i)) !=
+                              -1)) ||
+                      (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? globalKeyNow
                   : null));
         }
@@ -361,6 +371,8 @@ class _TimetableTabState extends State<TimetableTab> {
   @override
   void initState() {
     super.initState();
+    firestoreService =
+        new FirestoreService(currentUser: FirebaseAuth.instance.currentUser!);
     load();
   }
 
@@ -444,13 +456,14 @@ class _TimetableTabState extends State<TimetableTab> {
                                       constraints: BoxConstraints(
                                         maxWidth: 500,
                                       ),
-                                          alignment: Alignment.topCenter,
-                                          child: SingleChildScrollView(
-                                            controller: scrollController,
-                                            child: Column(
-                                            children:  displayTimetable,
-                                            ),
-                                          ),)
+                                      alignment: Alignment.topCenter,
+                                      child: SingleChildScrollView(
+                                        controller: scrollController,
+                                        child: Column(
+                                          children: displayTimetable,
+                                        ),
+                                      ),
+                                    )
                                   : Center(
                                       child: Column(
                                       children: [
@@ -468,8 +481,7 @@ class _TimetableTabState extends State<TimetableTab> {
               ],
               crossAxisAlignment: CrossAxisAlignment.center,
             )),
-            padding: EdgeInsets.only(top: 15)
-    ));
+            padding: EdgeInsets.only(top: 15)));
   }
 
   Container zeitraster() {
@@ -498,7 +510,7 @@ class DisplayFree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(left: 95,right: 15),
+        margin: EdgeInsets.only(left: 95, right: 15),
         child: Column(children: [
           Container(
             padding: EdgeInsets.all(15),
@@ -622,7 +634,6 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     String lk1 = '---';
     String lk2 = '---';
     int selectedLK = 0;
-    var storage = GetStorage();
     try {
       lk1 = widget.allTimetableUnits
           .firstWhere((element) => element.subject!.contains('LK'))
@@ -633,14 +644,22 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
               !element.subject!.contains(lk1))
           .subject!;
 
-      if ((DateTime.now().weekOfYear.isEven &&
-          storage.read('changingLkWeekNumber').isEven) || (!DateTime.now().weekOfYear.isEven &&
-          !storage.read('changingLkWeekNumber').isEven)) {
-        if (storage.read('changingLkSubject') == lk2) {
+      int changingLkWeekNumber = (await FirestoreService(
+                  currentUser: FirebaseAuth.instance.currentUser!)
+              .readValue('changingLkWeekNumber'))
+          .toString() as int;
+      String changingLkSubject = (await FirestoreService(
+                  currentUser: FirebaseAuth.instance.currentUser!)
+              .readValue('changingLkSubject'))
+          .toString();
+
+      if ((DateTime.now().weekOfYear.isEven && changingLkWeekNumber.isEven) ||
+          (!DateTime.now().weekOfYear.isEven && !changingLkWeekNumber.isEven)) {
+        if (changingLkSubject == lk2) {
           selectedLK = 1;
         }
       } else {
-        if (storage.read('changingLkSubject') == lk1) {
+        if (changingLkSubject == lk1) {
           selectedLK = 1;
         }
       }
@@ -664,11 +683,10 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     timeTableUnit = widget.timeTableUnit;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 95,right: 15),
+      margin: EdgeInsets.only(left: 95, right: 15),
       padding: EdgeInsets.all(20),
       width: double.infinity,
       decoration: decorationTimetable(context),

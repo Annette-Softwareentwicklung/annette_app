@@ -6,7 +6,6 @@ import 'package:annette_app/fundamentals/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/miscellaneous-files/manageNotifications.dart';
 import 'package:annette_app/miscellaneous-files/currentValues.dart';

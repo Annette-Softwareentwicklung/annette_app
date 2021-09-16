@@ -47,7 +47,7 @@ class VertretungsplanCrawler {
         tempColumn = tempColumn.substring(tempColumn.indexOf('/td>') + 4);
       }
 
-      String configurationString =  await firestoreService.readValue('configuration') as String;
+      String configurationString =  (await firestoreService.readValue('configuration')).toString();
 
       String currentClass = configurationString.substring(
           configurationString.indexOf('c:') + 2,
@@ -57,8 +57,7 @@ class VertretungsplanCrawler {
 
       if (result[0] == null) {
         ///Klassen-unspezifische Ereignisse
-        bool temp = await firestoreService.readValue('unspecificOccurences') as bool;
-
+        bool temp = (await firestoreService.readValue('unspecificOccurences')) as bool;
         relevant = temp;
       } else {
         if (result[0]!.contains(currentClass.substring(0, 1)) &&
