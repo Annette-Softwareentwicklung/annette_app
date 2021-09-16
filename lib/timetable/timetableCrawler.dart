@@ -1,11 +1,8 @@
-import 'package:annette_app/data/subjects.dart';
 import 'package:annette_app/database/databaseCreate.dart';
 import 'package:annette_app/firebase/firestoreService.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
@@ -15,8 +12,8 @@ class TimetableCrawler {
   late FirestoreService firestoreService;
   late User currentUser;
 
-  Future<void> setConfiguration(
-      String configurationString, String difExport, DateTime newVersion) async {
+  Future<void> setConfiguration(String configurationString, String difExport,
+      DateTime newVersion, bool isAutoUpdate) async {
     currentUser = FirebaseAuth.instance.currentUser!;
     firestoreService = new FirestoreService(currentUser: currentUser);
     if (!(await firestoreService.checkIfUserDocumentExists())) {
@@ -29,7 +26,7 @@ class TimetableCrawler {
 
     await setTimetable(difExport, configurationString);
 
-    if (currentClass.toLowerCase().contains('q')) {
+    if (currentClass.toLowerCase().contains('q') && !isAutoUpdate) {
       await firestoreService.updateDocument(
           'changingLkSubject',
           configurationString.substring(
@@ -41,8 +38,6 @@ class TimetableCrawler {
     await firestoreService.updateDocument(
         'timetableVersion', newVersion.toString());
     await firestoreService.updateDocument('configuration', configurationString);
-
-    GetStorage().write('timetableVersion', newVersion.toString());
   }
 
   Future<void> setTimetable(String code, String configurationString) async {

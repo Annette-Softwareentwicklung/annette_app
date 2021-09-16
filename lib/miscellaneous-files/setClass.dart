@@ -1,13 +1,16 @@
+import 'package:annette_app/firebase/firestoreService.dart';
+import 'package:annette_app/fundamentals/loadingInformation.dart';
 import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
 import 'package:annette_app/timetable/groupsEF.dart';
 import 'package:annette_app/timetable/groupsQ1.dart';
 import 'package:annette_app/timetable/groupsQ2.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:annette_app/custom_widgets/errorContainer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:provider/provider.dart';
 
 class SetClass extends StatefulWidget {
   final bool isInGuide;
@@ -30,7 +33,6 @@ class _SetClassState extends State<SetClass> {
   bool errorInternet = false;
   OnlineFiles onlineFiles = new OnlineFiles();
   late DateTime newVersion;
-  bool loading = false;
 
   late bool q2Initialize;
 
@@ -93,10 +95,7 @@ class _SetClassState extends State<SetClass> {
   List<String> zk1 = ['Freistunde'];
   List<String> zk2 = ['Freistunde'];
 
-  void setGroupsOS() async {
-    final storage = GetStorage();
-    storage.write('changingLkSubject', selectedLk1);
-    storage.write('changingLkWeekNumber', 2);
+  void setGroupsOS(BuildContext pContext) async {
     String tempConfiguration;
 
     if (selectedClass == 'Q1') {
@@ -111,22 +110,24 @@ class _SetClassState extends State<SetClass> {
     }
 
     await activateTimetableCrawler(tempConfiguration);
-    GetStorage().write('configuration', tempConfiguration);
     setState(() {
-      loading = false;
+      Provider.of<LoadingInformation>(pContext, listen: false).setValue(false);
       showFinishedConfiguration = true;
     });
   }
 
-  void setGroupsUS() async {
+  void setGroupsUS(BuildContext pContext) async {
     String tempConfiguration;
+    late String religionToInsert;
+    late String languageToInsert;
+    late String diffToInsert;
 
     if (selectedReligionUS == 'Kath. Religion') {
-      selectedReligionUS = 'KR';
+      religionToInsert = 'KR';
     } else if (selectedReligionUS == 'Ev. Religion') {
-      selectedReligionUS = 'ER';
+      religionToInsert = 'ER';
     } else {
-      selectedReligionUS = 'PPL';
+      religionToInsert = 'PPL';
     }
 
     bool tempLanguage6 = false;
@@ -141,45 +142,44 @@ class _SetClassState extends State<SetClass> {
 
     if (tempLanguage6) {
       if (selectedSecondLanguageUS == 'Französisch') {
-        selectedSecondLanguageUS = 'F6';
+        languageToInsert = 'F6';
       } else {
-        selectedSecondLanguageUS = 'L6';
+        languageToInsert = 'L6';
       }
     } else {
       if (selectedSecondLanguageUS == 'Französisch') {
-        selectedSecondLanguageUS = 'F7';
+        languageToInsert = 'F7';
       } else {
-        selectedSecondLanguageUS = 'L7';
+        languageToInsert = 'L7';
       }
     }
 
     if (selectedDiffUS == 'Physik-Technik') {
-      selectedDiffUS = 'PHd';
+      diffToInsert = 'PHd';
     } else if (selectedDiffUS == 'Kunst') {
-      selectedDiffUS = 'KUd';
+      diffToInsert = 'KUd';
     } else if (selectedDiffUS == 'Spanisch') {
       ///Spanisch ab Klasse 9 muss hier berücksichtigt werden.
-      selectedDiffUS = 'S8';
+      diffToInsert = 'S8';
     } else if (selectedDiffUS == 'Geschichte') {
-      selectedDiffUS = 'GEd';
+      diffToInsert = 'GEd';
     } else {
-      selectedDiffUS = 'IFd';
+      diffToInsert = 'IFd';
     }
 
     if (selectedClass.contains('9') || selectedClass.contains('10')) {
       tempConfiguration =
-          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:$selectedDiffUS;';
+          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$religionToInsert;sLanguageUS:$languageToInsert;diffUS:$diffToInsert;';
     } else if (!selectedClass.contains('5') && !selectedClass.contains('6')) {
       tempConfiguration =
-          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:$selectedSecondLanguageUS;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$religionToInsert;sLanguageUS:$languageToInsert;diffUS:Freistunde;';
     } else {
       tempConfiguration =
-          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$selectedReligionUS;sLanguageUS:Freistunde;diffUS:Freistunde;';
+          'c:$selectedClass;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:$religionToInsert;sLanguageUS:Freistunde;diffUS:Freistunde;';
     }
     await activateTimetableCrawler(tempConfiguration);
-    GetStorage().write('configuration', tempConfiguration);
     setState(() {
-      //loading = false;
+      Provider.of<LoadingInformation>(pContext, listen: false).setValue(false);
       showFinishedConfiguration = true;
     });
   }
@@ -187,7 +187,7 @@ class _SetClassState extends State<SetClass> {
   Future<void> activateTimetableCrawler(pConfigurationString) async {
     TimetableCrawler ttc1 = new TimetableCrawler();
     await ttc1.setConfiguration(
-        pConfigurationString, onlineFiles.difExport, newVersion);
+        pConfigurationString, onlineFiles.difExport, newVersion, false);
   }
 
   void setClass() async {
@@ -379,7 +379,7 @@ class _SetClassState extends State<SetClass> {
       Future<List<String>> _readData() async {
         List<String> tempContent = [];
         try {
-          String contents = GetStorage().read('configuration');
+          String contents = await FirestoreService(currentUser: FirebaseAuth.instance.currentUser!).readValue('configuration') as String;
 
           tempContent.add(contents.substring(contents.indexOf('c:') + 2,
               contents.indexOf(';', contents.indexOf('c:'))));
@@ -606,164 +606,169 @@ class _SetClassState extends State<SetClass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SafeArea(
-            child: (errorInternet)
-                ? ErrorInternetContainer(
-                    onRefresh: () {
-                      errorInternet = false;
-                      load();
-                    },
-                  )
-                : Container(
-                    height: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Stack(children: [
-                      Center(
-                        child: (showFinishedConfiguration)
-                            ? finishedConfigurationWidget()
-                            : (showGroupsOS)
-                                ? groupsOsWidget()
-                                : (showGroupsUS)
-                                    ? groupsUsWidget()
-                                    : classesWidget(),
-                      ),
-                      Positioned(
-                          left: 0.0,
-                          right: 0.0,
-                          top: 70.0,
-                          child: Column(children: [
-                            Container(
-                              child: Text(
-                                'App konfigurieren',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 28,
+      body: ChangeNotifierProvider<LoadingInformation>(
+        create: (context) => new LoadingInformation(false),
+        builder: (context, _) {
+
+        return Stack(
+          children: [
+            SafeArea(
+              child: (errorInternet)
+                  ? ErrorInternetContainer(
+                      onRefresh: () {
+                        errorInternet = false;
+                        load();
+                      },
+                    )
+                  : Container(
+                      height: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Stack(children: [
+                        Center(
+                          child: (showFinishedConfiguration)
+                              ? finishedConfigurationWidget()
+                              : (showGroupsOS)
+                                  ? groupsOsWidget(context)
+                                  : (showGroupsUS)
+                                      ? groupsUsWidget(context)
+                                      : classesWidget(),
+                        ),
+                        Positioned(
+                            left: 0.0,
+                            right: 0.0,
+                            top: 70.0,
+                            child: Column(children: [
+                              Container(
+                                child: Text(
+                                  'App konfigurieren',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 28,
+                                  ),
                                 ),
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.only(bottom: 15),
+                                margin: EdgeInsets.only(left: 5),
                               ),
-                              alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.only(bottom: 15),
-                              margin: EdgeInsets.only(left: 5),
-                            ),
-                            if(!showFinishedConfiguration)
-                            Row(
-                              children: [
-                                if (!finished)
-                                  Expanded(
+                              if(!showFinishedConfiguration)
+                              Row(
+                                children: [
+                                  if (!finished)
+                                    Expanded(
+                                        flex: 2,
+                                        child: LinearProgressIndicator(
+                                          minHeight: 2,
+                                          backgroundColor:
+                                              (Theme.of(context).brightness ==
+                                                      Brightness.dark)
+                                                  ? Colors.grey
+                                                  : null,
+                                          color: (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Theme.of(context).accentColor
+                                              : Colors.blue,
+                                        )),
+                                  if (finished)
+                                    Expanded(
                                       flex: 2,
-                                      child: LinearProgressIndicator(
-                                        minHeight: 2,
-                                        backgroundColor:
-                                            (Theme.of(context).brightness ==
-                                                    Brightness.dark)
-                                                ? Colors.grey
-                                                : null,
+                                      child: Container(
+                                        height: 2,
                                         color: (Theme.of(context).brightness ==
                                                 Brightness.dark)
                                             ? Theme.of(context).accentColor
                                             : Colors.blue,
-                                      )),
-                                if (finished)
+                                      ),
+                                    ),
+                                  SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: (!finished)
+                                                ? Colors.grey
+                                                : (Theme.of(context).brightness ==
+                                                        Brightness.dark)
+                                                    ? Theme.of(context).accentColor
+                                                    : Colors.blue,
+                                            width: 2),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '1',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                      height: 2,
+                                      color: (!showGroupsOS && !showGroupsUS)
+                                          ? Colors.grey
+                                          : (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Theme.of(context).accentColor
+                                              : Colors.blue,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: (!showGroupsOS && !showGroupsUS)
+                                                ? Colors.grey
+                                                : (Theme.of(context).brightness ==
+                                                        Brightness.dark)
+                                                    ? Theme.of(context).accentColor
+                                                    : Colors.blue,
+                                            width: 2),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '2',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Expanded(
                                     flex: 2,
                                     child: Container(
                                       height: 2,
-                                      color: (Theme.of(context).brightness ==
-                                              Brightness.dark)
-                                          ? Theme.of(context).accentColor
-                                          : Colors.blue,
+                                      color: (!showFinishedConfiguration)
+                                          ? Colors.grey
+                                          : (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Theme.of(context).accentColor
+                                              : Colors.blue,
                                     ),
                                   ),
-                                SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: (!finished)
-                                              ? Colors.grey
-                                              : (Theme.of(context).brightness ==
-                                                      Brightness.dark)
-                                                  ? Theme.of(context).accentColor
-                                                  : Colors.blue,
-                                          width: 2),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '1',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    height: 2,
-                                    color: (!showGroupsOS && !showGroupsUS)
-                                        ? Colors.grey
-                                        : (Theme.of(context).brightness ==
-                                                Brightness.dark)
-                                            ? Theme.of(context).accentColor
-                                            : Colors.blue,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: (!showGroupsOS && !showGroupsUS)
-                                              ? Colors.grey
-                                              : (Theme.of(context).brightness ==
-                                                      Brightness.dark)
-                                                  ? Theme.of(context).accentColor
-                                                  : Colors.blue,
-                                          width: 2),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '2',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    height: 2,
-                                    color: (!showFinishedConfiguration)
-                                        ? Colors.grey
-                                        : (Theme.of(context).brightness ==
-                                                Brightness.dark)
-                                            ? Theme.of(context).accentColor
-                                            : Colors.blue,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ]))
-                    ]),
-                  ),
-          ),
-          if (loading)
-            Container(
-              color: (loading) ? Colors.black26 : null,
-              width: double.infinity,
-              height: double.infinity,
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(),
+                                ],
+                              )
+                            ]))
+                      ]),
+                    ),
             ),
-        ],
+            if (context.watch<LoadingInformation>().value)
+              Container(
+                color: (context.watch<LoadingInformation>().value) ? Colors.black26 : null,
+                width: double.infinity,
+                height: double.infinity,
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(),
+              ),
+          ],
+        );},
       ),
     );
   }
@@ -860,7 +865,7 @@ class _SetClassState extends State<SetClass> {
     }
   }
 
-  Widget groupsOsWidget() {
+  Widget groupsOsWidget(BuildContext pContext) {
     String infoText = 'Wähle hier deine individuellen Kurse. Dazu zählen die ';
     if (selectedClass == 'Q1' || selectedClass == 'Q2') {
       infoText = infoText + 'Leistungs- und ';
@@ -1146,11 +1151,8 @@ class _SetClassState extends State<SetClass> {
             margin: EdgeInsets.all(15),
             child: TextButton(
               onPressed: () {
-                /*setState(() {
-                  loading = true;
-                });
-                 */
-                setGroupsOS();
+                Provider.of<LoadingInformation>(pContext, listen: false).setValue(true);
+                setGroupsOS(pContext);
               },
               child: Container(
                   padding: EdgeInsets.all(10),
@@ -1255,7 +1257,7 @@ class _SetClassState extends State<SetClass> {
     }
   }
 
-  Widget groupsUsWidget() {
+  Widget groupsUsWidget(BuildContext pContext) {
     String infoText = 'Wähle hier deine individuellen Kurse. Dazu zähl';
 
     if (selectedClass.contains('5') || selectedClass.contains('6')) {
@@ -1406,11 +1408,8 @@ class _SetClassState extends State<SetClass> {
             margin: EdgeInsets.all(15),
             child: TextButton(
               onPressed: () {
-                /*setState(() {
-                  loading = true;
-                });
-                 */
-                setGroupsUS();
+                Provider.of<LoadingInformation>(pContext, listen: false).setValue(true);
+                setGroupsUS(pContext);
               },
               child: Container(
                   padding: EdgeInsets.all(10),

@@ -105,7 +105,7 @@ Future<bool> updateTimetable(DateTime newVersion) async {
       if (stundenplanDIF.contains(currentClass)) {
         TimetableCrawler timetableCrawler = new TimetableCrawler();
         timetableCrawler.setConfiguration(
-            configuration, stundenplanDIF, newVersion);
+            configuration, stundenplanDIF, newVersion, true);
         return true;
       }
     }
