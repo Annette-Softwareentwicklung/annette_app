@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/custom_widgets/signInUI.dart';
 import 'package:annette_app/firebase/authentication.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -129,7 +130,13 @@ class _AuthenticationUIState extends State<AuthenticationUI> {
                               setState(() {
                                 loading = true;
                               });
-                              await AuthenticationService().signInAnonymously();
+                              UserCredential? _user = await AuthenticationService().signInAnonymously();
+                              if(_user == null) {
+                                setState(() {
+                                  loading = false;
+                                });
+                                showCustomInformationDialog(context, 'Keine Verbindung', 'Authentifizierung fehlgeschlagen. Bitte überprüfe deine Internetverbindung.', true, false, false);
+                              }
                             },
                             child: Container(
                                 padding: EdgeInsets.all(10),

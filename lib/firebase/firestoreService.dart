@@ -13,8 +13,8 @@ class FirestoreService {
     return users.doc(currentUser.uid).set({
       'configuration': null,
       'timetableVersion': DateTime(0, 0, 0).toString(),
-      'changingLkSubject': null,
-      'changingLkWeeknumber': 2,
+      'changingLkSubject': '---',
+      'changingLkWeekNumber': 2,
       'unspecificOccurences': true,
     }).catchError((error) => print("Failed to add user: $error"));
   }
@@ -55,15 +55,40 @@ class FirestoreService {
         .then((value) => value[key]);
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserCollection(
+      String collectionName) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .collection(collectionName)
+        .get(GetOptions(source: Source.serverAndCache));
+  }
+
+  Stream<DocumentSnapshot<Object?>> documentStream() =>
+      users.doc(currentUser.uid).snapshots();
+
+  ///TimetableUnits
   Future<DocumentReference<Map<String, dynamic>>> insertTimetableUnit(
       TimeTableUnit timeTableUnit) async {
     return insertInUserCollection('timetable', <String, dynamic>{
       'subject': timeTableUnit.subject,
       'room': timeTableUnit.room,
       'dayNumber': timeTableUnit.dayNumber,
-      'lessonNumer': timeTableUnit.lessonNumber,
+      'lessonNumber': timeTableUnit.lessonNumber,
     });
   }
 
-  Stream<DocumentSnapshot<Object?>> documentStream () => users.doc(currentUser.uid).snapshots();
+  Future<List<TimeTableUnit>> getAllTimetableUnits() async {
+    List<TimeTableUnit> list = [];
+    var snapshot = await getUserCollection('timetable');
+    for (DocumentSnapshot ds in snapshot.docs) {
+      list.add(new TimeTableUnit(
+        subject: ds.get('subject'),
+        room: ds.get('room'),
+        lessonNumber: ds.get('lessonNumber'),
+        dayNumber: ds.get('dayNumber'),
+      ));
+    }
+    return list;
+  }
 }

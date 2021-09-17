@@ -5,11 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService {
-  Future<UserCredential> signInAnonymously() async {
-    UserCredential _userCredential =
-        await FirebaseAuth.instance.signInAnonymously();
-    //await FirebaseFirestore.instance.disableNetwork();
-    return _userCredential;
+  Future<UserCredential?> signInAnonymously() async {
+    try {
+      UserCredential _userCredential =
+      await FirebaseAuth.instance.signInAnonymously();
+      //await FirebaseFirestore.instance.disableNetwork();
+      return _userCredential;
+    } on FirebaseAuthException catch(e) {
+      print(e.code);
+      return null;
+    }
   }
 
   Future<UserCredential> signInWithGoogle(

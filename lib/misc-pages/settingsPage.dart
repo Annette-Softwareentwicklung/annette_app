@@ -1,21 +1,18 @@
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/firebase/firestoreService.dart';
-import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
 import 'package:annette_app/firebase/authenticationUI.dart';
+import 'package:annette_app/fundamentals/changingLkInformation.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import '../fundamentals/preferredTheme.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:annette_app/database/databaseCreate.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
 import 'package:week_of_year/week_of_year.dart';
 import 'package:annette_app/miscellaneous-files/manageNotifications.dart';
@@ -29,56 +26,60 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   var storage = GetStorage();
-  late bool? unspecificOccurences;
   late PreferredTheme preferredTheme;
-  String lk1 = '---';
-  String lk2 = '---';
-  late int selectedLK;
-  late List<TimeTableUnit> allTimetableUnits;
   bool hasDeletedDoneTasks = false;
   late FirestoreService firestoreService;
 
   @override
   void initState() {
     super.initState();
-    firestoreService = new FirestoreService(currentUser: FirebaseAuth.instance.currentUser!);
-    unspecificOccurences = storage.read('unspecificOccurences');
-    if (unspecificOccurences == null) {
-      unspecificOccurences = true;
-    }
-    selectedLK = 0;
-    setChangingLK();
+    firestoreService =
+        new FirestoreService(currentUser: FirebaseAuth.instance.currentUser!);
   }
 
-  void setChangingLK() async {
-    allTimetableUnits = await databaseGetAllTimeTableUnit();
-    try {
-      lk1 = allTimetableUnits
-          .firstWhere((element) => element.subject!.contains('LK'))
-          .subject!;
-      lk2 = allTimetableUnits
-          .firstWhere((element) =>
-              element.subject!.contains('LK') &&
-              !element.subject!.contains(lk1))
-          .subject!;
+  Future<ChangingLkInformation> getChangingLkValues(
+      DocumentSnapshot? ds) async {
+    int selectedLK = 0;
+    String lk1 = '---';
+    String lk2 = '---';
+    if (ds != null) {
+      late String changingLkSubject;
+      late int changingLkWeekNumber;
+      changingLkSubject = ds.get('changingLkSubject');
+      changingLkWeekNumber = ds.get('changingLkWeekNumber');
+      List<TimeTableUnit> allTimetableUnits =
+          await firestoreService.getAllTimetableUnits();
 
-      print(
-          'load: ${storage.read('changingLkSubject')} ${storage.read('changingLkWeekNumber')}');
-      if ((DateTime.now().weekOfYear.isEven &&
-              storage.read('changingLkWeekNumber').isEven) ||
-          (!DateTime.now().weekOfYear.isEven &&
-              !storage.read('changingLkWeekNumber').isEven)) {
-        if (storage.read('changingLkSubject') == lk2) {
+      try {
+        lk1 = allTimetableUnits
+            .firstWhere((element) => element.subject!.contains('LK'))
+            .subject!;
+      } catch (e) {}
+      try {
+        lk2 = allTimetableUnits
+            .firstWhere((element) =>
+                element.subject!.contains('LK') &&
+                !element.subject!.contains(lk1))
+            .subject!;
+      } catch (e) {}
+
+      if ((DateTime.now().weekOfYear.isEven && changingLkWeekNumber.isEven) ||
+          (!DateTime.now().weekOfYear.isEven && !changingLkWeekNumber.isEven)) {
+        if (changingLkSubject == lk2) {
           selectedLK = 1;
         }
       } else {
-        if (storage.read('changingLkSubject') == lk1) {
+        if (changingLkSubject == lk1) {
           selectedLK = 1;
         }
       }
+    }
 
-      setState(() {});
-    } catch (e) {}
+    return ChangingLkInformation(
+      selectedLkValue: selectedLK,
+      lk2Name: lk2,
+      lk1Name: lk1,
+    );
   }
 
   @override
@@ -108,7 +109,12 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scrollbar(
       child: Container(
         alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
+        child: StreamBuilder<DocumentSnapshot<Object?>>(
+        stream: firestoreService.documentStream(),
+    builder: (BuildContext context,
+    AsyncSnapshot<DocumentSnapshot<Object?>>
+    ds) {
+    return SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             constraints: BoxConstraints(maxWidth: 500),
@@ -128,24 +134,22 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 17,
                         ),
                       ),
-                      StreamBuilder<DocumentSnapshot<Object?>>(
-                          stream: firestoreService.documentStream(),
-                      builder:
-                          (BuildContext context,
-                              AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
-                        return CupertinoSwitch(
-                            value: (snapshot.hasData) ? snapshot.data!.get('unspecificOccurences') as bool : true,
-                            onChanged: (value) {
-                              firestoreService.updateDocument('unspecificOccurences', value);
-                            });
-                      }),
+                       CupertinoSwitch(
+                                value: (ds.hasData)
+                                    ? ds.data!.get('unspecificOccurences')
+                                        as bool
+                                    : true,
+                                onChanged: (value) {
+                                  firestoreService.updateDocument(
+                                      'unspecificOccurences', value);
+                                }),
                     ],
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Text(
-                      'Dir werden auf dem Vertretungsplan ${(unspecificOccurences!) ? '' : 'keine '}Ereignisse angezeigt, die ${(unspecificOccurences!) ? 'keiner' : 'nicht einer'} spezifischen Klasse zugeordnet sind. ${(unspecificOccurences!) ? 'Diese können trotzdem relevant für dich sein.' : 'Auch wenn diese dennoch für dich relevant sein könnten.'}',
+                      'Dir werden auf dem Vertretungsplan ${((ds.hasData) && ds.data!.get('unspecificOccurences') as bool) ? '' : 'keine '}Ereignisse angezeigt, die ${((ds.hasData) && ds.data!.get('unspecificOccurences') as bool) ? 'keiner' : 'nicht einer'} spezifischen Klasse zugeordnet sind. ${((ds.hasData) && ds.data!.get('unspecificOccurences') as bool) ? 'Diese können trotzdem relevant für dich sein.' : 'Auch wenn diese dennoch für dich relevant sein könnten.'}',
                       style: textDescription),
                 ),
                 Container(
@@ -214,68 +218,81 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: textDescription,
                   ),
                 ),
-                if (storage.read('configuration').contains('Q1') ||
-                    storage.read('configuration').contains('Q2'))
-                  Container(
-                    margin: EdgeInsets.only(top: 30),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                    decoration: boxDecoration,
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Wechselnde LK-Schiene',
-                          style: TextStyle(fontSize: 17),
-                        ),
-                        ListTile(
-                          title: Text(lk1),
-                          leading: Radio(
-                            value: 0,
-                            groupValue: selectedLK,
-                            onChanged: (value) {
-                              storage.write('changingLkSubject', lk1);
-                              storage.write('changingLkWeekNumber',
-                                  DateTime.now().weekOfYear);
-                              print(storage.read('changingLkSubject'));
-                              print(storage.read('changingLkWeekNumber'));
-                              setState(() {
-                                selectedLK = value as int;
-                              });
-                            },
-                            activeColor: (Theme.of(context).brightness ==
-                                    Brightness.dark)
-                                ? Theme.of(context).accentColor
-                                : Colors.blue,
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(lk2),
-                          leading: Radio(
-                            value: 1,
-                            groupValue: selectedLK,
-                            onChanged: (value) {
-                              storage.write('changingLkSubject', lk2);
-                              storage.write('changingLkWeekNumber',
-                                  DateTime.now().weekOfYear);
-                              print(storage.read('changingLkSubject'));
-                              print(storage.read('changingLkWeekNumber'));
-                              setState(() {
-                                selectedLK = value as int;
-                              });
-                            },
-                            activeColor: (Theme.of(context).brightness ==
-                                    Brightness.dark)
-                                ? Theme.of(context).accentColor
-                                : Colors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (storage.read('configuration').contains('Q1') ||
-                    storage.read('configuration').contains('Q2'))
+                if (ds.data != null && ds.data!.get('configuration').toString().toLowerCase().contains('q'))
+                Container(
+                  margin: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  decoration: boxDecoration,
+                  width: double.infinity,
+                  child: FutureBuilder<ChangingLkInformation>(
+                            future: getChangingLkValues(ds.data),
+                            initialData: ChangingLkInformation(
+                                lk1Name: '-1-',
+                                lk2Name: '-2-',
+                                selectedLkValue: 0),
+                            builder: (context,
+                                AsyncSnapshot<ChangingLkInformation>
+                                    lkInformationSnapshot) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Wechselnde LK-Schiene',
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                        lkInformationSnapshot.data!.lk1Name),
+                                    leading: Radio(
+                                      value: 0,
+                                      groupValue: lkInformationSnapshot
+                                          .data!.selectedLkValue,
+                                      onChanged: (value) {
+                                        firestoreService.updateDocument(
+                                            'changingLkSubject',
+                                            lkInformationSnapshot
+                                                .data!.lk1Name);
+                                        firestoreService.updateDocument(
+                                            'changingLkWeekNumber',
+                                            DateTime.now().weekOfYear);
+                                      },
+                                      activeColor:
+                                          (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Theme.of(context).accentColor
+                                              : Colors.blue,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                        lkInformationSnapshot.data!.lk2Name),
+                                    leading: Radio(
+                                      value: 1,
+                                      groupValue: lkInformationSnapshot
+                                          .data!.selectedLkValue,
+                                      onChanged: (value) {
+                                        firestoreService.updateDocument(
+                                            'changingLkSubject',
+                                            lkInformationSnapshot
+                                                .data!.lk2Name);
+                                        firestoreService.updateDocument(
+                                            'changingLkWeekNumber',
+                                            DateTime.now().weekOfYear);
+                                      },
+                                      activeColor:
+                                          (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Theme.of(context).accentColor
+                                              : Colors.blue,
+                                    ),
+                                  ),
+                                ],
+                              );
+                      }),
+                ),
+
+                if (ds.data != null && ds.data!.get('configuration').toString().toLowerCase().contains('q'))
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     alignment: Alignment.centerLeft,
@@ -329,7 +346,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             .push(MaterialPageRoute(builder: (context) {
                           return AuthenticationUI(
                             isInGuide: false,
-                            onUpdatedAccount: () => setState(() {}),
+                            onUpdatedAccount: () => setState(() {
+                              firestoreService = new FirestoreService(currentUser: FirebaseAuth.instance.currentUser!);
+                            }),
                           );
                         }));
                       }),
@@ -423,7 +442,6 @@ class _SettingsPageState extends State<SettingsPage> {
                               DeviceOrientation.landscapeLeft,
                               DeviceOrientation.portraitUp,
                             ]);
-                            setState(() {});
                           },
                         );
                       }));
@@ -462,22 +480,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               true,
                               true) ==
                           true) {
-                        var storage = GetStorage();
                         storage.write('prefferedTheme', 2);
                         storage.write('order', 3);
 
-                        ///Datenbank löschen
-                        WidgetsFlutterBinding.ensureInitialized();
-                        final Future<Database> database = openDatabase(
-                          join(await getDatabasesPath(), 'local_database.db'),
-                          onCreate: (db, version) {
-                            createDb(db);
-                          },
-                          version: 1,
-                        );
-                        Database db = await database;
-                        await db.execute("DELETE FROM homeworkTasks");
-                        await db.execute("DELETE FROM timetable");
                         cancelAllNotifications();
                         await FirebaseAuth.instance.signOut();
                       }
@@ -497,8 +502,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 )
               ],
             ),
-          ),
-        ),
+          )
+        );})
       ),
     );
   }
