@@ -32,16 +32,15 @@ class FirestoreService {
   }
 
   Future<void> deleteUserCollection(String collectionName) async {
-    return FirebaseFirestore.instance
+    var snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser.uid)
         .collection(collectionName)
-        .get()
-        .then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.docs) {
-        ds.reference.delete();
-      }
-    });
+        .get(GetOptions(source: Source.serverAndCache));
+
+    for (DocumentSnapshot ds in snapshot.docs) {
+      ds.reference.delete();
+    }
   }
 
   Future<DocumentReference<Map<String, dynamic>>> insertInUserCollection(
@@ -65,4 +64,6 @@ class FirestoreService {
       'lessonNumer': timeTableUnit.lessonNumber,
     });
   }
+
+  Stream<DocumentSnapshot<Object?>> documentStream () => users.doc(currentUser.uid).snapshots();
 }

@@ -36,7 +36,7 @@ class TimetableCrawler {
   }
 
   Future<void> setTimetable(String code, String configurationString) async {
-    firestoreService.deleteUserCollection('timetable');
+    await firestoreService.deleteUserCollection('timetable');
     List<TimeTableUnit> timetableUnitsToInsert = [];
     String timetableCode = code;
 

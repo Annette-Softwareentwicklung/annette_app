@@ -1,9 +1,11 @@
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
+import 'package:annette_app/firebase/firestoreService.dart';
 import 'package:annette_app/firebase/timetableUnitFirebaseInteraction.dart';
 import 'package:annette_app/firebase/authenticationUI.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
@@ -34,10 +36,12 @@ class _SettingsPageState extends State<SettingsPage> {
   late int selectedLK;
   late List<TimeTableUnit> allTimetableUnits;
   bool hasDeletedDoneTasks = false;
+  late FirestoreService firestoreService;
 
   @override
   void initState() {
     super.initState();
+    firestoreService = new FirestoreService(currentUser: FirebaseAuth.instance.currentUser!);
     unspecificOccurences = storage.read('unspecificOccurences');
     if (unspecificOccurences == null) {
       unspecificOccurences = true;
@@ -124,14 +128,17 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 17,
                         ),
                       ),
-                      CupertinoSwitch(
-                          value: unspecificOccurences!,
-                          onChanged: (value) {
-                            storage.write('unspecificOccurences', value);
-                            setState(() {
-                              unspecificOccurences = value;
+                      StreamBuilder<DocumentSnapshot<Object?>>(
+                          stream: firestoreService.documentStream(),
+                      builder:
+                          (BuildContext context,
+                              AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
+                        return CupertinoSwitch(
+                            value: (snapshot.hasData) ? snapshot.data!.get('unspecificOccurences') as bool : true,
+                            onChanged: (value) {
+                              firestoreService.updateDocument('unspecificOccurences', value);
                             });
-                          }),
+                      }),
                     ],
                   ),
                 ),
@@ -345,32 +352,32 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         width: double.infinity,
                         height: 45,
-                        child:
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Email:',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      color: (Theme.of(context).brightness ==
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Email:',
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: (Theme.of(context).brightness ==
                                           Brightness.dark)
-                                          ? Colors.white
-                                          : Colors.black),
-                                ),
-                                   Text(
-                                    FirebaseAuth.instance.currentUser!.providerData.first.email.toString(),
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        color: (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                            ? Colors.white
-                                            : Colors.black),
-
-                                ),
-                                Text(''),
-                              ],
+                                      ? Colors.white
+                                      : Colors.black),
                             ),
+                            Text(
+                              FirebaseAuth.instance.currentUser!.providerData
+                                  .first.email
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: (Theme.of(context).brightness ==
+                                          Brightness.dark)
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            Text(''),
+                          ],
+                        ),
                       ),
                       onPressed: () {}),
                 if (!FirebaseAuth.instance.currentUser!.isAnonymous)
@@ -378,8 +385,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Du bist mit einem ${(FirebaseAuth.instance.currentUser!.providerData.first.providerId.toString() == 'google.com') ? 'Google' : '-'
-                      }-Konto eingeloggt.',
+                      'Du bist mit einem ${(FirebaseAuth.instance.currentUser!.providerData.first.providerId.toString() == 'google.com') ? 'Google' : '-'}-Konto eingeloggt.',
                       style: textDescription,
                     ),
                   ),
@@ -457,12 +463,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               true) ==
                           true) {
                         var storage = GetStorage();
-
-                        storage.write('introScreen', true);
                         storage.write('prefferedTheme', 2);
-                        storage.write('configuration',
-                            'c:5A;lk1:Freistunde;lk2:Freistunde;gk1:Freistunde;gk2:Freistunde;gk3:Freistunde;gk4:Freistunde;gk5:Freistunde;gk6:Freistunde;gk7:Freistunde;gk8:Freistunde;gk9:Freistunde;gk10:Freistunde;gk11:Freistunde;gk12:Freistunde;gk13:Freistunde;zk1:Freistunde;zk2:Freistunde;religionUS:Freistunde;sLanguageUS:Freistunde;diffUS:Freistunde;');
-                        storage.write('unspecificOccurences', true);
                         storage.write('order', 3);
 
                         ///Datenbank löschen
