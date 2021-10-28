@@ -10,7 +10,7 @@ class GroupsEF {
         String? tempUrl = await getTimetableURL();
         if (tempUrl != null) {
           var response = await http
-              .get(Uri.https('www.annettegymnasium.de', '$tempUrl/c00026.htm'));
+              .get(Uri.https('plaene.annettegymnasium.de', '$tempUrl/c00026.htm'));
           if (response.statusCode == 200) {
             return response.body;
           }

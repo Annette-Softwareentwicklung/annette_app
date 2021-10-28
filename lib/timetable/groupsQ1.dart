@@ -12,7 +12,7 @@ class GroupsQ1 {
 
           var
           response = await http.get(
-            Uri.https('www.annettegymnasium.de', '$tempUrl/c00027.htm'));
+            Uri.https('plaene.annettegymnasium.de', '$tempUrl/c00027.htm'));
         if (response.statusCode == 200) {
           return response.body;
         }}

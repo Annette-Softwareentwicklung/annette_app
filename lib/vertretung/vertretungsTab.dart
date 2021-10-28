@@ -39,7 +39,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
   void makeRequest() async {
     try {
       var response = await http.get(Uri.https(
-          'www.annettegymnasium.de', 'SP/vertretung/Heute_KoL/subst_001.htm'));
+          'plaene.annettegymnasium.de', 'vertretung/Heute_KoL/subst_001.htm'));
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc1 =
@@ -64,7 +64,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
       }
 
       response = await http.get(Uri.https(
-          'www.annettegymnasium.de', 'SP/vertretung/Morgen_KoL/subst_001.htm'));
+          'plaene.annettegymnasium.de', 'vertretung/Morgen_KoL/subst_001.htm'));
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc2 =
