@@ -1,3 +1,4 @@
+import 'package:annette_app/data/links.dart';
 import 'package:http/http.dart' as http;
 
 Future<String?> getTimetableURL() async {
@@ -5,7 +6,7 @@ Future<String?> getTimetableURL() async {
   try {
     var response = await http
         .get(Uri.https(
-        'www.annettegymnasium.de', 'SP/stundenplan_oL/frames/navbar.htm'));
+        Links.timetableUrl, 'stundenplan_oL/frames/navbar.htm'));
     if (response.statusCode == 200) {
       htmlCode = response.body;
       htmlCode = htmlCode.substring(htmlCode.indexOf('name="week"'));
@@ -13,7 +14,7 @@ Future<String?> getTimetableURL() async {
       htmlCode = htmlCode.substring(htmlCode.indexOf('"') + 1);
       htmlCode = htmlCode.substring(0, htmlCode.indexOf('"'));
 
-  return 'SP/stundenplan_oL/c/' + htmlCode;
+  return 'stundenplan_oL/c/' + htmlCode;
   }
   return null;
   } catch (e) {

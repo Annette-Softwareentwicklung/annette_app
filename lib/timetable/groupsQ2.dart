@@ -1,3 +1,4 @@
+import 'package:annette_app/data/links.dart';
 import 'package:http/http.dart' as http;
 
 import '../miscellaneous-files/timetableURL.dart';
@@ -13,7 +14,7 @@ class GroupsQ2 {
           var
 
           response = await http.get(
-            Uri.https('www.annettegymnasium.de', '$tempUrl/c00028.htm'));
+            Uri.https(Links.timetableUrl, '$tempUrl/c00028.htm'));
         if (response.statusCode == 200) {
           return response.body;
         }}

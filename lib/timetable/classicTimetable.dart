@@ -1,3 +1,4 @@
+import 'package:annette_app/data/links.dart';
 import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,7 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
       return Center(
         child: WebView(
           initialUrl:
-              'https://www.annettegymnasium.de/$tempUrl/c$currentClassNumber.htm',
+              'https://${Links.timetableUrl}/$tempUrl/c$currentClassNumber.htm',
           javascriptMode: JavascriptMode.unrestricted,
           onProgress: (progress) => CupertinoActivityIndicator(),
           onWebResourceError: (e) {

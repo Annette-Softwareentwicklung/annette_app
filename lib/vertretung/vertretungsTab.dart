@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:annette_app/data/links.dart';
 import 'package:annette_app/vertretung/vertretungListTile.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
@@ -39,7 +40,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
   void makeRequest() async {
     try {
       var response = await http.get(Uri.https(
-          'www.annettegymnasium.de', 'SP/vertretung/Heute_KoL/subst_001.htm'));
+          Links.vertretungToday.substring(0, Links.vertretungToday.indexOf('/')), Links.vertretungToday.substring(Links.vertretungToday.indexOf('/') + 1)));
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc1 =
@@ -64,7 +65,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
       }
 
       response = await http.get(Uri.https(
-          'www.annettegymnasium.de', 'SP/vertretung/Morgen_KoL/subst_001.htm'));
+          Links.vertretungTomorrow.substring(0, Links.vertretungTomorrow.indexOf('/')), Links.vertretungTomorrow.substring(Links.vertretungTomorrow.indexOf('/') + 1)));
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc2 =

@@ -1,3 +1,4 @@
+import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,8 +95,8 @@ void main() async {
     final storage = GetStorage();
     if (await _readData('configuration.txt') != null &&
         storage.read('configuration') == null) {
-        storage.write('configuration', await _readData('configuration.txt'));
-        storage.write('timetableVersion', DateTime(0,0).toString());
+      storage.write('configuration', await _readData('configuration.txt'));
+      storage.write('timetableVersion', DateTime(0, 0).toString());
     }
     if (await _readData('data.txt') != null &&
         storage.read('introScreen') == null) {
@@ -116,6 +117,21 @@ void main() async {
     }
   } catch (e) {
     print(e);
+  }
+  final storage = GetStorage();
+
+  if ((storage.read('configuration').contains('Q1') ||
+      storage.read('configuration').contains('Q2')) && (storage.read('changingLkSubject') == null ||
+        storage.read('changingLkWeekNumber') == null)) {
+    try {
+      storage.write(
+          'changingLkSubject',
+          (await databaseGetAllTimeTableUnit())
+              .firstWhere((element) => element.subject!.contains('LK')));
+      storage.write('changingLkWeeknumber', 1);
+    } catch (e) {
+      print(e);
+    }
   }
 
   ///Leitfaden beim ersten Öffnen der App
