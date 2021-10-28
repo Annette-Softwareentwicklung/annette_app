@@ -1,3 +1,4 @@
+import 'package:annette_app/data/links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -56,7 +57,7 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
             Expanded(
               child: WebView(
                 initialUrl:
-                    'https://plaene.annettegymnasium.de/vertretung/Heute_KoL/subst_001.htm',
+                    'https://${Links.vertretungToday}',
                 javascriptMode: JavascriptMode.unrestricted,
                 onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {
@@ -70,7 +71,7 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
             Expanded(
               child: WebView(
                 initialUrl:
-                    'https://plaene.annettegymnasium.de/vertretung/Morgen_KoL/subst_001.htm',
+                    'https://${Links.vertretungTomorrow}',
                 javascriptMode: JavascriptMode.unrestricted,
                 onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {

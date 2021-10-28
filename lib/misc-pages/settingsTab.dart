@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/design.dart';
+import 'package:annette_app/data/links.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:annette_app/misc-pages/settingsPage.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
@@ -62,7 +63,7 @@ class SettingsTab extends StatelessWidget {
                   color: Theme.of(context).accentColor),
               onTap: () async {
                 try {
-                  await launch('https://www.annettegymnasium.de/');
+                  await launch('https://${Links.annetteWebsite}/');
                 } catch (e) {
                   print(e);
                   await showCustomInformationDialog(
