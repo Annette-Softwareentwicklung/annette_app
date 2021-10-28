@@ -56,7 +56,7 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
             Expanded(
               child: WebView(
                 initialUrl:
-                    'https://www.annettegymnasium.de/SP/vertretung/Heute_KoL/subst_001.htm',
+                    'https://plaene.annettegymnasium.de/vertretung/Heute_KoL/subst_001.htm',
                 javascriptMode: JavascriptMode.unrestricted,
                 onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {
@@ -70,7 +70,7 @@ class _ClassicVertretungsplanState extends State<ClassicVertretungsplan> {
             Expanded(
               child: WebView(
                 initialUrl:
-                    'https://www.annettegymnasium.de/SP/vertretung/Morgen_KoL/subst_001.htm',
+                    'https://plaene.annettegymnasium.de/vertretung/Morgen_KoL/subst_001.htm',
                 javascriptMode: JavascriptMode.unrestricted,
                 onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {

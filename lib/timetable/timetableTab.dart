@@ -476,10 +476,10 @@ class _TimetableTabState extends State<TimetableTab> {
     return Container(
       child: (Platform.isIOS)
           ? ShowWebview(
-              url: 'https://www.annettegymnasium.de/SP/Pausenregelung.jpg',
+              url: 'https://plaene.annettegymnasium.de/Pausenregelung.jpg',
             )
           : Image.network(
-              'https://www.annettegymnasium.de/SP/Pausenregelung.jpg'),
+              'https://plaene.annettegymnasium.de/Pausenregelung.jpg'),
     );
   }
 
