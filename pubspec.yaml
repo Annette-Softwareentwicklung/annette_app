@@ -3,12 +3,7 @@ description: Annette App 3.0
 
 publish_to: 'none'
 
-version: 3.2.0+7
-
-authors:
-  - "Jan Wermeckes"
-
-  - "Rui Zhang"
+version: 3.3.0+8
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

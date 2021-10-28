@@ -28,12 +28,10 @@ class AboutPage extends StatelessWidget {
         String appName = "Annette App";
         String version = "0.0.0";
         DateTime? timeTableVersion = getTimetableVersion();
-        List<dynamic> developers = ['---'];
 
         if (snapshot.hasData) {
           Map yamlData = loadYaml(snapshot.data);
           version = yamlData["version"];
-          developers = yamlData["authors"].toList();
         }
 
         return new DefaultScaffold(
@@ -104,7 +102,7 @@ class AboutPage extends StatelessWidget {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                              Text("Entwickler:\n${developers.join(' und ')}\n"),
+                              Text("Entwickler:\nJan Wermeckes und Rui Zhang\n"),
                               Text('Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.' +
                                   '\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.' +
                                   '\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.' +
@@ -114,7 +112,7 @@ class AboutPage extends StatelessWidget {
                               SelectableText(
                                 'appentwicklung.jan@gmx.de',
                               ),
-                                  Text('\n©2021 ${developers.join(' und ')}'),
+                                  Text('\n©2021 Jan Wermeckes und Rui Zhang'),
 
                                 ])),
                         Container(
