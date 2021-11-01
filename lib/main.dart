@@ -120,17 +120,20 @@ void main() async {
   }
   final storage = GetStorage();
 
-  if ((storage.read('configuration').contains('Q1') ||
-      storage.read('configuration').contains('Q2')) && (storage.read('changingLkSubject') == null ||
-        storage.read('changingLkWeekNumber') == null)) {
-    try {
-      storage.write(
-          'changingLkSubject',
-          (await databaseGetAllTimeTableUnit())
-              .firstWhere((element) => element.subject!.contains('LK')));
-      storage.write('changingLkWeeknumber', 1);
-    } catch (e) {
-      print(e);
+  if (storage.read('configuration') != null) {
+    if ((storage.read('configuration').contains('Q1') ||
+            storage.read('configuration').contains('Q2')) &&
+        (storage.read('changingLkSubject') == null ||
+            storage.read('changingLkWeekNumber') == null)) {
+      try {
+        storage.write(
+            'changingLkSubject',
+            (await databaseGetAllTimeTableUnit())
+                .firstWhere((element) => element.subject!.contains('LK')));
+        storage.write('changingLkWeeknumber', 1);
+      } catch (e) {
+        print(e);
+      }
     }
   }
 

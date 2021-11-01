@@ -66,13 +66,6 @@ class SettingsTab extends StatelessWidget {
                   await launch('https://${Links.annetteWebsite}/');
                 } catch (e) {
                   print(e);
-                  await showCustomInformationDialog(
-                      context,
-                      'Fehler',
-                      'Diese Funktion scheint mit deinem Gerät nicht zu funktionieren.',
-                      true,
-                      false,
-                      true);
                 }
               }),
           Divider(),
@@ -86,13 +79,6 @@ class SettingsTab extends StatelessWidget {
                       'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now');
                 } catch (e) {
                   print(e);
-                  await showCustomInformationDialog(
-                      context,
-                      'Fehler',
-                      'Diese Funktion scheint mit deinem Gerät nicht zu funktionieren.',
-                      true,
-                      false,
-                      true);
                 }
               }),
           Divider(),
