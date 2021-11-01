@@ -333,7 +333,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Die gesamte App und alle Einstellungen werden zurückgesetzt',
+                    'Die gesamte App und alle Einstellungen werden zurückgesetzt.',
                     style: textDescription,
                   ),
                 ),
