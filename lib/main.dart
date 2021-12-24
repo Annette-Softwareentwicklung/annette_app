@@ -1,4 +1,4 @@
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
+/*import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -223,4 +223,89 @@ class MyApp extends StatelessWidget {
               ),
             )));
   }
+}*/
+
+import 'dart:convert';
+import 'package:annette_app/fundamentals/timetableUnit.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter_widgetkit/flutter_widgetkit.dart';
+import 'homescreenWidget/FlutterWidgetData.dart';
+
+void main() {
+  runApp(MyApp());
 }
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    WidgetKit.reloadAllTimelines();
+    WidgetKit.reloadTimelines('test');
+
+    final data = FlutterWidgetData('Hello From Flutter');
+    final resultString = await WidgetKit.getItem('testString', 'group.com.annetteapp');
+    final resultBool = await WidgetKit.getItem('testBool', 'group.com.annetteapp');
+    final resultNumber = await WidgetKit.getItem('testNumber', 'group.com.annetteapp');
+    final resultJsonString = await WidgetKit.getItem('testJson', 'group.com.annetteapp');
+
+    var resultData;
+    if(resultJsonString != null) {
+      resultData = FlutterWidgetData.fromJson(jsonDecode(resultJsonString));
+    }
+
+    WidgetKit.setItem('testString', 'Hello World', 'group.com.annetteapp');
+    WidgetKit.setItem('testBool', false, 'group.com.annetteapp');
+    WidgetKit.setItem('testNumber', 10, 'group.com.annetteapp');
+    WidgetKit.setItem('testJson', jsonEncode(data), 'group.com.annetteapp');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('iOS Widget Showcase'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Enter a text 🙏🏻',
+              ),
+              Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                  child: TextField(
+                      controller: textController
+                  )),
+              ElevatedButton(onPressed: () {
+                //WidgetKit.setItem('widgetData', jsonEncode(FlutterWidgetData(textController.text)), 'group.com.annetteapp');
+                WidgetKit.setItem('widgetData', jsonEncode(TimeTableUnit(dayNumber: 1,lessonNumber: 1,room: 'A101',id: 0,subject: 'Deutsch')), 'group.com.annetteapp');
+                WidgetKit.reloadAllTimelines();
+                print('reload');
+              }, child: Text('Update Widget 🥳')),
+              ElevatedButton(onPressed: () {
+                WidgetKit.removeItem('widgetData', 'group.com.annetteapp');
+                WidgetKit.reloadAllTimelines();
+              }, child: Text('Remove Widget Data ⚠️'))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

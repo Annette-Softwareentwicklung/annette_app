@@ -12,13 +12,14 @@ class TimeTableUnit {
         this.dayNumber,
         this.lessonNumber,});
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'subject': subject,
-      'room': room,
-      'dayNumber': dayNumber,
-      'lessonNumber': lessonNumber,
-    };
-  }
+  TimeTableUnit.fromJson(Map<String, dynamic> json) : id = json['id'],subject = json['subject'],room = json['room'],dayNumber = json['dayNumber'],lessonNumber = json['lessonNumber'];
+
+  Map<String, dynamic> toJson() =>
+      {
+        'id': id,
+        'subject': subject,
+        'room': room,
+        'dayNumber': dayNumber,
+        'lessonNumber': lessonNumber,
+      };
 }

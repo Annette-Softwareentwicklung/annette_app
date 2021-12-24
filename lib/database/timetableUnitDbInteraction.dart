@@ -20,7 +20,7 @@ void databaseInsertTimetableUnit(TimeTableUnit pTimeTableUnit) async {
     final Database db = await database;
     await db.insert(
       'timetable',
-      timeTableUnit.toMap(),
+      timeTableUnit.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -42,7 +42,7 @@ void databaseUpdateTimeTableUnit(TimeTableUnit pTimeTableUnit) async {
     final db = await database;
     await db.update(
       'timetable',
-      timeTableUnit.toMap(),
+      timeTableUnit.toJson(),
       where: "id = ?",
       whereArgs: [timeTableUnit.id],
     );
