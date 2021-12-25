@@ -63,12 +63,36 @@ struct FlutterWidgetEntryView : View {
     var entry: Provider.Entry
     
     private var FlutterDataView: some View {
-      Text(entry.flutterData!.subject)
+        Text(entry.flutterData!.subject)
     }
     
     private var NoDataView: some View {
-      Text("Konfiguriere den Stundenplan in der Annette App!")
+        
+        VStack (alignment: .trailing) {
+            HStack(alignment: .top) {
+                Image(systemName: "1.circle.fill")
+                    .foregroundColor(.blue)
+                    .font(.system(size: 40))
+                Spacer()
+                
+                    Text("8:00 - 8:45")
+                        .foregroundColor(Color.gray)
+                        .font(.system(size: 15,weight: .regular,design: .default))
+            }
+            Text("Orientierungsstunde")
+                .font(.system(size: 25,weight: .medium,design: .default))
+
+            HStack() {
+                Text("A101")
+                    .font(.system(size: 20,weight: .regular,design: .default))
+                Image(systemName: "location.circle")
+                    .font(.system(size: 20,weight: .light))
+            }
+            
+        }.padding()
+      //Text("Konfiguriere den Stundenplan in der Annette App!")
     }
+    
     
     var body: some View {
       if(entry.flutterData == nil) {
@@ -89,13 +113,18 @@ struct FlutterWidget: Widget {
             FlutterWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Stundenplan")
-        .description("Zeigt immer die aktuelle Stunde inklusive Raum an.")
+        .description("Zeigt die aktuelle Stunde inklusive Raum an.")
+        .supportedFamilies([.systemSmall,.systemMedium])
     }
 }
 
 struct FlutterWidget_Previews: PreviewProvider {
     static var previews: some View {
-        FlutterWidgetEntryView(entry: SimpleEntry(date: Date(), flutterData: nil))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            FlutterWidgetEntryView(entry: SimpleEntry(date: Date(), flutterData: nil))
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+            FlutterWidgetEntryView(entry: SimpleEntry(date: Date(), flutterData: nil))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
     }
+}
 }
