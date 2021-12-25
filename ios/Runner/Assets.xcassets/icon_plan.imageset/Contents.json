@@ -1,12 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "icon_plan.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon_plan-1.png",
+      "filename" : "calendar@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
