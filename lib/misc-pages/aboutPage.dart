@@ -102,7 +102,7 @@ class AboutPage extends StatelessWidget {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                              Text("Entwickler:\nJan Wermeckes und Rui Zhang\n"),
+                              Text("Entwickler:\nAnnette-Entwickelt-Software AG\n"),
                               Text('Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.' +
                                   '\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.' +
                                   '\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.' +
@@ -110,9 +110,9 @@ class AboutPage extends StatelessWidget {
                                   '\n\nAlle Angaben ohne Gewähr!' +
                                   '\n\nKontakt / Feedback:'),
                               SelectableText(
-                                'appentwicklung.jan@gmx.de',
+                                'AnnetteSoftware@gmail.com',
                               ),
-                                  Text('\n©2021 Jan Wermeckes und Rui Zhang'),
+                                  Text('\n©2022 Annette-Entwickelt-Software AG'),
 
                                 ])),
                         Container(
