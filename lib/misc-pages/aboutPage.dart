@@ -1,9 +1,7 @@
 import 'package:annette_app/custom_widgets/defaultScaffold.dart';
 import 'package:annette_app/data/design.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:annette_app/data/assets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:yaml/yaml.dart';
@@ -37,7 +35,7 @@ class AboutPage extends StatelessWidget {
         return new DefaultScaffold(
             title: "Über diese App",
             content: Container(
-              alignment: Alignment.topCenter,
+                alignment: Alignment.topCenter,
                 padding: EdgeInsets.symmetric(
                     horizontal: sectionMargin,
                     vertical: Design.standardPagePadding),
@@ -63,8 +61,8 @@ class AboutPage extends StatelessWidget {
                                           color: Colors.grey.withOpacity(0.15),
                                           spreadRadius: 2,
                                           blurRadius: 5,
-                                          offset: Offset(
-                                              0, 3), // changes position of shadow
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
                                         ),
                                       ],
                                 color: Colors.white,
@@ -73,11 +71,13 @@ class AboutPage extends StatelessWidget {
                               ),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey, width: 1),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
                                   borderRadius: BorderRadius.circular(10),
                                   shape: BoxShape.rectangle,
                                   image: DecorationImage(
-                                      image: AssetImage(assetPaths.iconImagePath),
+                                      image:
+                                          AssetImage(AssetPaths.iconImagePath),
                                       fit: BoxFit.fitHeight),
                                 ),
                               ),
@@ -88,7 +88,8 @@ class AboutPage extends StatelessWidget {
                                   Text(
                                     appName,
                                     style: TextStyle(
-                                        fontSize: 25, fontWeight: FontWeight.w500),
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w500),
                                     textAlign: TextAlign.center,
                                   ),
                                   Text("Version $version"),
@@ -98,44 +99,49 @@ class AboutPage extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: sectionMargin),
+                            margin: EdgeInsets.only(top: sectionMargin),
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                              Text("Entwickler:\nAnnette-Entwickelt-Software AG\n"),
-                              Text('Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.' +
-                                  '\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.' +
-                                  '\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.' +
-                                  '\n\nDer aktuell verwendete Stundenplan ist von Stand:\n${(timeTableVersion != null) ? timeTableVersion.toString() : "Fehler"}' +
-                                  '\n\nAlle Angaben ohne Gewähr!' +
-                                  '\n\nKontakt / Feedback:'),
-                              SelectableText(
-                                'AnnetteSoftware@gmail.com',
-                              ),
-                                  Text('\n©2022 Annette-Entwickelt-Software AG'),
-
+                                  Text(
+                                      "Entwickler:\nAnnette-Entwickelt-Software AG\n"),
+                                  Text('Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.' +
+                                      '\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.' +
+                                      '\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.' +
+                                      '\n\nDer aktuell verwendete Stundenplan ist von Stand:\n${(timeTableVersion != null) ? timeTableVersion.toString() : "Fehler"}' +
+                                      '\n\nAlle Angaben ohne Gewähr!' +
+                                      '\n\nKontakt / Feedback:'),
+                                  SelectableText(
+                                    'AnnetteSoftware@gmail.com',
+                                  ),
+                                  Text(
+                                      '\n©2022 Annette-Entwickelt-Software AG'),
                                 ])),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: sectionMargin,vertical: sectionMargin),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: sectionMargin,
+                              vertical: sectionMargin),
                           child: OutlinedButton(
-                              onPressed: () => showLicensePage(
-                                  context: context,
-                                  applicationIcon: Container(
-                                    margin: EdgeInsets.symmetric(vertical: sectionMargin),
-                                    width: 100,
-                                      height: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      shape: BoxShape.rectangle,
-                                      image: DecorationImage(
-                                          image: AssetImage(assetPaths.iconImagePath),
-                                          fit: BoxFit.fitHeight),
-                                    ),
+                            onPressed: () => showLicensePage(
+                                context: context,
+                                applicationIcon: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: sectionMargin),
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            AssetPaths.iconImagePath),
+                                        fit: BoxFit.fitHeight),
                                   ),
-                                  applicationName: appName,
-                                  applicationVersion: version),
-                              child: Text("Lizenzen anzeigen"),
-                            ),
+                                ),
+                                applicationName: appName,
+                                applicationVersion: version),
+                            child: Text("Lizenzen anzeigen"),
+                          ),
                         ),
                       ],
                     ),

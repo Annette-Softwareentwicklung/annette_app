@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,9 @@ class VertretungListTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark)
+            ? Colors.black26
+            : Colors.black12,
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(20),
       ),
@@ -55,8 +56,7 @@ class VertretungListTile extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: (vertretung.subjectOld != null &&
                                 vertretung.subjectNew != null &&
-                                vertretung.subjectNew !=
-                                    vertretung.subjectOld)
+                                vertretung.subjectNew != vertretung.subjectOld)
                             ? Colors.red
                             : null,
                       ),
@@ -142,8 +142,8 @@ class VertretungListTile extends StatelessWidget {
                   children: [
                     ///Anzeige "Lehrer neu"
 
-                    if (
-                    (vertretung.teacherNew != null && vertretung.teacherOld != null &&
+                    if ((vertretung.teacherNew != null &&
+                            vertretung.teacherOld != null &&
                             vertretung.teacherOld! != vertretung.teacherNew) ||
                         (vertretung.teacherNew != null &&
                             vertretung.type != null &&
@@ -214,7 +214,7 @@ class VertretungListTile extends StatelessWidget {
             children: [
               if (!vertretung.type!.toLowerCase().contains('vertretung') &&
                   !vertretung.type!.toLowerCase().contains('raum')
-                  //&& vertretung.subjectOld != null
+              //&& vertretung.subjectOld != null
               )
                 Text(
                   (vertretung.comment != null)

@@ -494,7 +494,8 @@ class _SetClassState extends State<SetClass> {
               ? 638
               : /*(MediaQuery.of(context).size.height > 1000)
                   ? 700
-                  : */MediaQuery.of(context).size.height - 80,
+                  : */
+              MediaQuery.of(context).size.height - 80,
           decoration: new BoxDecoration(
             color: (Theme.of(context).brightness == Brightness.dark)
                 ? Color.fromRGBO(40, 40, 40, 1)
@@ -641,111 +642,111 @@ class _SetClassState extends State<SetClass> {
                           padding: EdgeInsets.only(bottom: 15),
                           margin: EdgeInsets.only(left: 5),
                         ),
-                        if(!showFinishedConfiguration)
-                        Row(
-                          children: [
-                            if (!finished)
-                              Expanded(
+                        if (!showFinishedConfiguration)
+                          Row(
+                            children: [
+                              if (!finished)
+                                Expanded(
+                                    flex: 2,
+                                    child: LinearProgressIndicator(
+                                      minHeight: 2,
+                                      backgroundColor:
+                                          (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Colors.grey
+                                              : null,
+                                      color: (Theme.of(context).brightness ==
+                                              Brightness.dark)
+                                          ? Theme.of(context).accentColor
+                                          : Colors.blue,
+                                    )),
+                              if (finished)
+                                Expanded(
                                   flex: 2,
-                                  child: LinearProgressIndicator(
-                                    minHeight: 2,
-                                    backgroundColor:
-                                        (Theme.of(context).brightness ==
-                                                Brightness.dark)
-                                            ? Colors.grey
-                                            : null,
+                                  child: Container(
+                                    height: 2,
                                     color: (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
                                         : Colors.blue,
-                                  )),
-                            if (finished)
+                                  ),
+                                ),
+                              SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: (!finished)
+                                            ? Colors.grey
+                                            : (Theme.of(context).brightness ==
+                                                    Brightness.dark)
+                                                ? Theme.of(context).accentColor
+                                                : Colors.blue,
+                                        width: 2),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '1',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  height: 2,
+                                  color: (!showGroupsOS && !showGroupsUS)
+                                      ? Colors.grey
+                                      : (Theme.of(context).brightness ==
+                                              Brightness.dark)
+                                          ? Theme.of(context).accentColor
+                                          : Colors.blue,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: (!showGroupsOS && !showGroupsUS)
+                                            ? Colors.grey
+                                            : (Theme.of(context).brightness ==
+                                                    Brightness.dark)
+                                                ? Theme.of(context).accentColor
+                                                : Colors.blue,
+                                        width: 2),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '2',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
                               Expanded(
                                 flex: 2,
                                 child: Container(
                                   height: 2,
-                                  color: (Theme.of(context).brightness ==
-                                          Brightness.dark)
-                                      ? Theme.of(context).accentColor
-                                      : Colors.blue,
+                                  color: (!showFinishedConfiguration)
+                                      ? Colors.grey
+                                      : (Theme.of(context).brightness ==
+                                              Brightness.dark)
+                                          ? Theme.of(context).accentColor
+                                          : Colors.blue,
                                 ),
                               ),
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: (!finished)
-                                          ? Colors.grey
-                                          : (Theme.of(context).brightness ==
-                                                  Brightness.dark)
-                                              ? Theme.of(context).accentColor
-                                              : Colors.blue,
-                                      width: 2),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '1',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                height: 2,
-                                color: (!showGroupsOS && !showGroupsUS)
-                                    ? Colors.grey
-                                    : (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                        ? Theme.of(context).accentColor
-                                        : Colors.blue,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: (!showGroupsOS && !showGroupsUS)
-                                          ? Colors.grey
-                                          : (Theme.of(context).brightness ==
-                                                  Brightness.dark)
-                                              ? Theme.of(context).accentColor
-                                              : Colors.blue,
-                                      width: 2),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '2',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                height: 2,
-                                color: (!showFinishedConfiguration)
-                                    ? Colors.grey
-                                    : (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                        ? Theme.of(context).accentColor
-                                        : Colors.blue,
-                              ),
-                            ),
-                          ],
-                        )
+                            ],
+                          )
                       ]))
                 ]),
               ),
@@ -1010,32 +1011,46 @@ class _SetClassState extends State<SetClass> {
                                   }).toList(),
                                   onChanged: (String? newValue) {
                                     setState(() {
-                                      if (j == 1) {
-                                        selectedGk1 = newValue!;
-                                      } else if (j == 2) {
-                                        selectedGk2 = newValue!;
-                                      } else if (j == 3) {
-                                        selectedGk3 = newValue!;
-                                      } else if (j == 4) {
-                                        selectedGk4 = newValue!;
-                                      } else if (j == 5) {
-                                        selectedGk5 = newValue!;
-                                      } else if (j == 6) {
-                                        selectedGk6 = newValue!;
-                                      } else if (j == 7) {
-                                        selectedGk7 = newValue!;
-                                      } else if (j == 8) {
-                                        selectedGk8 = newValue!;
-                                      } else if (j == 9) {
-                                        selectedGk9 = newValue!;
-                                      } else if (j == 10) {
-                                        selectedGk10 = newValue!;
-                                      } else if (j == 11) {
-                                        selectedGk11 = newValue!;
-                                      } else if (j == 12) {
-                                        selectedGk12 = newValue!;
-                                      } else {
-                                        selectedGk13 = newValue!;
+                                      switch (j) {
+                                        case 1:
+                                          selectedGk1 = newValue!;
+                                          break;
+                                        case 2:
+                                          selectedGk2 = newValue!;
+                                          break;
+                                        case 3:
+                                          selectedGk3 = newValue!;
+                                          break;
+                                        case 4:
+                                          selectedGk4 = newValue!;
+                                          break;
+                                        case 5:
+                                          selectedGk5 = newValue!;
+                                          break;
+                                        case 6:
+                                          selectedGk6 = newValue!;
+                                          break;
+                                        case 7:
+                                          selectedGk7 = newValue!;
+                                          break;
+                                        case 8:
+                                          selectedGk8 = newValue!;
+                                          break;
+                                        case 9:
+                                          selectedGk9 = newValue!;
+                                          break;
+                                        case 10:
+                                          selectedGk10 = newValue!;
+                                          break;
+                                        case 11:
+                                          selectedGk11 = newValue!;
+                                          break;
+                                        case 12:
+                                          selectedGk12 = newValue!;
+                                          break;
+                                        case 13:
+                                          selectedGk13 = newValue!;
+                                          break;
                                       }
                                     });
                                   },

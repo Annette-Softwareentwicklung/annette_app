@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 ///Deutsche Übersetzung Cupertino Datepicker/Timepicker
 
-class CupertinoLocalizationsDelegate extends LocalizationsDelegate<CupertinoLocalizations> {
+class CupertinoLocalizationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
   const CupertinoLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) => locale.languageCode == 'de';
 
   @override
-  Future<CupertinoLocalizations> load(Locale locale) => GermanCupertinoLocalizations.load(locale);
+  Future<CupertinoLocalizations> load(Locale locale) =>
+      GermanCupertinoLocalizations.load(locale);
 
   @override
   bool shouldReload(CupertinoLocalizationsDelegate old) => false;
@@ -70,8 +71,6 @@ class GermanCupertinoLocalizations implements CupertinoLocalizations {
     'Dezember',
   ];
 
-
-
   @override
   String datePickerYear(int yearIndex) => yearIndex.toString();
 
@@ -95,8 +94,7 @@ class GermanCupertinoLocalizations implements CupertinoLocalizations {
 
   @override
   String datePickerMinuteSemanticsLabel(int minute) {
-    if (minute == 1)
-      return '1 Minute';
+    if (minute == 1) return '1 Minute';
     return minute.toString() + ' Minuten';
   }
 
@@ -111,7 +109,8 @@ class GermanCupertinoLocalizations implements CupertinoLocalizations {
   DatePickerDateOrder get datePickerDateOrder => DatePickerDateOrder.mdy;
 
   @override
-  DatePickerDateTimeOrder get datePickerDateTimeOrder => DatePickerDateTimeOrder.date_time_dayPeriod;
+  DatePickerDateTimeOrder get datePickerDateTimeOrder =>
+      DatePickerDateTimeOrder.date_time_dayPeriod;
 
   @override
   String get anteMeridiemAbbreviation => 'AM';
@@ -132,7 +131,8 @@ class GermanCupertinoLocalizations implements CupertinoLocalizations {
   String timerPickerSecond(int second) => second.toString();
 
   @override
-  String timerPickerHourLabel(int hour) => '';//hour == 1 ? 'Stunde' : 'Stunden';
+  String timerPickerHourLabel(int hour) =>
+      ''; //hour == 1 ? 'Stunde' : 'Stunden';
 
   @override
   String timerPickerMinuteLabel(int minute) => 'Uhr';
@@ -171,12 +171,14 @@ class GermanCupertinoLocalizations implements CupertinoLocalizations {
   ///
   /// This method is typically used to create a [LocalizationsDelegate].
   static Future<CupertinoLocalizations> load(Locale locale) {
-    return SynchronousFuture<CupertinoLocalizations>(const GermanCupertinoLocalizations());
+    return SynchronousFuture<CupertinoLocalizations>(
+        const GermanCupertinoLocalizations());
   }
 
   /// A [LocalizationsDelegate] that uses [DefaultCupertinoLocalizations.load]
   /// to create an instance of this class.
-  static const LocalizationsDelegate<CupertinoLocalizations> delegate = CupertinoLocalizationsDelegate();
+  static const LocalizationsDelegate<CupertinoLocalizations> delegate =
+      CupertinoLocalizationsDelegate();
 
   @override
   // TODO: implement modalBarrierDismissLabel
@@ -191,6 +193,4 @@ class GermanCupertinoLocalizations implements CupertinoLocalizations {
   @override
   // TODO: implement searchTextFieldPlaceholderLabel
   String get searchTextFieldPlaceholderLabel => throw UnimplementedError();
-
-
 }

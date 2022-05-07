@@ -21,7 +21,7 @@ class IntroductionScreen extends StatefulWidget {
 class IntroductionScreenState extends State<IntroductionScreen> {
   List<Widget> _pages = [
     ImageTitleTextModel(
-      image: AssetImage(assetPaths.iconImagePath),
+      image: AssetImage(AssetPaths.iconImagePath),
       title: 'Annette App',
       demoImage: false,
       text:
@@ -29,21 +29,21 @@ class IntroductionScreenState extends State<IntroductionScreen> {
     ),
     ImageTitleTextModel(
       demoImage: true,
-      image: AssetImage(assetPaths.vertretungsDemoPath),
+      image: AssetImage(AssetPaths.vertretungsDemoPath),
       title: 'Vertretungsplan',
       text:
           'Individuell nach deinen Kursen gefiltert - damit du direkt informiert bist.',
     ),
     ImageTitleTextModel(
       demoImage: true,
-      image: AssetImage(assetPaths.homeworkDemoPath),
+      image: AssetImage(AssetPaths.homeworkDemoPath),
       title: 'Hausaufgaben',
       text:
           'Es war noch nie so leicht, Hausaufgaben zu erstellen und zu verwalten. Automatische Facherkennung anhand deines Stundenplans und Push-Benachrichtigungen zur Erinnerung sind nur zwei von vielen nützlichen Features.',
     ),
     ImageTitleTextModel(
       demoImage: true,
-      image: AssetImage(assetPaths.timetableDemoPath),
+      image: AssetImage(AssetPaths.timetableDemoPath),
       title: 'Stundenplan',
       text:
           'Dein individueller Stundenplan inklusive Pausenzeiten. Dank automatischer Erkennung der aktuellen Stunde lässt sich der Stundenplan schnell ablesen, und du musst nicht erst deinen Kurs in der großen Übersicht suchen.',
@@ -52,8 +52,6 @@ class IntroductionScreenState extends State<IntroductionScreen> {
   final pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
-
-
 
   void helperOrientation() {
     if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
@@ -71,7 +69,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 
   @override
   dispose() {
-   SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
@@ -230,9 +228,9 @@ class ImageTitleTextModel extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(
-                  top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
-                  bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
-      ),
+                top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
+                bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
+              ),
               child: Text(
                 title,
                 textAlign: TextAlign.center,

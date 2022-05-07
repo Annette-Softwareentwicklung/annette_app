@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/design.dart';
 import 'package:annette_app/data/links.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
