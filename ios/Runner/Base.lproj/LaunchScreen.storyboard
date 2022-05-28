@@ -54,7 +54,7 @@
                         <constraints>
                             <constraint firstItem="aRq-UI-uj2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="fUl-Au-3yq"/>
                             <constraint firstItem="aRq-UI-uj2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-80" id="h8h-PU-X82"/>
-                            <constraint firstItem="xbc-2k-c8Z" firstAttribute="top" secondItem="5IG-fw-6Hx" secondAttribute="bottom" constant="35" id="mBV-HE-mdG"/>
+                            <constraint firstAttribute="bottom" secondItem="5IG-fw-6Hx" secondAttribute="bottom" constant="69" id="mBV-HE-mdG"/>
                             <constraint firstItem="5IG-fw-6Hx" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="pMM-7T-rSL"/>
                         </constraints>
                     </view>
