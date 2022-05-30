@@ -96,6 +96,7 @@ class NavigationControllerState extends State<NavigationController> {
                   : SettingsTab(),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
+        backgroundColor: Color.fromRGBO(0, 136, 148, 1),
         child: Icon(Icons.add),
         onPressed: () {
           showNewHomeworkDialog();

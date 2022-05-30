@@ -18,7 +18,7 @@ class ErrorInternetContainer extends StatelessWidget {
             size: 150,
             color: (Theme.of(context).brightness == Brightness.dark)
                 ? Theme.of(context).accentColor
-                : Colors.blueAccent,
+                : Color.fromRGBO(0, 136, 148, 1),
           ),
           Container(
               padding: EdgeInsets.symmetric(horizontal: 30),

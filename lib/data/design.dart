@@ -20,7 +20,7 @@ class Design {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateColor.resolveWith((states) => Colors.lightBlueAccent),
+          backgroundColor: MaterialStateColor.resolveWith((states) => Color.fromRGBO(0, 136, 148, 1),),
           foregroundColor: MaterialStateColor.resolveWith((states) => Colors.black),
         ),
       ),
@@ -37,8 +37,8 @@ class Design {
       floatingActionButtonTheme:
       FloatingActionButtonThemeData(foregroundColor: Colors.black),
       //buttonTheme: ButtonThemeData(buttonColor: Colors.tealAccent),
-      buttonTheme: ButtonThemeData(buttonColor: Colors.lightBlueAccent),
-      accentColor: Colors.lightBlueAccent,
+      buttonTheme: ButtonThemeData(buttonColor: Color.fromRGBO(0, 136, 148, 1),),
+      accentColor: Color.fromRGBO(0, 136, 148, 1),
       snackBarTheme: SnackBarThemeData(
           contentTextStyle: TextStyle(
             color: Colors.white,
@@ -64,7 +64,7 @@ class Design {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateColor.resolveWith((states) => Colors.blue),
+          backgroundColor: MaterialStateColor.resolveWith((states) => Color.fromRGBO(0, 136, 148, 1),),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -74,7 +74,7 @@ class Design {
       brightness: Brightness.light,
       accentColor: Colors.black54,
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Colors.blue, foregroundColor: Colors.white),
+          backgroundColor: Color.fromRGBO(0, 136, 148, 1), foregroundColor: Colors.white),
     );
 
 }

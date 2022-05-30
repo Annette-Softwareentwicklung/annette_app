@@ -13,7 +13,7 @@ class VertretungListTile extends StatelessWidget {
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   final Shader lightGradient = LinearGradient(
-    colors: <Color>[Colors.blue, Colors.tealAccent],
+    colors: <Color>[Color.fromRGBO(0, 136, 148, 1), Colors.tealAccent],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   @override
@@ -37,7 +37,7 @@ class VertretungListTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: Color.fromRGBO(0, 136, 148, 1),
                       ),
                     )
                   : Text(''),

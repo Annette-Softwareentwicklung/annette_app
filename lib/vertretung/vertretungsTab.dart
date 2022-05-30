@@ -29,12 +29,12 @@ class _VertretungsTabState extends State<VertretungsTab> {
     Color.fromRGBO(234, 157, 73, 1)
   ]);
   final LinearGradient lightGradient = LinearGradient(colors: [
-    Color.fromRGBO(74, 149, 236, 1),
-    Color.fromRGBO(110, 160, 200, 1)
+    Color.fromRGBO(0, 136, 148, 1),
+    Color.fromRGBO(14, 46, 64, 1)
   ]);
   final LinearGradient darkGradient = LinearGradient(colors: [
-    Color.fromRGBO(44, 119, 206, 1),
-    Color.fromRGBO(90, 140, 180, 1)
+    Color.fromRGBO(0, 136, 148, 1),
+    Color.fromRGBO(14, 46, 64, 1)
   ]);
 
   void makeRequest() async {

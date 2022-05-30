@@ -160,7 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Colors.blue,
+                                  : Color.fromRGBO(0, 136, 148, 1),
                         ),
                       ),
                       ListTile(
@@ -174,7 +174,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Colors.blue,
+                                  : Color.fromRGBO(0, 136, 148, 1),
                         ),
                       ),
                       ListTile(
@@ -188,7 +188,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Colors.blue,
+                                  : Color.fromRGBO(0, 136, 148, 1),
                         ),
                       ),
                     ],
@@ -235,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             activeColor: (Theme.of(context).brightness ==
                                     Brightness.dark)
                                 ? Theme.of(context).accentColor
-                                : Colors.blue,
+                                : Color.fromRGBO(0, 136, 148, 1),
                           ),
                         ),
                         ListTile(
@@ -256,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             activeColor: (Theme.of(context).brightness ==
                                     Brightness.dark)
                                 ? Theme.of(context).accentColor
-                                : Colors.blue,
+                                : Color.fromRGBO(0, 136, 148, 1),
                           ),
                         ),
                       ],

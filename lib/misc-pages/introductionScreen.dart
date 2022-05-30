@@ -108,7 +108,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                               color: (Theme.of(context).brightness ==
                                       Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Colors.blue,
+                                  : Color.fromRGBO(0, 136, 148, 1),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -145,7 +145,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CirclePageIndicator(
-                        selectedDotColor: Colors.blue,
+                        selectedDotColor: Color.fromRGBO(0, 136, 148, 1),
                         size: 13,
                         selectedSize: 13,
                         // dotSpacing: 15,
@@ -217,7 +217,7 @@ class ImageTitleTextModel extends StatelessWidget {
                   border: Border.all(
                       color: (Theme.of(context).brightness == Brightness.dark &&
                               demoImage)
-                          ? Colors.blue
+                          ? Color.fromRGBO(0, 136, 148, 1)
                           : Colors.grey,
                       width: (Theme.of(context).brightness == Brightness.dark)
                           ? 2

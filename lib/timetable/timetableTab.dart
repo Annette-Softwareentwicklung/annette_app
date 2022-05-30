@@ -62,11 +62,11 @@ class _TimetableTabState extends State<TimetableTab> {
   String? dateToday;
 
   final Shader lightGradient = LinearGradient(
-    colors: <Color>[Colors.blue, Colors.tealAccent],
+    colors: <Color>[Color.fromRGBO(0, 136, 148, 1), Colors.tealAccent],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   final Shader darkGradient = LinearGradient(
-    colors: <Color>[Colors.tealAccent, Colors.blue],
+    colors: <Color>[Colors.tealAccent, Color.fromRGBO(0, 136, 148, 1),],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   void load() async {
@@ -516,7 +516,7 @@ class DisplayFree extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                    color: Color.fromRGBO(0, 136, 148, 1),
                     /*foreground: Paint()
                     ..shader = (Theme.of(context).brightness == Brightness.dark)
                         ? darkGradient
@@ -686,7 +686,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: Color.fromRGBO(0, 136, 148, 1),
                   /*foreground: Paint()
                     ..shader = (Theme.of(context).brightness == Brightness.dark)
                         ? darkGradient
@@ -805,7 +805,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                       'Wechselnder LK',
                       style: TextStyle(
                           fontSize: 17,
-                          color: Colors.blue,
+                          color: Color.fromRGBO(0, 136, 148, 1),
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.normal),
                     ),
@@ -813,7 +813,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                       padding: EdgeInsets.only(left: 3),
                       child: Icon(
                         CupertinoIcons.info_circle,
-                        color: Colors.blue,
+                        color: Color.fromRGBO(0, 136, 148, 1),
                         size: 23,
                       ),
                     ),

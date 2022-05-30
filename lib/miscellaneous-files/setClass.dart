@@ -657,7 +657,7 @@ class _SetClassState extends State<SetClass> {
                                     color: (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Colors.blue,
+                                        : Color.fromRGBO(0, 136, 148, 1),
                                   )),
                             if (finished)
                               Expanded(
@@ -667,7 +667,7 @@ class _SetClassState extends State<SetClass> {
                                   color: (Theme.of(context).brightness ==
                                           Brightness.dark)
                                       ? Theme.of(context).accentColor
-                                      : Colors.blue,
+                                      : Color.fromRGBO(0, 136, 148, 1),
                                 ),
                               ),
                             SizedBox(
@@ -682,7 +682,7 @@ class _SetClassState extends State<SetClass> {
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
                                               ? Theme.of(context).accentColor
-                                              : Colors.blue,
+                                              : Color.fromRGBO(0, 136, 148, 1),
                                       width: 2),
                                 ),
                                 alignment: Alignment.center,
@@ -704,7 +704,7 @@ class _SetClassState extends State<SetClass> {
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Colors.blue,
+                                        : Color.fromRGBO(0, 136, 148, 1),
                               ),
                             ),
                             SizedBox(
@@ -719,7 +719,7 @@ class _SetClassState extends State<SetClass> {
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
                                               ? Theme.of(context).accentColor
-                                              : Colors.blue,
+                                              : Color.fromRGBO(0, 136, 148, 1),
                                       width: 2),
                                 ),
                                 alignment: Alignment.center,
@@ -741,7 +741,7 @@ class _SetClassState extends State<SetClass> {
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Colors.blue,
+                                        : Color.fromRGBO(0, 136, 148, 1),
                               ),
                             ),
                           ],
@@ -811,7 +811,7 @@ class _SetClassState extends State<SetClass> {
                             color: (Theme.of(context).brightness ==
                                     Brightness.dark)
                                 ? Theme.of(context).accentColor
-                                : Colors.blue,
+                                : Color.fromRGBO(0, 136, 148, 1),
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           child: Text(
@@ -900,7 +900,7 @@ class _SetClassState extends State<SetClass> {
                                 text: 'Welche Kurse habe ich?',
                                 style: TextStyle(
                                     decoration: TextDecoration.underline,
-                                    color: Colors.blue,
+                                    color: Color.fromRGBO(0, 136, 148, 1),
                                     fontSize: 17,
                                     fontStyle: FontStyle.italic),
                               ),
@@ -1141,7 +1141,7 @@ class _SetClassState extends State<SetClass> {
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
                         ? Theme.of(context).accentColor
-                        : Colors.blue,
+                        : Color.fromRGBO(0, 136, 148, 1),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(
@@ -1397,7 +1397,7 @@ class _SetClassState extends State<SetClass> {
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
                         ? Theme.of(context).accentColor
-                        : Colors.blue,
+                        : Color.fromRGBO(0, 136, 148, 1),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(
