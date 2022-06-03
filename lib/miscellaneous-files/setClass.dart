@@ -9,6 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 
+///
+/// !!!
+///
+/// Folgende Abkürzungen werden in dieser Datei genutzt: US -> Unterstufe; OS -> Oberstufe
+///
+///
+/// !!!
+///
+
+
 class SetClass extends StatefulWidget {
   final bool isInGuide;
   final VoidCallback onButtonPressed;

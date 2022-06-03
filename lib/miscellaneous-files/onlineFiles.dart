@@ -3,14 +3,16 @@ import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:http/http.dart' as http;
 
 class OnlineFiles {
+  /// folgendes Attribut ist ein String für den Stundenplan
   late String difExport;
+
   late DateTime newVersion;
 
   Future<bool> initialize() async {
     Future<String?> _getDifExport() async {
       try {
         var response = await http.get(
-            Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplan.txt'));
+            Uri.http('annette-app-files.vercel.app', '220524_Stundenplan.TXT'));
         if (response.statusCode == 200) {
           return response.body;
         }
@@ -21,23 +23,29 @@ class OnlineFiles {
     }
 
     Future<DateTime?> _getNewVersion() async {
-      try {
-        HttpClient client = HttpClient();
-        HttpClientRequest req = await client.getUrl(Uri.parse(
-            'http://janw.bplaced.net/annetteapp/data/stundenplan.txt'));
-        HttpClientResponse tempResponse = await req.close();
-        String t = tempResponse.headers.value(
-            HttpHeaders.lastModifiedHeader)!;
-        return getLastModifiedTime(t);
-      } catch (e) {
-        return null;
-      }
+      /// die jetzige Zeit wird zurückgegeben, damit der Stundenplan immer neu geladen wird.
+      /// das Problem ist nämlich, dass vercel keinen "lastModifiedHeader" sendet
+      /// Rui hat kein Bock im Moment die Stelle zu verändern, die den "getNewVersion" Wert liest und dort das so einzustellen,
+      /// dass diese nicht mehr relevant ist ;p
+      /*
+      HttpClient client = HttpClient();
+      HttpClientRequest req = await client.getUrl(Uri.parse(
+          'http://janw.bplaced.net/annetteapp/data/stundenplan.txt'));
+      HttpClientResponse tempResponse = await req.close();
+      print(tempResponse.headers);
+      String t = tempResponse.headers.value(
+          HttpHeaders.lastModifiedHeader)!;
+       */
+      return DateTime.now();
     }
+
+    final difExportValue = await _getDifExport();
+    final newVersionValue = await _getNewVersion();
 
 
     if (
-        await _getDifExport() != null &&
-        await _getNewVersion() != null) {
+        difExportValue != null &&
+        newVersionValue != null) {
       difExport = (await _getDifExport())!;
       newVersion = (await _getNewVersion())!;
       return true;
