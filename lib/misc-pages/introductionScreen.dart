@@ -19,15 +19,15 @@ class IntroductionScreen extends StatefulWidget {
 }
 
 class IntroductionScreenState extends State<IntroductionScreen> {
-
   List<Widget> _pages = [
     ImageTitleTextModel(
       image: AssetImage(assetPaths.iconImagePath),
       title: 'Annette App',
       demoImage: false,
       text:
-          'Die rundum erneuerte Annette App bietet zahlreiche Funktionen, um dir deinen Schulalltag zu erleichtern. '
-              ' - Entwickelt von der Annette-Entwickelt-Software-AG',
+          '''Die rundum erneuerte Annette App bietet zahlreiche Funktionen, um dir deinen Schulalltag zu erleichtern.
+          
+- Entwickelt von der Annette-Entwickelt-Software-AG''',
     ),
     ImageTitleTextModel(
       demoImage: true,
@@ -55,8 +55,6 @@ class IntroductionScreenState extends State<IntroductionScreen> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
 
-
-
   void helperOrientation() {
     if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
       SystemChrome.setPreferredOrientations([
@@ -73,7 +71,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 
   @override
   dispose() {
-   SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
@@ -213,6 +211,7 @@ class ImageTitleTextModel extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(bottom: 20),
               child: Container(
+                //demoImage
                 width: (demoImage) ? 350 : 200,
                 height: (demoImage) ? 350 : 200,
                 decoration: BoxDecoration(
@@ -231,10 +230,11 @@ class ImageTitleTextModel extends StatelessWidget {
               ),
             ),
             Container(
+              //fetter Titel der Page
               margin: EdgeInsets.only(
-                  top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
-                  bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
-      ),
+                top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
+                bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
+              ),
               child: Text(
                 title,
                 textAlign: TextAlign.center,
@@ -245,6 +245,7 @@ class ImageTitleTextModel extends StatelessWidget {
               ),
             ),
             Container(
+              //Beschreibungs-Text
               child: Scrollbar(
                 child: SingleChildScrollView(
                   child: Text(
@@ -261,10 +262,10 @@ class ImageTitleTextModel extends StatelessWidget {
                     ? 0
                     : (MediaQuery.of(context).size.height < 700)
                         ? 115
-                        : 150,
+                        : 250,
                 maxWidth: 400,
                 maxHeight:
-                    (MediaQuery.of(context).size.height < 700) ? 115 : 1000,
+                    (MediaQuery.of(context).size.height < 700) ? 135 : 1000,
               ),
             ),
             Spacer(),
