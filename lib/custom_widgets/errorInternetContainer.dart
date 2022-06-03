@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../data/design.dart';
 
 class ErrorInternetContainer extends StatelessWidget {
   final VoidCallback onRefresh;
@@ -18,7 +19,7 @@ class ErrorInternetContainer extends StatelessWidget {
             size: 150,
             color: (Theme.of(context).brightness == Brightness.dark)
                 ? Theme.of(context).accentColor
-                : Colors.blueAccent,
+                : Design.annetteColor,
           ),
           Container(
               padding: EdgeInsets.symmetric(horizontal: 30),

@@ -1,3 +1,4 @@
+import 'package:annette_app/data/design.dart';
 import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
 import 'package:annette_app/timetable/groupsEF.dart';
 import 'package:annette_app/timetable/groupsQ1.dart';
@@ -663,11 +664,11 @@ class _SetClassState extends State<SetClass> {
                                         (Theme.of(context).brightness ==
                                                 Brightness.dark)
                                             ? Colors.grey
-                                            : null,
+                                            : Design.annetteColorLight.withOpacity(0.5),
                                     color: (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Colors.blue,
+                                        : Design.annetteColor,
                                   )),
                             if (finished)
                               Expanded(
@@ -677,7 +678,7 @@ class _SetClassState extends State<SetClass> {
                                   color: (Theme.of(context).brightness ==
                                           Brightness.dark)
                                       ? Theme.of(context).accentColor
-                                      : Colors.blue,
+                                      : Design.annetteColor,
                                 ),
                               ),
                             SizedBox(
@@ -692,7 +693,7 @@ class _SetClassState extends State<SetClass> {
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
                                               ? Theme.of(context).accentColor
-                                              : Colors.blue,
+                                              : Design.annetteColor,
                                       width: 2),
                                 ),
                                 alignment: Alignment.center,
@@ -714,7 +715,7 @@ class _SetClassState extends State<SetClass> {
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Colors.blue,
+                                        : Design.annetteColor,
                               ),
                             ),
                             SizedBox(
@@ -729,7 +730,7 @@ class _SetClassState extends State<SetClass> {
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
                                               ? Theme.of(context).accentColor
-                                              : Colors.blue,
+                                              : Design.annetteColor,
                                       width: 2),
                                 ),
                                 alignment: Alignment.center,
@@ -751,7 +752,7 @@ class _SetClassState extends State<SetClass> {
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Colors.blue,
+                                        : Design.annetteColor,
                               ),
                             ),
                           ],
@@ -821,7 +822,7 @@ class _SetClassState extends State<SetClass> {
                             color: (Theme.of(context).brightness ==
                                     Brightness.dark)
                                 ? Theme.of(context).accentColor
-                                : Colors.blue,
+                                : Design.annetteColor,
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           child: Text(
@@ -910,7 +911,7 @@ class _SetClassState extends State<SetClass> {
                                 text: 'Welche Kurse habe ich?',
                                 style: TextStyle(
                                     decoration: TextDecoration.underline,
-                                    color: Colors.blue,
+                                    color: Design.annetteColor,
                                     fontSize: 17,
                                     fontStyle: FontStyle.italic),
                               ),
@@ -1151,7 +1152,7 @@ class _SetClassState extends State<SetClass> {
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
                         ? Theme.of(context).accentColor
-                        : Colors.blue,
+                        : Design.annetteColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(
@@ -1407,7 +1408,7 @@ class _SetClassState extends State<SetClass> {
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
                         ? Theme.of(context).accentColor
-                        : Colors.blue,
+                        : Design.annetteColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(

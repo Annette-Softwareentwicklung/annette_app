@@ -111,6 +111,9 @@ class AboutPage extends StatelessWidget {
                                   '\n\nKontakt / Feedback:'),
                               SelectableText(
                                 'AnnetteSoftware@gmail.com',
+                                style: TextStyle(
+                                  color: Design.annetteColor,
+                                ),
                               ),
                                   Text('\n©2022 Annette-Entwickelt-Software AG'),
 
