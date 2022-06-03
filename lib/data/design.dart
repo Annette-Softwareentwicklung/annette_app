@@ -6,6 +6,14 @@ import 'package:flutter/material.dart';
 class Design {
   static Color annetteColor = Color.fromRGBO(0, 136, 148, 1);
   static double standardPagePadding = 10.0;
+  static LinearGradient lightGradient = LinearGradient(colors: [
+    Color.fromRGBO(0, 136, 148, 1),
+    Color.fromRGBO(10, 91, 99, 1) //Color.fromRGBO(14, 46, 64, 1)
+  ]);
+  static LinearGradient darkGradient = LinearGradient(colors: [
+    Color.fromRGBO(0, 136, 148, 1),
+    Color.fromRGBO(10, 91, 99, 1) //Color.fromRGBO(14, 46, 64, 1)
+  ]);
 
   static ThemeData darkTheme = ThemeData(
     outlinedButtonTheme: OutlinedButtonThemeData(

@@ -1,9 +1,9 @@
 import 'dart:ui';
+import 'package:annette_app/data/design.dart';
 import 'package:annette_app/data/links.dart';
 import 'package:annette_app/vertretung/vertretungListTile.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -24,18 +24,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
   String lastEdited = '--';
   bool load = true;
 
-  final LinearGradient redYellowGradient = LinearGradient(colors: [
-    Color.fromRGBO(236, 112, 111, 1),
-    Color.fromRGBO(234, 157, 73, 1)
-  ]);
-  final LinearGradient lightGradient = LinearGradient(colors: [
-    Color.fromRGBO(0, 136, 148, 1),
-    Color.fromRGBO(14, 46, 64, 1)
-  ]);
-  final LinearGradient darkGradient = LinearGradient(colors: [
-    Color.fromRGBO(0, 136, 148, 1),
-    Color.fromRGBO(14, 46, 64, 1)
-  ]);
 
   void makeRequest() async {
     try {
@@ -221,8 +209,8 @@ class _VertretungsTabState extends State<VertretungsTab> {
             decoration: BoxDecoration(
               //color: Colors.black12,
               gradient: (Theme.of(context).brightness == Brightness.dark)
-                  ? darkGradient
-                  : lightGradient,
+                  ? Design.darkGradient
+                  : Design.lightGradient,
               borderRadius: BorderRadius.circular(10),
               //border: Border.all(color: Theme.of(context).accentColor, width: 1),
             ),
@@ -319,8 +307,8 @@ class _VertretungsTabState extends State<VertretungsTab> {
             decoration: BoxDecoration(
               //color: Colors.black12,
               gradient: (Theme.of(context).brightness == Brightness.dark)
-                  ? darkGradient
-                  : lightGradient,
+                  ? Design.darkGradient
+                  : Design.lightGradient,
               borderRadius: BorderRadius.circular(10),
               //border: Border.all(color: Theme.of(context).accentColor, width: 1),
             ),
