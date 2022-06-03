@@ -149,7 +149,7 @@ class _VertretungsTabState extends State<VertretungsTab> {
           physics: const AlwaysScrollableScrollPhysics(),
         ))
       ]),
-      //color: Colors.red,
+      color: Design.annetteColor,
       onRefresh: () {
         return Future.delayed(Duration.zero, () {
           setState(() {
