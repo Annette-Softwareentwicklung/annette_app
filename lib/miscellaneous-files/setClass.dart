@@ -1,3 +1,4 @@
+import 'package:annette_app/data/design.dart';
 import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
 import 'package:annette_app/timetable/groupsEF.dart';
 import 'package:annette_app/timetable/groupsQ1.dart';
@@ -653,11 +654,11 @@ class _SetClassState extends State<SetClass> {
                                         (Theme.of(context).brightness ==
                                                 Brightness.dark)
                                             ? Colors.grey
-                                            : null,
+                                            : Design.annetteColorLight,
                                     color: (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Color.fromRGBO(0, 136, 148, 1),
+                                        : Design.annetteColor,
                                   )),
                             if (finished)
                               Expanded(
@@ -667,7 +668,7 @@ class _SetClassState extends State<SetClass> {
                                   color: (Theme.of(context).brightness ==
                                           Brightness.dark)
                                       ? Theme.of(context).accentColor
-                                      : Color.fromRGBO(0, 136, 148, 1),
+                                      : Design.annetteColor,
                                 ),
                               ),
                             SizedBox(
