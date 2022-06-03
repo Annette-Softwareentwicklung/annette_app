@@ -1,10 +1,11 @@
+import 'dart:ui';
 import 'package:annette_app/timetable/timetableTab.dart';
 import 'package:annette_app/miscellaneous-files/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quick_actions/quick_actions.dart';
-import '../data/design.dart';
 import '../homework/homeworkTab.dart';
 import '../misc-pages/settingsTab.dart';
 import '../homework/addDialog.dart';
@@ -95,7 +96,6 @@ class NavigationControllerState extends State<NavigationController> {
                   : SettingsTab(),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor: Design.annetteColor,
         child: Icon(Icons.add),
         onPressed: () {
           showNewHomeworkDialog();

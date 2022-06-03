@@ -1,12 +1,11 @@
 import 'dart:ui';
 import 'package:annette_app/data/assets.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
-
-import '../data/design.dart';
 
 class IntroductionScreen extends StatefulWidget {
   final VoidCallback onFinished;
@@ -109,7 +108,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                               color: (Theme.of(context).brightness ==
                                       Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Design.annetteColor,
+                                  : Colors.blue,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -146,7 +145,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CirclePageIndicator(
-                        selectedDotColor: Design.annetteColor,
+                        selectedDotColor: Colors.blue,
                         size: 13,
                         selectedSize: 13,
                         // dotSpacing: 15,
@@ -218,7 +217,7 @@ class ImageTitleTextModel extends StatelessWidget {
                   border: Border.all(
                       color: (Theme.of(context).brightness == Brightness.dark &&
                               demoImage)
-                          ? Design.annetteColor
+                          ? Colors.blue
                           : Colors.grey,
                       width: (Theme.of(context).brightness == Brightness.dark)
                           ? 2
