@@ -654,7 +654,7 @@ class _SetClassState extends State<SetClass> {
                                         (Theme.of(context).brightness ==
                                                 Brightness.dark)
                                             ? Colors.grey
-                                            : Design.annetteColorLight,
+                                            : Design.annetteColorLight.withOpacity(0.5),
                                     color: (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
