@@ -12,7 +12,6 @@ import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../data/design.dart';
 import '../data/subjects.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:week_of_year/week_of_year.dart';
@@ -61,6 +60,14 @@ class _TimetableTabState extends State<TimetableTab> {
   List<VertretungsEinheit>? vertretungenMorgen = [];
   String? dateTomorrow;
   String? dateToday;
+
+  final Shader lightGradient = LinearGradient(
+    colors: <Color>[Colors.blue, Colors.tealAccent],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
+  final Shader darkGradient = LinearGradient(
+    colors: <Color>[Colors.tealAccent, Colors.blue],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   void load() async {
     allTimes = getAllTimes();
@@ -509,7 +516,11 @@ class DisplayFree extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Design.annetteColor,
+                    color: Colors.blue,
+                    /*foreground: Paint()
+                    ..shader = (Theme.of(context).brightness == Brightness.dark)
+                        ? darkGradient
+                        : lightGradient,*/
                   ),
                 ),
                 Text(
@@ -675,7 +686,11 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: Design.annetteColor,
+                  color: Colors.blue,
+                  /*foreground: Paint()
+                    ..shader = (Theme.of(context).brightness == Brightness.dark)
+                        ? darkGradient
+                        : lightGradient,*/
                 ),
               ),
               Expanded(
@@ -790,7 +805,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                       'Wechselnder LK',
                       style: TextStyle(
                           fontSize: 17,
-                          color: Design.annetteColor,
+                          color: Colors.blue,
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.normal),
                     ),
@@ -798,7 +813,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                       padding: EdgeInsets.only(left: 3),
                       child: Icon(
                         CupertinoIcons.info_circle,
-                        color: Design.annetteColor,
+                        color: Colors.blue,
                         size: 23,
                       ),
                     ),

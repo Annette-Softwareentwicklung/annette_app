@@ -450,7 +450,7 @@ class DetailedViewState extends State<DetailedView> {
                             CupertinoIcons.add,
                             color: (Theme.of(context).brightness ==
                                     Brightness.light)
-                                ? Design.annetteColor
+                                ? Colors.blue
                                 : Theme.of(context).accentColor,
                             size: 28,
                           ),

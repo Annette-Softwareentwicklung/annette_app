@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import '../data/design.dart';
 import '../fundamentals/preferredTheme.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:annette_app/database/databaseCreate.dart';
@@ -161,7 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Design.annetteColor,
+                                  : Colors.blue,
                         ),
                       ),
                       ListTile(
@@ -175,7 +174,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Design.annetteColor,
+                                  : Colors.blue,
                         ),
                       ),
                       ListTile(
@@ -189,7 +188,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Design.annetteColor,
+                                  : Colors.blue,
                         ),
                       ),
                     ],
@@ -236,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             activeColor: (Theme.of(context).brightness ==
                                     Brightness.dark)
                                 ? Theme.of(context).accentColor
-                                : Design.annetteColor,
+                                : Colors.blue,
                           ),
                         ),
                         ListTile(
@@ -257,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             activeColor: (Theme.of(context).brightness ==
                                     Brightness.dark)
                                 ? Theme.of(context).accentColor
-                                : Design.annetteColor,
+                                : Colors.blue,
                           ),
                         ),
                       ],
