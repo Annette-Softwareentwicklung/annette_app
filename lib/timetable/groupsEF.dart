@@ -10,6 +10,7 @@ class GroupsEF {
       try {
         String? tempUrl = await getTimetableURL();
         if (tempUrl != null) {
+
           var response = await http
               .get(Uri.https(Links.timetableUrl, '$tempUrl/c00026.htm'));
           if (response.statusCode == 200) {
@@ -29,18 +30,18 @@ class GroupsEF {
       groupsEfList.add([]);
       groupsEfList.add([]);
 
-      for(int i=1; i<13; i++) {
+      for (int i = 1; i < 13; i++) {
         List<String> tempList = [];
         String tempCode = htmlCode;
         String tempName = 'GK-Schiene';
 
         int tempIndex = tempCode.indexOf('$tempName $i<');
-        if(tempIndex == -1) {
+        if (tempIndex == -1) {
           tempName = 'GK Schiene';
           tempIndex = tempCode.indexOf('$tempName $i<');
         }
 
-        while(tempIndex != -1) {
+        while (tempIndex != -1) {
           tempCode =
               tempCode.substring(0, tempCode.indexOf('</TABLE', tempIndex));
           tempCode = tempCode.substring(tempCode.lastIndexOf('TABLE'));
@@ -52,7 +53,9 @@ class GroupsEF {
             String s = tempCode.substring(0, tempCode.indexOf('</B'));
             s = s.replaceAll('.', ' ');
             s = s.trim();
-            if (!tempList.contains(s) && !s.contains('Z1') && !s.contains('Z2')) {
+            if (!tempList.contains(s) &&
+                !s.contains('Z1') &&
+                !s.contains('Z2')) {
               tempList.add(s);
             }
             tempCode = tempCode.substring(tempCode.indexOf('</B'));
@@ -61,10 +64,8 @@ class GroupsEF {
             return a.compareTo(b);
           });
 
-
           tempCode = htmlCode;
           tempIndex = tempCode.indexOf('$tempName $i<', tempIndex + 10);
-
         }
         groupsEfList.add(tempList);
       }

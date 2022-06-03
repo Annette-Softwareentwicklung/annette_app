@@ -19,13 +19,15 @@ class IntroductionScreen extends StatefulWidget {
 }
 
 class IntroductionScreenState extends State<IntroductionScreen> {
+
   List<Widget> _pages = [
     ImageTitleTextModel(
       image: AssetImage(assetPaths.iconImagePath),
       title: 'Annette App',
       demoImage: false,
       text:
-          'Die rundum erneuerte Annette App bietet zahlreiche Funktionen, um dir deinen Schulalltag zu erleichtern.',
+          'Die rundum erneuerte Annette App bietet zahlreiche Funktionen, um dir deinen Schulalltag zu erleichtern. '
+              ' - Entwickelt von der Annette-Entwickelt-Software-AG',
     ),
     ImageTitleTextModel(
       demoImage: true,
