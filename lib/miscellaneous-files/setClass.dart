@@ -683,7 +683,7 @@ class _SetClassState extends State<SetClass> {
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
                                               ? Theme.of(context).accentColor
-                                              : Color.fromRGBO(0, 136, 148, 1),
+                                              : Design.annetteColor,
                                       width: 2),
                                 ),
                                 alignment: Alignment.center,
@@ -705,7 +705,7 @@ class _SetClassState extends State<SetClass> {
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Color.fromRGBO(0, 136, 148, 1),
+                                        : Design.annetteColor,
                               ),
                             ),
                             SizedBox(
@@ -720,7 +720,7 @@ class _SetClassState extends State<SetClass> {
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
                                               ? Theme.of(context).accentColor
-                                              : Color.fromRGBO(0, 136, 148, 1),
+                                              : Design.annetteColor,
                                       width: 2),
                                 ),
                                 alignment: Alignment.center,
@@ -742,7 +742,7 @@ class _SetClassState extends State<SetClass> {
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
                                         ? Theme.of(context).accentColor
-                                        : Color.fromRGBO(0, 136, 148, 1),
+                                        : Design.annetteColor,
                               ),
                             ),
                           ],
@@ -812,7 +812,7 @@ class _SetClassState extends State<SetClass> {
                             color: (Theme.of(context).brightness ==
                                     Brightness.dark)
                                 ? Theme.of(context).accentColor
-                                : Color.fromRGBO(0, 136, 148, 1),
+                                : Design.annetteColor,
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           child: Text(
@@ -901,7 +901,7 @@ class _SetClassState extends State<SetClass> {
                                 text: 'Welche Kurse habe ich?',
                                 style: TextStyle(
                                     decoration: TextDecoration.underline,
-                                    color: Color.fromRGBO(0, 136, 148, 1),
+                                    color: Design.annetteColor,
                                     fontSize: 17,
                                     fontStyle: FontStyle.italic),
                               ),
@@ -1142,7 +1142,7 @@ class _SetClassState extends State<SetClass> {
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
                         ? Theme.of(context).accentColor
-                        : Color.fromRGBO(0, 136, 148, 1),
+                        : Design.annetteColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(
@@ -1398,7 +1398,7 @@ class _SetClassState extends State<SetClass> {
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
                         ? Theme.of(context).accentColor
-                        : Color.fromRGBO(0, 136, 148, 1),
+                        : Design.annetteColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Text(

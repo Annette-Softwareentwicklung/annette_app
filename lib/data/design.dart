@@ -7,19 +7,16 @@ class Design {
   static Color annetteColor = Color.fromRGBO(0, 136, 148, 1);
   static Color annetteColorLight = Color.fromRGBO(0, 156, 170, 1);
   static double standardPagePadding = 10.0;
-  static LinearGradient lightGradient = LinearGradient(colors: [
-    Color.fromRGBO(0, 136, 148, 1),
-    Color.fromRGBO(10, 91, 99, 1)
-  ]);
-  static LinearGradient darkGradient = LinearGradient(colors: [
-    Color.fromRGBO(0, 136, 148, 1),
-    Color.fromRGBO(10, 91, 99, 1)
-  ]);
+  static LinearGradient lightGradient =
+      LinearGradient(colors: [annetteColor, Color.fromRGBO(10, 91, 99, 1)]);
+  static LinearGradient darkGradient =
+      LinearGradient(colors: [annetteColor, Color.fromRGBO(10, 91, 99, 1)]);
 
   static ThemeData darkTheme = ThemeData(
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
-        overlayColor: MaterialStateProperty.resolveWith((states) => annetteColorLight.withOpacity(0.1)),
+        overlayColor: MaterialStateProperty.resolveWith(
+            (states) => annetteColorLight.withOpacity(0.1)),
         foregroundColor:
             MaterialStateProperty.resolveWith((states) => Colors.white),
         textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(
@@ -38,7 +35,8 @@ class Design {
     ),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-            overlayColor: MaterialStateProperty.resolveWith((states) => annetteColorLight.withOpacity(0.1)),
+            overlayColor: MaterialStateProperty.resolveWith(
+                (states) => annetteColorLight.withOpacity(0.1)),
             foregroundColor:
                 MaterialStateProperty.resolveWith((states) => Colors.white))),
     brightness: Brightness.dark,
@@ -73,7 +71,8 @@ class Design {
     )),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
-        overlayColor: MaterialStateProperty.resolveWith((states) => annetteColorLight.withOpacity(0.1)),
+        overlayColor: MaterialStateProperty.resolveWith(
+            (states) => annetteColorLight.withOpacity(0.1)),
         foregroundColor:
             MaterialStateProperty.resolveWith((states) => Colors.black87),
         textStyle: MaterialStateProperty.resolveWith((states) => TextStyle(
@@ -90,7 +89,8 @@ class Design {
     ),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-            overlayColor: MaterialStateProperty.resolveWith((states) => annetteColorLight.withOpacity(0.1)),
+            overlayColor: MaterialStateProperty.resolveWith(
+                (states) => annetteColorLight.withOpacity(0.1)),
             foregroundColor:
                 MaterialStateProperty.resolveWith((states) => Colors.black))),
     brightness: Brightness.light,
