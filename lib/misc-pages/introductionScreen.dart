@@ -48,12 +48,15 @@ class IntroductionScreenState extends State<IntroductionScreen> {
       text:
           'Dein individueller Stundenplan inklusive Pausenzeiten. Dank automatischer Erkennung der aktuellen Stunde lässt sich der Stundenplan schnell ablesen, und du musst nicht erst deinen Kurs in der großen Übersicht suchen.',
     ),
+    ImageTitleTextModel(
+        demoImage: false,
+        //image: AssetImage(assetPaths.iconImagePath),
+        title: 'Annette Entwickelt Software',
+        text: 'Diese App wird von der Annette-Entwickelt-Software-AG mit Leidenschaft entwickelt :).'),
   ];
   final pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
-
-
 
   void helperOrientation() {
     if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
@@ -71,7 +74,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 
   @override
   dispose() {
-   SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
@@ -186,14 +189,14 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 }
 
 class ImageTitleTextModel extends StatelessWidget {
-  final ImageProvider<Object> image;
+  final ImageProvider<Object>? image;
   final String title;
   final String text;
   final bool demoImage;
 
   const ImageTitleTextModel(
       {Key? key,
-      required this.image,
+      this.image,
       required this.title,
       required this.text,
       required this.demoImage})
@@ -210,29 +213,36 @@ class ImageTitleTextModel extends StatelessWidget {
             Spacer(),
             Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: Container(
+              child: image != null
+                  ?Container(
+                //demoImage
                 width: (demoImage) ? 350 : 200,
                 height: (demoImage) ? 350 : 200,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                      color: (Theme.of(context).brightness == Brightness.dark &&
-                              demoImage)
-                          ? Colors.blue
-                          : Colors.grey,
-                      width: (Theme.of(context).brightness == Brightness.dark)
-                          ? 2
-                          : 1),
-                  borderRadius: BorderRadius.circular(20),
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(image: image, fit: BoxFit.fitHeight),
-                ),
-              ),
+                        border: Border.all(
+                            color: (Theme.of(context).brightness ==
+                                        Brightness.dark &&
+                                    demoImage)
+                                ? Colors.blue
+                                : Colors.grey,
+                            width: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? 2
+                                : 1),
+                        borderRadius: BorderRadius.circular(20),
+                        shape: BoxShape.rectangle,
+                        image: DecorationImage(
+                            image: image!, fit: BoxFit.fitHeight),
+                      )
+
+              ): Container(),
             ),
             Container(
+              //fetter Titel der Page
               margin: EdgeInsets.only(
-                  top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
-                  bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
-      ),
+                top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
+                bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
+              ),
               child: Text(
                 title,
                 textAlign: TextAlign.center,
@@ -243,6 +253,7 @@ class ImageTitleTextModel extends StatelessWidget {
               ),
             ),
             Container(
+              //Beschreibungs-Text
               child: Scrollbar(
                 child: SingleChildScrollView(
                   child: Text(
@@ -259,10 +270,10 @@ class ImageTitleTextModel extends StatelessWidget {
                     ? 0
                     : (MediaQuery.of(context).size.height < 700)
                         ? 115
-                        : 150,
+                        : 250,
                 maxWidth: 400,
                 maxHeight:
-                    (MediaQuery.of(context).size.height < 700) ? 115 : 1000,
+                    (MediaQuery.of(context).size.height < 700) ? 135 : 1000,
               ),
             ),
             Spacer(),
