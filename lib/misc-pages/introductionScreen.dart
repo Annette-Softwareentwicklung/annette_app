@@ -25,9 +25,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
       title: 'Annette App',
       demoImage: false,
       text:
-          '''Die rundum erneuerte Annette App bietet zahlreiche Funktionen, um dir deinen Schulalltag zu erleichtern.
-          
-- Entwickelt von der Annette-Entwickelt-Software-AG''',
+          'Die rundum erneuerte Annette App bietet zahlreiche Funktionen, um dir deinen Schulalltag zu erleichtern.',
     ),
     ImageTitleTextModel(
       demoImage: true,
@@ -50,6 +48,11 @@ class IntroductionScreenState extends State<IntroductionScreen> {
       text:
           'Dein individueller Stundenplan inklusive Pausenzeiten. Dank automatischer Erkennung der aktuellen Stunde lässt sich der Stundenplan schnell ablesen, und du musst nicht erst deinen Kurs in der großen Übersicht suchen.',
     ),
+    ImageTitleTextModel(
+        demoImage: false,
+        //image: AssetImage(assetPaths.iconImagePath),
+        title: 'Annette Entwickelt Software',
+        text: 'Diese App wird von der Annette-Entwickelt-Software-AG mit Leidenschaft entwickelt :).'),
   ];
   final pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
@@ -186,14 +189,14 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 }
 
 class ImageTitleTextModel extends StatelessWidget {
-  final ImageProvider<Object> image;
+  final ImageProvider<Object>? image;
   final String title;
   final String text;
   final bool demoImage;
 
   const ImageTitleTextModel(
       {Key? key,
-      required this.image,
+      this.image,
       required this.title,
       required this.text,
       required this.demoImage})
@@ -210,24 +213,29 @@ class ImageTitleTextModel extends StatelessWidget {
             Spacer(),
             Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: Container(
+              child: image != null
+                  ?Container(
                 //demoImage
                 width: (demoImage) ? 350 : 200,
                 height: (demoImage) ? 350 : 200,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                      color: (Theme.of(context).brightness == Brightness.dark &&
-                              demoImage)
-                          ? Colors.blue
-                          : Colors.grey,
-                      width: (Theme.of(context).brightness == Brightness.dark)
-                          ? 2
-                          : 1),
-                  borderRadius: BorderRadius.circular(20),
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(image: image, fit: BoxFit.fitHeight),
-                ),
-              ),
+                        border: Border.all(
+                            color: (Theme.of(context).brightness ==
+                                        Brightness.dark &&
+                                    demoImage)
+                                ? Colors.blue
+                                : Colors.grey,
+                            width: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? 2
+                                : 1),
+                        borderRadius: BorderRadius.circular(20),
+                        shape: BoxShape.rectangle,
+                        image: DecorationImage(
+                            image: image!, fit: BoxFit.fitHeight),
+                      )
+
+              ): Container(),
             ),
             Container(
               //fetter Titel der Page
