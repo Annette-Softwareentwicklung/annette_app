@@ -212,21 +212,29 @@ class HomeworkTabState extends State<HomeworkTab> {
   /// nicht unkontrolliert hin und her springt und der Benutzer nachvollziehen kann,
   /// was passiert ist.
   void removeFromList(int i) {
+    int animDuration = 300;
     tasks[i].isChecked = 1;
     Task removedTask = tasks.removeAt(i);
     listAccess.currentState!.setState(() {});
     listAccess.currentState!.removeItem(
-        i,
-        (context, animation) => HomeworkListTile(
-              key: UniqueKey(),
-              task: removedTask,
-              animation: animation,
-            ));
+      i,
+      (context, animation) => HomeworkListTile(
+        key: UniqueKey(),
+        task: removedTask,
+        animation: animation,
+      ),
+      duration: Duration(milliseconds: animDuration),
+    );
 
     if (tasks.length == 0) {
-      setState(() {
-        load();
-      });
+      Future.delayed(
+        Duration(milliseconds: animDuration),
+        () {
+          setState(() {
+            load();
+          });
+        },
+      );
     }
 
     if (removedTask.id == defaultToShowOnDetailedSplitView?.id) {
@@ -486,7 +494,7 @@ class HomeworkTabState extends State<HomeworkTab> {
                                     index: index,
                                     animation: animation,
                                   );
-                              })))
+                                })))
               ]),
             ),
             if (MediaQuery.of(context).orientation == Orientation.landscape)
