@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 class Design {
   static Color annetteColor = Color.fromRGBO(111, 162, 171, 1);
   static Color annetteColorLight = Color.fromRGBO(0, 156, 170, 1);
-  static double standardPagePadding = 10.0;
+  static double standardPagePadding = 15.0;
   static LinearGradient lightGradient =
       LinearGradient(colors: [annetteColor, annetteColor]);
   static LinearGradient darkGradient =

@@ -4,6 +4,7 @@ import 'package:annette_app/data/links.dart';
 import 'package:annette_app/vertretung/vertretungListTile.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -131,10 +132,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
     return SafeArea(
         child: RefreshIndicator(
       child: Column(children: [
-        Container(
-          child: Text('Stand: $lastEdited'),
-          padding: EdgeInsets.all(2),
-        ),
         Expanded(
             child: SingleChildScrollView(
           child: Flex(
@@ -144,6 +141,11 @@ class _VertretungsTabState extends State<VertretungsTab> {
             children: [
               Flexible(child: vertretungToday(), flex: 1, fit: FlexFit.loose,),
               Flexible(child: vertretungTomorrow(), flex: 1,fit: FlexFit.loose,),
+              //Flexible(
+              //  flex: 1,
+              //  fit: FlexFit.loose,
+              //  child: Text('Stand: $lastEdited', textAlign: TextAlign.center, textWidthBasis: TextWidthBasis.parent,),
+              //)
             ],
           ),
           physics: const AlwaysScrollableScrollPhysics(),
