@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // TODO: implement textThemes
 
 class Design {
-  static Color annetteColor = Color.fromRGBO(0, 136, 148, 1);
+  static Color annetteColor = Color.fromRGBO(111, 162, 171, 1);
   static Color annetteColorLight = Color.fromRGBO(0, 156, 170, 1);
   static double standardPagePadding = 10.0;
   static LinearGradient lightGradient =
-      LinearGradient(colors: [annetteColor, Color.fromRGBO(10, 91, 99, 1)]);
+      LinearGradient(colors: [annetteColor, annetteColor]);
   static LinearGradient darkGradient =
-      LinearGradient(colors: [annetteColor, Color.fromRGBO(10, 91, 99, 1)]);
+      LinearGradient(colors: [annetteColor, annetteColor]);
 
   static ThemeData darkTheme = ThemeData(
     outlinedButtonTheme: OutlinedButtonThemeData(
@@ -60,7 +61,12 @@ class Design {
 
   static ThemeData lightTheme = ThemeData(
     appBarTheme: AppBarTheme(
-      backgroundColor: annetteColor,
+      backgroundColor: Colors.white,
+      titleTextStyle: TextStyle(
+        color: annetteColor,
+        fontWeight: FontWeight.w800,
+        fontSize: 20
+      )
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: annetteColor,
