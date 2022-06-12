@@ -48,31 +48,21 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
 
   final ObjectKey checkBoxKey = ObjectKey(CustomCheckboxState);
 
-  /// Diese Methode wird aufgerufen, wenn die Aufgabe abgehakt wurde.
-  /// Sollte ein Haken gesetzt sein, wird die Methode remove() aufgerufen.
-  void check() {
-    if (isChecked == 0) {
-      isChecked = 1;
-      remove();
-    } else {
-      isChecked = 0;
-    }
-  }
-
   /// Nach einer Zeitspanne von 2 Sekunden wird geprüft, ob die Aufgabe nach wie vor
   /// abgehakt ist. Sollte dem so sein, wird die Aufgabe aus der Datenbank gelöscht und
   /// die geplante System-Benachrichtigung storniert.
   /// Durch diese 2 Sekunden hat der Benutzer noch die Möglichkeit, die Aufgabe
   /// wieder "entabzuhaken", sie also wieder als noch nicht erledigt an gezeigt wird.
   /// Dann wird die Aufgabe auch nicht gelöscht.
+  ///
+  /// Die Möglichkeit die Aufgabe abzuhaken und wieder "entabzuhaken" wurde vorerst entfernt,
+  /// da der Cooldown von 2 Sekunden zu Bugs beim Anzeigen der AnimatedList geführt hat.
+  /// Die Methode löscht die Aufgabe nun stattdessen ohne "Überdenkzeit" aus der Datenbank
+  /// und storniert die geplante Systembenachrichtigung.
   void remove() async {
-    Future.delayed(Duration(seconds: 2), () {
-      if (isChecked == 1) {
-        databaseDeleteTask(task!.id);
-        cancelNotification(task!.id);
-        widget.onRemove!(widget.index);
-      }
-    });
+    databaseDeleteTask(task!.id);
+    cancelNotification(task!.id);
+    widget.onRemove!(widget.index);
   }
 
   ///Man bekommt in 1 Stunde eine Benachrichtigung.
@@ -107,7 +97,6 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
   void initState() {
     super.initState();
     task = widget.task;
-    isChecked = task!.isChecked;
 
     if (task!.notes != null) {
       if (task!.notes!.length > 20) {
@@ -216,7 +205,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
                     key: checkBoxKey,
                     task: task,
                     onChanged: () {
-                      check();
+                      remove();
                     },
                   ),
                   title: (task!.subject == 'Sonstiges')
