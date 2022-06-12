@@ -66,6 +66,9 @@ class Design {
         color: annetteColor,
         fontWeight: FontWeight.w800,
         fontSize: 20
+      ),
+      iconTheme: IconThemeData(
+        color: annetteColor
       )
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
