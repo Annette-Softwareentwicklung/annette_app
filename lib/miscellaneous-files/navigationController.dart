@@ -1,11 +1,12 @@
-import 'dart:ui';
+
+
 import 'package:annette_app/timetable/timetableTab.dart';
 import 'package:annette_app/miscellaneous-files/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:quick_actions/quick_actions.dart';
+import '../data/design.dart';
 import '../homework/homeworkTab.dart';
 import '../misc-pages/settingsTab.dart';
 import '../homework/addDialog.dart';
@@ -24,8 +25,15 @@ class NavigationController extends StatefulWidget {
 
 class NavigationControllerState extends State<NavigationController> {
   int tabIndex = 0;
+
   final GlobalKey<HomeworkTabState> homeworkTabAccess =
-      GlobalKey<HomeworkTabState>();
+    GlobalKey<HomeworkTabState>();
+
+  /// um wet code zu vermeiden, wird eine LUT (Look up table) verwendet, hierbei dient ist der Index der zugehörige Tabindex
+  /// !!! Der Grund, wieso an Index 1 von [tabIndexToTab] null steht, ist dass dort der HomeworkTab angezeigt werden muss.
+  /// Dieser Tab benötigt das [homeworkTabAccess] Attribut als Key-value. !!!
+  List tabIndexToTab = [VertretungsTab(), null, TimetableTab(), SettingsTab()];
+  List tabIndexToTitle = ["Vertretungsplan", "Hausaufgaben", "Stundenplan", "Sonstiges"];
 
   /// Initialisieren
   @override
@@ -70,32 +78,50 @@ class NavigationControllerState extends State<NavigationController> {
     );
   }
 
+
+
+
   /// Anzeige des Scaffolds mit "bottomNavigationBar". Je nach dem welcher Tab in der Menüleiste
   /// ausgewählt ist, wird der entsprechende Tab angezeigt.
   /// Der "floatingActionButton" öffnet den Dialog zum Hinzufügen von Hausaufgaben.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: (tabIndex == 0)
-            ? Text('Vertretungsplan')
-            : (tabIndex == 1)
-                ? Text('Hausaufgaben')
-                : (tabIndex == 2)
-                    ? Text('Stundenplan')
-                    : Text('Sonstiges'),
-      ),
-      body: (tabIndex == 0)
-          ? VertretungsTab()
-          : (tabIndex == 1)
-              ? HomeworkTab(
-                  key: homeworkTabAccess,
+      body: SafeArea(
+        child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                    left: Design.standardPagePadding,
+                    right: Design.standardPagePadding,
+                    top: Design.standardPagePadding * 2,
+                    bottom: Design.standardPagePadding * 0.8),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    tabIndexToTitle[tabIndex],
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    )
                 )
-              : (tabIndex == 2)
-                  ? TimetableTab()
-                  : SettingsTab(),
+              ),
+              Expanded(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Design.standardPagePadding * 0.5),
+                      child: (tabIndex == 1) /// sonderfall, da der key-value [homeworkTabAccess] noch eingegeben werden muss
+                          ? HomeworkTab(
+                        key: homeworkTabAccess,
+                      )
+                          : tabIndexToTab[tabIndex]
+                  )
+              )
+            ]
+        )
+      ),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
+        backgroundColor: Design.annetteColor,
         child: Icon(Icons.add),
         onPressed: () {
           showNewHomeworkDialog();

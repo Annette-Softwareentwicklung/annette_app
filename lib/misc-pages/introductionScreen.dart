@@ -1,11 +1,12 @@
 import 'dart:ui';
 import 'package:annette_app/data/assets.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+
+import '../data/design.dart';
 
 class IntroductionScreen extends StatefulWidget {
   final VoidCallback onFinished;
@@ -49,14 +50,17 @@ class IntroductionScreenState extends State<IntroductionScreen> {
           'Dein individueller Stundenplan inklusive Pausenzeiten. Dank automatischer Erkennung der aktuellen Stunde lässt sich der Stundenplan schnell ablesen, und du musst nicht erst deinen Kurs in der großen Übersicht suchen.',
     ),
     ImageTitleTextModel(
-        demoImage: false,
-        //image: AssetImage(assetPaths.iconImagePath),
-        title: 'Annette Entwickelt Software',
-        text: 'Diese App wird von der Annette-Entwickelt-Software-AG mit Leidenschaft entwickelt :).'),
+      demoImage: false,
+      //image: AssetImage(assetPaths.iconImagePath),
+      title: 'Annette Entwickelt Software',
+      text: 'Diese App wird von der Annette-Entwickelt-Software-AG mit Leidenschaft entwickelt :).'
+    )
   ];
   final pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
+
+
 
   void helperOrientation() {
     if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
@@ -74,7 +78,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 
   @override
   dispose() {
-    SystemChrome.setPreferredOrientations([
+   SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
@@ -111,7 +115,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                               color: (Theme.of(context).brightness ==
                                       Brightness.dark)
                                   ? Theme.of(context).accentColor
-                                  : Colors.blue,
+                                  : Design.annetteColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -148,7 +152,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CirclePageIndicator(
-                        selectedDotColor: Colors.blue,
+                        selectedDotColor: Design.annetteColor,
                         size: 13,
                         selectedSize: 13,
                         // dotSpacing: 15,
@@ -213,36 +217,30 @@ class ImageTitleTextModel extends StatelessWidget {
             Spacer(),
             Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: image != null
-                  ?Container(
-                //demoImage
+              child: image != null ?
+              Container(
                 width: (demoImage) ? 350 : 200,
                 height: (demoImage) ? 350 : 200,
                 decoration: BoxDecoration(
-                        border: Border.all(
-                            color: (Theme.of(context).brightness ==
-                                        Brightness.dark &&
-                                    demoImage)
-                                ? Colors.blue
-                                : Colors.grey,
-                            width: (Theme.of(context).brightness ==
-                                    Brightness.dark)
-                                ? 2
-                                : 1),
-                        borderRadius: BorderRadius.circular(20),
-                        shape: BoxShape.rectangle,
-                        image: DecorationImage(
-                            image: image!, fit: BoxFit.fitHeight),
-                      )
-
-              ): Container(),
+                  border: Border.all(
+                      color: (Theme.of(context).brightness == Brightness.dark &&
+                              demoImage)
+                          ? Design.annetteColor
+                          : Colors.grey,
+                      width: (Theme.of(context).brightness == Brightness.dark)
+                          ? 2
+                          : 1),
+                  borderRadius: BorderRadius.circular(20),
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(image: image!, fit: BoxFit.fitHeight),
+                ),
+              ): Container()
             ),
             Container(
-              //fetter Titel der Page
               margin: EdgeInsets.only(
-                top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
-                bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
-              ),
+                  top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
+                  bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
+      ),
               child: Text(
                 title,
                 textAlign: TextAlign.center,
@@ -253,7 +251,6 @@ class ImageTitleTextModel extends StatelessWidget {
               ),
             ),
             Container(
-              //Beschreibungs-Text
               child: Scrollbar(
                 child: SingleChildScrollView(
                   child: Text(
@@ -270,10 +267,10 @@ class ImageTitleTextModel extends StatelessWidget {
                     ? 0
                     : (MediaQuery.of(context).size.height < 700)
                         ? 115
-                        : 250,
+                        : 150,
                 maxWidth: 400,
                 maxHeight:
-                    (MediaQuery.of(context).size.height < 700) ? 135 : 1000,
+                    (MediaQuery.of(context).size.height < 700) ? 115 : 1000,
               ),
             ),
             Spacer(),

@@ -143,10 +143,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
     return SafeArea(
         child: RefreshIndicator(
       child: Column(children: [
-        Container(
-          child: Text('Stand: $lastEdited'),
-          padding: EdgeInsets.all(2),
-        ),
         Expanded(
             child: SingleChildScrollView(
           child: Flex(
@@ -156,6 +152,11 @@ class _VertretungsTabState extends State<VertretungsTab> {
             children: [
               Flexible(child: vertretungToday(), flex: 1, fit: FlexFit.loose,),
               Flexible(child: vertretungTomorrow(), flex: 1,fit: FlexFit.loose,),
+              //Flexible(
+              //  flex: 1,
+              //  fit: FlexFit.loose,
+              //  child: Text('Stand: $lastEdited', textAlign: TextAlign.center, textWidthBasis: TextWidthBasis.parent,),
+              //)
             ],
           ),
           physics: const AlwaysScrollableScrollPhysics(),
