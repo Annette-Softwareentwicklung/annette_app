@@ -173,6 +173,7 @@ void helper(String? payload) async {
 
 /// Einstiegspunkt der App.
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return DismissKeyboard(
@@ -223,4 +224,7 @@ class MyApp extends StatelessWidget {
               ),
             )));
   }
+
+
+
 }

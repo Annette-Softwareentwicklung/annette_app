@@ -32,8 +32,8 @@ class NavigationControllerState extends State<NavigationController> {
   /// um wet code zu vermeiden, wird eine LUT (Look up table) verwendet, hierbei dient ist der Index der zugehörige Tabindex
   /// !!! Der Grund, wieso an Index 1 von [tabIndexToTab] null steht, ist dass dort der HomeworkTab angezeigt werden muss.
   /// Dieser Tab benötigt das [homeworkTabAccess] Attribut als Key-value. !!!
-  List tabIndexToTab = [VertretungsTab(), null, TimetableTab(), SettingsTab()];
-  List tabIndexToTitle = ["Vertretungsplan", "Hausaufgaben", "Stundenplan", "Sonstiges"];
+  List tabIndexToTab = [VertretungsTab(), null, TimetableTab(), null, SettingsTab()];
+  List tabIndexToTitle = ["Vertretungsplan", "Hausaufgaben", "Stundenplan", "Klausurplan", "Sonstiges"];
 
   /// Initialisieren
   @override
@@ -120,15 +120,15 @@ class NavigationControllerState extends State<NavigationController> {
         )
       ),
       floatingActionButton: FloatingActionButton(
-        elevation: 0,
+        elevation: 20,
         backgroundColor: Design.annetteColor,
         child: Icon(Icons.add),
         onPressed: () {
           showNewHomeworkDialog();
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: bottomBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      bottomNavigationBar: bottomBar(context),
     );
   }
 
@@ -170,8 +170,12 @@ class NavigationControllerState extends State<NavigationController> {
       );
   }
 
-  Widget bottomBar() {
+  Widget bottomBar(BuildContext context) {
     return BottomNavigationBar(
+      unselectedFontSize: 10,
+      showUnselectedLabels: true,
+      unselectedItemColor: Colors.grey,
+      selectedItemColor: Design.annetteColor,
       items: [
         BottomNavigationBarItem(
           label: 'Vertretung',
@@ -189,12 +193,17 @@ class NavigationControllerState extends State<NavigationController> {
           //icon: Icon(Icons.date_range_rounded),
         ),
         BottomNavigationBarItem(
+          label: 'Klausurplan',
+          icon: Icon(CupertinoIcons.calendar_circle),
+          //icon: Icon(Icons.list),
+        ),
+        BottomNavigationBarItem(
           label: 'Sonstiges',
           icon: Icon(CupertinoIcons.ellipsis),
           //icon: Icon(Icons.more_horiz_rounded),
         ),
       ],
-      type: BottomNavigationBarType.fixed,
+      type: BottomNavigationBarType.shifting,
       onTap: (index) {
         setState(() {
           tabIndex = index;
