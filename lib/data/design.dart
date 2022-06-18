@@ -13,6 +13,14 @@ class Design {
       LinearGradient(colors: [annetteColor, annetteColor]);
 
   static ThemeData darkTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: Colors.black38,
+     foregroundColor: Colors.white,
+     titleTextStyle: TextStyle(
+         fontSize: 20
+     ),
+     // backgroundColor: Colors.black45,
+    ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.resolveWith(
@@ -65,8 +73,8 @@ class Design {
       backgroundColor: Colors.white,
       titleTextStyle: TextStyle(
         color: annetteColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: FontWeight.w600
       ),
       iconTheme: IconThemeData(
         color: annetteColor
