@@ -78,6 +78,12 @@ class NavigationControllerState extends State<NavigationController> {
     );
   }
 
+  void setTabIndex(int newIndex) {
+    setState(() {
+      tabIndex = newIndex;
+    });
+  }
+
 
 
 
@@ -180,34 +186,27 @@ class NavigationControllerState extends State<NavigationController> {
         BottomNavigationBarItem(
           label: 'Vertretung',
           icon: Icon(CupertinoIcons.rectangle_grid_1x2),
-          //icon: Icon(Icons.list),
         ),
         BottomNavigationBarItem(
           label: 'Hausaufgaben',
           icon: Icon(CupertinoIcons.square_list),
-          //icon: Icon(Icons.list),
         ),
         BottomNavigationBarItem(
           label: 'Stundenplan',
           icon: Icon(CupertinoIcons.calendar),
-          //icon: Icon(Icons.date_range_rounded),
         ),
         BottomNavigationBarItem(
           label: 'Klausurplan',
           icon: Icon(CupertinoIcons.calendar_circle),
-          //icon: Icon(Icons.list),
         ),
         BottomNavigationBarItem(
           label: 'Sonstiges',
           icon: Icon(CupertinoIcons.ellipsis),
-          //icon: Icon(Icons.more_horiz_rounded),
         ),
       ],
       type: BottomNavigationBarType.shifting,
       onTap: (index) {
-        setState(() {
-          tabIndex = index;
-        });
+        setTabIndex(index);
       },
       currentIndex: tabIndex,
     );

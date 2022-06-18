@@ -1,9 +1,7 @@
 import 'package:annette_app/custom_widgets/defaultScaffold.dart';
 import 'package:annette_app/data/design.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:annette_app/data/assets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:yaml/yaml.dart';
@@ -77,7 +75,7 @@ class AboutPage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                   shape: BoxShape.rectangle,
                                   image: DecorationImage(
-                                      image: AssetImage(assetPaths.iconImagePath),
+                                      image: AssetImage(AssetPaths.iconImagePath),
                                       fit: BoxFit.fitHeight),
                                 ),
                               ),
@@ -131,7 +129,7 @@ class AboutPage extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10),
                                       shape: BoxShape.rectangle,
                                       image: DecorationImage(
-                                          image: AssetImage(assetPaths.iconImagePath),
+                                          image: AssetImage(AssetPaths.iconImagePath),
                                           fit: BoxFit.fitHeight),
                                     ),
                                   ),

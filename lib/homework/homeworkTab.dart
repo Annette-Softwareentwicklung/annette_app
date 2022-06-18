@@ -414,7 +414,7 @@ class HomeworkTabState extends State<HomeworkTab> {
                     border: Border(
                       bottom: BorderSide(
                         width: 1,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),
