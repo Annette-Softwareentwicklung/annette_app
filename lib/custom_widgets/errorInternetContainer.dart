@@ -18,7 +18,7 @@ class ErrorInternetContainer extends StatelessWidget {
             Icons.wifi_off_sharp,
             size: 150,
             color: (Theme.of(context).brightness == Brightness.dark)
-                ? Theme.of(context).accentColor
+                ? Theme.of(context).colorScheme.secondary
                 : Design.annetteColor,
           ),
           Container(

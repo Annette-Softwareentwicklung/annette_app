@@ -10,13 +10,11 @@ import 'misc-pages/introductionScreen.dart';
 import 'miscellaneous-files/navigationController.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'miscellaneous-files/translation.dart';
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -51,8 +49,6 @@ void main() async {
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     helper(notificationAppLaunchDetails!.payload);
   }
-
-  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
 
   tz.initializeTimeZones();
 
@@ -159,9 +155,8 @@ void helper(String? payload) async {
   do {
     try {
       await Future.delayed(Duration.zero, () async {
-        navigationControllerAccess.currentState!.setState(() {
-          navigationControllerAccess.currentState!.tabIndex = 1;
-        });
+        navigationControllerAccess.currentState!.setTabIndex(1);
+
         await Future.delayed(Duration(milliseconds: 500), () {
           navigationControllerAccess
               .currentState!.homeworkTabAccess.currentState!
