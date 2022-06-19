@@ -9,9 +9,9 @@ class Design {
   static Color annetteColorLight = Color.fromRGBO(0, 156, 170, 1);
   static double standardPagePadding = 15.0;
   static LinearGradient lightGradient =
-      LinearGradient(colors: [annetteColor, annetteColor]);
+      LinearGradient(colors: [Colors.white, Colors.white]);
   static LinearGradient darkGradient =
-      LinearGradient(colors: [annetteColor, annetteColor]);
+      LinearGradient(colors: [Colors.black, Colors.black]);
 
   static ThemeData darkTheme = ThemeData(
     outlinedButtonTheme: OutlinedButtonThemeData(
