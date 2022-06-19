@@ -114,6 +114,8 @@ void main() async {
   } catch (e) {
     print(e);
   }
+
+
   final storage = GetStorage();
 
   if (storage.read('configuration') != null) {
@@ -140,6 +142,9 @@ void main() async {
   } else {
     guide = false;
   }
+
+
+  ///
 
   runApp(MyApp());
 }
