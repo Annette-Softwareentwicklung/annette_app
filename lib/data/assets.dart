@@ -1,5 +1,5 @@
 
-class assetPaths {
+class AssetPaths {
 
   static String iconImagePath = "assets/images/icon.png";
   static String homeworkDemoPath = "assets/images/homeworkDemo.png";

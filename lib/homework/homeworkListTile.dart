@@ -213,7 +213,7 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
                       : Text(task!.subject!),
                   subtitle: listTilesubtitle,
                   trailing: Icon(Icons.info_outlined,
-                      color: Theme.of(context).accentColor),
+                      color: Theme.of(context).colorScheme.secondary),
                   onTap: () {
                     if (MediaQuery.of(context).orientation ==
                         Orientation.landscape) {

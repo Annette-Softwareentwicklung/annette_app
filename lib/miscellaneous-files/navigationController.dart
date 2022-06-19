@@ -82,6 +82,12 @@ class NavigationControllerState extends State<NavigationController> {
     );
   }
 
+  void setTabIndex(int newIndex) {
+    setState(() {
+      tabIndex = newIndex;
+    });
+  }
+
 
 
 

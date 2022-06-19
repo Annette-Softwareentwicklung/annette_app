@@ -667,7 +667,7 @@ class _SetClassState extends State<SetClass> {
                                             : Design.annetteColorLight.withOpacity(0.5),
                                     color: (Theme.of(context).brightness ==
                                             Brightness.dark)
-                                        ? Theme.of(context).accentColor
+                                        ? Theme.of(context).colorScheme.secondary
                                         : Design.annetteColor,
                                   )),
                             if (finished)
@@ -677,7 +677,7 @@ class _SetClassState extends State<SetClass> {
                                   height: 2,
                                   color: (Theme.of(context).brightness ==
                                           Brightness.dark)
-                                      ? Theme.of(context).accentColor
+                                      ? Theme.of(context).colorScheme.secondary
                                       : Design.annetteColor,
                                 ),
                               ),
@@ -692,7 +692,7 @@ class _SetClassState extends State<SetClass> {
                                           ? Colors.grey
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
-                                              ? Theme.of(context).accentColor
+                                              ? Theme.of(context).colorScheme.secondary
                                               : Design.annetteColor,
                                       width: 2),
                                 ),
@@ -714,7 +714,7 @@ class _SetClassState extends State<SetClass> {
                                     ? Colors.grey
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
-                                        ? Theme.of(context).accentColor
+                                        ? Theme.of(context).colorScheme.secondary
                                         : Design.annetteColor,
                               ),
                             ),
@@ -729,7 +729,7 @@ class _SetClassState extends State<SetClass> {
                                           ? Colors.grey
                                           : (Theme.of(context).brightness ==
                                                   Brightness.dark)
-                                              ? Theme.of(context).accentColor
+                                              ? Theme.of(context).colorScheme.secondary
                                               : Design.annetteColor,
                                       width: 2),
                                 ),
@@ -751,7 +751,7 @@ class _SetClassState extends State<SetClass> {
                                     ? Colors.grey
                                     : (Theme.of(context).brightness ==
                                             Brightness.dark)
-                                        ? Theme.of(context).accentColor
+                                        ? Theme.of(context).colorScheme.secondary
                                         : Design.annetteColor,
                               ),
                             ),
@@ -821,7 +821,7 @@ class _SetClassState extends State<SetClass> {
                           decoration: BoxDecoration(
                             color: (Theme.of(context).brightness ==
                                     Brightness.dark)
-                                ? Theme.of(context).accentColor
+                                ? Theme.of(context).colorScheme.secondary
                                 : Design.annetteColor,
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
@@ -1151,7 +1151,7 @@ class _SetClassState extends State<SetClass> {
                   width: 180,
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
-                        ? Theme.of(context).accentColor
+                        ? Theme.of(context).colorScheme.secondary
                         : Design.annetteColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
@@ -1174,15 +1174,12 @@ class _SetClassState extends State<SetClass> {
     if (finished) {
       return Container(
           padding: EdgeInsets.all(15),
-          //alignment: Alignment.center,
           child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               controller: ScrollController(initialScrollOffset: 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                // mainAxisSize: MainAxisSize.min,
                 children: [
-                  //Spacer(flex: 1),
                   Container(
                     margin: EdgeInsets.only(bottom: 20),
                     child: Icon(
@@ -1217,7 +1214,7 @@ class _SetClassState extends State<SetClass> {
                         ? Theme.of(context)
                             .floatingActionButtonTheme
                             .backgroundColor
-                        : Theme.of(context).accentColor,
+                        : Theme.of(context).colorScheme.secondary,
                     child: (widget.isInGuide)
                         ? Text(
                             'Los geht\'s',
@@ -1407,7 +1404,7 @@ class _SetClassState extends State<SetClass> {
                   width: 180,
                   decoration: BoxDecoration(
                     color: (Theme.of(context).brightness == Brightness.dark)
-                        ? Theme.of(context).accentColor
+                        ? Theme.of(context).colorScheme.secondary
                         : Design.annetteColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
