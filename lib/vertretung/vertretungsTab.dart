@@ -4,7 +4,6 @@ import 'package:annette_app/data/links.dart';
 import 'package:annette_app/vertretung/vertretungListTile.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:annette_app/vertretung/vertretunsplanCrawler.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;

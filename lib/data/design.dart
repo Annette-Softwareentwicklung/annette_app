@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // TODO: implement textThemes
 
@@ -14,6 +13,14 @@ class Design {
       LinearGradient(colors: [Colors.black, Colors.black]);
 
   static ThemeData darkTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: Colors.black38,
+     foregroundColor: Colors.white,
+     titleTextStyle: TextStyle(
+         fontSize: 20
+     ),
+     // backgroundColor: Colors.black45,
+    ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.resolveWith(
@@ -48,11 +55,13 @@ class Design {
     ),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(foregroundColor: Colors.black),
-    //buttonTheme: ButtonThemeData(buttonColor: Colors.tealAccent),
     buttonTheme: ButtonThemeData(
       buttonColor: annetteColor,
     ),
-    accentColor: annetteColor,
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      secondary: annetteColor,
+      brightness: Brightness.dark
+    ),
     snackBarTheme: SnackBarThemeData(
         contentTextStyle: TextStyle(
       color: Colors.white,
@@ -64,8 +73,8 @@ class Design {
       backgroundColor: Colors.white,
       titleTextStyle: TextStyle(
         color: annetteColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: FontWeight.w600
       ),
       iconTheme: IconThemeData(
         color: annetteColor
@@ -103,7 +112,10 @@ class Design {
             foregroundColor:
                 MaterialStateProperty.resolveWith((states) => Colors.black))),
     brightness: Brightness.light,
-    accentColor: Colors.black54,
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      brightness: Brightness.light,
+      secondary: Colors.black54,
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: annetteColor, foregroundColor: Colors.white),
   );

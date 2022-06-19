@@ -100,8 +100,6 @@ String parseTimeToUserOutput(String s, [DateTime? pComparisonTime]) {
   DateTime comparisonTime =
       (pComparisonTime != null) ? pComparisonTime : DateTime.now();
 
-  temp == comparisonTime;
-
   if (temp.year == comparisonTime.year &&
       temp.month == comparisonTime.month &&
       temp.day == comparisonTime.day) {

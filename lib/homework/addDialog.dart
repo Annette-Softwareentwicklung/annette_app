@@ -6,7 +6,6 @@ import 'package:annette_app/fundamentals/task.dart';
 import 'package:annette_app/database/taskDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/miscellaneous-files/manageNotifications.dart';
 import 'package:annette_app/miscellaneous-files/currentValues.dart';
@@ -516,8 +515,7 @@ class _AddDialogState extends State<AddDialog> {
                                   ? Theme.of(context)
                                       .floatingActionButtonTheme
                                       .backgroundColor
-                                  : Theme.of(context).accentColor,
-                          //color: Theme.of(context).accentColor,
+                                  : Theme.of(context).colorScheme.secondary,
                           child: Text(
                             'Hinzufügen',
                             style: TextStyle(
