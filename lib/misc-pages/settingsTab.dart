@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/design.dart';
 import 'package:annette_app/data/links.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
@@ -10,7 +9,6 @@ import 'package:annette_app/custom_widgets/defaultScaffold.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'aboutPage.dart';
-import 'examPlan.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Diese Klasse beinhaltet den Einstellungsbereich.
@@ -34,17 +32,6 @@ class SettingsTab extends StatelessWidget {
       padding: EdgeInsets.all(Design.standardPagePadding),
       child: ListView(
         children: <Widget>[
-          ListTile(
-              title: Text('Klausurplan'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                          title: 'Klausurplan', content: ExamPlan());
-                    }),
-                  )),
-          Divider(),
           ListTile(
               title: Text('Klassischer Vertretungsplan'),
               trailing: Icon(Icons.chevron_right,
