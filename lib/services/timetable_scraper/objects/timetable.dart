@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'block.dart';
+import 'package:annette_app/services/timetable_scraper/objects/lesson.dart';
+
 import 'weekday.dart';
 import 'weekdays.dart';
 
@@ -95,25 +96,28 @@ class Timetable {
       }
 
       //Das eigentliche Objekt erstellen und mit den gesammelten Informationen füllen
-      Block block = Block(
+      Lesson lesson = Lesson(
+          entry['id'],
           entry['startTime'],
           weirdTimeConvert(entry['startTime'].toString()),
           entry['endTime'],
           room,
           name);
 
+      //Aus den verschiedenen Lessons anhand ihrer startTime?z[block]objects erstellenb
+
       //Das Objekt dem entsprechenden Wochentag in der obigen Map zuteilen
       //Aufgrund des Formats muss das Datum dafür konvertiert werden
-      print(block.name +
+      print(lesson.name +
           " | " +
           entry['date'].toString() +
           " => " +
           weirdDayConvert(entry['date']).toString());
-      weekdays[weirdDayConvert(entry['date'])]?.blocks.add(block);
+      weekdays[weirdDayConvert(entry['date'])]?.lessons.add(lesson);
     }
     weekdays.forEach(
       (key, value) => {
-        value.blocks.forEach((element) {
+        value.lessons.forEach((element) {
           print(value.name +
               " -> " +
               element.name +

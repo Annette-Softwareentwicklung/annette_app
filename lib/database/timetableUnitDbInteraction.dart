@@ -51,7 +51,6 @@ void databaseUpdateTimeTableUnit(TimeTableUnit pTimeTableUnit) async {
   await updateTimeTableUnit(pTimeTableUnit);
 }
 
-
 Future<TimeTableUnit> databaseGetSpecificTimeTableUnit(int pId) async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(
@@ -65,7 +64,7 @@ Future<TimeTableUnit> databaseGetSpecificTimeTableUnit(int pId) async {
   Future<TimeTableUnit> getSpecificTimeTableUnit(int id) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps =
-    await db.query('timetable', where: "id = ?", whereArgs: [id]);
+        await db.query('timetable', where: "id = ?", whereArgs: [id]);
 
     final List<TimeTableUnit> list = List.generate(maps.length, (i) {
       return TimeTableUnit(
@@ -90,7 +89,6 @@ Future<TimeTableUnit> databaseGetSpecificTimeTableUnit(int pId) async {
   return await getSpecificTimeTableUnit(pId);
 }
 
-
 void databaseDeleteTimeTableUnit(int? pId) async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(
@@ -114,7 +112,6 @@ void databaseDeleteTimeTableUnit(int? pId) async {
   await deleteTimeTableUnit(pId);
 }
 
-
 Future<List<TimeTableUnit>> databaseGetAllTimeTableUnit() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Future<Database> database = openDatabase(
@@ -127,9 +124,7 @@ Future<List<TimeTableUnit>> databaseGetAllTimeTableUnit() async {
 
   Future<List<TimeTableUnit>> getAllTimeTableUnit() async {
     final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'timetable'
-    );
+    final List<Map<String, dynamic>> maps = await db.query('timetable');
 
     return List.generate(maps.length, (i) {
       return TimeTableUnit(
