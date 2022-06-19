@@ -451,7 +451,7 @@ class DetailedViewState extends State<DetailedView> {
                             color: (Theme.of(context).brightness ==
                                     Brightness.light)
                                 ? Design.annetteColor
-                                : Theme.of(context).accentColor,
+                                : Theme.of(context).colorScheme.secondary,
                             size: 28,
                           ),
                           Text(
@@ -490,7 +490,7 @@ class DetailedViewState extends State<DetailedView> {
                             : Icon(
                                 CupertinoIcons.circle,
                                 size: 28,
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                         checked!
                             ? Text(
@@ -575,7 +575,7 @@ class DetailedViewState extends State<DetailedView> {
                   Icon(
                     CupertinoIcons.timer,
                     color: (Theme.of(context).brightness == Brightness.dark)
-                        ? Theme.of(context).accentColor
+                        ? Theme.of(context).colorScheme.secondary
                         : Colors.blueGrey,
                   ),
                   Container(
@@ -618,7 +618,7 @@ class DetailedViewState extends State<DetailedView> {
             if (editable)
               IconButton(
                 icon: Icon(Icons.edit_rounded,
-                    color: Theme.of(context).accentColor),
+                    color: Theme.of(context).colorScheme.secondary),
                 onPressed: editFunction(),
               )
           ],

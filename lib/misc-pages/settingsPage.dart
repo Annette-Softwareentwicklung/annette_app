@@ -160,7 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
-                                  ? Theme.of(context).accentColor
+                                  ? Theme.of(context).colorScheme.secondary
                                   : Design.annetteColor,
                         ),
                       ),
@@ -174,7 +174,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
-                                  ? Theme.of(context).accentColor
+                                  ? Theme.of(context).colorScheme.secondary
                                   : Design.annetteColor,
                         ),
                       ),
@@ -188,7 +188,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                           activeColor:
                               (Theme.of(context).brightness == Brightness.dark)
-                                  ? Theme.of(context).accentColor
+                                  ? Theme.of(context).colorScheme.secondary
                                   : Design.annetteColor,
                         ),
                       ),
@@ -235,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             },
                             activeColor: (Theme.of(context).brightness ==
                                     Brightness.dark)
-                                ? Theme.of(context).accentColor
+                                ? Theme.of(context).colorScheme.secondary
                                 : Design.annetteColor,
                           ),
                         ),
@@ -256,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             },
                             activeColor: (Theme.of(context).brightness ==
                                     Brightness.dark)
-                                ? Theme.of(context).accentColor
+                                ? Theme.of(context).colorScheme.secondary
                                 : Design.annetteColor,
                           ),
                         ),
