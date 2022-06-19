@@ -8,9 +8,9 @@ class Design {
   static Color annetteColorLight = Color.fromRGBO(0, 156, 170, 1);
   static double standardPagePadding = 15.0;
   static LinearGradient lightGradient =
-      LinearGradient(colors: [Colors.white, Colors.white]);
+      LinearGradient(colors: [annetteColor, annetteColor]);
   static LinearGradient darkGradient =
-      LinearGradient(colors: [Colors.black, Colors.black]);
+      LinearGradient(colors: [annetteColor, annetteColor]);
 
   static ThemeData darkTheme = ThemeData(
     appBarTheme: AppBarTheme(
