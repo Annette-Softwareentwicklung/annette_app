@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:quick_actions/quick_actions.dart';
 import '../data/design.dart';
 import '../homework/homeworkTab.dart';
+import '../misc-pages/examPlan.dart';
 import '../misc-pages/settingsTab.dart';
 import '../homework/addDialog.dart';
 import 'dart:async';
@@ -33,9 +34,9 @@ class NavigationControllerState extends State<NavigationController> {
     GlobalKey<HomeworkTabState>();
 
   /// um wet code zu vermeiden, wird eine LUT (Look up table) verwendet, hierbei dient ist der Index der zugehörige Tabindex
-  /// !!! Der Grund, wieso an Index 1 von [tabIndexToTab] null steht, ist dass dort der HomeworkTab angezeigt werden muss.
+  /// !!! Der Grund, wieso an Index 2 von [tabIndexToTab] null steht, ist dass dort der HomeworkTab angezeigt werden muss.
   /// Dieser Tab benötigt das [homeworkTabAccess] Attribut als Key-value. !!!
-  List tabIndexToTab = [NewsTab(), VertretungsTab(), null, TimetableTab(), null, SettingsTab()];
+  List tabIndexToTab = [NewsTab(), VertretungsTab(), null, TimetableTab(), ExamPlan(), SettingsTab()];
   List tabIndexToTitle = ["Neuigkeiten", "Vertretungsplan", "Hausaufgaben", "Stundenplan", "Klausurplan", "Sonstiges"];
 
   /// Initialisieren

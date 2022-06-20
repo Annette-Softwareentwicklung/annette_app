@@ -34,17 +34,6 @@ class SettingsTab extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           ListTile(
-              title: Text('Klausurplan'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).colorScheme.secondary),
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                          title: 'Klausurplan', content: ExamPlan());
-                    }),
-                  )),
-          Divider(),
-          ListTile(
               title: Text('Klassischer Vertretungsplan'),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).colorScheme.secondary),
