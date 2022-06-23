@@ -28,6 +28,14 @@ class NavigationController extends StatefulWidget {
 class NavigationControllerState extends State<NavigationController> {
   int tabIndex = 0;
 
+  /// Alle Überschriften, diese werde auch genutzt, um den tabIndex für die entsprechenden Ansichten zu finden.
+  static final String newsTabTitle = "Neuigkeiten";
+  static final String vertretungsTabTitle = "Vertretungsplan";
+  static final String homeworkTabTitle = "Hausaufgaben";
+  static final String timetableTabTitle = "Stundenplan";
+  static final String examTabTitle = "Klausurplan";
+  static final String sonstigesTabTitle = "Sonstiges";
+
   final ScrollPhysics bottomNavigationBarScrollPhysics = new ScrollPhysics();
 
   final GlobalKey<HomeworkTabState> homeworkTabAccess =
@@ -37,7 +45,7 @@ class NavigationControllerState extends State<NavigationController> {
   /// !!! Der Grund, wieso an Index 2 von [tabIndexToTab] null steht, ist dass dort der HomeworkTab angezeigt werden muss.
   /// Dieser Tab benötigt das [homeworkTabAccess] Attribut als Key-value. !!!
   List tabIndexToTab = [NewsTab(), VertretungsTab(), null, TimetableTab(), ExamPlan(), SettingsTab()];
-  List tabIndexToTitle = ["Neuigkeiten", "Vertretungsplan", "Hausaufgaben", "Stundenplan", "Klausurplan", "Sonstiges"];
+  List tabIndexToTitle = [newsTabTitle, vertretungsTabTitle, homeworkTabTitle, timetableTabTitle, examTabTitle, sonstigesTabTitle];
 
   /// Initialisieren
   @override
@@ -53,7 +61,7 @@ class NavigationControllerState extends State<NavigationController> {
       if (shortcutType == 'timetable') {
         print('timetable');
         setState(() {
-          tabIndex = 2;
+          tabIndex = tabIndexToTitle.indexOf(timetableTabTitle);
         });
       }
 
@@ -119,7 +127,7 @@ class NavigationControllerState extends State<NavigationController> {
               Expanded(
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: Design.standardPagePadding * 0.5),
-                      child: (tabIndex == 2) /// sonderfall, da der key-value [homeworkTabAccess] noch eingegeben werden muss
+                      child: (tabIndex == tabIndexToTitle.indexOf(homeworkTabTitle)) /// sonderfall, da der key-value [homeworkTabAccess] noch eingegeben werden muss
                           ? HomeworkTab(
                         key: homeworkTabAccess,
                       )
@@ -171,7 +179,7 @@ class NavigationControllerState extends State<NavigationController> {
           ),
           child: AddDialog(
             onTaskCreated: (newTask) {
-              if (tabIndex == 1) {
+              if (tabIndex == tabIndexToTitle.indexOf(homeworkTabTitle)) {
                 homeworkTabAccess.currentState!.insertTask(newTask);
               }
             },
