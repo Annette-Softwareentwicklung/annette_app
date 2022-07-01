@@ -89,12 +89,6 @@ Future<void> update(BuildContext context) async {
 Future<bool> updateTimetable(/*DateTime newVersion*/) async {
   try {
     String stundenplanDIF;
-
-    /*var response = await http
-        .get(Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplan.txt'));*/
-
-    //actually fake a response using the new scraper like a boss
-
     String configuration;
     try {
       configuration = GetStorage().read('configuration');
@@ -107,9 +101,7 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
     var timetableString =
         await TimetableScraper.fetch(GroupExt.fromString(key: currentClass));
     print("object");
-    stundenplanDIF = timetableString
-        //.substring(1, timetableString.length - 1)
-        .replaceAll("\\", "");
+    stundenplanDIF = timetableString.replaceAll("\\", "");
     if (stundenplanDIF.contains(currentClass)) {
       TimetableCrawler timetableCrawler = new TimetableCrawler();
       timetableCrawler.setConfiguration(
