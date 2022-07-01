@@ -73,6 +73,10 @@ class _TimetableTabState extends State<TimetableTab> {
     allTimes = getAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
 
+    for (var element in allTimeTableUnits) {
+      print(element.toString());
+    }
+
     allTimeTableUnits.sort((a, b) {
       return a.lessonNumber!.compareTo(b.lessonNumber!);
     });

@@ -76,6 +76,7 @@ class TimetableCrawler {
                 timetableCode.substring(0, timetableCode.indexOf(',')))!;
             timetableCode =
                 timetableCode.substring(timetableCode.indexOf(',') + 1);
+            print(timetableCode);
 
             ///if-Abfrage zur Überprüfung ob es eine Stundennummer gibt oder ob das "Feld" leer ist.
             if (timetableCode.indexOf(',') != 0) {

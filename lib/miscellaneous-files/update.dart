@@ -107,8 +107,8 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
     var timetableString =
         await TimetableScraper.fetch(GroupExt.fromString(key: currentClass));
     print("object");
-    stundenplanDIF = timetableString.body
-        .substring(1, timetableString.body.length - 1)
+    stundenplanDIF = timetableString
+        //.substring(1, timetableString.length - 1)
         .replaceAll("\\", "");
     if (stundenplanDIF.contains(currentClass)) {
       TimetableCrawler timetableCrawler = new TimetableCrawler();
