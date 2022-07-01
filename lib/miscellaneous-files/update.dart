@@ -63,6 +63,7 @@ Future<void> update(BuildContext context) async {
 
     DateTime versionNew;
     try {
+      //TODO: Prüfen, wie aktuell der Stundenplan ist?
       /*HttpClient client = HttpClient();
       HttpClientRequest req = await client.getUrl(
           Uri.parse('http://janw.bplaced.net/annetteapp/data/stundenplan.txt'));
@@ -70,7 +71,6 @@ Future<void> update(BuildContext context) async {
       String t = tempResponse.headers.value(HttpHeaders.lastModifiedHeader)!;
       print('Zuletzt geändert: $t');
       versionNew = getLastModifiedTime(t)!;*/
-      //TO DO: Fehlerbehandlung
       if (true) {
         if (await updateTimetable(/*versionNew*/)) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarTimetableUpdated);
