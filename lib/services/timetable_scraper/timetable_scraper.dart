@@ -5,7 +5,7 @@ class TimetableScraper {
   static Future<String> fetch(GroupIDs id) async {
     //TODO: durch production deployment ersetzen
     var res = await http.get(Uri.http(
-        'annette-entwickelt-software-a0de4y9t7-totallyinformatik.vercel.app',
+        'annette-entwickelt-software-fc0x768ff-totallyinformatik.vercel.app/',
         'api/annette_app/dateien/stundenplan/' + id.name));
     print("fetched!");
     if (res.statusCode != 200) {

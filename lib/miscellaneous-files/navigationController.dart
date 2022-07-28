@@ -1,3 +1,4 @@
+import 'package:annette_app/page_news/newsTab.dart';
 import 'package:annette_app/timetable/timetableTab.dart';
 import 'package:annette_app/miscellaneous-files/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
