@@ -198,22 +198,32 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
               ),
             ],
             closeOnScroll: true,
-            child: Card(
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 5),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+               color: Theme.of(context).cardColor,
+               borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
               child: ListTile(
-
-                  leading: CustomCheckbox(
+                  title: Row(
+                    children: [
+                      (task!.subject == 'Sonstiges')
+                          ? Text(notes!) : Text(task!.subject!),
+                      SizedBox(width: 20),
+                      Icon(Icons.info_outlined,
+                        color: Theme.of(context).colorScheme.secondary)
+                    ]
+                  )
+                ,
+                  subtitle: listTilesubtitle,
+                  trailing: CustomCheckbox(
                     key: checkBoxKey,
                     task: task,
                     onChanged: () {
                       remove();
                     },
                   ),
-                  title: (task!.subject == 'Sonstiges')
-                      ? Text(notes!)
-                      : Text(task!.subject!),
-                  subtitle: listTilesubtitle,
-                  trailing: Icon(Icons.info_outlined,
-                      color: Theme.of(context).colorScheme.secondary),
                   onTap: () {
                     if (MediaQuery.of(context).orientation ==
                         Orientation.landscape) {

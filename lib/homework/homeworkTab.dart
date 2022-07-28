@@ -418,52 +418,53 @@ class HomeworkTabState extends State<HomeworkTab> {
                       ),
                     ),
                   ),
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    width: 178,
-                    child: DropdownButton<String>(
-                      items: [
-                        'Als nächstes',
-                        'Als letztes',
-                        'Fach aufsteigend',
-                        'Fach absteigend',
-                        'Zuletzt hinzugefügt',
-                        'Zuerst hinzugefügt'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) async {
-                        setState(() {
-                          selectedOrder = value;
-                        });
-                        if (value == 'Als nächstes') {
-                          orderValue = 3;
-                        } else if (value == 'Zuerst hinzugefügt') {
-                          orderValue = 5;
-                        } else if (value == 'Zuletzt hinzugefügt') {
-                          orderValue = 6;
-                        } else if (value == 'Fach aufsteigend') {
-                          orderValue = 1;
-                        } else if (value == 'Fach absteigend') {
-                          orderValue = 2;
-                        } else if (value == 'Als letztes') {
-                          orderValue = 4;
-                        }
-                        storage.write('order', orderValue);
+                  alignment: Alignment.center,
+                  child: Expanded(
+                    child: Container(
+                      child: DropdownButton<String>(
+                        items: [
+                          'Als nächstes',
+                          'Als letztes',
+                          'Fach aufsteigend',
+                          'Fach absteigend',
+                          'Zuletzt hinzugefügt',
+                          'Zuerst hinzugefügt'
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) async {
+                          setState(() {
+                            selectedOrder = value;
+                          });
+                          if (value == 'Als nächstes') {
+                            orderValue = 3;
+                          } else if (value == 'Zuerst hinzugefügt') {
+                            orderValue = 5;
+                          } else if (value == 'Zuletzt hinzugefügt') {
+                            orderValue = 6;
+                          } else if (value == 'Fach aufsteigend') {
+                            orderValue = 1;
+                          } else if (value == 'Fach absteigend') {
+                            orderValue = 2;
+                          } else if (value == 'Als letztes') {
+                            orderValue = 4;
+                          }
+                          storage.write('order', orderValue);
 
-                        reload(null);
-                      },
-                      value: selectedOrder,
-                      hint: Text('Sortierung'),
-                      icon: Icon(CupertinoIcons.arrow_up_arrow_down),
-                      underline: Container(),
-                      isDense: true,
-                      isExpanded: true,
+                          reload(null);
+                        },
+                        value: selectedOrder,
+                        hint: Text('Sortierung'),
+                        icon: Icon(CupertinoIcons.arrow_up_arrow_down),
+                        underline: Container(),
+                        isDense: true,
+                        isExpanded: true,
+                      ),
                     ),
-                  ),
+                  )
                 ),
                 Expanded(
                     child: Container(

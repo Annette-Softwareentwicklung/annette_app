@@ -50,7 +50,7 @@ class DetailedViewState extends State<DetailedView> {
   static double timePickerHeight = 150;
   static double timePickerWidth = 280;
   static BoxDecoration timePickerBorder = BoxDecoration(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(10),
       border: Border.all(
           width: 1
       )
@@ -397,7 +397,7 @@ class DetailedViewState extends State<DetailedView> {
                     ? Colors.white
                     : Colors.grey[800],
                 border: Border.all(color: Colors.black45, width: 1.0),
-                borderRadius: BorderRadius.circular(5)),
+                borderRadius: BorderRadius.circular(10)),
             padding: EdgeInsets.all(Design.standardPagePadding),
             margin: EdgeInsets.all(Design.standardPagePadding),
             child: Center(
@@ -433,7 +433,7 @@ class DetailedViewState extends State<DetailedView> {
                                 ? Colors.white
                                 : Colors.grey[800],
                         border: Border.all(color: Colors.black45, width: 1.0),
-                        borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.all(5.0),
                     margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: TextButton(
@@ -468,7 +468,7 @@ class DetailedViewState extends State<DetailedView> {
                           ? Colors.white
                           : Colors.grey[800],
                       border: Border.all(color: Colors.black45, width: 1.0),
-                      borderRadius: BorderRadius.circular(5)),
+                      borderRadius: BorderRadius.circular(10)),
                   padding: EdgeInsets.all(5.0),
                   margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: TextButton(

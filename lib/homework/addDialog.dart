@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:annette_app/data/design.dart';
 import 'package:annette_app/data/subjects.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -523,12 +524,7 @@ class _AddDialogState extends State<AddDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CupertinoButton(
-                            color: (Theme.of(context).brightness ==
-                                    Brightness.light)
-                                ? Theme.of(context)
-                                    .floatingActionButtonTheme
-                                    .backgroundColor
-                                : Theme.of(context).accentColor,
+                            color: Design.annetteColor,
                             //color: Theme.of(context).accentColor,
                             child: Text(
                               'Hinzufügen',
