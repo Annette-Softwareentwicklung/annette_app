@@ -28,7 +28,10 @@ class _VertretungsTabState extends State<VertretungsTab> {
   void makeRequest() async {
     try {
       var response = await http.get(Uri.https(
-          Links.vertretungToday.substring(0, Links.vertretungToday.indexOf('/')), Links.vertretungToday.substring(Links.vertretungToday.indexOf('/') + 1)));
+          Links.vertretungToday
+              .substring(0, Links.vertretungToday.indexOf('/')),
+          Links.vertretungToday
+              .substring(Links.vertretungToday.indexOf('/') + 1)));
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc1 =
@@ -53,7 +56,10 @@ class _VertretungsTabState extends State<VertretungsTab> {
       }
 
       response = await http.get(Uri.https(
-          Links.vertretungTomorrow.substring(0, Links.vertretungTomorrow.indexOf('/')), Links.vertretungTomorrow.substring(Links.vertretungTomorrow.indexOf('/') + 1)));
+          Links.vertretungTomorrow
+              .substring(0, Links.vertretungTomorrow.indexOf('/')),
+          Links.vertretungTomorrow
+              .substring(Links.vertretungTomorrow.indexOf('/') + 1)));
       if (response.statusCode == 200) {
         htmlCode = response.body;
         VertretungsplanCrawler vpc2 =
@@ -100,7 +106,6 @@ class _VertretungsTabState extends State<VertretungsTab> {
     }
   }
 
-
   void helperOrientation() {
     if (MediaQueryData.fromWindow(window).size.longestSide < 700) {
       SystemChrome.setPreferredOrientations([
@@ -135,16 +140,22 @@ class _VertretungsTabState extends State<VertretungsTab> {
             child: SingleChildScrollView(
           child: Flex(
             mainAxisSize: MainAxisSize.min,
-            direction: (MediaQuery.of(context).orientation == Orientation.landscape) ? Axis.horizontal : Axis.vertical,
+            direction:
+                (MediaQuery.of(context).orientation == Orientation.landscape)
+                    ? Axis.horizontal
+                    : Axis.vertical,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Flexible(child: vertretungToday(), flex: 1, fit: FlexFit.loose,),
-              Flexible(child: vertretungTomorrow(), flex: 1,fit: FlexFit.loose,),
-              //Flexible(
-              //  flex: 1,
-              //  fit: FlexFit.loose,
-              //  child: Text('Stand: $lastEdited', textAlign: TextAlign.center, textWidthBasis: TextWidthBasis.parent,),
-              //)
+              Flexible(
+                child: vertretungToday(),
+                flex: 1,
+                fit: FlexFit.loose,
+              ),
+              Flexible(
+                child: vertretungTomorrow(),
+                flex: 1,
+                fit: FlexFit.loose,
+              ),
             ],
           ),
           physics: const AlwaysScrollableScrollPhysics(),
@@ -181,12 +192,13 @@ class _VertretungsTabState extends State<VertretungsTab> {
                   Container(
                     margin: EdgeInsets.only(bottom: 10),
                     child: Text(
-                    'Infos zum Tag:',
-                    style: TextStyle(
-                        fontSize: 17,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),)
+                      'Infos zum Tag:',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
                 else
                   Text(
                     'Keine weiteren Nachrichten',
@@ -223,7 +235,9 @@ class _VertretungsTabState extends State<VertretungsTab> {
       ),
       margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
       decoration: BoxDecoration(
-        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark)
+            ? Colors.black26
+            : Colors.black12,
         borderRadius: BorderRadius.circular(10),
         //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
       ),
@@ -247,7 +261,9 @@ class _VertretungsTabState extends State<VertretungsTab> {
         margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
         height: 50,
         decoration: BoxDecoration(
-          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+          color: (Theme.of(context).brightness == Brightness.dark)
+              ? Colors.black26
+              : Colors.black12,
           borderRadius: BorderRadius.circular(10),
           //border: Border.all(color: Theme.of(context).accentColor, width: 1),
         ),
@@ -279,12 +295,13 @@ class _VertretungsTabState extends State<VertretungsTab> {
                   Container(
                     margin: EdgeInsets.only(bottom: 10),
                     child: Text(
-                    'Infos zum Tag:',
-                    style: TextStyle(
-                        fontSize: 17,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),)
+                      'Infos zum Tag:',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
                 else
                   Text(
                     'Keine weiteren Nachrichten',
@@ -319,9 +336,17 @@ class _VertretungsTabState extends State<VertretungsTab> {
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
       ),
-      margin: EdgeInsets.only(top: (MediaQuery.of(context).orientation == Orientation.portrait) ? 25 : 10 , left: 10, right: 10, bottom: 5),
+      margin: EdgeInsets.only(
+          top: (MediaQuery.of(context).orientation == Orientation.portrait)
+              ? 25
+              : 10,
+          left: 10,
+          right: 10,
+          bottom: 5),
       decoration: BoxDecoration(
-        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+        color: (Theme.of(context).brightness == Brightness.dark)
+            ? Colors.black26
+            : Colors.black12,
         borderRadius: BorderRadius.circular(10),
         //    border: Border.all(color: Theme.of(context).accentColor, width: 1),
       ),
@@ -345,7 +370,9 @@ class _VertretungsTabState extends State<VertretungsTab> {
         margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 25),
         height: 50,
         decoration: BoxDecoration(
-          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black26 : Colors.black12,
+          color: (Theme.of(context).brightness == Brightness.dark)
+              ? Colors.black26
+              : Colors.black12,
           borderRadius: BorderRadius.circular(10),
           //border: Border.all(color: Theme.of(context).accentColor, width: 1),
         ),

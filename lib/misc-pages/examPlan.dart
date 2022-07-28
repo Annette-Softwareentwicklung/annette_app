@@ -64,7 +64,6 @@ class _ExamPlanState extends State<ExamPlan> {
     }
   }
 
-
   void load() async {
     if (await getCurrentClass() == 1) {
       currentClass = 'q1';
@@ -125,9 +124,10 @@ class _ExamPlanState extends State<ExamPlan> {
                     )
                   : (error)
                       ? ErrorInternetContainer(
-                                      onRefresh: () {
-                                          changePlan(selectedClass);},
-                                    )
+                          onRefresh: () {
+                            changePlan(selectedClass);
+                          },
+                        )
                       : Center(
                           child: Column(
                             children: [

@@ -56,6 +56,8 @@ class TimetableCrawler {
 
         ///if-Abfrage zur Überprüfung ob es ein Fach gibt oder ob das "Feld" leer ist.
         if (timetableCode.indexOf(',') != 0) {
+          print(timetableCode);
+          print(timetableCode.substring(0, timetableCode.indexOf('"')));
           String tempSubject =
               timetableCode.substring(0, timetableCode.indexOf('"'));
           timetableCode =
@@ -74,6 +76,7 @@ class TimetableCrawler {
                 timetableCode.substring(0, timetableCode.indexOf(',')))!;
             timetableCode =
                 timetableCode.substring(timetableCode.indexOf(',') + 1);
+            print(timetableCode);
 
             ///if-Abfrage zur Überprüfung ob es eine Stundennummer gibt oder ob das "Feld" leer ist.
             if (timetableCode.indexOf(',') != 0) {
@@ -223,12 +226,11 @@ class TimetableCrawler {
       ///Q1: Mo. 1 + 2
       ///Q2: Mi 1 + 2
       String? subjectLk1;
-      if(timetableUnitsToInsert
-          .indexWhere((element) =>
-      element.subject!.contains('LK')) != -1) {
+      if (timetableUnitsToInsert
+              .indexWhere((element) => element.subject!.contains('LK')) !=
+          -1) {
         subjectLk1 = timetableUnitsToInsert
-            .firstWhere((element) =>
-        element.subject!.contains('LK'))
+            .firstWhere((element) => element.subject!.contains('LK'))
             .subject;
       }
       if (subjectLk1 != null) {
@@ -239,7 +241,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 1, subject: subjectLk1, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 1,
+                subject: subjectLk1,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk1 &&
@@ -247,7 +252,10 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 2, subject: subjectLk1, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 2,
+                subject: subjectLk1,
+                room: '???'));
           }
         } else if (currentClass == 'Q2') {
           if (timetableUnitsToInsert.indexWhere((element) =>
@@ -256,7 +264,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 1, subject: subjectLk1, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 1,
+                subject: subjectLk1,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk1 &&
@@ -264,20 +275,23 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 2, subject: subjectLk1, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 2,
+                subject: subjectLk1,
+                room: '???'));
           }
         }
 
         String? subjectLk2;
-        if(timetableUnitsToInsert
-            .indexWhere((element) =>
-        element.subject!.contains('LK') &&
-            !element.subject!.contains(subjectLk1!)) != -1) {
-          subjectLk2 = timetableUnitsToInsert
-            .firstWhere((element) =>
+        if (timetableUnitsToInsert.indexWhere((element) =>
                 element.subject!.contains('LK') &&
-                !element.subject!.contains(subjectLk1!))
-            .subject;
+                !element.subject!.contains(subjectLk1!)) !=
+            -1) {
+          subjectLk2 = timetableUnitsToInsert
+              .firstWhere((element) =>
+                  element.subject!.contains('LK') &&
+                  !element.subject!.contains(subjectLk1!))
+              .subject;
         }
         if (currentClass == 'Q1' && subjectLk2 != null) {
           if (timetableUnitsToInsert.indexWhere((element) =>
@@ -286,7 +300,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 1, subject: subjectLk2, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 1,
+                subject: subjectLk2,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk2 &&
@@ -294,7 +311,10 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 1, lessonNumber: 2, subject: subjectLk2, room: '???'));
+                dayNumber: 1,
+                lessonNumber: 2,
+                subject: subjectLk2,
+                room: '???'));
           }
         } else if (currentClass == 'Q2' && subjectLk2 != null) {
           if (timetableUnitsToInsert.indexWhere((element) =>
@@ -303,7 +323,10 @@ class TimetableCrawler {
                   element.lessonNumber == 1) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 1, subject: subjectLk2, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 1,
+                subject: subjectLk2,
+                room: '???'));
           }
           if (timetableUnitsToInsert.indexWhere((element) =>
                   element.subject == subjectLk2 &&
@@ -311,15 +334,23 @@ class TimetableCrawler {
                   element.lessonNumber == 2) ==
               -1) {
             timetableUnitsToInsert.add(TimeTableUnit(
-                dayNumber: 3, lessonNumber: 2, subject: subjectLk2, room: '???'));
+                dayNumber: 3,
+                lessonNumber: 2,
+                subject: subjectLk2,
+                room: '???'));
           }
         }
       }
-
     }
 
     timetableUnitsToInsert.forEach((element) {
+      print(element.toString());
       databaseInsertTimetableUnit(element);
+      print(
+          '${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');
+    });
+    var units = await databaseGetAllTimeTableUnit();
+    units.forEach((element) {
       print(
           '${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');
     });

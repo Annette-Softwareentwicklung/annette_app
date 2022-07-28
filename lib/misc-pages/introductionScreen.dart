@@ -60,8 +60,6 @@ class IntroductionScreenState extends State<IntroductionScreen> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   int currentPageIndex = 0;
 
-
-
   void helperOrientation() {
     if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
       SystemChrome.setPreferredOrientations([
@@ -78,7 +76,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
 
   @override
   dispose() {
-   SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
@@ -238,9 +236,9 @@ class ImageTitleTextModel extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(
-                  top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
-                  bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
-      ),
+                top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,
+                bottom: (MediaQuery.of(context).size.height < 700) ? 18 : 18,
+              ),
               child: Text(
                 title,
                 textAlign: TextAlign.center,

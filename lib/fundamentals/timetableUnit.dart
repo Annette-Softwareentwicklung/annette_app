@@ -5,12 +5,13 @@ class TimeTableUnit {
   final int? dayNumber;
   final int? lessonNumber;
 
-  TimeTableUnit(
-      {this.id,
-        this.subject,
-        this.room,
-        this.dayNumber,
-        this.lessonNumber,});
+  TimeTableUnit({
+    this.id,
+    this.subject,
+    this.room,
+    this.dayNumber,
+    this.lessonNumber,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -20,5 +21,10 @@ class TimeTableUnit {
       'dayNumber': dayNumber,
       'lessonNumber': lessonNumber,
     };
+  }
+
+  @override
+  String toString() {
+    return "TimetableUnit(id: $id, subject: $subject, room: $room, dayNumber: $dayNumber, lessonNumber: $lessonNumber)";
   }
 }

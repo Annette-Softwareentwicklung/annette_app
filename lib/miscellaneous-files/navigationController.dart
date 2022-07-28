@@ -1,6 +1,3 @@
-
-
-import 'package:annette_app/page_news/newsTab.dart';
 import 'package:annette_app/timetable/timetableTab.dart';
 import 'package:annette_app/miscellaneous-files/update.dart';
 import 'package:annette_app/vertretung/vertretungsTab.dart';
@@ -83,11 +80,9 @@ class NavigationControllerState extends State<NavigationController> {
           type: 'timetable', localizedTitle: 'Stundenplan', icon: 'icon_plan'),
     ]);
 
-    Future.delayed(Duration(seconds: 1),
-        () {
-            update(context);
-        }
-    );
+    Future.delayed(Duration(seconds: 1), () {
+      update(context);
+    });
   }
 
   void setTabIndex(int newIndex) {
@@ -152,25 +147,27 @@ class NavigationControllerState extends State<NavigationController> {
 
   /// Öffnet das Dialogfenster zum Erstellen einer neuen Hausaufgabe
   void showNewHomeworkDialog() {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (context) => Container(
-          width: MediaQuery.of(context).size.width,
-          color: Colors.transparent,
-          padding: EdgeInsets.symmetric(
-            horizontal: (MediaQuery.of(context).size.width > 500) ? ((MediaQuery.of(context).size.width - 500) / 2) : 0,
-          ),
-          child: Container(
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        width: MediaQuery.of(context).size.width,
+        color: Colors.transparent,
+        padding: EdgeInsets.symmetric(
+          horizontal: (MediaQuery.of(context).size.width > 500)
+              ? ((MediaQuery.of(context).size.width - 500) / 2)
+              : 0,
+        ),
+        child: Container(
           height: (MediaQuery.of(context).size.height < 758)
               ? 638
-              : (MediaQuery.of(context).size.height > 1000) ? 700 : MediaQuery.of(context).size.height - 120,
-
+              : (MediaQuery.of(context).size.height > 1000)
+                  ? 700
+                  : MediaQuery.of(context).size.height - 120,
           decoration: new BoxDecoration(
             color: (Theme.of(context).brightness == Brightness.dark)
-                ?  Color.fromRGBO(
-                    40, 40, 40, 1)
+                ? Color.fromRGBO(40, 40, 40, 1)
                 : Color.fromRGBO(248, 248, 253, 1),
             borderRadius: new BorderRadius.only(
               topLeft: const Radius.circular(20.0),
@@ -184,8 +181,9 @@ class NavigationControllerState extends State<NavigationController> {
               }
             },
           ),
-        ),),
-      );
+        ),
+      ),
+    );
   }
 
   Widget bottomBar(BuildContext context) {

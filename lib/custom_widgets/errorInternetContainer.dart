@@ -22,8 +22,8 @@ class ErrorInternetContainer extends StatelessWidget {
                 : Design.annetteColor,
           ),
           Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
               'Du scheinst nicht mit dem Internet verbunden zu sein. Bitte überprüfe deine Verbindung.',
               textAlign: TextAlign.center,
               style: TextStyle(

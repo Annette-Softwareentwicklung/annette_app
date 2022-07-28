@@ -19,7 +19,7 @@ import 'package:week_of_year/week_of_year.dart';
 
 BoxDecoration decorationTimetable(BuildContext context) {
   return BoxDecoration(
-      /*boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
+    /*boxShadow: (Theme.of(context).brightness == Brightness.dark) ? null : [
   BoxShadow(
   color: Colors.grey.withOpacity(0.15),
   spreadRadius: 3,
@@ -65,6 +65,10 @@ class _TimetableTabState extends State<TimetableTab> {
   void load() async {
     allTimes = getAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
+
+    for (var element in allTimeTableUnits) {
+      print(element.toString());
+    }
 
     allTimeTableUnits.sort((a, b) {
       return a.lessonNumber!.compareTo(b.lessonNumber!);
@@ -236,14 +240,16 @@ class _TimetableTabState extends State<TimetableTab> {
         if (i == 1 || !isFree)
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-              isNow: (pLessonNumber != null && pLessonNumber >= i &&
+              isNow: (pLessonNumber != null &&
+                      pLessonNumber >= i &&
                       pLessonNumber < j &&
                       ((isInBreak == false && !isFree) || (isFree)))
                   ? true
                   : false,
-              key: (pLessonNumber != null && pLessonNumber >= i &&
-                  pLessonNumber < j &&
-                  ((isInBreak == false && !isFree) || (isFree)))
+              key: (pLessonNumber != null &&
+                      pLessonNumber >= i &&
+                      pLessonNumber < j &&
+                      ((isInBreak == false && !isFree) || (isFree)))
                   ? globalKeyNow
                   : null));
 
@@ -273,8 +279,9 @@ class _TimetableTabState extends State<TimetableTab> {
             print(storage.read('changingLkSubject'));
             print(storage.read('changingLkWeekNumber'));
             if ((DateTime.now().weekOfYear.isEven &&
-                storage.read('changingLkWeekNumber').isEven) || (!DateTime.now().weekOfYear.isEven &&
-                !storage.read('changingLkWeekNumber').isEven)) {
+                    storage.read('changingLkWeekNumber').isEven) ||
+                (!DateTime.now().weekOfYear.isEven &&
+                    !storage.read('changingLkWeekNumber').isEven)) {
               if (storage.read('changingLkSubject') !=
                   tempTimetableUnit.subject!) {
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
@@ -327,16 +334,19 @@ class _TimetableTabState extends State<TimetableTab> {
                                   (element.dayNumber! == pWeekday &&
                                       element.lessonNumber! > i)) !=
                               -1)) ||
-                      (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
+                      (pLessonNumber != null &&
+                          pLessonNumber > i &&
+                          pLessonNumber < j &&
+                          nextFree)))
                   ? true
                   : false,
               key: (((isInBreak == true &&
-                  pLessonNumber == i &&
-                  (allTimeTableUnits.indexWhere((element) =>
-                  (element.dayNumber! == pWeekday &&
-                      element.lessonNumber! > i)) !=
-                      -1)) ||
-                  (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
+                          pLessonNumber == i &&
+                          (allTimeTableUnits.indexWhere((element) =>
+                                  (element.dayNumber! == pWeekday &&
+                                      element.lessonNumber! > i)) !=
+                              -1)) ||
+                      (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
                   ? globalKeyNow
                   : null));
         }
@@ -438,13 +448,14 @@ class _TimetableTabState extends State<TimetableTab> {
                                       constraints: BoxConstraints(
                                         maxWidth: 500,
                                       ),
-                                          alignment: Alignment.topCenter,
-                                          child: SingleChildScrollView(
-                                            controller: scrollController,
-                                            child: Column(
-                                            children:  displayTimetable,
-                                            ),
-                                          ),)
+                                      alignment: Alignment.topCenter,
+                                      child: SingleChildScrollView(
+                                        controller: scrollController,
+                                        child: Column(
+                                          children: displayTimetable,
+                                        ),
+                                      ),
+                                    )
                                   : Center(
                                       child: Column(
                                       children: [
@@ -462,8 +473,7 @@ class _TimetableTabState extends State<TimetableTab> {
               ],
               crossAxisAlignment: CrossAxisAlignment.center,
             )),
-            padding: EdgeInsets.only(top: 15)
-    ));
+            padding: EdgeInsets.only(top: 15)));
   }
 
   Container zeitraster() {
@@ -472,8 +482,7 @@ class _TimetableTabState extends State<TimetableTab> {
           ? ShowWebview(
               url: 'https://${Links.times}',
             )
-          : Image.network(
-              'https://${Links.times}'),
+          : Image.network('https://${Links.times}'),
     );
   }
 
@@ -492,7 +501,7 @@ class DisplayFree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(left: 95,right: 15),
+        margin: EdgeInsets.only(left: 95, right: 15),
         child: Column(children: [
           Container(
             padding: EdgeInsets.all(15),
@@ -624,8 +633,9 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
           .subject!;
 
       if ((DateTime.now().weekOfYear.isEven &&
-          storage.read('changingLkWeekNumber').isEven) || (!DateTime.now().weekOfYear.isEven &&
-          !storage.read('changingLkWeekNumber').isEven)) {
+              storage.read('changingLkWeekNumber').isEven) ||
+          (!DateTime.now().weekOfYear.isEven &&
+              !storage.read('changingLkWeekNumber').isEven)) {
         if (storage.read('changingLkSubject') == lk2) {
           selectedLK = 1;
         }
@@ -654,11 +664,10 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     timeTableUnit = widget.timeTableUnit;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 95,right: 15),
+      margin: EdgeInsets.only(left: 95, right: 15),
       padding: EdgeInsets.all(20),
       width: double.infinity,
       decoration: decorationTimetable(context),
