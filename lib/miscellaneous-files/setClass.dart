@@ -662,14 +662,14 @@ class _SetClassState extends State<SetClass> {
                                     child: LinearProgressIndicator(
                                       minHeight: 2,
                                       backgroundColor:
-                                          (Theme.of(context).brightness ==
-                                                  Brightness.dark)
-                                              ? Colors.grey
-                                              : null,
+                                      (Theme.of(context).brightness ==
+                                          Brightness.dark)
+                                          ? Colors.grey
+                                          : Design.annetteColorLight.withOpacity(0.5),
                                       color: (Theme.of(context).brightness ==
-                                              Brightness.dark)
-                                          ? Theme.of(context).accentColor
-                                          : Colors.blue,
+                                          Brightness.dark)
+                                          ? Theme.of(context).colorScheme.secondary
+                                          : Design.annetteColor,
                                     )),
                               if (finished)
                                 Expanded(
@@ -677,9 +677,9 @@ class _SetClassState extends State<SetClass> {
                                   child: Container(
                                     height: 2,
                                     color: (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                        ? Theme.of(context).accentColor
-                                        : Colors.blue,
+                                        Brightness.dark)
+                                        ? Theme.of(context).colorScheme.secondary
+                                        : Design.annetteColor,
                                   ),
                                 ),
                               SizedBox(
@@ -692,9 +692,9 @@ class _SetClassState extends State<SetClass> {
                                         color: (!finished)
                                             ? Colors.grey
                                             : (Theme.of(context).brightness ==
-                                                    Brightness.dark)
-                                                ? Theme.of(context).accentColor
-                                                : Colors.blue,
+                                            Brightness.dark)
+                                            ? Theme.of(context).colorScheme.secondary
+                                            : Design.annetteColor,
                                         width: 2),
                                   ),
                                   alignment: Alignment.center,
@@ -714,9 +714,9 @@ class _SetClassState extends State<SetClass> {
                                   color: (!showGroupsOS && !showGroupsUS)
                                       ? Colors.grey
                                       : (Theme.of(context).brightness ==
-                                              Brightness.dark)
-                                          ? Theme.of(context).accentColor
-                                          : Colors.blue,
+                                      Brightness.dark)
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Design.annetteColor,
                                 ),
                               ),
                               SizedBox(
@@ -729,9 +729,9 @@ class _SetClassState extends State<SetClass> {
                                         color: (!showGroupsOS && !showGroupsUS)
                                             ? Colors.grey
                                             : (Theme.of(context).brightness ==
-                                                    Brightness.dark)
-                                                ? Theme.of(context).accentColor
-                                                : Colors.blue,
+                                            Brightness.dark)
+                                            ? Theme.of(context).colorScheme.secondary
+                                            : Design.annetteColor,
                                         width: 2),
                                   ),
                                   alignment: Alignment.center,
@@ -751,9 +751,9 @@ class _SetClassState extends State<SetClass> {
                                   color: (!showFinishedConfiguration)
                                       ? Colors.grey
                                       : (Theme.of(context).brightness ==
-                                              Brightness.dark)
-                                          ? Theme.of(context).accentColor
-                                          : Colors.blue,
+                                      Brightness.dark)
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Design.annetteColor,
                                 ),
                               ),
                             ],
@@ -1199,7 +1199,7 @@ class _SetClassState extends State<SetClass> {
                     margin: EdgeInsets.only(bottom: 20),
                     child: Icon(
                       Icons.check_circle_outline,
-                      color: Colors.green,
+                      color: Design.annetteColor,
                       size: 200,
                     ),
                   ),

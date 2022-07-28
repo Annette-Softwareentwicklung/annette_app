@@ -76,8 +76,8 @@ Future<void> update(BuildContext context) async {
           ScaffoldMessenger.of(context).showSnackBar(snackBarTimetableUpdated);
           /*storage.write('timetableVersion', versionNew.toString());*/
         } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(snackBarTimetableUpdateFailed);
+          //ScaffoldMessenger.of(context)
+          //    .showSnackBar(snackBarTimetableUpdateFailed);
         }
       }
     } catch (e) {}
