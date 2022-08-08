@@ -9,7 +9,7 @@ class TimetableScraper {
     print(date);
 
     var res = await http.get(Uri.http(
-        'annette-entwickelt-software-6oaro0t5x-totallyinformatik.vercel.app',
+        'annette-entwickelt-software-api-totallyinformatik.vercel.app',
         'api/annette_app/dateien/stundenplan/' + id.name + "/" + date));
     print("fetched!");
     if (res.statusCode != 200) {
