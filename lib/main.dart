@@ -38,7 +38,7 @@ void main() async {
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
-    if (payload != null) {<
+    if (payload != null) {
       helper(payload);
 
       debugPrint('notification payload: ' + payload);
@@ -115,7 +115,6 @@ void main() async {
     print(e);
   }
 
-
   final storage = GetStorage();
 
   if (storage.read('configuration') != null) {
@@ -142,7 +141,6 @@ void main() async {
   } else {
     guide = false;
   }
-
 
   ///
 
@@ -173,7 +171,6 @@ void helper(String? payload) async {
 
 /// Einstiegspunkt der App.
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return DismissKeyboard(
@@ -224,7 +221,4 @@ class MyApp extends StatelessWidget {
               ),
             )));
   }
-
-
-
 }
