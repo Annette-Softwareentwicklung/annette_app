@@ -38,7 +38,7 @@ void main() async {
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
-    if (payload != null) {
+    if (payload != null) {<
       helper(payload);
 
       debugPrint('notification payload: ' + payload);

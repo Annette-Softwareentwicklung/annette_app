@@ -3,8 +3,6 @@ import 'package:http/http.dart' as http;
 
 class TimetableScraper {
   static Future<String> fetch(GroupIDs id) async {
-    //TODO: durch production deployment ersetzen
-
     String date = DateTime.now().toString().substring(0, 10);
     print(date);
 
