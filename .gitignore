@@ -9,6 +9,10 @@
 .history
 .svn/
 
+# build
+keystore.jks
+upload_certificate.pem
+
 # IntelliJ related
 *.iml
 *.ipr
