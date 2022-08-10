@@ -42,7 +42,7 @@ class TimetableTab extends StatefulWidget {
 
 class _TimetableTabState extends State<TimetableTab> {
   bool finishedNow = false;
-  int tabIndex = 0;
+  int tabIndex = 1;
   bool finishedZeitraster = false;
   late List<TimeTableUnit> allTimeTableUnits;
   late List<String> subjectFullnames;
@@ -377,12 +377,12 @@ class _TimetableTabState extends State<TimetableTab> {
               children: [
                 CupertinoSlidingSegmentedControl(
                   children: {
-                    0: Container(
-                      child: Text('Aktuell'),
-                      padding: EdgeInsets.symmetric(horizontal: 25),
-                    ),
                     1: Container(
                       child: Text('Gesamt'),
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                    ),
+                    0: Container(
+                      child: Text('Aktuell'),
                       padding: EdgeInsets.symmetric(horizontal: 25),
                     ),
                     2: Container(

@@ -1,3 +1,4 @@
 {
-    "rpc.enabled": false
+    "rpc.enabled": false,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
