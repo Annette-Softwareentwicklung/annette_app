@@ -9,8 +9,8 @@ class OnlineFiles {
   Future<bool> initialize() async {
     Future<String?> _getDifExport() async {
       try {
-        var response = await http.get(
-            Uri.http('annette-app-files.vercel.app', '220524_Stundenplan.TXT'));
+        var response = await http
+            .get(Uri.http('annette-app-files.vercel.app', 'stundenplan.TXT'));
         if (response.statusCode == 200) {
           return response.body;
         }
@@ -42,10 +42,7 @@ class OnlineFiles {
     final difExportValue = await _getDifExport();
     final newVersionValue = await _getNewVersion();
 
-
-    if (
-        difExportValue != null &&
-        newVersionValue != null) {
+    if (difExportValue != null && newVersionValue != null) {
       difExport = (await _getDifExport())!;
       newVersion = (await _getNewVersion())!;
       return true;

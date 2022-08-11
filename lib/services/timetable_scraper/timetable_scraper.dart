@@ -3,17 +3,22 @@ import 'package:http/http.dart' as http;
 
 class TimetableScraper {
   static Future<String> fetch(GroupIDs id) async {
-    String date = DateTime.now().toString().substring(0, 10);
-    print(date);
+    DateTime now = DateTime.now();
+    print(now);
+    //*  Stundenplan des nächsten Tages nach 18 Uhr anzeigen
+    String date = now.toString().substring(0, 10);
+    if (now.hour >= 18) {
+      DateTime tomorrow = now.add(Duration(hours: 24 - now.hour + 10));
+      date = tomorrow.toString().substring(0, 10);
+    }
 
     var res = await http.get(Uri.http(
         'annette-entwickelt-software-api-totallyinformatik.vercel.app',
         'api/annette_app/dateien/stundenplan/' + id.name + "/" + date));
     print("fetched!");
     if (res.statusCode != 200) {
-      print("error error error");
-      print(res.statusCode);
-      throw Exception('http.get error: statusCode= ${res.statusCode}');
+      return "error";
+      //throw Exception('http.get error: statusCode= ${res.statusCode}');
     } else {
       print("Request erfolgreich [200]");
     }

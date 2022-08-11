@@ -100,7 +100,10 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
     print(currentClass);
     var timetableString =
         await TimetableScraper.fetch(GroupExt.fromString(key: currentClass));
-    print("object");
+
+    /// falls es ein Error ist, dann soll der Stundenplan nicht erneuert werden.
+    if (timetableString == "error") return false;
+
     stundenplanDIF = timetableString.replaceAll("\\", "");
     if (stundenplanDIF.contains(currentClass)) {
       TimetableCrawler timetableCrawler = new TimetableCrawler();

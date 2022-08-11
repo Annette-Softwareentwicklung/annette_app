@@ -24,7 +24,7 @@ class NavigationController extends StatefulWidget {
 }
 
 class NavigationControllerState extends State<NavigationController> {
-  int tabIndex = 0;
+  int tabIndex = 1;
 
   /// Alle Überschriften, diese werde auch genutzt, um den tabIndex für die entsprechenden Ansichten zu finden.
   static final String newsTabTitle = "Neuigkeiten";
@@ -37,13 +37,27 @@ class NavigationControllerState extends State<NavigationController> {
   final ScrollPhysics bottomNavigationBarScrollPhysics = new ScrollPhysics();
 
   final GlobalKey<HomeworkTabState> homeworkTabAccess =
-    GlobalKey<HomeworkTabState>();
+      GlobalKey<HomeworkTabState>();
 
   /// um wet code zu vermeiden, wird eine LUT (Look up table) verwendet, hierbei dient ist der Index der zugehörige Tabindex
   /// !!! Der Grund, wieso an Index 2 von [tabIndexToTab] null steht, ist dass dort der HomeworkTab angezeigt werden muss.
   /// Dieser Tab benötigt das [homeworkTabAccess] Attribut als Key-value. !!!
-  List tabIndexToTab = [NewsTab(), VertretungsTab(), null, TimetableTab(), ExamPlan(), SettingsTab()];
-  List tabIndexToTitle = [newsTabTitle, vertretungsTabTitle, homeworkTabTitle, timetableTabTitle, examTabTitle, sonstigesTabTitle];
+  List tabIndexToTab = [
+    NewsTab(),
+    VertretungsTab(),
+    null,
+    TimetableTab(),
+    ExamPlan(),
+    SettingsTab()
+  ];
+  List tabIndexToTitle = [
+    newsTabTitle,
+    vertretungsTabTitle,
+    homeworkTabTitle,
+    timetableTabTitle,
+    examTabTitle,
+    sonstigesTabTitle
+  ];
 
   /// Initialisieren
   @override
@@ -92,9 +106,6 @@ class NavigationControllerState extends State<NavigationController> {
     });
   }
 
-
-
-
   /// Anzeige des Scaffolds mit "bottomNavigationBar". Je nach dem welcher Tab in der Menüleiste
   /// ausgewählt ist, wird der entsprechende Tab angezeigt.
   /// Der "floatingActionButton" öffnet den Dialog zum Hinzufügen von Hausaufgaben.
@@ -102,37 +113,32 @@ class NavigationControllerState extends State<NavigationController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                    left: Design.standardPagePadding,
-                    right: Design.standardPagePadding,
-                    top: Design.standardPagePadding * 2,
-                    bottom: Design.standardPagePadding * 0.8),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                    tabIndexToTitle[tabIndex],
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    )
-                )
-              ),
-              Expanded(
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Design.standardPagePadding * 0.5),
-                      child: (tabIndex == tabIndexToTitle.indexOf(homeworkTabTitle)) /// sonderfall, da der key-value [homeworkTabAccess] noch eingegeben werden muss
-                          ? HomeworkTab(
+          child: Column(children: [
+        Container(
+            padding: EdgeInsets.only(
+                left: Design.standardPagePadding,
+                right: Design.standardPagePadding,
+                top: Design.standardPagePadding * 2,
+                bottom: Design.standardPagePadding * 0.8),
+            alignment: Alignment.centerLeft,
+            child: Text(tabIndexToTitle[tabIndex],
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ))),
+        Expanded(
+            child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: Design.standardPagePadding * 0.5),
+                child: (tabIndex == tabIndexToTitle.indexOf(homeworkTabTitle))
+
+                    /// sonderfall, da der key-value [homeworkTabAccess] noch eingegeben werden muss
+                    ? HomeworkTab(
                         key: homeworkTabAccess,
                       )
-                          : tabIndexToTab[tabIndex]
-                  )
-              )
-            ]
-        )
-      ),
+                    : tabIndexToTab[tabIndex]))
+      ])),
       floatingActionButton: FloatingActionButton(
         elevation: 20,
         backgroundColor: Design.annetteColor,
@@ -189,50 +195,50 @@ class NavigationControllerState extends State<NavigationController> {
 
   Widget bottomBar(BuildContext context) {
     return BottomNavigationBar(
-        landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-        unselectedFontSize: 9,
-        showUnselectedLabels: true,
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Design.annetteColor,
-        items: [
-          BottomNavigationBarItem(
-            label: 'Aktuelles',
-            icon: Icon(CupertinoIcons.exclamationmark),
-            //icon: Icon(Icons.list),
-          ),
-          BottomNavigationBarItem(
-            label: 'Vertretung',
-            icon: Icon(CupertinoIcons.rectangle_grid_1x2),
-            //icon: Icon(Icons.list),
-          ),
-          BottomNavigationBarItem(
-            label: 'Hausaufgaben',
-            icon: Icon(CupertinoIcons.square_list),
-            //icon: Icon(Icons.list),
-          ),
-          BottomNavigationBarItem(
-            label: 'Stundenplan',
-            icon: Icon(CupertinoIcons.calendar),
-            //icon: Icon(Icons.date_range_rounded),
-          ),
-          BottomNavigationBarItem(
-            label: 'Klausurplan',
-            icon: Icon(CupertinoIcons.calendar_circle),
-            //icon: Icon(Icons.list),
-          ),
-          BottomNavigationBarItem(
-            label: 'Sonstiges',
-            icon: Icon(CupertinoIcons.ellipsis),
-            //icon: Icon(Icons.more_horiz_rounded),
-          ),
-        ],
-        type: BottomNavigationBarType.shifting,
-        onTap: (index) {
-          setState(() {
-            tabIndex = index;
-          });
-        },
-        currentIndex: tabIndex,
+      landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+      unselectedFontSize: 9,
+      showUnselectedLabels: true,
+      unselectedItemColor: Colors.grey,
+      selectedItemColor: Design.annetteColor,
+      items: [
+        BottomNavigationBarItem(
+          label: 'Aktuelles',
+          icon: Icon(CupertinoIcons.exclamationmark),
+          //icon: Icon(Icons.list),
+        ),
+        BottomNavigationBarItem(
+          label: 'Vertretung',
+          icon: Icon(CupertinoIcons.rectangle_grid_1x2),
+          //icon: Icon(Icons.list),
+        ),
+        BottomNavigationBarItem(
+          label: 'Hausaufgaben',
+          icon: Icon(CupertinoIcons.square_list),
+          //icon: Icon(Icons.list),
+        ),
+        BottomNavigationBarItem(
+          label: 'Stundenplan',
+          icon: Icon(CupertinoIcons.calendar),
+          //icon: Icon(Icons.date_range_rounded),
+        ),
+        BottomNavigationBarItem(
+          label: 'Klausurplan',
+          icon: Icon(CupertinoIcons.calendar_circle),
+          //icon: Icon(Icons.list),
+        ),
+        BottomNavigationBarItem(
+          label: 'Sonstiges',
+          icon: Icon(CupertinoIcons.ellipsis),
+          //icon: Icon(Icons.more_horiz_rounded),
+        ),
+      ],
+      type: BottomNavigationBarType.shifting,
+      onTap: (index) {
+        setState(() {
+          tabIndex = index;
+        });
+      },
+      currentIndex: tabIndex,
     );
   }
 }

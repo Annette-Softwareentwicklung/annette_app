@@ -364,6 +364,9 @@ class TimetableCrawler {
 
     List<TimeTableUnit> timetableUnits = await databaseGetAllTimeTableUnit();
 
+    print(allSubjects);
+    print(timetableUnits);
+
     for (int i = 0; i < timetableUnits.length; i++) {
       String tempSubjectAbbreviation = timetableUnits[i].subject!;
 
