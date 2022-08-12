@@ -3,7 +3,7 @@ description: Annette App 3.0
 
 publish_to: 'none'
 
-version: 4.0.1+10
+version: 4.0.2+11
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
