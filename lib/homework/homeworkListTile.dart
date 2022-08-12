@@ -21,7 +21,9 @@ class HomeworkListTile extends StatefulWidget {
   final Function(int?)? onDelete;
   final Function(Task?)? onDetail;
   final Function(int?)? onReload;
-  final Function(int)? onDetailedViewReload;///Callback zum Aktualisieren der Detailansicht. Task-ID als Parameter.
+  final Function(int)? onDetailedViewReload;
+
+  ///Callback zum Aktualisieren der Detailansicht. Task-ID als Parameter.
   final Animation? animation;
 
   HomeworkListTile(
@@ -71,16 +73,16 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
   void remindMeLater(String time) {
     DateTime tempTime;
 
-    if(time == 'afternoon') {
-      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,16);
-    }
-    else if(time == 'evening') {
-      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,20);
-    }
-    else if(time == 'tomorrowMorning') {
-      tempTime = new DateTime(DateTime.now().year,DateTime.now().month,(DateTime.now().day + 1),9);
-    }
-    else {
+    if (time == 'afternoon') {
+      tempTime = new DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 16);
+    } else if (time == 'evening') {
+      tempTime = new DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 20);
+    } else if (time == 'tomorrowMorning') {
+      tempTime = new DateTime(DateTime.now().year, DateTime.now().month,
+          (DateTime.now().day + 1), 9);
+    } else {
       tempTime = DateTime.now().add(Duration(hours: 1));
     }
 
@@ -125,20 +127,21 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
             : null,
       )
     ]);
+
     ///Controller zum Steuern des "Slidable"-Widgets
     SlidableController slidableController = new SlidableController();
 
     return SizeTransition(
         sizeFactor: widget.animation as Animation<double>,
         child: Slidable(
-          controller: slidableController,
+            controller: slidableController,
             key: widget.key!,
             actionPane: SlidableDrawerActionPane(),
             actionExtentRatio: 1 / 4,
             dismissal: SlidableDismissal(
               closeOnCanceled: true,
               dragDismissible: true,
-              dismissThresholds: <SlideActionType, double> {
+              dismissThresholds: <SlideActionType, double>{
                 SlideActionType.primary: 0.6,
                 SlideActionType.secondary: 0.4,
               },
@@ -159,7 +162,6 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
               },
               child: SlidableDrawerDismissal(),
             ),
-
             secondaryActions: [
               ///SlideAction zum Löschen der Aufgabe
               IconSlideAction(
@@ -170,7 +172,8 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
                 onTap: () {
                   ///Wird "Löschen" ausgewählt, wird das Listtile "dismissed". Dies hat dann auch
                   ///zur Folge, dass die Aufgabe gelöscht wird.
-                  slidableController.activeState!.dismiss(actionType: SlideActionType.secondary);
+                  slidableController.activeState!
+                      .dismiss(actionType: SlideActionType.secondary);
                 },
               ),
             ],
@@ -185,15 +188,22 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
                   remindMeLater('oneHour');
                 },
               ),
-
               IconSlideAction(
                 closeOnTap: true,
                 color: Colors.blueGrey,
-                caption: (DateTime.now().hour < 16) ? 'Nachmittag' : (DateTime.now().hour < 20) ? 'Am Abend' : 'Morgen',
+                caption: (DateTime.now().hour < 16)
+                    ? 'Nachmittag'
+                    : (DateTime.now().hour < 20)
+                        ? 'Am Abend'
+                        : 'Morgen',
                 foregroundColor: Colors.white,
                 icon: CupertinoIcons.timer,
                 onTap: () {
-                  remindMeLater((DateTime.now().hour < 16) ? 'afternoon' : (DateTime.now().hour < 20) ? 'evening' : 'tomorrowMorning');
+                  remindMeLater((DateTime.now().hour < 16)
+                      ? 'afternoon'
+                      : (DateTime.now().hour < 20)
+                          ? 'evening'
+                          : 'tomorrowMorning');
                 },
               ),
             ],
@@ -202,20 +212,18 @@ class _HomeworkListTileState extends State<HomeworkListTile> {
               margin: EdgeInsets.symmetric(vertical: 5),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-               color: Theme.of(context).cardColor,
-               borderRadius: BorderRadius.all(Radius.circular(15)),
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               child: ListTile(
-                  title: Row(
-                    children: [
-                      (task!.subject == 'Sonstiges')
-                          ? Text(notes!) : Text(task!.subject!),
-                      SizedBox(width: 20),
-                      Icon(Icons.info_outlined,
+                  title: Row(children: [
+                    (task!.subject == 'Sonstiges')
+                        ? Text(notes!)
+                        : Text(task!.subject!),
+                    SizedBox(width: 20),
+                    Icon(Icons.info_outlined,
                         color: Theme.of(context).colorScheme.secondary)
-                    ]
-                  )
-                ,
+                  ]),
                   subtitle: listTilesubtitle,
                   trailing: CustomCheckbox(
                     key: checkBoxKey,
