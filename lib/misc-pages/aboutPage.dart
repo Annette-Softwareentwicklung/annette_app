@@ -108,7 +108,6 @@ class AboutPage extends StatelessWidget {
                                   Text('Annette App für das Annette-von-Droste-Hülshoff Gymnasium Düsseldorf.' +
                                       '\nEine Internet-Verbindung ist für bestimmte Funktionen erforderlich.' +
                                       '\n\nDer Stundenplan wird automatisch bei jedem Neustart der App und beim Ändern der Klasse aktualisiert.' +
-                                      '\n\nDer aktuell verwendete Stundenplan ist von Stand:\n${(timeTableVersion != null) ? timeTableVersion.toString() : "Fehler"}' +
                                       '\n\nAlle Angaben ohne Gewähr!' +
                                       '\n\nKontakt / Feedback:'),
                                   SelectableText(
