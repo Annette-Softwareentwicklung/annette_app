@@ -5,8 +5,11 @@ import '../data/design.dart';
 class ErrorInternetContainer extends StatelessWidget {
   final VoidCallback onRefresh;
 
-  const ErrorInternetContainer({Key? key, required this.onRefresh})
-      : super(key: key);
+  const ErrorInternetContainer({
+    Key? key,
+    required this.onRefresh,
+    /*required Null Function() onButtonPressed*/
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

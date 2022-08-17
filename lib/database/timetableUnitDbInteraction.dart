@@ -17,6 +17,7 @@ void databaseInsertTimetableUnit(TimeTableUnit pTimeTableUnit) async {
   );
 
   Future<void> insertTimeTableUnit(TimeTableUnit timeTableUnit) async {
+    print("Inserting TimetableUnit...");
     final Database db = await database;
     await db.insert(
       'timetable',
@@ -71,7 +72,6 @@ Future<TimeTableUnit> databaseGetSpecificTimeTableUnit(int pId) async {
         id: maps[i]['id'],
         subject: maps[i]['subject'],
         room: maps[i]['room'],
-        lessonNumber: maps[i]['lessonNumber'],
         dayNumber: maps[i]['dayNumber'],
       );
     });
@@ -80,7 +80,6 @@ Future<TimeTableUnit> databaseGetSpecificTimeTableUnit(int pId) async {
         subject: list[0].subject,
         room: list[0].room,
         dayNumber: list[0].dayNumber,
-        lessonNumber: list[0].lessonNumber,
         id: list[0].id);
 
     return timeTableUnit;
@@ -127,12 +126,16 @@ Future<List<TimeTableUnit>> databaseGetAllTimeTableUnit() async {
     final List<Map<String, dynamic>> maps = await db.query('timetable');
 
     return List.generate(maps.length, (i) {
+      //TODO: remove
+      /*print("i " +
+          maps[i]['id'].toString() +
+          " subject " +
+          maps[i]['subject'].toString());*/
       return TimeTableUnit(
         id: maps[i]['id'],
         subject: maps[i]['subject'],
         room: maps[i]['room'],
         dayNumber: maps[i]['dayNumber'],
-        lessonNumber: maps[i]['lessonNumber'],
       );
     });
   }

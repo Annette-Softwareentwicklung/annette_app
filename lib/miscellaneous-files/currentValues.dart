@@ -10,14 +10,14 @@ class CurrentValues {
   late List<TimeTableUnit> allTimetableUnits;
 
   Future<void> initialize() async {
-    times =  getAllTimes();
+    times = getAllTimes();
     allTimetableUnits = await databaseGetAllTimeTableUnit();
   }
 
   /// Diese Methode gibt den Zeitpunkt des Starts der 1. Stunde am aktuellen Tag zurück.
   DateTime getStartOfFirstLesson() {
     DateTime temp =
-    new DateTime(currentTime.year, currentTime.month, currentTime.day);
+        new DateTime(currentTime.year, currentTime.month, currentTime.day);
     temp = temp.add(parseDuration(times[0].time!));
     return temp;
   }
@@ -42,19 +42,16 @@ class CurrentValues {
       temp = temp.add(parseDuration(times[i].time!));
 
       if (currentTime.isAfter(temp)) {
-        if (allTimetableUnits.indexWhere((element) =>
-                element.lessonNumber == i + 1 &&
-                element.dayNumber == weekdayForDays) !=
+        if (allTimetableUnits
+                .indexWhere((element) => element.dayNumber == weekdayForDays) !=
             -1) {
           currentLesson = i + 1;
         }
       }
     }
 
-
-    int tempIndex = allTimetableUnits.indexWhere((element) =>
-        element.lessonNumber == currentLesson &&
-        element.dayNumber == weekdayForDays);
+    int tempIndex = allTimetableUnits
+        .indexWhere((element) => element.dayNumber == weekdayForDays);
 
     if (tempIndex != -1) {
       timetableUnit = allTimetableUnits[tempIndex];
@@ -85,17 +82,20 @@ class CurrentValues {
         i = 1;
       }
       if (allTimetableUnits.indexWhere((element) =>
-              element.subject == pSubject && element.dayNumber == i) != -1) {
+              element.subject == pSubject && element.dayNumber == i) !=
+          -1) {
         nextTimeTableUnit = allTimetableUnits[allTimetableUnits.indexWhere(
             (element) =>
                 element.subject == pSubject && element.dayNumber == i)];
 
-        if(allTimetableUnits.indexWhere(
-                (element) =>
-            element.subject == nextTimeTableUnit!.subject && element.dayNumber == nextTimeTableUnit.dayNumber && element.lessonNumber == (nextTimeTableUnit.lessonNumber! - 1)) != -1) {
+        if (allTimetableUnits.indexWhere((element) =>
+                element.subject == nextTimeTableUnit!.subject &&
+                element.dayNumber == nextTimeTableUnit.dayNumber) !=
+            -1) {
           nextTimeTableUnit = allTimetableUnits[allTimetableUnits.indexWhere(
-                  (element) =>
-              element.subject == nextTimeTableUnit!.subject && element.dayNumber == nextTimeTableUnit.dayNumber && element.lessonNumber == (nextTimeTableUnit.lessonNumber! - 1))];
+              (element) =>
+                  element.subject == nextTimeTableUnit!.subject &&
+                  element.dayNumber == nextTimeTableUnit.dayNumber)];
         }
         gotNext = true;
       }
@@ -104,12 +104,13 @@ class CurrentValues {
     }
 
     int temp = nextTimeTableUnit!.dayNumber! - currentTime.weekday;
-    if(temp < 1)
-      temp+= 7;
-    nextLesson = new DateTime(currentTime.year, currentTime.month, currentTime.day);
+    if (temp < 1) temp += 7;
+    nextLesson =
+        new DateTime(currentTime.year, currentTime.month, currentTime.day);
     //nextLesson = nextLesson.add(new Duration(days: nextTimeTableUnit!.dayNumber! - (currentTime.weekday)));
     nextLesson = nextLesson.add(new Duration(days: temp));
-    nextLesson = nextLesson.add(parseDuration(times[(nextTimeTableUnit.lessonNumber! - 1)].time!));
+    //TODO: herausfinden, was diese Zeile macht und ihre Funktionalität mit etwas ersetzen, was nicht die lessonNumber benutzt
+    //nextLesson = nextLesson.add(parseDuration(times[(nextTimeTableUnit.lessonNumber! - 1)].time!));
 
     return nextLesson;
   }

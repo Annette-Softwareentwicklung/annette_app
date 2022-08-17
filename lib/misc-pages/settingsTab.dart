@@ -3,6 +3,7 @@ import 'package:annette_app/data/design.dart';
 import 'package:annette_app/data/links.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:annette_app/misc-pages/settingsPage.dart';
+import 'package:annette_app/miscellaneous-files/setClassV2.dart';
 import 'package:annette_app/vertretung/classicVertretungsplan.dart';
 import 'package:flutter/material.dart';
 import 'package:annette_app/custom_widgets/defaultScaffold.dart';
@@ -51,7 +52,8 @@ class SettingsTab extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondary),
               onTap: () async {
                 try {
-                  await launchUrl(Uri.parse('https://${Links.annetteWebsite}/'));
+                  await launchUrl(
+                      Uri.parse('https://${Links.annetteWebsite}/'));
                 } catch (e) {
                   print(e);
                 }
@@ -63,7 +65,8 @@ class SettingsTab extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondary),
               onTap: () async {
                 try {
-                  await launchUrl(Uri.parse('https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now'));
+                  await launchUrl(Uri.parse(
+                      'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now'));
                 } catch (e) {
                   print(e);
                 }
@@ -99,7 +102,7 @@ class SettingsTab extends StatelessWidget {
 
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) {
-                    return SetClass(
+                    return SetClassV2(
                       isInGuide: false,
                       onButtonPressed: () {
                         SystemChrome.setPreferredOrientations([
@@ -115,8 +118,8 @@ class SettingsTab extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text('Über diese App'),
-            trailing:
-                Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.secondary),
+            trailing: Icon(Icons.chevron_right,
+                color: Theme.of(context).colorScheme.secondary),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return AboutPage();

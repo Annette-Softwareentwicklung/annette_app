@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
-import 'package:annette_app/services/timetable_scraper/objects/group_ids.dart';
-import 'package:annette_app/services/timetable_scraper/timetable_scraper.dart';
+import 'package:annette_app/services/api_client/objects/group_ids.dart';
+import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:annette_app/services/api_client/objects/group_ids.dart';
 import 'package:path/path.dart';
 
 ///Zum Aktualisieren des Stundenplans im Hintergrund
@@ -51,6 +52,8 @@ final snackBarTimetableUpdated = SnackBar(
 );
 
 Future<void> update(BuildContext context) async {
+  print("deez nuts");
+
   ///Update Vertretungsplan
   try {
     var storage = GetStorage();
@@ -99,11 +102,10 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
         configuration.indexOf('c:') + 2, configuration.indexOf(';'));
     print(currentClass);
     var timetableString =
-        await TimetableScraper.fetch(GroupExt.fromString(key: currentClass));
+        await ApiClient.fetchTimetable(GroupExt.fromString(key: currentClass));
 
     /// falls es ein Error ist, dann soll der Stundenplan nicht erneuert werden.
     if (timetableString == "error") return false;
-
     stundenplanDIF = timetableString.replaceAll("\\", "");
     if (stundenplanDIF.contains(currentClass)) {
       TimetableCrawler timetableCrawler = new TimetableCrawler();

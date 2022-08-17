@@ -19,7 +19,6 @@ import 'package:get_storage/get_storage.dart';
 /// !!!
 ///
 
-
 class SetClass extends StatefulWidget {
   final bool isInGuide;
   final VoidCallback onButtonPressed;
@@ -83,9 +82,7 @@ class _SetClassState extends State<SetClass> {
   late List<List<String>> groupsQ1List;
   late List<List<String>> groupsQ2List;
 
-  List<String> lk1 = [
-    'Freistunde',
-  ];
+  List<String> lk1 = ['Freistunde'];
   List<String> lk2 = ['Freistunde'];
   List<String> gk1 = ['Freistunde'];
   List<String> gk2 = ['Freistunde'];
@@ -622,6 +619,7 @@ class _SetClassState extends State<SetClass> {
                   errorInternet = false;
                   load();
                 },
+                //onButtonPressed: () {},
               )
             : Container(
                 height: double.infinity,
@@ -662,13 +660,16 @@ class _SetClassState extends State<SetClass> {
                                     child: LinearProgressIndicator(
                                       minHeight: 2,
                                       backgroundColor:
-                                      (Theme.of(context).brightness ==
-                                          Brightness.dark)
-                                          ? Colors.grey
-                                          : Design.annetteColorLight.withOpacity(0.5),
+                                          (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Colors.grey
+                                              : Design.annetteColorLight
+                                                  .withOpacity(0.5),
                                       color: (Theme.of(context).brightness ==
-                                          Brightness.dark)
-                                          ? Theme.of(context).colorScheme.secondary
+                                              Brightness.dark)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
                                           : Design.annetteColor,
                                     )),
                               if (finished)
@@ -677,8 +678,10 @@ class _SetClassState extends State<SetClass> {
                                   child: Container(
                                     height: 2,
                                     color: (Theme.of(context).brightness ==
-                                        Brightness.dark)
-                                        ? Theme.of(context).colorScheme.secondary
+                                            Brightness.dark)
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .secondary
                                         : Design.annetteColor,
                                   ),
                                 ),
@@ -692,9 +695,11 @@ class _SetClassState extends State<SetClass> {
                                         color: (!finished)
                                             ? Colors.grey
                                             : (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                            ? Theme.of(context).colorScheme.secondary
-                                            : Design.annetteColor,
+                                                    Brightness.dark)
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary
+                                                : Design.annetteColor,
                                         width: 2),
                                   ),
                                   alignment: Alignment.center,
@@ -714,9 +719,11 @@ class _SetClassState extends State<SetClass> {
                                   color: (!showGroupsOS && !showGroupsUS)
                                       ? Colors.grey
                                       : (Theme.of(context).brightness ==
-                                      Brightness.dark)
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : Design.annetteColor,
+                                              Brightness.dark)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Design.annetteColor,
                                 ),
                               ),
                               SizedBox(
@@ -729,9 +736,11 @@ class _SetClassState extends State<SetClass> {
                                         color: (!showGroupsOS && !showGroupsUS)
                                             ? Colors.grey
                                             : (Theme.of(context).brightness ==
-                                            Brightness.dark)
-                                            ? Theme.of(context).colorScheme.secondary
-                                            : Design.annetteColor,
+                                                    Brightness.dark)
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary
+                                                : Design.annetteColor,
                                         width: 2),
                                   ),
                                   alignment: Alignment.center,
@@ -751,9 +760,11 @@ class _SetClassState extends State<SetClass> {
                                   color: (!showFinishedConfiguration)
                                       ? Colors.grey
                                       : (Theme.of(context).brightness ==
-                                      Brightness.dark)
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : Design.annetteColor,
+                                              Brightness.dark)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Design.annetteColor,
                                 ),
                               ),
                             ],

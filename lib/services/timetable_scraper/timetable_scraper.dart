@@ -1,4 +1,4 @@
-import 'package:annette_app/services/timetable_scraper/objects/group_ids.dart';
+import 'package:annette_app/services/api_client/objects/group_ids.dart';
 import 'package:http/http.dart' as http;
 
 class TimetableScraper {

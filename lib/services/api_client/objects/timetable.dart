@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:annette_app/services/timetable_scraper/objects/lesson.dart';
+import 'package:annette_app/services/api_client/objects/lesson.dart';
 
 import 'weekday.dart';
 import 'weekdays.dart';

@@ -70,13 +70,11 @@ class _TimetableTabState extends State<TimetableTab> {
       print(element.toString());
     }
 
-    allTimeTableUnits.sort((a, b) {
-      return a.lessonNumber!.compareTo(b.lessonNumber!);
-    });
-
     DateTime tempTime = new DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day);
     int displayDay = DateTime.now().weekday;
+
+    //Setzt den Tag zurück, falls die Woche vorbei ist
     if (displayDay == 6 || displayDay == 7) {
       displayDay = 1;
       displayDayString = 'Montag';
@@ -86,6 +84,7 @@ class _TimetableTabState extends State<TimetableTab> {
       int currentLessonNumber = 0;
       bool isInBreak = false;
 
+      //Findet die momentan laufende Stunde heraus und ermittelt, ob gerade Pause ist
       for (int i = 0; i < allTimes.length; i++) {
         if (!DateTime.now()
             .isBefore(tempTime.add(parseDuration(allTimes[i].time!)))) {
@@ -104,10 +103,8 @@ class _TimetableTabState extends State<TimetableTab> {
         await setDay(DateTime.now().weekday, null, null);
         displayDayString = 'Heute';
       } else {
-        if (allTimeTableUnits.indexWhere((element) =>
-                (element.dayNumber == DateTime.now().weekday &&
-                    element.lessonNumber! >=
-                        (currentLessonNumber + ((isInBreak) ? 1 : 0)))) !=
+        if (allTimeTableUnits.indexWhere(
+                (element) => (element.dayNumber == DateTime.now().weekday)) !=
             -1) {
           await setDay(DateTime.now().weekday, currentLessonNumber, isInBreak);
           displayDayString = 'Jetzt';
@@ -198,8 +195,8 @@ class _TimetableTabState extends State<TimetableTab> {
           key: null));
     } else {
       int i = 1;
-      while (allTimeTableUnits.indexWhere((element) =>
-              (element.dayNumber! == pWeekday && element.lessonNumber! >= i)) !=
+      while (allTimeTableUnits
+              .indexWhere((element) => (element.dayNumber! == pWeekday)) !=
           -1) {
         int? tempEnd;
         bool isFree = false;
@@ -211,26 +208,23 @@ class _TimetableTabState extends State<TimetableTab> {
         }
 
         if (i != 1 &&
-            allTimeTableUnits.indexWhere((element) =>
-                    element.dayNumber == pWeekday &&
-                    element.lessonNumber == i - 1) !=
+            allTimeTableUnits
+                    .indexWhere((element) => element.dayNumber == pWeekday) !=
                 -1 &&
-            allTimeTableUnits.indexWhere((element) =>
-                    element.dayNumber == pWeekday &&
-                    element.lessonNumber == i) !=
+            allTimeTableUnits
+                    .indexWhere((element) => element.dayNumber == pWeekday) !=
                 -1) {
           displayTimetable
               .add(DisplayBreak(duration: tempDuration.inMinutes.toString()));
         }
 
-        if (allTimeTableUnits.indexWhere((element) =>
-                (element.dayNumber! == pWeekday &&
-                    element.lessonNumber! == i)) ==
+        if (allTimeTableUnits
+                .indexWhere((element) => (element.dayNumber! == pWeekday)) ==
             -1) {
           isFree = true;
           j = i + 1;
-          while (allTimeTableUnits.indexWhere((element) =>
-                  element.dayNumber == pWeekday && element.lessonNumber == j) ==
+          while (allTimeTableUnits
+                  .indexWhere((element) => element.dayNumber == pWeekday) ==
               -1) {
             tempEnd = j;
             j++;
@@ -263,14 +257,12 @@ class _TimetableTabState extends State<TimetableTab> {
           i = tempEnd;
         }
         if (!isFree) {
-          TimeTableUnit tempTimetableUnit = allTimeTableUnits.firstWhere(
-              (element) => (element.dayNumber! == pWeekday &&
-                  element.lessonNumber! == i));
+          TimeTableUnit tempTimetableUnit = allTimeTableUnits
+              .firstWhere((element) => (element.dayNumber! == pWeekday));
 
           bool isChangingLK = false;
           if (tempTimetableUnit.subject!.contains('LK') &&
               allTimeTableUnits.indexWhere((element) =>
-                      element.lessonNumber == i &&
                       element.dayNumber == pWeekday &&
                       element.subject != tempTimetableUnit.subject) !=
                   -1) {
@@ -286,7 +278,6 @@ class _TimetableTabState extends State<TimetableTab> {
                   tempTimetableUnit.subject!) {
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
                     (element.dayNumber! == pWeekday &&
-                        element.lessonNumber! == i &&
                         element.subject == storage.read('changingLkSubject')));
               }
             } else {
@@ -294,7 +285,6 @@ class _TimetableTabState extends State<TimetableTab> {
                   tempTimetableUnit.subject!) {
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
                     (element.dayNumber! == pWeekday &&
-                        element.lessonNumber! == i &&
                         element.subject != storage.read('changingLkSubject')));
               }
             }
@@ -312,14 +302,12 @@ class _TimetableTabState extends State<TimetableTab> {
 
         if (!isFree) {
           bool nextFree = false;
-          if (allTimeTableUnits.indexWhere((element) =>
-                  (element.dayNumber! == pWeekday &&
-                      element.lessonNumber! > i)) !=
+          if (allTimeTableUnits
+                  .indexWhere((element) => (element.dayNumber! == pWeekday)) !=
               -1) {
             j = i + 1;
-            while (allTimeTableUnits.indexWhere((element) =>
-                    element.dayNumber == pWeekday &&
-                    element.lessonNumber == j) ==
+            while (allTimeTableUnits
+                    .indexWhere((element) => element.dayNumber == pWeekday) ==
                 -1) {
               nextFree = true;
               j++;
@@ -331,8 +319,7 @@ class _TimetableTabState extends State<TimetableTab> {
               isNow: (((isInBreak == true &&
                           pLessonNumber == i &&
                           (allTimeTableUnits.indexWhere((element) =>
-                                  (element.dayNumber! == pWeekday &&
-                                      element.lessonNumber! > i)) !=
+                                  (element.dayNumber! == pWeekday)) !=
                               -1)) ||
                       (pLessonNumber != null &&
                           pLessonNumber > i &&
@@ -343,10 +330,12 @@ class _TimetableTabState extends State<TimetableTab> {
               key: (((isInBreak == true &&
                           pLessonNumber == i &&
                           (allTimeTableUnits.indexWhere((element) =>
-                                  (element.dayNumber! == pWeekday &&
-                                      element.lessonNumber! > i)) !=
+                                  (element.dayNumber! == pWeekday)) !=
                               -1)) ||
-                      (pLessonNumber != null && pLessonNumber > i && pLessonNumber < j && nextFree)))
+                      (pLessonNumber != null &&
+                          pLessonNumber > i &&
+                          pLessonNumber < j &&
+                          nextFree)))
                   ? globalKeyNow
                   : null));
         }
@@ -680,7 +669,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                timeTableUnit.lessonNumber!.toString(),
+                "[timetableTab.dart Line 666] hier sollte eigentlich aus irgendeinem Grund die Lesson number stehen",
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
