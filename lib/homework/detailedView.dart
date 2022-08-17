@@ -50,7 +50,7 @@ class DetailedViewState extends State<DetailedView> {
   static double timePickerHeight = 150;
   static double timePickerWidth = 280;
   static BoxDecoration timePickerBorder = BoxDecoration(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(10),
       border: Border.all(
           width: 1
       )
@@ -397,7 +397,7 @@ class DetailedViewState extends State<DetailedView> {
                     ? Colors.white
                     : Colors.grey[800],
                 border: Border.all(color: Colors.black45, width: 1.0),
-                borderRadius: BorderRadius.circular(5)),
+                borderRadius: BorderRadius.circular(10)),
             padding: EdgeInsets.all(Design.standardPagePadding),
             margin: EdgeInsets.all(Design.standardPagePadding),
             child: Center(
@@ -433,7 +433,7 @@ class DetailedViewState extends State<DetailedView> {
                                 ? Colors.white
                                 : Colors.grey[800],
                         border: Border.all(color: Colors.black45, width: 1.0),
-                        borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.all(5.0),
                     margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: TextButton(
@@ -450,8 +450,8 @@ class DetailedViewState extends State<DetailedView> {
                             CupertinoIcons.add,
                             color: (Theme.of(context).brightness ==
                                     Brightness.light)
-                                ? Colors.blue
-                                : Theme.of(context).accentColor,
+                                ? Design.annetteColor
+                                : Theme.of(context).colorScheme.secondary,
                             size: 28,
                           ),
                           Text(
@@ -468,7 +468,7 @@ class DetailedViewState extends State<DetailedView> {
                           ? Colors.white
                           : Colors.grey[800],
                       border: Border.all(color: Colors.black45, width: 1.0),
-                      borderRadius: BorderRadius.circular(5)),
+                      borderRadius: BorderRadius.circular(10)),
                   padding: EdgeInsets.all(5.0),
                   margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: TextButton(
@@ -490,7 +490,7 @@ class DetailedViewState extends State<DetailedView> {
                             : Icon(
                                 CupertinoIcons.circle,
                                 size: 28,
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                         checked!
                             ? Text(
@@ -575,7 +575,7 @@ class DetailedViewState extends State<DetailedView> {
                   Icon(
                     CupertinoIcons.timer,
                     color: (Theme.of(context).brightness == Brightness.dark)
-                        ? Theme.of(context).accentColor
+                        ? Theme.of(context).colorScheme.secondary
                         : Colors.blueGrey,
                   ),
                   Container(
@@ -618,7 +618,7 @@ class DetailedViewState extends State<DetailedView> {
             if (editable)
               IconButton(
                 icon: Icon(Icons.edit_rounded,
-                    color: Theme.of(context).accentColor),
+                    color: Theme.of(context).colorScheme.secondary),
                 onPressed: editFunction(),
               )
           ],

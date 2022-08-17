@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // TODO: implement textThemes
 
 class Design {
-  static Color annetteColor = Color.fromRGBO(111, 162, 171, 1);
+  static Color annetteColor = Color.fromRGBO(72, 146, 151, 1);
   static Color annetteColorLight = Color.fromRGBO(0, 156, 170, 1);
   static double standardPagePadding = 15.0;
   static LinearGradient lightGradient =
@@ -14,6 +13,12 @@ class Design {
       LinearGradient(colors: [annetteColor, annetteColor]);
 
   static ThemeData darkTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: Colors.black38,
+      foregroundColor: Colors.white,
+      titleTextStyle: TextStyle(fontSize: 20),
+      // backgroundColor: Colors.black45,
+    ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.resolveWith(
@@ -48,11 +53,11 @@ class Design {
     ),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(foregroundColor: Colors.black),
-    //buttonTheme: ButtonThemeData(buttonColor: Colors.tealAccent),
     buttonTheme: ButtonThemeData(
       buttonColor: annetteColor,
     ),
-    accentColor: annetteColor,
+    colorScheme: ColorScheme.fromSwatch()
+        .copyWith(secondary: annetteColor, brightness: Brightness.dark),
     snackBarTheme: SnackBarThemeData(
         contentTextStyle: TextStyle(
       color: Colors.white,
@@ -61,16 +66,10 @@ class Design {
 
   static ThemeData lightTheme = ThemeData(
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.white,
-      titleTextStyle: TextStyle(
-        color: annetteColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 20
-      ),
-      iconTheme: IconThemeData(
-        color: annetteColor
-      )
-    ),
+        backgroundColor: Colors.white,
+        titleTextStyle: TextStyle(
+            color: annetteColor, fontSize: 20, fontWeight: FontWeight.w600),
+        iconTheme: IconThemeData(color: annetteColor)),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: annetteColor,
     ),
@@ -103,8 +102,12 @@ class Design {
             foregroundColor:
                 MaterialStateProperty.resolveWith((states) => Colors.black))),
     brightness: Brightness.light,
-    accentColor: Colors.black54,
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      brightness: Brightness.light,
+      secondary: Colors.black54,
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: annetteColor, foregroundColor: Colors.white),
+    cardColor: Colors.grey[200],
   );
 }

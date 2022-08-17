@@ -48,7 +48,7 @@ class CustomCheckboxState extends State<CustomCheckbox> {
               )
             : Icon(
                 CupertinoIcons.circle,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                // color: CupertinoColors.secondaryLabel,
           size: 30,
               ),

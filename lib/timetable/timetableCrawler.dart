@@ -56,6 +56,8 @@ class TimetableCrawler {
 
         ///if-Abfrage zur Überprüfung ob es ein Fach gibt oder ob das "Feld" leer ist.
         if (timetableCode.indexOf(',') != 0) {
+          print(timetableCode);
+          print(timetableCode.substring(0, timetableCode.indexOf('"')));
           String tempSubject =
               timetableCode.substring(0, timetableCode.indexOf('"'));
           timetableCode =
@@ -74,6 +76,7 @@ class TimetableCrawler {
                 timetableCode.substring(0, timetableCode.indexOf(',')))!;
             timetableCode =
                 timetableCode.substring(timetableCode.indexOf(',') + 1);
+            print(timetableCode);
 
             ///if-Abfrage zur Überprüfung ob es eine Stundennummer gibt oder ob das "Feld" leer ist.
             if (timetableCode.indexOf(',') != 0) {
@@ -341,7 +344,13 @@ class TimetableCrawler {
     }
 
     timetableUnitsToInsert.forEach((element) {
+      print(element.toString());
       databaseInsertTimetableUnit(element);
+      print(
+          '${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');
+    });
+    var units = await databaseGetAllTimeTableUnit();
+    units.forEach((element) {
       print(
           '${element.subject} ${element.room} ${element.dayNumber} ${element.lessonNumber}');
     });
@@ -354,6 +363,9 @@ class TimetableCrawler {
     Map<String, String> allSubjects = getSubjects();
 
     List<TimeTableUnit> timetableUnits = await databaseGetAllTimeTableUnit();
+
+    print(allSubjects);
+    print(timetableUnits);
 
     for (int i = 0; i < timetableUnits.length; i++) {
       String tempSubjectAbbreviation = timetableUnits[i].subject!;

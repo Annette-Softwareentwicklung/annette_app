@@ -223,13 +223,12 @@ class HomeworkTabState extends State<HomeworkTab> {
               task: removedTask,
               animation: animation,
             ),
-      duration: Duration(milliseconds: animDuration)
-    );
+        duration: Duration(milliseconds: animDuration));
 
     if (tasks.length == 0) {
       Future.delayed(
         Duration(milliseconds: animDuration),
-            () {
+        () {
           setState(() {
             load();
           });
@@ -414,13 +413,12 @@ class HomeworkTabState extends State<HomeworkTab> {
                     border: Border(
                       bottom: BorderSide(
                         width: 1,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),
                   alignment: Alignment.centerRight,
                   child: Container(
-                    width: 178,
                     child: DropdownButton<String>(
                       items: [
                         'Als nächstes',
@@ -494,7 +492,7 @@ class HomeworkTabState extends State<HomeworkTab> {
                                     index: index,
                                     animation: animation,
                                   );
-                              })))
+                                })))
               ]),
             ),
             if (MediaQuery.of(context).orientation == Orientation.landscape)

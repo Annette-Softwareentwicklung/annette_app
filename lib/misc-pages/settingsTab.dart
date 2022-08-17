@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/design.dart';
 import 'package:annette_app/data/links.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
@@ -35,20 +34,9 @@ class SettingsTab extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           ListTile(
-              title: Text('Klausurplan'),
-              trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
-              onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return DefaultScaffold(
-                          title: 'Klausurplan', content: ExamPlan());
-                    }),
-                  )),
-          Divider(),
-          ListTile(
               title: Text('Klassischer Vertretungsplan'),
               trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
+                  color: Theme.of(context).colorScheme.secondary),
               onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return DefaultScaffold(
@@ -60,10 +48,10 @@ class SettingsTab extends StatelessWidget {
           ListTile(
               title: Text('Annette Homepage'),
               trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
+                  color: Theme.of(context).colorScheme.secondary),
               onTap: () async {
                 try {
-                  await launch('https://${Links.annetteWebsite}/');
+                  await launchUrl(Uri.parse('https://${Links.annetteWebsite}/'));
                 } catch (e) {
                   print(e);
                 }
@@ -72,11 +60,10 @@ class SettingsTab extends StatelessWidget {
           ListTile(
               title: Text('Kalender'),
               trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
+                  color: Theme.of(context).colorScheme.secondary),
               onTap: () async {
                 try {
-                  await launch(
-                      'https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now');
+                  await launchUrl(Uri.parse('https://cloud.annettemoodle.de/index.php/apps/calendar/p/MTJwp7DKSZss9PXD/dayGridMonth/now'));
                 } catch (e) {
                   print(e);
                 }
@@ -87,7 +74,7 @@ class SettingsTab extends StatelessWidget {
           ListTile(
               title: Text('Einstellungen'),
               trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
+                  color: Theme.of(context).colorScheme.secondary),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) {
@@ -102,7 +89,7 @@ class SettingsTab extends StatelessWidget {
           ListTile(
               title: Text('Klasse ändern'),
               trailing: Icon(Icons.chevron_right,
-                  color: Theme.of(context).accentColor),
+                  color: Theme.of(context).colorScheme.secondary),
               onTap: () {
                 if (MediaQueryData.fromWindow(window).size.shortestSide < 500) {
                   SystemChrome.setPreferredOrientations([
@@ -129,7 +116,7 @@ class SettingsTab extends StatelessWidget {
           ListTile(
             title: Text('Über diese App'),
             trailing:
-                Icon(Icons.chevron_right, color: Theme.of(context).accentColor),
+                Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.secondary),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return AboutPage();

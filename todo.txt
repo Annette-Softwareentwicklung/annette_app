@@ -1,3 +1,0 @@
-- Kommentare zu Dateien hinzufügen
-- Dateien sortieren
-- Code aufteilen

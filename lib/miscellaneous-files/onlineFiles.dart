@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:http/http.dart' as http;
 
 class OnlineFiles {
@@ -11,8 +9,8 @@ class OnlineFiles {
   Future<bool> initialize() async {
     Future<String?> _getDifExport() async {
       try {
-        var response = await http.get(
-            Uri.http('annette-app-files.vercel.app', '220524_Stundenplan.TXT'));
+        var response = await http
+            .get(Uri.http('annette-app-files.vercel.app', 'stundenplan.TXT'));
         if (response.statusCode == 200) {
           return response.body;
         }
@@ -23,6 +21,8 @@ class OnlineFiles {
     }
 
     Future<DateTime?> _getNewVersion() async {
+      // TODO: entweder entfernen oder überarbeiten
+      ///
       /// die jetzige Zeit wird zurückgegeben, damit der Stundenplan immer neu geladen wird.
       /// das Problem ist nämlich, dass vercel keinen "lastModifiedHeader" sendet
       /// Rui hat kein Bock im Moment die Stelle zu verändern, die den "getNewVersion" Wert liest und dort das so einzustellen,
@@ -42,10 +42,7 @@ class OnlineFiles {
     final difExportValue = await _getDifExport();
     final newVersionValue = await _getNewVersion();
 
-
-    if (
-        difExportValue != null &&
-        newVersionValue != null) {
+    if (difExportValue != null && newVersionValue != null) {
       difExport = (await _getDifExport())!;
       newVersion = (await _getNewVersion())!;
       return true;

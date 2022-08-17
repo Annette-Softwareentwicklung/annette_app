@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
+import 'package:annette_app/services/timetable_scraper/objects/group_ids.dart';
+import 'package:annette_app/services/timetable_scraper/timetable_scraper.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 ///Zum Aktualisieren des Stundenplans im Hintergrund
-
 
 final snackBarTimetableUpdateFailed = SnackBar(
   duration: Duration(seconds: 3),
@@ -53,64 +55,65 @@ Future<void> update(BuildContext context) async {
   try {
     var storage = GetStorage();
 
-    if(storage.read('timetableVersion') == null) {
-      storage.write('timetableVersion', DateTime(0,0).toString());
+    if (storage.read('timetableVersion') == null) {
+      storage.write('timetableVersion', DateTime(0, 0).toString());
     }
 
     DateTime version = DateTime.parse(storage.read('timetableVersion'));
 
-      DateTime versionNew;
-      try {
-        HttpClient client = HttpClient();
-        HttpClientRequest req = await client.getUrl(Uri.parse(
-            'http://janw.bplaced.net/annetteapp/data/stundenplan.txt'));
-        HttpClientResponse tempResponse = await req.close();
-        String t = tempResponse.headers.value(HttpHeaders.lastModifiedHeader)!;
-        print('Zuletzt geändert: $t');
-        versionNew = getLastModifiedTime(t)!;
-
-        if (version.isBefore(versionNew)) {
-          if (await updateTimetable(versionNew)) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(snackBarTimetableUpdated);
-            storage.write('timetableVersion', versionNew.toString());
-          } else {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(snackBarTimetableUpdateFailed);
-          }
+    DateTime versionNew;
+    try {
+      //TODO: Prüfen, wie aktuell der Stundenplan ist?
+      /*HttpClient client = HttpClient();
+      HttpClientRequest req = await client.getUrl(
+          Uri.parse('http://janw.bplaced.net/annetteapp/data/stundenplan.txt'));
+      HttpClientResponse tempResponse = await req.close();
+      String t = tempResponse.headers.value(HttpHeaders.lastModifiedHeader)!;
+      print('Zuletzt geändert: $t');
+      versionNew = getLastModifiedTime(t)!;*/
+      if (true) {
+        if (await updateTimetable(/*versionNew*/)) {
+          ScaffoldMessenger.of(context).showSnackBar(snackBarTimetableUpdated);
+          /*storage.write('timetableVersion', versionNew.toString());*/
+        } else {
+          //ScaffoldMessenger.of(context)
+          //    .showSnackBar(snackBarTimetableUpdateFailed);
         }
-      } catch (e) {}
-
+      }
+    } catch (e) {}
   } catch (e) {
     print(e);
   }
 }
 
-Future<bool> updateTimetable(DateTime newVersion) async {
+Future<bool> updateTimetable(/*DateTime newVersion*/) async {
   try {
     String stundenplanDIF;
-
-    var response = await http
-        .get(Uri.http('janw.bplaced.net', 'annetteapp/data/stundenplan.txt'));
-    if (response.statusCode == 200) {
-      stundenplanDIF = response.body;
-      String configuration;
-      try{
-        configuration = GetStorage().read('configuration');
-      } catch(e) {
-        configuration = 'c:error;';
-      }
-      String currentClass = configuration.substring(
-          configuration.indexOf('c:') + 2, configuration.indexOf(';'));
-      if (stundenplanDIF.contains(currentClass)) {
-        TimetableCrawler timetableCrawler = new TimetableCrawler();
-        timetableCrawler.setConfiguration(
-            configuration, stundenplanDIF, newVersion);
-        return true;
-      }
+    String configuration;
+    try {
+      configuration = GetStorage().read('configuration');
+    } catch (e) {
+      configuration = 'c:error;';
     }
-    return false;
+    String currentClass = configuration.substring(
+        configuration.indexOf('c:') + 2, configuration.indexOf(';'));
+    print(currentClass);
+    var timetableString =
+        await TimetableScraper.fetch(GroupExt.fromString(key: currentClass));
+
+    /// falls es ein Error ist, dann soll der Stundenplan nicht erneuert werden.
+    if (timetableString == "error") return false;
+
+    stundenplanDIF = timetableString.replaceAll("\\", "");
+    if (stundenplanDIF.contains(currentClass)) {
+      TimetableCrawler timetableCrawler = new TimetableCrawler();
+      timetableCrawler.setConfiguration(
+          configuration, stundenplanDIF, new DateTime.now());
+      return true;
+    }
   } catch (e) {
+    print(e);
     return false;
   }
+  return false;
 }

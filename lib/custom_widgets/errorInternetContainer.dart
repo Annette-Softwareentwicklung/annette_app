@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../data/design.dart';
 
 class ErrorInternetContainer extends StatelessWidget {
   final VoidCallback onRefresh;
@@ -17,12 +18,12 @@ class ErrorInternetContainer extends StatelessWidget {
             Icons.wifi_off_sharp,
             size: 150,
             color: (Theme.of(context).brightness == Brightness.dark)
-                ? Theme.of(context).accentColor
-                : Colors.blueAccent,
+                ? Theme.of(context).colorScheme.secondary
+                : Design.annetteColor,
           ),
           Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Text(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
               'Du scheinst nicht mit dem Internet verbunden zu sein. Bitte überprüfe deine Verbindung.',
               textAlign: TextAlign.center,
               style: TextStyle(
