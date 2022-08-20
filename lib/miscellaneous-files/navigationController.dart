@@ -95,10 +95,7 @@ class NavigationControllerState extends State<NavigationController> {
           type: 'timetable', localizedTitle: 'Stundenplan', icon: 'icon_plan'),
     ]);
 
-    Future.delayed(Duration(seconds: 1), () {
-      // ** The only point where the timetable is updated.
-      update(context);
-    });
+    update(context);
   }
 
   void setTabIndex(int newIndex) {
