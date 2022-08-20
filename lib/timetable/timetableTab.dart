@@ -100,6 +100,7 @@ class _TimetableTabState extends State<TimetableTab> {
         }
       }
 
+      // determining if the day that is shown should be today or tomorrow.
       if (currentLessonNumber == 0) {
         await setDay(DateTime.now().weekday, null, null);
         displayDayString = 'Heute';

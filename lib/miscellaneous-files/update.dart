@@ -62,6 +62,7 @@ Future<void> update(BuildContext context) async {
     DateTime version = DateTime.parse(storage.read('timetableVersion'));
 
     DateTime versionNew;
+
     try {
       //TODO: Prüfen, wie aktuell der Stundenplan ist?
       /*HttpClient client = HttpClient();
@@ -71,14 +72,12 @@ Future<void> update(BuildContext context) async {
       String t = tempResponse.headers.value(HttpHeaders.lastModifiedHeader)!;
       print('Zuletzt geändert: $t');
       versionNew = getLastModifiedTime(t)!;*/
-      if (true) {
-        if (await updateTimetable(/*versionNew*/)) {
-          ScaffoldMessenger.of(context).showSnackBar(snackBarTimetableUpdated);
-          /*storage.write('timetableVersion', versionNew.toString());*/
-        } else {
-          //ScaffoldMessenger.of(context)
-          //    .showSnackBar(snackBarTimetableUpdateFailed);
-        }
+      if (await updateTimetable(/*versionNew*/)) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarTimetableUpdated);
+        /*storage.write('timetableVersion', versionNew.toString());*/
+      } else {
+        //ScaffoldMessenger.of(context)
+        //    .showSnackBar(snackBarTimetableUpdateFailed);
       }
     } catch (e) {}
   } catch (e) {

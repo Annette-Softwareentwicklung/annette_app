@@ -4,13 +4,14 @@ import 'package:http/http.dart' as http;
 class TimetableScraper {
   static Future<String> fetch(GroupIDs id) async {
     DateTime now = DateTime.now();
-    print(now);
     //*  Stundenplan des nächsten Tages nach 18 Uhr anzeigen
     String date = now.toString().substring(0, 10);
     if (now.hour >= 18) {
       DateTime tomorrow = now.add(Duration(hours: 24 - now.hour + 10));
       date = tomorrow.toString().substring(0, 10);
     }
+
+    print(date);
 
     var res = await http.get(Uri.http(
         'annette-entwickelt-software-api-totallyinformatik.vercel.app',

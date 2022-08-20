@@ -96,6 +96,7 @@ class NavigationControllerState extends State<NavigationController> {
     ]);
 
     Future.delayed(Duration(seconds: 1), () {
+      // ** The only point where the timetable is updated.
       update(context);
     });
   }
