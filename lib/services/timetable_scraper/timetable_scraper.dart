@@ -13,6 +13,7 @@ class TimetableScraper {
       date = tomorrow.toString().substring(0, 10);
     }
 
+    // if its saturdays, sundays or fridays after 18 pm, then fetch timetable for monday, next week
     if (tomorrow.weekday == 6 || tomorrow.weekday == 7) {
       DateTime nextWeekMonday =
           tomorrow.add(Duration(days: 7 - now.weekday + 1));
@@ -31,6 +32,7 @@ class TimetableScraper {
     } else {
       print("Request erfolgreich [200]");
     }
+
     print(res.body);
 
     return res.body;
