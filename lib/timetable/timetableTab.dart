@@ -111,9 +111,9 @@ class _TimetableTabState extends State<TimetableTab> {
         if (today.weekday == 6 || today.weekday == 7 || today.hour >= 18) {
           // should show the next day
           int temp = today.weekday + 1;
-          await setDay(
-              (temp == 6 || temp == 7 || temp == 8) ? 1 : temp, null, null);
-          displayDayString = (temp == 6) ? 'Montag' : 'Morgen';
+          bool isWeekend = (temp == 6 || temp == 7 || temp == 8);
+          await setDay(isWeekend ? 1 : temp, null, null);
+          displayDayString = isWeekend ? 'Montag' : 'Morgen';
         } else {
           // is not the next day
           await setDay(today.weekday, currentLessonNumber, isInBreak);
