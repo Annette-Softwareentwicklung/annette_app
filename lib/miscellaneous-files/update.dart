@@ -76,8 +76,8 @@ Future<void> update(BuildContext context) async {
         ScaffoldMessenger.of(context).showSnackBar(snackBarTimetableUpdated);
         /*storage.write('timetableVersion', versionNew.toString());*/
       } else {
-        //ScaffoldMessenger.of(context)
-        //    .showSnackBar(snackBarTimetableUpdateFailed);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBarTimetableUpdateFailed);
       }
     } catch (e) {}
   } catch (e) {
@@ -93,6 +93,7 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
       configuration = GetStorage().read('configuration');
     } catch (e) {
       configuration = 'c:error;';
+      return false;
     }
     String currentClass = configuration.substring(
         configuration.indexOf('c:') + 2, configuration.indexOf(';'));

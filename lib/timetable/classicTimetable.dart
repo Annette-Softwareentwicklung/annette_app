@@ -30,13 +30,13 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
       });
     } else {
       String currentClass;
-        try {
-          String contents = GetStorage().read('configuration');
-          currentClass = contents.substring(
-              contents.indexOf('c:') + 2, contents.indexOf(';'));
-        } catch (e) {
-          currentClass = '5A';
-        }
+      try {
+        String contents = GetStorage().read('configuration');
+        currentClass = contents.substring(
+            contents.indexOf('c:') + 2, contents.indexOf(';'));
+      } catch (e) {
+        currentClass = '5A';
+      }
 
       int classesNumber = onlineFiles.allClasses().indexOf(currentClass) + 1;
       currentClassNumber = classesNumber.toString().padLeft(5, '0');
@@ -105,8 +105,8 @@ class _ClassicTimetableState extends State<ClassicTimetable> {
       );
     } else if (error) {
       return ErrorInternetContainer(
-                      onRefresh: () => getCurrentClassNumber(),
-                    );
+        onRefresh: () => getCurrentClassNumber(),
+      );
     } else {
       return Center(
         child: Column(
