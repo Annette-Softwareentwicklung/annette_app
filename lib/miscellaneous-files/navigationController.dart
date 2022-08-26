@@ -10,6 +10,7 @@ import '../homework/homeworkTab.dart';
 import '../misc-pages/examPlan.dart';
 import '../misc-pages/settingsTab.dart';
 import '../homework/addDialog.dart';
+import '../timetable/timetableTab.dart';
 import 'dart:async';
 
 /// Diese Klasse gibt das Scaffold-Widget mit der Menüleiste am Boden zurück und ruft die
@@ -72,6 +73,7 @@ class NavigationControllerState extends State<NavigationController> {
       ///Homescreen Quickaction "Stundenplan"
       if (shortcutType == 'timetable') {
         print('timetable');
+        tabIndexToTab[3].load();
         setState(() {
           tabIndex = tabIndexToTitle.indexOf(timetableTabTitle);
         });

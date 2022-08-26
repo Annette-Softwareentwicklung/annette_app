@@ -63,6 +63,8 @@ class _TimetableTabState extends State<TimetableTab> {
   String? dateToday;
 
   void load() async {
+    print("Timetable wird geladen");
+
     allTimes = getAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
 
@@ -117,6 +119,7 @@ class _TimetableTabState extends State<TimetableTab> {
       }
     }
 
+    // fügt die Anzeige des Tages hinzu
     displayTimetable.insert(
       0,
       Container(
@@ -180,6 +183,8 @@ class _TimetableTabState extends State<TimetableTab> {
 
   Future<void> setDay(int pWeekday, int? pLessonNumber, bool? isInBreak) async {
     Duration tempDuration = Duration(days: 1);
+
+    //Falls an dem gegebenen Tag keine Stunden vorhanden sind, wird eine Freistunde hinzugefügt
     if (allTimeTableUnits
             .indexWhere((element) => (element.dayNumber! == pWeekday)) ==
         -1) {
@@ -201,6 +206,7 @@ class _TimetableTabState extends State<TimetableTab> {
         int? tempEnd;
         bool isFree = false;
         int j = i + 1;
+
         if (i != 1) {
           tempDuration = parseDuration(allTimes[(i - 1)].time!) -
               parseDuration(allTimes[(i - 2)].time!) -
@@ -210,14 +216,12 @@ class _TimetableTabState extends State<TimetableTab> {
         if (i != 1 &&
             allTimeTableUnits
                     .indexWhere((element) => element.dayNumber == pWeekday) !=
-                -1 &&
-            allTimeTableUnits
-                    .indexWhere((element) => element.dayNumber == pWeekday) !=
                 -1) {
           displayTimetable
               .add(DisplayBreak(duration: tempDuration.inMinutes.toString()));
         }
 
+        //Fügt Freistunden-Buffer ein
         if (allTimeTableUnits
                 .indexWhere((element) => (element.dayNumber! == pWeekday)) ==
             -1) {
@@ -231,22 +235,19 @@ class _TimetableTabState extends State<TimetableTab> {
           }
         }
 
-        if (i == 1 || !isFree)
+        if (i == 1 || !isFree) {
+          bool cond = pLessonNumber != null &&
+              pLessonNumber >= i &&
+              pLessonNumber < j &&
+              ((isInBreak == false && !isFree) || (isFree));
+
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(parseDuration(allTimes[(i - 1)].time!)),
-              isNow: (pLessonNumber != null &&
-                      pLessonNumber >= i &&
-                      pLessonNumber < j &&
-                      ((isInBreak == false && !isFree) || (isFree)))
-                  ? true
-                  : false,
-              key: (pLessonNumber != null &&
-                      pLessonNumber >= i &&
-                      pLessonNumber < j &&
-                      ((isInBreak == false && !isFree) || (isFree)))
-                  ? globalKeyNow
-                  : null));
+              isNow: (cond) ? true : false,
+              key: (cond) ? globalKeyNow : null));
+        }
 
+        //Fügt die Anzeige aller aneinanderhöngenden Freistunden hinzu
         if (isFree) {
           displayTimetable.add(DisplayFree(
               pHour:
@@ -256,10 +257,12 @@ class _TimetableTabState extends State<TimetableTab> {
         if (tempEnd != null) {
           i = tempEnd;
         }
+
         if (!isFree) {
           TimeTableUnit tempTimetableUnit = allTimeTableUnits
               .firstWhere((element) => (element.dayNumber! == pWeekday));
 
+          //handhabt die wechselnden LKs
           bool isChangingLK = false;
           if (tempTimetableUnit.subject!.contains('LK') &&
               allTimeTableUnits.indexWhere((element) =>
@@ -313,7 +316,6 @@ class _TimetableTabState extends State<TimetableTab> {
               j++;
             }
           }
-
           displayTimetable.add(TimeDivider(
               time: getTimeFromDuration(tempDuration),
               isNow: (((isInBreak == true &&
@@ -512,6 +514,7 @@ class DisplayFree extends StatelessWidget {
                 ),
                 Text(
                   'Frei',
+                  textAlign: TextAlign.end,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 Text(''),

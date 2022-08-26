@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 class ApiClient {
   static String baseURL = "10.20.5.42:3000";
 
-  static Future<String> fetchTimetable(GroupIDs id) async {
+  static Future<String> fetchTimetable(String id) async {
     //TODO: durch production deployment ersetzen
 
     String date = DateTime.now().toString().substring(0, 10);
     print(date);
 
     var res = await http.get(Uri.http(baseURL,
-        'api/annette_app/dateien/stundenplan/json/' + id.name + "/" + date));
+        'api/annette_app/dateien/stundenplan/json/' + id + "/" + date));
     print("fetched!");
     if (res.statusCode != 200) {
       print("error error error");
@@ -33,9 +33,9 @@ class ApiClient {
   ///Die API unterstützt auch automatische Differenzierung von Sek I und Sek II.
   ///Das Ergebnis wird in angemessenem Format geliefert und in [SetClassV2] weiterverwendet.
   ///[id] stellt hierbei die Klasse dar, für die der Stundenplan geladen werden soll.
-  static Future<String> fetchChoiceOptions(GroupIDs id) async {
+  static Future<String> fetchChoiceOptions(String id) async {
     var res = await http.get(Uri.http(
-        baseURL, 'api/annette_app/dateien/stundenplan/optionen/' + id.name));
+        baseURL, 'api/annette_app/dateien/stundenplan/optionen/' + id));
     print("fetched JSON!");
     if (res.statusCode != 200) {
       print("error error error");

@@ -101,8 +101,10 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
     String currentClass = configuration.substring(
         configuration.indexOf('c:') + 2, configuration.indexOf(';'));
     print(currentClass);
-    var timetableString =
-        await ApiClient.fetchTimetable(GroupExt.fromString(key: currentClass));
+    var timetableString = await ApiClient.fetchTimetable(currentClass);
+
+    // falls die API einen falschen Plan zurückgibt, wird der Plan neu geladen
+    print(timetableString);
 
     /// falls es ein Error ist, dann soll der Stundenplan nicht erneuert werden.
     if (timetableString == "error") return false;
