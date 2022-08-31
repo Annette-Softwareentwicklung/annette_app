@@ -287,12 +287,12 @@ class DetailedViewState extends State<DetailedView> {
   }
 
   void onNotesChanged(String text, Function setError) {
+    var cursorPos = _textEditingController.selection.base.offset;
     updateNotes = text;
     _textEditingController.text = updateNotes!;
     _textEditingController.selection =
         TextSelection.fromPosition(TextPosition(
-            offset: _textEditingController
-                .text.length));
+            offset: cursorPos));
     setState(() {});
 
     if (updateNotes == '' || updateNotes == null) {
