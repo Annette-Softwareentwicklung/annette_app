@@ -8,6 +8,7 @@ import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/data/lessonStartTimes.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/miscellaneous-files/showWebview.dart';
+import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,13 +65,9 @@ class _TimetableTabState extends State<TimetableTab> {
 
   void load() async {
     print("Timetable wird geladen");
-
-    allTimes = getAllTimes();
-    allTimeTableUnits = await databaseGetAllTimeTableUnit();
-
-    for (var element in allTimeTableUnits) {
+    /*for (var element in allTimeTableUnits) {
       print(element.toString());
-    }
+    }*/
 
     DateTime tempTime = new DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -119,7 +116,11 @@ class _TimetableTabState extends State<TimetableTab> {
       }
     }
 
-    // fügt die Anzeige des Tages hinzu
+    // retrieves the times and the timetable for the respective day from the api
+    allTimes = getAllTimes();
+    allTimeTableUnits = await ApiClient.fetchTimetableForDay(displayDay);
+
+    // adds the display of the day
     displayTimetable.insert(
       0,
       Container(
@@ -271,8 +272,8 @@ class _TimetableTabState extends State<TimetableTab> {
                   -1) {
             isChangingLK = true;
             GetStorage storage = GetStorage();
-            print(storage.read('changingLkSubject'));
-            print(storage.read('changingLkWeekNumber'));
+            //print(storage.read('changingLkSubject'));
+            //print(storage.read('changingLkWeekNumber'));
             if ((DateTime.now().weekOfYear.isEven &&
                     storage.read('changingLkWeekNumber').isEven) ||
                 (!DateTime.now().weekOfYear.isEven &&
@@ -356,6 +357,7 @@ class _TimetableTabState extends State<TimetableTab> {
   @override
   void initState() {
     super.initState();
+    print("Stundenplan wird zum ersten Mal geladen");
     load();
   }
 

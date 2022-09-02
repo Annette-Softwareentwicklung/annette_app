@@ -73,7 +73,7 @@ class NavigationControllerState extends State<NavigationController> {
       ///Homescreen Quickaction "Stundenplan"
       if (shortcutType == 'timetable') {
         print('timetable');
-        tabIndexToTab[3].load();
+        //tabIndexToTab[3].load();
         setState(() {
           tabIndex = tabIndexToTitle.indexOf(timetableTabTitle);
         });

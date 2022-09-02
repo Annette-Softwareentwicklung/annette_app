@@ -1,5 +1,6 @@
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
+import 'package:annette_app/services/api_client/api_client.dart';
 
 Map<String, String> getSubjects() {
   Map<String, String> subjects = {
@@ -60,9 +61,10 @@ Map<String, String> getSubjects() {
 }
 
 // Function to retrieve the subject a user has
-Future<Map<String, dynamic>> getUserSubjects(List<String> subjectCodes, List<String> subjectNames) async {
-
-  List<TimeTableUnit> timetableUnits = await databaseGetAllTimeTableUnit();
+Future<Map<String, dynamic>> getUserSubjects(
+    List<String> subjectCodes, List<String> subjectNames) async {
+  List<TimeTableUnit> timetableUnits =
+      await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
   timetableUnits.sort((a, b) {
     return a.subject!.compareTo(b.subject!);
   });
@@ -71,12 +73,12 @@ Future<Map<String, dynamic>> getUserSubjects(List<String> subjectCodes, List<Str
 
   ///Mittagspause herausfiltern
   int temp = timetableUnits.indexWhere((element) => element.subject == 'MP');
-  while(temp != -1) {
+  while (temp != -1) {
     timetableUnits.removeAt(temp);
     temp = timetableUnits.indexWhere((element) => element.subject == 'MP');
   }
   temp = timetableUnits.indexWhere((element) => element.subject == 'MP MH');
-  while(temp != -1) {
+  while (temp != -1) {
     timetableUnits.removeAt(temp);
     temp = timetableUnits.indexWhere((element) => element.subject == 'MP MH');
   }
@@ -127,5 +129,4 @@ Future<Map<String, dynamic>> getUserSubjects(List<String> subjectCodes, List<Str
     "subjectCodes": subjectCodes,
     "subjectNames": subjectNames
   };
-
 }

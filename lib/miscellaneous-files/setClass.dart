@@ -1,4 +1,4 @@
-import 'package:annette_app/data/design.dart';
+/*import 'package:annette_app/data/design.dart';
 import 'package:annette_app/miscellaneous-files/onlineFiles.dart';
 import 'package:annette_app/timetable/groupsEF.dart';
 import 'package:annette_app/timetable/groupsQ1.dart';
@@ -1448,3 +1448,4 @@ class _SetClassState extends State<SetClass> {
         ]));
   }
 }
+TODO:Klasse löschen*/

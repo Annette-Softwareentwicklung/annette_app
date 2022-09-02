@@ -1,6 +1,7 @@
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
+import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,7 +44,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void setChangingLK() async {
-    allTimetableUnits = await databaseGetAllTimeTableUnit();
+    allTimetableUnits =
+        await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
     try {
       lk1 = allTimetableUnits
           .firstWhere((element) => element.subject!.contains('LK'))
