@@ -650,11 +650,17 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     } catch (e) {
       print(e);
     }
-
+    //Hier prüfe ich, um welchen Tag es sich handelt, bevor der LK angezeigt wird, damit am Wochenende schon der LK nächster Woche angezeigt wird
+    String tempString = "";
+    if((int)dateValue.DayOfWeek<=5){
+          tempString = 'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
+      } else {
+          tempString = 'Diese Woche: ${(selectedLK == 1) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 0) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
+      }
     await showCustomInformationDialog(
       context,
       'Wechselnder LK',
-      'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
+      tempString,
       true,
       false,
       true,
