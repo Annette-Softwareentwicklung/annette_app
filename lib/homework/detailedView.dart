@@ -315,7 +315,6 @@ class DetailedViewState extends State<DetailedView> {
     editDialog("Notizen", StatefulBuilder(builder: (context, setError) {
       return Column(children: [
         TextField(
-          cursorColor: Design.annetteColor,
           minLines: 1,
           maxLines: AddDialog.notesLines,
           dragStartBehavior: DragStartBehavior.down,
