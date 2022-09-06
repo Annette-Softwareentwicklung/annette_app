@@ -287,12 +287,12 @@ class DetailedViewState extends State<DetailedView> {
   }
 
   void onNotesChanged(String text, Function setError) {
+    var cursorPos = _textEditingController.selection.base.offset;
     updateNotes = text;
     _textEditingController.text = updateNotes!;
     _textEditingController.selection =
         TextSelection.fromPosition(TextPosition(
-            offset: _textEditingController
-                .text.length));
+            offset: cursorPos));
     setState(() {});
 
     if (updateNotes == '' || updateNotes == null) {
@@ -312,30 +312,32 @@ class DetailedViewState extends State<DetailedView> {
 
 
   void editNotes() {
-
-    editDialog(
-      "Notizen",
-      StatefulBuilder(builder: (context, setError) {
-        return Column(children: [
-          TextField(
-            minLines: 1,
-            maxLines: AddDialog.notesLines,
-            dragStartBehavior: DragStartBehavior.down,
-            controller: _textEditingController,
-            decoration: InputDecoration(hintText: 'Notizen'),
-            onChanged: (text) => onNotesChanged(text, setError),
+    editDialog("Notizen", StatefulBuilder(builder: (context, setError) {
+      return Column(children: [
+        TextField(
+          minLines: 1,
+          maxLines: AddDialog.notesLines,
+          dragStartBehavior: DragStartBehavior.down,
+          controller: _textEditingController,
+          decoration: InputDecoration(
+            hintText: 'Notizen',
+            focusedBorder: new UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Design.annetteColor,
+                width: 2,
+              ),
+            ),
           ),
-          (errorNotes)
-              ? Text(
-            'Notiz erforderlich',
-            style: TextStyle(color: Colors.red),
-          )
-              : Text(''),
-        ]);
-      }),
-        () => confirmNotes
-    );
-
+          onChanged: (text) => onNotesChanged(text, setError),
+        ),
+        (errorNotes)
+            ? Text(
+                'Notiz erforderlich',
+                style: TextStyle(color: Colors.red),
+              )
+            : Text(''),
+      ]);
+    }), () => confirmNotes);
   }
 
   /// Diese Methode dient dazu, im Querformat eine andere Aufgabe in der Detailansicht anzuzeigen
