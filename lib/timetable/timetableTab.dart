@@ -66,6 +66,11 @@ class _TimetableTabState extends State<TimetableTab> {
   void load() async {
     print("Timetable wird geladen");
     /*for (var element in allTimeTableUnits) {
+    allTimes = getAllTimes();
+    allTimeTableUnits = await databaseGetAllTimeTableUnit();
+    print(allTimeTableUnits);
+
+    for (var element in allTimeTableUnits) {
       print(element.toString());
     }*/
 
@@ -73,7 +78,6 @@ class _TimetableTabState extends State<TimetableTab> {
         DateTime.now().year, DateTime.now().month, DateTime.now().day);
     int displayDay = DateTime.now().weekday;
 
-    //Setzt den Tag zurück, falls die Woche vorbei ist
     if (displayDay == 6 || displayDay == 7) {
       displayDay = 1;
       displayDayString = 'Montag';
@@ -98,20 +102,23 @@ class _TimetableTabState extends State<TimetableTab> {
         }
       }
 
+      // determining if the day that is shown should be today or tomorrow.
       if (currentLessonNumber == 0) {
         await setDay(DateTime.now().weekday, null, null);
         displayDayString = 'Heute';
       } else {
-        if (allTimeTableUnits.indexWhere(
-                (element) => (element.dayNumber == DateTime.now().weekday)) !=
-            -1) {
-          await setDay(DateTime.now().weekday, currentLessonNumber, isInBreak);
-          displayDayString = 'Jetzt';
-          isNow = true;
+        DateTime today = DateTime.now();
+        if (today.weekday == 6 || today.weekday == 7 || today.hour >= 18) {
+          // should show the next day
+          int temp = today.weekday + 1;
+          bool isWeekend = (temp == 6 || temp == 7 || temp == 8);
+          await setDay(isWeekend ? 1 : temp, null, null);
+          displayDayString = isWeekend ? 'Montag' : 'Morgen';
         } else {
-          int temp = DateTime.now().weekday + 1;
-          await setDay((temp == 6) ? 1 : temp, null, null);
-          displayDayString = (temp == 6) ? 'Montag' : 'Morgen';
+          // is not the next day
+          await setDay(today.weekday, currentLessonNumber, isInBreak);
+          displayDayString = 'Heute';
+          isNow = true;
         }
       }
     }

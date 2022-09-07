@@ -4,13 +4,23 @@ import 'package:http/http.dart' as http;
 class TimetableScraper {
   static Future<String> fetch(GroupIDs id) async {
     DateTime now = DateTime.now();
-    print(now);
     //*  Stundenplan des nächsten Tages nach 18 Uhr anzeigen
     String date = now.toString().substring(0, 10);
+    DateTime tomorrow = now;
+
     if (now.hour >= 18) {
-      DateTime tomorrow = now.add(Duration(hours: 24 - now.hour + 10));
+      tomorrow = now.add(Duration(hours: 24 - now.hour + 10));
       date = tomorrow.toString().substring(0, 10);
     }
+
+    // if its saturdays, sundays or fridays after 18 pm, then fetch timetable for monday, next week
+    if (tomorrow.weekday == 6 || tomorrow.weekday == 7) {
+      DateTime nextWeekMonday =
+          tomorrow.add(Duration(days: 7 - now.weekday + 1));
+      date = nextWeekMonday.toString().substring(0, 10);
+    }
+
+    print(date);
 
     var res = await http.get(Uri.http(
         'annette-entwickelt-software-api-totallyinformatik.vercel.app',
@@ -22,6 +32,7 @@ class TimetableScraper {
     } else {
       print("Request erfolgreich [200]");
     }
+
     print(res.body);
 
     return res.body;
