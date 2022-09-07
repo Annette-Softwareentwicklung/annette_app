@@ -52,7 +52,7 @@ final snackBarTimetableUpdated = SnackBar(
 );
 
 Future<void> update(BuildContext context) async {
-  print("deez nuts");
+  print("Update wird durchgeführt...");
 
   ///Update Vertretungsplan
   try {

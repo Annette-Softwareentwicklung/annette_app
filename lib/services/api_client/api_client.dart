@@ -34,8 +34,17 @@ class ApiClient {
   ///Das Ergebnis wird in angemessenem Format geliefert und in [SetClassV2] weiterverwendet.
   ///[id] stellt hierbei die Klasse dar, für die der Stundenplan geladen werden soll.
   static Future<String> fetchChoiceOptions(String id) async {
+    //Workaround für einen Bug/eine Fehlkonfiguration auf der Seite von WebUntis,
+    //durch den nur die Pläne für a-Klassen alle Diff-Optionen enthalten
+    if (id.startsWith("9") || id.startsWith("10")) {
+      id = id.substring(0) + "A";
+    }
+
+    //HTTP-Request
     var res = await http.get(Uri.http(
         baseURL, 'api/annette_app/dateien/stundenplan/optionen/' + id));
+
+    //req erfolgreich
     print("fetched JSON!");
     if (res.statusCode != 200) {
       print("error error error");
