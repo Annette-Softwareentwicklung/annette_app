@@ -281,25 +281,36 @@ class _TimetableTabState extends State<TimetableTab> {
             GetStorage storage = GetStorage();
             print(storage.read('changingLkSubject'));
             print(storage.read('changingLkWeekNumber'));
-            if ((DateTime.now().weekOfYear.isEven &&
+
+            final now = DateTime.now();
+            if ((now.weekOfYear.isEven &&
                     storage.read('changingLkWeekNumber').isEven) ||
-                (!DateTime.now().weekOfYear.isEven &&
-                    !storage.read('changingLkWeekNumber').isEven)) {
+                (now.weekOfYear.isEven &&
+                    !storage.read('changingLkWeekNumber').isEven)
+                && !(now.weekday != 6 && now.weekday != 7 && now.weekday)
+                    ) {
+
               if (storage.read('changingLkSubject') !=
                   tempTimetableUnit.subject!) {
+
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
                     (element.dayNumber! == pWeekday &&
                         element.lessonNumber! == i &&
                         element.subject == storage.read('changingLkSubject')));
+
               }
+
             } else {
+
               if (storage.read('changingLkSubject') ==
                   tempTimetableUnit.subject!) {
                 tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
                     (element.dayNumber! == pWeekday &&
                         element.lessonNumber! == i &&
                         element.subject != storage.read('changingLkSubject')));
+
               }
+
             }
           }
 
