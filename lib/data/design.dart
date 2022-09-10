@@ -62,6 +62,10 @@ class Design {
         contentTextStyle: TextStyle(
       color: Colors.white,
     )),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: annetteColor,
+        selectionHandleColor: annetteColor,
+      )
   );
 
   static ThemeData lightTheme = ThemeData(
@@ -109,5 +113,9 @@ class Design {
     floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: annetteColor, foregroundColor: Colors.white),
     cardColor: Colors.grey[200],
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: annetteColor,
+        selectionHandleColor: annetteColor,
+      )
   );
 }
