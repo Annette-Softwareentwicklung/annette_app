@@ -6,6 +6,9 @@
 ///
 ///  Die Methode "toMap()" konvertiert alle Attribute in eine Map.
 ///  Diese wird benötigt, um eine neue Zeit in die Datenbank einzufügen.
+///
+/// TODO: MERGE WITH lessonStartTimes.dart
+///
 class LessonStartTime {
   final int? id;
   final String? time;

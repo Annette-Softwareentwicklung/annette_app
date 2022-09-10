@@ -1,5 +1,9 @@
 import 'package:http/http.dart' as http;
 
+// TODO: WEITERE SCHNITTSTELLE MIT DER ALTEN STUNDENPLAN METHODE
+// TODO: SOLLTE MIT API ERSETZT WERDEN
+// TODO: WIRD VON SETCLASS UND CLASSICTIMETABLE GENUTZT
+
 class OnlineFiles {
   /// folgendes Attribut ist ein String für den Stundenplan
   late String difExport;

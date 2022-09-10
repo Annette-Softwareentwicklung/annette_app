@@ -1,4 +1,4 @@
-import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
+import 'package:annette_app/pages/vertretung/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../data/design.dart';

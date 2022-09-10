@@ -2,8 +2,10 @@ import 'dart:core';
 
 import 'package:annette_app/services/timetable_scraper/objects/lesson.dart';
 
-import 'block.dart';
+import '../../../kann_gelöscht_werden/block.dart';
 import 'lesson.dart';
+
+// TODO: MERGE WITH weekdays.dart
 
 class Weekday {
   final String name;

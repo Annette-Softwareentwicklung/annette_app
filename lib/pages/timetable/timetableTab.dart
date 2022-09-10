@@ -2,14 +2,14 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/links.dart';
-import 'package:annette_app/fundamentals/lessonStartTime.dart';
-import 'package:annette_app/fundamentals/timetableUnit.dart';
+import 'package:annette_app/pages/homework/lessonStartTime.dart';
+import 'package:annette_app/util/timetableUnit.dart';
 import 'package:annette_app/database/timetableUnitDbInteraction.dart';
-import 'package:annette_app/data/lessonStartTimes.dart';
+import 'package:annette_app/pages/homework/lessonStartTimes.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
-import 'package:annette_app/miscellaneous-files/showWebview.dart';
+import 'package:annette_app/components/showWebview.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
-import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
+import 'package:annette_app/pages/vertretung/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../data/design.dart';
@@ -57,8 +57,10 @@ class _TimetableTabState extends State<TimetableTab> {
 
   late String htmlCode;
   bool vertretungsplanError = false;
-  List<VertretungsEinheit>? vertretungenHeute = [];
-  List<VertretungsEinheit>? vertretungenMorgen = [];
+  List<VertretungsEinheit>? vertretungenHeute =
+      []; // TODO: KANN GELÖSCHT WERDEN
+  List<VertretungsEinheit>? vertretungenMorgen =
+      []; // TODO: KANN GELÖSCHT WERDEN
   String? dateTomorrow;
   String? dateToday;
 
