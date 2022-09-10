@@ -652,7 +652,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     }
     //Hier prüfe ich, um welchen Tag es sich handelt, bevor der LK angezeigt wird, damit am Wochenende schon der LK nächster Woche angezeigt wird
     String tempString = "";
-    if((int)dateValue.DayOfWeek<=5){
+    if((int)dateValue.DayOfWeek<5 || ((int)dateValue.DayOfWeek == 5 && time.now().hour<19)){
           tempString = 'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
       } else {
           tempString = 'Diese Woche: ${(selectedLK == 1) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 0) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
