@@ -19,21 +19,15 @@ class TimetableScraper {
           tomorrow.add(Duration(days: 7 - now.weekday + 1));
       date = nextWeekMonday.toString().substring(0, 10);
     }
-
-    print(date);
-
     var res = await http.get(Uri.http(
         'annette-entwickelt-software-api-totallyinformatik.vercel.app',
         'api/annette_app/dateien/stundenplan/' + id.name + "/" + date));
-    print("fetched!");
     if (res.statusCode != 200) {
       return "error";
       //throw Exception('http.get error: statusCode= ${res.statusCode}');
     } else {
       print("Request erfolgreich [200]");
     }
-
-    print(res.body);
 
     return res.body;
   }
