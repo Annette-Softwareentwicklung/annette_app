@@ -667,15 +667,12 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     } catch (e) {                                                           
       print(e);
     }
-    //Hier prüfe ich, um welchen Tag es sich handelt, und dann wird ein text erstellt, der abhängig davon ist, ob man ein wechselnden LK hat oder nicht
-    String tempString = "";
-    if((int)dateValue.DayOfWeek<5 || ((int)dateValue.DayOfWeek == 5 && time.now().hour<19)){
-          tempString = 'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
-      }
+    
     await showCustomInformationDialog(    //s. customDialog.dart um die genaue Funktion zu sehen
       context,              //<-- selbsterklärend
       'Wechselnder LK',     //<-- titel
-      tempString,           //<-- text
+      'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',,           
+                            //<-- text
       true,                 //<-- check option
       false,                //<-- cancel option
       true,                 //<-- barrierDismissible , also fragt ob man den Rahmen verwerfen kann
