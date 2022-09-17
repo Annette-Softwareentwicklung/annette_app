@@ -287,7 +287,7 @@ class _TimetableTabState extends State<TimetableTab> {
                     !storage.read('changingLkWeekNumber').isEven)) {   
               if (storage.read('changingLkSubject') !=                        
                   tempTimetableUnit.subject!) {
-                    if((int)dateValue.DayOfWeek<5 || ((int)dateValue.DayOfWeek == 5 && time.now().hour<19)){    
+                    if(DateTime.now().weekday<5 || (DateTime.now().weekday == 5 && DateTime.now().hour<18)){    
                       // Man muss aufpassen, ob man sich in der Woche oder im Wochenende befindet, 
                       //weil niemand will am Wochenende wissen, was man die Woche hatte, sondern was man in der nächsten Woche hat
                       // Am Wochenende passiert halt genau das Gegenteil von dem was in der Woche passiert
@@ -305,17 +305,17 @@ class _TimetableTabState extends State<TimetableTab> {
             } else {                                                             // 2: Ansonsten, wenn LK Woche gerade und JahresWoche ungerade oder vice versa der Fall ist
               if (storage.read('changingLkSubject') ==                          // Falls das LK Fach doch dem temporären Element entspricht
                   tempTimetableUnit.subject!) {
-                if((int)dateValue.DayOfWeek<5 || ((int)dateValue.DayOfWeek == 5 && time.now().hour<19)){   // s.o. (Z. 291)
-                tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>   
-                    (element.dayNumber! == pWeekday &&                         
-                        element.lessonNumber! == i &&                           // dann wird das temp Ele zum ersten Element, was
-                        element.subject != storage.read('changingLkSubject'))); // nicht gleich dem wechselnden LK Fach ist und die Zeit natürlich übereinstimmt
-                  } else {
-                    tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>   // s.o. (Z. 311)
-                    (element.dayNumber! == pWeekday &&                         
-                        element.lessonNumber! == i &&                           
-                        element.subject == storage.read('changingLkSubject')));
-                  }
+                    if(DateTime.now().weekday<5 || (DateTime.now().weekday == 5 && DateTime.now().hour<18)){
+                    tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>   
+                        (element.dayNumber! == pWeekday &&                         
+                            element.lessonNumber! == i &&                           // dann wird das temp Ele zum ersten Element, was
+                            element.subject != storage.read('changingLkSubject'))); // nicht gleich dem wechselnden LK Fach ist und die Zeit natürlich übereinstimmt
+                      } else {
+                        tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>   // s.o. (Z. 311)
+                        (element.dayNumber! == pWeekday &&                         
+                            element.lessonNumber! == i &&                           
+                            element.subject == storage.read('changingLkSubject')));
+                      }
               }
             }
           }
@@ -671,7 +671,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     await showCustomInformationDialog(    //s. customDialog.dart um die genaue Funktion zu sehen
       context,              //<-- selbsterklärend
       'Wechselnder LK',     //<-- titel
-      'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',,           
+      'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',           
                             //<-- text
       true,                 //<-- check option
       false,                //<-- cancel option
