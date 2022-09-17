@@ -11,6 +11,7 @@ import 'package:annette_app/miscellaneous-files/showWebview.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
+import 'package:annette_app/timetable/getTimetable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../data/design.dart';
@@ -125,7 +126,7 @@ class _TimetableTabState extends State<TimetableTab> {
 
     // retrieves the times and the timetable for the respective day from the api
     allTimes = getAllTimes();
-    allTimeTableUnits = await ApiClient.fetchTimetableForDay(displayDay);
+    allTimeTableUnits = getTimetableForDay(displayDay) as List<TimeTableUnit>;
 
     // adds the display of the day
     displayTimetable.insert(
