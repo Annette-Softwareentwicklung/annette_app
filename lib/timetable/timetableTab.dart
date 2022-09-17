@@ -279,8 +279,6 @@ class _TimetableTabState extends State<TimetableTab> {
                   -1) {
             isChangingLK = true;
             GetStorage storage = GetStorage();
-            print(storage.read('changingLkSubject'));
-            print(storage.read('changingLkWeekNumber'));
 
             final now = DateTime.now();
             if ((now.weekOfYear.isEven &&
