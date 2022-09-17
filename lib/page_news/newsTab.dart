@@ -19,12 +19,9 @@ import '../data/links.dart';
 /// Der Code für die Ansicht für alle Neuigkeiten
 ///
 
-
 class NewsTab extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => new _NewsTabState();
-
 }
 
 class _NewsTabState extends State<NewsTab> {
@@ -55,7 +52,6 @@ class _NewsTabState extends State<NewsTab> {
 
   @override
   Widget build(BuildContext context) {
-
     if (error) {
       return ErrorInternetContainer(
         onRefresh: () {
@@ -68,12 +64,9 @@ class _NewsTabState extends State<NewsTab> {
 
     return SafeArea(
         child: RefreshIndicator(
-          onRefresh: () async {
-
-          },
+            onRefresh: () async {},
             child: WebView(
-                initialUrl:
-                'https://www.annettegymnasium.de/',
+                initialUrl: 'https://www.annettegymnasium.de/',
                 javascriptMode: JavascriptMode.unrestricted,
                 onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {
@@ -81,12 +74,6 @@ class _NewsTabState extends State<NewsTab> {
                     showError();
                     error = true;
                   });
-                }
-            )
-        )
-    );
+                })));
   }
-
-
-
 }
