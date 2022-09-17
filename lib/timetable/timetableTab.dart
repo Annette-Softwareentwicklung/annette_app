@@ -8,6 +8,7 @@ import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/data/lessonStartTimes.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/miscellaneous-files/showWebview.dart';
+import 'package:annette_app/miscellaneous-files/update.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
@@ -79,7 +80,9 @@ class _TimetableTabState extends State<TimetableTab> {
         DateTime.now().year, DateTime.now().month, DateTime.now().day);
     int displayDay = DateTime.now().weekday;
 
-    if (displayDay == 6 || displayDay == 7) {
+    if (displayDay == 6 ||
+        displayDay == 7 ||
+        (displayDay == 5 && tempTime.hour >= 18)) {
       displayDay = 1;
       displayDayString = 'Montag';
       await setDay(1, null, null);
@@ -365,10 +368,20 @@ class _TimetableTabState extends State<TimetableTab> {
     ));
   }
 
+  loadTimetable() async {
+    // updating until it works.
+    bool updateStatus = false;
+    while (!updateStatus) {
+      updateStatus = await updateTimetable();
+    }
+    load();
+  }
+
   @override
   void initState() {
     super.initState();
-    load();
+    // Every time this tab is opened, it will try to load the entire timetable again for accuracy.
+    loadTimetable();
   }
 
   @override
