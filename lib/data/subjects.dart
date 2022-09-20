@@ -1,6 +1,6 @@
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
+import 'package:annette_app/services/timetable_storage.dart';
 
 Map<String, String> getSubjects() {
   Map<String, String> subjects = {
@@ -56,6 +56,7 @@ Map<String, String> getSubjects() {
     'D LZ': 'Deutsch',
     'L LZ': 'Latein',
     'F LZ': 'Französisch',
+    //TODO: neue Fächer hinzufügen
   };
   return subjects;
 }
@@ -64,7 +65,7 @@ Map<String, String> getSubjects() {
 Future<Map<String, dynamic>> getUserSubjects(
     List<String> subjectCodes, List<String> subjectNames) async {
   List<TimeTableUnit> timetableUnits =
-      await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
+      await getTimetableForWeek(WeekMode.THIS_WEEK) as List<TimeTableUnit>;
   timetableUnits.sort((a, b) {
     return a.subject!.compareTo(b.subject!);
   });

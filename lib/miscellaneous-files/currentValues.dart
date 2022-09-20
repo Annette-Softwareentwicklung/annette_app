@@ -4,6 +4,7 @@ import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
+import 'package:annette_app/services/timetable_storage.dart';
 
 class CurrentValues {
   DateTime currentTime = DateTime.now();
@@ -13,7 +14,7 @@ class CurrentValues {
   Future<void> initialize() async {
     times = getAllTimes();
     allTimetableUnits =
-        await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
+        await getTimetableForWeek(WeekMode.THIS_WEEK) as List<TimeTableUnit>;
   }
 
   /// Diese Methode gibt den Zeitpunkt des Starts der 1. Stunde am aktuellen Tag zurück.

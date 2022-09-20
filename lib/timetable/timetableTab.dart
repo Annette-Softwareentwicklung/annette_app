@@ -11,7 +11,6 @@ import 'package:annette_app/miscellaneous-files/showWebview.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
-import 'package:annette_app/timetable/getTimetable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../data/subjects.dart';
