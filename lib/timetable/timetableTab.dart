@@ -64,9 +64,10 @@ class _TimetableTabState extends State<TimetableTab> {
   String? dateToday;
 
   void load() async {
+    displayTimetable.clear();
+
     allTimes = getAllTimes();
     allTimeTableUnits = await databaseGetAllTimeTableUnit();
-    print(allTimeTableUnits);
 
     for (var element in allTimeTableUnits) {
       print(element.toString());
@@ -380,6 +381,7 @@ class _TimetableTabState extends State<TimetableTab> {
   @override
   void initState() {
     super.initState();
+    load();
     // Every time this tab is opened, it will try to load the entire timetable again for accuracy.
     loadTimetable();
   }
