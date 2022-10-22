@@ -12,9 +12,7 @@ class ExamPlan extends StatefulWidget {
 }
 
 class _ExamPlanState extends State<ExamPlan> {
-
   /// die Klausurplan Dateien sind immer im Format klausur_ef.pdf, oder klausur_q1.pdf oder klausur_q2.pdf
-
 
   late File file;
   late String currentClass;
@@ -52,7 +50,7 @@ class _ExamPlanState extends State<ExamPlan> {
     }
     selectedClass = pClass;
     try {
-      file = await loadFromNetwork('klausur_$currentClass');
+      file = await loadFromNetwork(currentClass);
       setState(() {
         finished = true;
       });
@@ -74,7 +72,7 @@ class _ExamPlanState extends State<ExamPlan> {
     }
     selectedClass = await getCurrentClass();
     try {
-      file = await loadFromNetwork('klausur_$currentClass');
+      file = await loadFromNetwork(currentClass);
       setState(() {
         finished = true;
       });
@@ -144,15 +142,15 @@ class _ExamPlanState extends State<ExamPlan> {
     );
   }
 
-  Future<File> loadFromNetwork(String plan) async {
-    final response = await http
-        .get(Uri.http('annette-app-files.vercel.app', '$plan.pdf'));
+  Future<File> loadFromNetwork(String currentClass) async {
+    final response = await http.get(Uri.http('annette-swe-api.vercel.app',
+        '/api/annette_app/dateien/klausur_plan/$currentClass'));
     final bytes = response.bodyBytes;
-    return _storeFile(plan, bytes);
+    return _storeFile(currentClass, bytes);
   }
 
-  Future<File> _storeFile(plan, bytes) async {
-    final filename = '$plan.pdf';
+  Future<File> _storeFile(currentClass, bytes) async {
+    final filename = '$currentClass.pdf';
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/$filename');
     await file.writeAsBytes(bytes, flush: true);

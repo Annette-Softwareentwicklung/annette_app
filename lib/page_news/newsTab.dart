@@ -66,7 +66,7 @@ class _NewsTabState extends State<NewsTab> {
         child: RefreshIndicator(
             onRefresh: () async {},
             child: WebView(
-                initialUrl: 'https://www.annettegymnasium.de/',
+                initialUrl: 'https://annette-swe-api.vercel.app/message',
                 javascriptMode: JavascriptMode.unrestricted,
                 onProgress: (progress) => CupertinoActivityIndicator(),
                 onWebResourceError: (e) {
