@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:convert';
 
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,7 +11,7 @@ Future<List<TimeTableUnit>> getTimetableForDay(int weekday) async {
 
   List<TimeTableUnit> timeTableForDay = [];
 
-  for (TimeTableUnit ttu in timeTableForWeek!) {
+  for (TimeTableUnit ttu in timeTableForWeek) {
     if (ttu.dayNumber == weekday) {
       timeTableForDay.add(ttu);
     }
@@ -19,7 +19,8 @@ Future<List<TimeTableUnit>> getTimetableForDay(int weekday) async {
   return timeTableForDay;
 }
 
-Future<List<TimeTableUnit>?> getTimetableForWeek(WeekMode week) async {
+Future<List<TimeTableUnit>> getTimetableForWeek(WeekMode week) async {
+  updateTimeTable(week);
   GetStorage storage = GetStorage();
   return storage.read(
       week == WeekMode.THIS_WEEK ? 'timeTableThisWeek' : 'timeTableNextWeek');
@@ -34,15 +35,21 @@ WeekMode getWeek(int weekday) {
 }
 
 void updateTimeTable(WeekMode week) async {
-  String apiReturn = await ApiClient.fetchTimetableForWeek(week);
   List<TimeTableUnit> timeTableForWeek = [];
+  await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK).then((apiReturn) {
+    // turns the String into a list of timeTableUnits
+    var apiJson = json.decode(apiReturn);
+    print(apiJson);
+    // timeTableForWeek = apiJson.map((e) => TimeTableUnit.fromJson(e.toMap())).toList();
 
-  // turns the String into a list of timeTableUnits
+    print("Zeitplan:");
+    print(timeTableForWeek);
 
-  GetStorage storage = GetStorage();
-  storage.write(
-      week == WeekMode.THIS_WEEK ? 'timeTableThisWeek' : 'timeTableNextWeek',
-      timeTableForWeek);
+    GetStorage storage = GetStorage();
+    storage.write(
+        week == WeekMode.THIS_WEEK ? 'timeTableThisWeek' : 'timeTableNextWeek',
+        timeTableForWeek);
+  });
 }
 
 DateTime? getTimetableVersion() {

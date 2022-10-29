@@ -1,10 +1,17 @@
 class TimeTableUnit {
-  final String? subject;
-  final String? room;
-  final int? dayNumber;
-  final bool? isRegular;
+  late final String? subject;
+  late final String? room;
+  late final int? dayNumber;
+  late final bool? isRegular;
 
   TimeTableUnit({this.subject, this.room, this.dayNumber, this.isRegular});
+
+  TimeTableUnit.fromJson(Map<String, dynamic> json) {
+    dayNumber = json['day'];
+    subject = json['subject']['longName'];
+    room = json['subject']['room'];
+    isRegular = json['subject']['regular'];
+  }
 
   Map<String, dynamic> toMap() {
     return {

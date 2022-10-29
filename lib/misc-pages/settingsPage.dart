@@ -1,5 +1,4 @@
 import 'package:annette_app/custom_widgets/customDialog.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:annette_app/services/timetable_storage.dart';
@@ -46,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void setChangingLK() async {
     allTimetableUnits =
-        await getTimeTableForWeek(WeekMode.THIS_WEEK) as List<TimeTableUnit>;
+        await getTimetableForWeek(WeekMode.THIS_WEEK) as List<TimeTableUnit>;
     try {
       lk1 = allTimetableUnits
           .firstWhere((element) => element.subject!.contains('LK'))

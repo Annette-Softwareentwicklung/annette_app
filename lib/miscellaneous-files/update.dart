@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/services/api_client/objects/group_ids.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
+import 'package:annette_app/services/timetable_storage.dart';
 import 'package:annette_app/timetable/timetableCrawler.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -75,10 +76,9 @@ Future<void> update(BuildContext context) async {
       String t = tempResponse.headers.value(HttpHeaders.lastModifiedHeader)!;
       print('Zuletzt geändert: $t');
       versionNew = getLastModifiedTime(t)!;*/
-      if (await updateTimetable(/*versionNew*/)) {
+      if (await getTimetableForWeek(WeekMode.THIS_WEEK) != null) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarTimetableUpdated);
-        /*storage.write('timetableVersion', versionNew.toString());*/
-      } else {
+      }else {
         ScaffoldMessenger.of(context)
             .showSnackBar(snackBarTimetableUpdateFailed);
       }
@@ -88,7 +88,7 @@ Future<void> update(BuildContext context) async {
   }
 }
 
-Future<bool> updateTimetable(/*DateTime newVersion*/) async {
+/*Future<bool> updateTimetable(/*DateTime newVersion*/) async {
   try {
     String stundenplanDIF;
     String configuration;
@@ -120,4 +120,4 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
     return false;
   }
   return false;
-}
+}*/

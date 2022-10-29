@@ -4,11 +4,9 @@ import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/links.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/data/lessonStartTimes.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/miscellaneous-files/showWebview.dart';
-import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +14,8 @@ import 'package:flutter/material.dart';
 import '../data/subjects.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:week_of_year/week_of_year.dart';
+
+import '../services/timetable_storage.dart';
 
 BoxDecoration decorationTimetable(BuildContext context) {
   return BoxDecoration(
@@ -94,6 +94,10 @@ class _TimetableTabState extends State<TimetableTab> {
       int currentLessonNumber = 0;
       bool isInBreak = false;
 
+      // retrieves the times and the timetable for the respective day from the api
+      allTimes = getAllTimes();
+      allTimeTableUnits = await getTimetableForDay(displayDay);
+
       //Findet die momentan laufende Stunde heraus und ermittelt, ob gerade Pause ist
       for (int i = 0; i < allTimes.length; i++) {
         if (!DateTime.now()
@@ -129,10 +133,6 @@ class _TimetableTabState extends State<TimetableTab> {
         }
       }
     }
-
-    // retrieves the times and the timetable for the respective day from the api
-    allTimes = getAllTimes();
-    allTimeTableUnits = getTimetableForDay(displayDay) as List<TimeTableUnit>;
 
     // adds the display of the day
     displayTimetable.insert(

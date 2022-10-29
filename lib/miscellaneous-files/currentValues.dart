@@ -1,4 +1,3 @@
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/data/lessonStartTimes.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';

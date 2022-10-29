@@ -2,7 +2,6 @@ import 'dart:core';
 
 import 'package:annette_app/services/api_client/objects/lesson.dart';
 
-import 'block.dart';
 import 'lesson.dart';
 
 class Weekday {

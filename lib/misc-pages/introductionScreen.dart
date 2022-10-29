@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:annette_app/data/assets.dart';
-import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:annette_app/miscellaneous-files/setClassV2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
