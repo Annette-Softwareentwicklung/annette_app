@@ -275,34 +275,51 @@ class _TimetableTabState extends State<TimetableTab> {
                   element.lessonNumber! == i));
 
           bool isChangingLK = false;
-          if (tempTimetableUnit.subject!.contains('LK') &&
+          if (tempTimetableUnit.subject!.contains('LK') &&              // 1:   Element welches LK im Namen hat
               allTimeTableUnits.indexWhere((element) =>
-                      element.lessonNumber == i &&
-                      element.dayNumber == pWeekday &&
-                      element.subject != tempTimetableUnit.subject) !=
+                      element.lessonNumber == i &&                      // zur gleichen Stunde wie i ist
+                      element.dayNumber == pWeekday &&                  // am gleichen Tag wie der Wochentag ist
+                      element.subject != tempTimetableUnit.subject) !=  // und ungleich dem temporären Element ist
                   -1) {
-            isChangingLK = true;
-            GetStorage storage = GetStorage();
-
-            final now = DateTime.now();
-            if ((now.weekOfYear.isEven &&
-                    storage.read('changingLkWeekNumber').isEven) ||
-                (now.weekOfYear.isEven &&
-                    !storage.read('changingLkWeekNumber').isEven)) {
-              if (storage.read('changingLkSubject') !=
+            isChangingLK = true;                                         // a:  -> dann ist es ein wechselnder LK
+            GetStorage storage = GetStorage();                           // nun wird der Storage geladen
+            print(storage.read('changingLkSubject'));                    
+            print(storage.read('changingLkWeekNumber'));                 // Hier wird überprüft, ob
+            if ((DateTime.now().weekOfYear.isEven &&                     // die JahresWoche UND die LK-Woche gerade sind
+                    storage.read('changingLkWeekNumber').isEven) ||      // ODER
+                (!DateTime.now().weekOfYear.isEven &&                    // die JahresWoche UND die LK-Woche ungerade sind
+                    !storage.read('changingLkWeekNumber').isEven)) {   
+              if (storage.read('changingLkSubject') !=                        
                   tempTimetableUnit.subject!) {
-                tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
-                    (element.dayNumber! == pWeekday &&
-                        element.lessonNumber! == i &&
-                        element.subject == storage.read('changingLkSubject')));
+                    if(DateTime.now().weekday<5 || (DateTime.now().weekday == 5 && DateTime.now().hour<18)){    
+                      // Man muss aufpassen, ob man sich in der Woche oder im Wochenende befindet, 
+                      //weil niemand will am Wochenende wissen, was man die Woche hatte, sondern was man in der nächsten Woche hat
+                      // Am Wochenende passiert halt genau das Gegenteil von dem was in der Woche passiert
+                      tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>    // falls dem so ist, und das temp Ele vorher nicht dem LK entspricht        
+                          (element.dayNumber! == pWeekday &&                           // dann wird das temporäre Element zu diesem LK
+                          element.lessonNumber! == i &&                             
+                          element.subject == storage.read('changingLkSubject')));
+                  } else {
+                     tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>    // s.o. (Z. 294)
+                          (element.dayNumber! == pWeekday &&                           
+                          element.lessonNumber! == i &&                             
+                          element.subject != storage.read('changingLkSubject')));
+                  }
               }
-            } else {
-              if (storage.read('changingLkSubject') ==
+            } else {                                                             // 2: Ansonsten, wenn LK Woche gerade und JahresWoche ungerade oder vice versa der Fall ist
+              if (storage.read('changingLkSubject') ==                          // Falls das LK Fach doch dem temporären Element entspricht
                   tempTimetableUnit.subject!) {
-                tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>
-                    (element.dayNumber! == pWeekday &&
-                        element.lessonNumber! == i &&
-                        element.subject != storage.read('changingLkSubject')));
+                    if(DateTime.now().weekday<5 || (DateTime.now().weekday == 5 && DateTime.now().hour<18)){
+                    tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>   
+                        (element.dayNumber! == pWeekday &&                         
+                            element.lessonNumber! == i &&                           // dann wird das temp Ele zum ersten Element, was
+                            element.subject != storage.read('changingLkSubject'))); // nicht gleich dem wechselnden LK Fach ist und die Zeit natürlich übereinstimmt
+                      } else {
+                        tempTimetableUnit = allTimeTableUnits.firstWhere((element) =>   // s.o. (Z. 311)
+                        (element.dayNumber! == pWeekday &&                         
+                            element.lessonNumber! == i &&                           
+                            element.subject == storage.read('changingLkSubject')));
+                      }
               }
             }
           }
@@ -635,7 +652,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     return subjectFullname;
   }
 
-  void changeLK(BuildContext context) async {
+  void changeLK(BuildContext context) async {                         
     String lk1 = '---';
     String lk2 = '---';
     int selectedLK = 0;
@@ -643,36 +660,37 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
     try {
       lk1 = widget.allTimetableUnits
           .firstWhere((element) => element.subject!.contains('LK'))
-          .subject!;
+          .subject!;                                                        //lk 1 und 2 werden aus dem Stundenplan rausgelesen basically
       lk2 = widget.allTimetableUnits
           .firstWhere((element) =>
               element.subject!.contains('LK') &&
               !element.subject!.contains(lk1))
           .subject!;
 
-      if ((DateTime.now().weekOfYear.isEven &&
-              storage.read('changingLkWeekNumber').isEven) ||
-          (!DateTime.now().weekOfYear.isEven &&
+      if ((DateTime.now().weekOfYear.isEven &&                              // wenn dann sowohl die JahresWoche als auch die LK-Woche
+              storage.read('changingLkWeekNumber').isEven) ||               //gerade ODER ungerade sind, dann weiß man ja, das es sich hier
+          (!DateTime.now().weekOfYear.isEven &&                             // um einen wechselnden LK handelt. 
               !storage.read('changingLkWeekNumber').isEven)) {
-        if (storage.read('changingLkSubject') == lk2) {
+        if (storage.read('changingLkSubject') == lk2) {                     
           selectedLK = 1;
         }
-      } else {
-        if (storage.read('changingLkSubject') == lk1) {
-          selectedLK = 1;
-        }
+      } else {                                                              // wenn nun der wechselnde LK lk2  oder lk1 entspricht,
+        if (storage.read('changingLkSubject') == lk1) {                     // dann ist ein LK selected für einen wechselnden Lk,
+          selectedLK = 1;                                                   // also man guckt, ob es überhaupt einen wechselnden LK gibt
+        } 
       }
-    } catch (e) {
+    } catch (e) {                                                           
       print(e);
     }
-
-    await showCustomInformationDialog(
-      context,
-      'Wechselnder LK',
-      'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',
-      true,
-      false,
-      true,
+    
+    await showCustomInformationDialog(    //s. customDialog.dart um die genaue Funktion zu sehen
+      context,              //<-- selbsterklärend
+      'Wechselnder LK',     //<-- titel
+      'Diese Woche: ${(selectedLK == 0) ? lk1 : lk2}\nNächste Woche: ${(selectedLK == 1) ? lk1 : lk2}\n\nIm Bereich "Einstellungen" kannst du dies verändern.',           
+                            //<-- text
+      true,                 //<-- check option
+      false,                //<-- cancel option
+      true,                 //<-- barrierDismissible , also fragt ob man den Rahmen verwerfen kann
     );
   }
 
