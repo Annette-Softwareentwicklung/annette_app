@@ -89,15 +89,16 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
   try {
     String stundenplanDIF;
     String configuration;
+
     try {
       configuration = GetStorage().read('configuration');
     } catch (e) {
       configuration = 'c:error;';
       return false;
     }
+
     String currentClass = configuration.substring(
         configuration.indexOf('c:') + 2, configuration.indexOf(';'));
-    print(currentClass);
     var timetableString =
         await TimetableScraper.fetch(GroupExt.fromString(key: currentClass));
 
@@ -107,12 +108,13 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
     stundenplanDIF = timetableString.replaceAll("\\", "");
     if (stundenplanDIF.contains(currentClass)) {
       TimetableCrawler timetableCrawler = new TimetableCrawler();
-      timetableCrawler.setConfiguration(
+
+      await timetableCrawler.setConfiguration(
           configuration, stundenplanDIF, new DateTime.now());
+
       return true;
     }
   } catch (e) {
-    print(e);
     return false;
   }
   return false;
