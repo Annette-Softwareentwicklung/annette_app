@@ -39,8 +39,7 @@ void updateTimeTable(WeekMode week) async {
   await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK).then((apiReturn) {
     // turns the String into a list of timeTableUnits
     var apiJson = json.decode(apiReturn);
-    print(apiJson);
-    // timeTableForWeek = apiJson.map((e) => TimeTableUnit.fromJson(e.toMap())).toList();
+    timeTableForWeek = apiJson.map((e) => TimeTableUnit.fromJson(e)).toList();
 
     print("Zeitplan:");
     print(timeTableForWeek);

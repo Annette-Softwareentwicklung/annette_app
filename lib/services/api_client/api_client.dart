@@ -3,7 +3,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  static String baseURL = "192.168.1.113:3000";
+  static String baseURL = "172.29.32.1:3000";
 
   static Future<String> fetchTimetable(String id) async {
     //TODO: durch production deployment ersetzen

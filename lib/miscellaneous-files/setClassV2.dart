@@ -259,7 +259,9 @@ class _SetClassV2State extends State<SetClassV2> {
   void saveConfig() {
     GetStorage().write("class", widget.selectedClass);
     GetStorage().write("courses", this.classList.values);
+    GetStorage().write('introScreen', false);
     print(GetStorage().read("courses"));
+    widget.onButtonPressed();
   }
 }
 

@@ -125,12 +125,13 @@ void main() async {
         (storage.read('changingLkSubject') == null ||
             storage.read('changingLkWeekNumber') == null)) {
       try {
-        storage.write(
+        //TODO: Auskommentieren und fixen!!
+        /*storage.write(
             'changingLkSubject',
             (await getTimetableForWeek(WeekMode.THIS_WEEK)
                     as List<TimeTableUnit>)
                 .firstWhere((element) => element.subject!.contains('LK')));
-        storage.write('changingLkWeeknumber', 1);
+        storage.write('changingLkWeeknumber', 1);*/
       } catch (e) {
         print(e);
       }
@@ -209,9 +210,9 @@ class MyApp extends StatelessWidget {
                     child: (guide)
                         ? IntroductionScreen(
                             onFinished: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pushReplacement(
-                                  new MaterialPageRoute(
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushReplacement(new MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           NavigationController(
                                               key:
