@@ -63,11 +63,11 @@ Map<String, String> getSubjects() {
 // Function to retrieve the subject a user has
 Future<Map<String, dynamic>> getUserSubjects(
     List<String> subjectCodes, List<String> subjectNames) async {
-  List<TimeTableUnit> timetableUnits =
-      await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
-  timetableUnits.sort((a, b) {
-    return a.subject!.compareTo(b.subject!);
-  });
+  List<TimeTableUnit> timetableUnits = [];
+  //     await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
+  // timetableUnits.sort((a, b) {
+  //   return a.subject!.compareTo(b.subject!);
+  // });
 
   Map<String, String> allSubjects = getSubjects();
 

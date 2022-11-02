@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:annette_app/data/assets.dart';
 import 'package:annette_app/miscellaneous-files/setClass.dart';
+import 'package:annette_app/miscellaneous-files/setClassV2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
@@ -50,11 +51,11 @@ class IntroductionScreenState extends State<IntroductionScreen> {
           'Dein individueller Stundenplan inklusive Pausenzeiten. Dank automatischer Erkennung der aktuellen Stunde lässt sich der Stundenplan schnell ablesen, und du musst nicht erst deinen Kurs in der großen Übersicht suchen.',
     ),
     ImageTitleTextModel(
-      demoImage: false,
-      //image: AssetImage(assetPaths.iconImagePath),
-      title: 'Annette Entwickelt Software',
-      text: 'Diese App wird von der Annette-Entwickelt-Software-AG mit Leidenschaft entwickelt :).'
-    )
+        demoImage: false,
+        //image: AssetImage(assetPaths.iconImagePath),
+        title: 'Annette Entwickelt Software',
+        text:
+            'Diese App wird von der Annette-Entwickelt-Software-AG mit Leidenschaft entwickelt :).')
   ];
   final pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
@@ -130,7 +131,7 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                             )),
                         onPressed: () {
                           Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (BuildContext context) => SetClass(
+                              builder: (BuildContext context) => SetClassV2(
                                   isInGuide: true,
                                   onButtonPressed: () async {
                                     widget.onFinished();
@@ -214,26 +215,29 @@ class ImageTitleTextModel extends StatelessWidget {
           children: [
             Spacer(),
             Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: image != null ?
-              Container(
-                width: (demoImage) ? 350 : 200,
-                height: (demoImage) ? 350 : 200,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: (Theme.of(context).brightness == Brightness.dark &&
-                              demoImage)
-                          ? Design.annetteColor
-                          : Colors.grey,
-                      width: (Theme.of(context).brightness == Brightness.dark)
-                          ? 2
-                          : 1),
-                  borderRadius: BorderRadius.circular(20),
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(image: image!, fit: BoxFit.fitHeight),
-                ),
-              ): Container()
-            ),
+                margin: EdgeInsets.only(bottom: 20),
+                child: image != null
+                    ? Container(
+                        width: (demoImage) ? 350 : 200,
+                        height: (demoImage) ? 350 : 200,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: (Theme.of(context).brightness ==
+                                          Brightness.dark &&
+                                      demoImage)
+                                  ? Design.annetteColor
+                                  : Colors.grey,
+                              width: (Theme.of(context).brightness ==
+                                      Brightness.dark)
+                                  ? 2
+                                  : 1),
+                          borderRadius: BorderRadius.circular(20),
+                          shape: BoxShape.rectangle,
+                          image: DecorationImage(
+                              image: image!, fit: BoxFit.fitHeight),
+                        ),
+                      )
+                    : Container()),
             Container(
               margin: EdgeInsets.only(
                 top: (MediaQuery.of(context).size.height < 700) ? 0 : 18,

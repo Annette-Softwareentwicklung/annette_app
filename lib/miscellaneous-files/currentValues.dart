@@ -13,7 +13,8 @@ class CurrentValues {
   Future<void> initialize() async {
     times = getAllTimes();
     allTimetableUnits =
-        await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
+        (await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK))
+            as List<TimeTableUnit>;
   }
 
   /// Diese Methode gibt den Zeitpunkt des Starts der 1. Stunde am aktuellen Tag zurück.

@@ -124,10 +124,11 @@ void main() async {
         (storage.read('changingLkSubject') == null ||
             storage.read('changingLkWeekNumber') == null)) {
       try {
-        storage.write(
+        //TODO: Auskommentieren und fixen!!
+        /*storage.write(
             'changingLkSubject',
             (await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK))
-                .firstWhere((element) => element.subject!.contains('LK')));
+                .firstWhere((element) => element.subject!.contains('LK')));*/
         storage.write('changingLkWeeknumber', 1);
       } catch (e) {
         print(e);

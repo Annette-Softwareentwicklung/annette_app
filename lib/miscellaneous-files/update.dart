@@ -110,9 +110,9 @@ Future<bool> updateTimetable(/*DateTime newVersion*/) async {
     if (timetableString == "error") return false;
     stundenplanDIF = timetableString.replaceAll("\\", "");
     if (stundenplanDIF.contains(currentClass)) {
-      TimetableCrawler timetableCrawler = new TimetableCrawler();
-      timetableCrawler.setConfiguration(
-          configuration, stundenplanDIF, new DateTime.now());
+      //TimetableCrawler timetableCrawler = new TimetableCrawler();
+      //timetableCrawler.setConfiguration(
+      //    configuration, stundenplanDIF, new DateTime.now());
       return true;
     }
   } catch (e) {

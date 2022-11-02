@@ -126,7 +126,8 @@ class _TimetableTabState extends State<TimetableTab> {
 
     // retrieves the times and the timetable for the respective day from the api
     allTimes = getAllTimes();
-    allTimeTableUnits = getTimetableForDay(displayDay) as List<TimeTableUnit>;
+    allTimeTableUnits =
+        getTimetableForDay(DateTime.now()) as List<TimeTableUnit>;
 
     // adds the display of the day
     displayTimetable.insert(

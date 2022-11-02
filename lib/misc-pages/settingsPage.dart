@@ -45,7 +45,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void setChangingLK() async {
     allTimetableUnits =
-        await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK);
+        (await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK))
+            as List<TimeTableUnit>;
     try {
       lk1 = allTimetableUnits
           .firstWhere((element) => element.subject!.contains('LK'))

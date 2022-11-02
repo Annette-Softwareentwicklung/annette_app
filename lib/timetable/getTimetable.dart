@@ -1,16 +1,11 @@
-import 'dart:html';
-
 import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../services/api_client/api_client.dart';
 
-///
-///
-///
 Future<List<TimeTableUnit>> getTimetableForDay(DateTime day) async {
   List<TimeTableUnit>? timeTableForWeek =
-      await getTimeTableForWeek();
+      await getTimeTableForWeek(WeekMode.THIS_WEEK);
 
   List<TimeTableUnit> timeTableForDay = [];
 
