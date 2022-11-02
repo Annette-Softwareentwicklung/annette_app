@@ -1,6 +1,7 @@
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/fundamentals/preferredTheme.dart';
+import 'package:annette_app/fundamentals/timetableUnit.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
+import 'package:annette_app/services/timetable_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -124,11 +125,11 @@ void main() async {
         (storage.read('changingLkSubject') == null ||
             storage.read('changingLkWeekNumber') == null)) {
       try {
-        //TODO: Auskommentieren und fixen!!
-        /*storage.write(
+        storage.write(
             'changingLkSubject',
-            (await ApiClient.fetchTimetableForWeek(WeekMode.THIS_WEEK))
-                .firstWhere((element) => element.subject!.contains('LK')));*/
+            (await getTimetableForWeek(WeekMode.THIS_WEEK)
+                    as List<TimeTableUnit>)
+                .firstWhere((element) => element.subject!.contains('LK')));
         storage.write('changingLkWeeknumber', 1);
       } catch (e) {
         print(e);

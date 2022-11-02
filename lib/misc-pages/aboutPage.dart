@@ -1,22 +1,13 @@
 import 'package:annette_app/custom_widgets/defaultScaffold.dart';
 import 'package:annette_app/data/design.dart';
 import 'package:annette_app/data/assets.dart';
+import 'package:annette_app/services/timetable_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:yaml/yaml.dart';
 
 class AboutPage extends StatelessWidget {
   static double sectionMargin = 20;
-
-  DateTime? getTimetableVersion() {
-    try {
-      return DateTime.parse(GetStorage().read('timetableVersion'));
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

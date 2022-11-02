@@ -1,7 +1,6 @@
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../data/design.dart';
 
 class VertretungListTile extends StatelessWidget {
   final VertretungsEinheit vertretung;
@@ -13,7 +12,7 @@ class VertretungListTile extends StatelessWidget {
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   final Shader lightGradient = LinearGradient(
-    colors: <Color>[Design.annetteColor, Colors.tealAccent],
+    colors: <Color>[Colors.blue, Colors.tealAccent],
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   @override
@@ -39,7 +38,7 @@ class VertretungListTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
-                        color: Design.annetteColor,
+                        color: Colors.blue,
                       ),
                     )
                   : Text(''),

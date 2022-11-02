@@ -1,11 +1,9 @@
-import 'package:annette_app/miscellaneous-files/setClass.dart';
 import 'package:annette_app/miscellaneous-files/setClassV2.dart';
-import 'package:annette_app/services/api_client/objects/group_ids.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  static String baseURL = "10.20.5.42:3000";
+  static String baseURL = "192.168.1.113:3000";
 
   static Future<String> fetchTimetable(String id) async {
     //TODO: durch production deployment ersetzen
@@ -76,7 +74,6 @@ class ApiClient {
     return res.body;
   }
 
-  //TODO: TimetableUnits zurückgeben
   static Future<String> fetchTimetableForWeek(WeekMode weekMode) async {
     var classValue = GetStorage().read("class");
     var urlString = 'api/annette_app/dateien/stundenplan/json/${classValue}/';

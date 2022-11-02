@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:annette_app/custom_widgets/errorInternetContainer.dart';
 import 'package:annette_app/data/design.dart';
-import 'package:annette_app/services/api_client/objects/group_ids.dart';
 import 'package:annette_app/services/timetable_scraper/annette_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:annette_app/services/api_client/api_client.dart';
 

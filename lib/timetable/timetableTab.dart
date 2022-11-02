@@ -4,20 +4,18 @@ import 'package:annette_app/custom_widgets/customDialog.dart';
 import 'package:annette_app/data/links.dart';
 import 'package:annette_app/fundamentals/lessonStartTime.dart';
 import 'package:annette_app/fundamentals/timetableUnit.dart';
-import 'package:annette_app/database/timetableUnitDbInteraction.dart';
 import 'package:annette_app/data/lessonStartTimes.dart';
 import 'package:annette_app/miscellaneous-files/parseTime.dart';
 import 'package:annette_app/miscellaneous-files/showWebview.dart';
-import 'package:annette_app/services/api_client/api_client.dart';
 import 'package:annette_app/timetable/classicTimetable.dart';
 import 'package:annette_app/fundamentals/vertretungsEinheit.dart';
-import 'package:annette_app/timetable/getTimetable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../data/design.dart';
 import '../data/subjects.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:week_of_year/week_of_year.dart';
+
+import '../services/timetable_storage.dart';
 
 BoxDecoration decorationTimetable(BuildContext context) {
   return BoxDecoration(
@@ -64,6 +62,14 @@ class _TimetableTabState extends State<TimetableTab> {
   String? dateTomorrow;
   String? dateToday;
 
+  final Shader lightGradient = LinearGradient(
+    colors: <Color>[Colors.blue, Colors.tealAccent],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
+  final Shader darkGradient = LinearGradient(
+    colors: <Color>[Colors.tealAccent, Colors.blue],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
   void load() async {
     print("Timetable wird geladen");
     /*for (var element in allTimeTableUnits) {
@@ -87,6 +93,10 @@ class _TimetableTabState extends State<TimetableTab> {
       displayDayString = '--';
       int currentLessonNumber = 0;
       bool isInBreak = false;
+
+      // retrieves the times and the timetable for the respective day from the api
+      allTimes = getAllTimes();
+      allTimeTableUnits = await getTimetableForDay(displayDay);
 
       //Findet die momentan laufende Stunde heraus und ermittelt, ob gerade Pause ist
       for (int i = 0; i < allTimes.length; i++) {
@@ -123,11 +133,6 @@ class _TimetableTabState extends State<TimetableTab> {
         }
       }
     }
-
-    // retrieves the times and the timetable for the respective day from the api
-    allTimes = getAllTimes();
-    allTimeTableUnits =
-        getTimetableForDay(DateTime.now()) as List<TimeTableUnit>;
 
     // adds the display of the day
     displayTimetable.insert(
@@ -520,7 +525,11 @@ class DisplayFree extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Design.annetteColor,
+                    color: Colors.blue,
+                    /*foreground: Paint()
+                    ..shader = (Theme.of(context).brightness == Brightness.dark)
+                        ? darkGradient
+                        : lightGradient,*/
                   ),
                 ),
                 Text(
@@ -687,7 +696,11 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
-                  color: Design.annetteColor,
+                  color: Colors.blue,
+                  /*foreground: Paint()
+                    ..shader = (Theme.of(context).brightness == Brightness.dark)
+                        ? darkGradient
+                        : lightGradient,*/
                 ),
               ),
               Expanded(
@@ -802,7 +815,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                       'Wechselnder LK',
                       style: TextStyle(
                           fontSize: 17,
-                          color: Design.annetteColor,
+                          color: Colors.blue,
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.normal),
                     ),
@@ -810,7 +823,7 @@ class _DisplayTimetableUnitState extends State<DisplayTimetableUnit> {
                       padding: EdgeInsets.only(left: 3),
                       child: Icon(
                         CupertinoIcons.info_circle,
-                        color: Design.annetteColor,
+                        color: Colors.blue,
                         size: 23,
                       ),
                     ),
